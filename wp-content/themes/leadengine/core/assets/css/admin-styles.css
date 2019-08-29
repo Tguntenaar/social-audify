@@ -1,0 +1,475 @@
+/*
+Admin custom CSS
+@package leadengine
+by KeyDesign
+*/
+
+/* --------------------------------------
+ Meta box custom styles
+-----------------------------------------*/
+.kd_meta_block_prim {
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #ddd;
+}
+
+.meta_block_top {
+	margin-top: 10px;
+}
+
+.meta_block_bottom {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.kd_meta_block_prim label {
+	width: 20%;
+	display: inline-block;
+	font-weight: bold;
+	padding-top: 4px;
+}
+
+.kd_meta_block_prim .kd-meta-desc {
+	display: block;
+	width: 18%;
+	padding-top: 6px;
+	clear: both;
+	font-style: italic;
+	font-size: 12px;
+}
+
+.kd_meta_block_prim input {
+	color: #000;
+	font-size: 12px;
+	display: inline-block;
+}
+
+.kd_meta_block_prim .page_subtitle_box {
+	width: 73%;
+}
+
+.kd_meta_block_prim input[type=checkbox] {
+	margin-top: 6px;
+}
+
+#redux-sticky .button {
+	background: #fff;
+	border-color: #4f6df5;
+	box-shadow: none;
+	text-decoration: none;
+	text-shadow: none;
+	height: 35px;
+	color: #4f6df5;
+	font-weight: 700;
+	line-height: 33px;
+	padding: 0 20px;
+	margin: 0 5px;
+	float: left;
+}
+
+#redux-sticky .button:hover {
+	background: #333;
+	border-color: #333;
+	color: #fff;
+}
+
+#redux-sticky .button-primary {
+	background: #4f6df5;
+	border-color: #4f6df5;
+	box-shadow: none;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: none;
+	height: 35px;
+	font-weight: 700;
+	line-height: 33px;
+}
+
+#redux-sticky .button-primary:hover {
+	background: #333;
+	border-color: #333;
+}
+
+#redux-footer .button {
+	background: #fff;
+	border-color: #4f6df5;
+	box-shadow: none;
+	text-decoration: none;
+	text-shadow: none;
+	height: 35px;
+	color: #4f6df5;
+	font-weight: 700;
+	line-height: 33px;
+	padding: 0 20px;
+	margin: 0 5px;
+}
+
+#redux-footer .button:hover {
+	background: #333;
+	border-color: #333;
+	color: #fff;
+}
+
+#redux-footer .button-primary {
+	background: #4f6df5;
+	border-color: #4f6df5;
+	box-shadow: none;
+	color: #fff;
+	text-decoration: none;
+	text-shadow: none;
+	height: 35px;
+	font-weight: 700;
+	line-height: 33px;
+	margin: 0 5px;
+}
+
+#redux-footer .button-primary:hover {
+	background: #333;
+	border-color: #333;
+}
+
+#redux-form-wrapper input:focus {
+	box-shadow: none;
+	border-color: #4f6df5;
+}
+
+#redux-form-wrapper .select2-container .select2-choice {
+	display: block;
+	height: 33px;
+	padding: 0 0 0 8px;
+	overflow: hidden;
+	position: relative;
+	border: 1px solid #ddd;
+	white-space: nowrap;
+	line-height: 33px;
+	color: #333;
+	text-decoration: none;
+	border-radius: 4px;
+	background-clip: padding-box;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-color: #fff;
+	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eee), color-stop(0.5, #fff));
+	background-image: -webkit-linear-gradient(center bottom, #eee 0%, #fff 50%);
+	background-image: -moz-linear-gradient(center bottom, #eee 0%, #fff 50%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr ='#ffffff', endColorstr ='#eeeeee', GradientType = 0);
+	background-image: none;
+}
+
+#redux-form-wrapper .el-icon-question-sign {
+	color: #4f6df5;
+}
+
+#redux-form-wrapper .wp-color-result-text {
+	background: #fff;
+	border-radius: 0 2px 2px 0;
+	border-left: 1px solid #ddd;
+	color: #333;
+	display: block;
+	line-height: 22px;
+	padding: 0 6px;
+	text-align: center;
+}
+
+#redux-form-wrapper .select2-container .select2-choice .select2-arrow {
+	display: inline-block;
+	width: 18px;
+	height: 100%;
+	position: absolute;
+	right: 0;
+	line-height: 35px;
+	top: 0;
+	border-left: 1px solid #ddd;
+	border-radius: 0 4px 4px 0;
+	background-clip: padding-box;
+	background: #fff;
+	background-image: none;
+	background-image: none;
+	background-image: none;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr ='#eeeeee', endColorstr ='#cccccc', GradientType = 0);
+	background-image: none;
+}
+
+.redux-container {
+	background-color: #f5f5f5;
+	background-repeat: repeat-x;
+	background-image: -moz-linear-gradient(top, #f2f2f2 0, #f5f5f5 100%);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f2f2f2), color-stop(100%, #f5f5f5));
+	background-image: -webkit-linear-gradient(top, #f2f2f2 0, #f5f5f5 100%);
+	background-image: -ms-linear-gradient(top, #f2f2f2 0, #f5f5f5 100%);
+	background-image: -o-linear-gradient(top, #f2f2f2 0, #f5f5f5 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5', endColorstr='#eeeeee', GradientType=0);
+	background-image: linear-gradient(top, #f2f2f2 0, #f5f5f5 100%);
+	border: 1px solid #dedede;
+	box-shadow: none;
+	-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, .4);
+	margin-top: 5px;
+	overflow: hidden;
+	border-radius: 4px;
+}
+
+.redux-container #redux-header, .redux-container #redux-footer {
+	text-align: right;
+	padding: 10px;
+}
+
+.redux-container #redux-footer {
+	border-top: 1px solid #ddd!important;
+	z-index: 9999;
+	box-shadow: none;
+}
+
+.redux-container .notice-yellow {
+	margin: 0;
+	border-bottom: 1px solid #E7E7E7;
+	background-color: #f3f3f3;
+	color: red;
+	padding: 15px 35px 15px 14px;
+	text-shadow: none;
+}
+
+.redux-container #info_bar {
+	background: #f4f4f4;
+	border-bottom: 1px solid #ddd;
+	padding: 7px;
+	text-align: right;
+	-moz-box-shadow: inset 0 1px 0 #fcfcfc;
+	-webkit-box-shadow: inset 0 1px 0 #fcfcfc;
+	box-shadow: inset 0 1px 0 #fcfcfc;
+	height: 34px!important;
+	border-left: 0;
+}
+
+.redux-container .expand_options {
+	cursor: pointer;
+	display: block;
+	height: 22px;
+	width: 21px;
+	float: left;
+	font-size: 0;
+	text-indent: -9999px;
+	display: none;
+	margin: 1px 0 0 5px;
+	border: 1px solid #bbb;
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	/*background: url(../img/toggle_tabs.png) no-repeat -2px -26px;*/
+}
+
+.redux-main .form-table tr {
+	border-bottom: none!important;
+}
+
+.redux-main input {
+	line-height: 27px!important;
+	box-shadow: none!important;
+	border-radius: 4px;
+	background: #fff;
+	box-shadow: none;
+	outline: none;
+}
+
+.redux-main .input-append .add-on, .redux-main .input-prepend .add-on {
+	width: auto;
+	display: inline-block;
+	min-width: 16px;
+	padding: 3px 4px;
+	font-size: 12px;
+	font-weight: 400;
+	line-height: 20px;
+	text-align: center;
+	text-shadow: none;
+	background-color: #fff;
+	border: 1px solid #dedede;
+}
+
+.redux-container .redux-main .input-append .add-on, .redux-container .redux-main .input-prepend .add-on {
+    width: auto;
+    display: inline-block;
+    min-width: 16px;
+    padding: 7px 4px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 27px;
+    text-align: center;
+    text-shadow: none;
+    background-color: #fff;
+    border: 1px solid #dddddd;
+}
+
+.redux-container .redux-main .input-prepend .add-on {
+	line-height:20px;
+}
+
+.redux-sidebar .redux-group-menu li a {
+	display: block;
+	padding: 15px 4px 15px 14px;
+	background: #e0e0e0;
+	background: 0 0;
+	border-width: 1px 0;
+	border-style: solid;
+	border-bottom-color: #E7E7E7;
+	border-top-color: #F9F9F9;
+	opacity: 1;
+	color: #333;
+	font-weight: 700;
+	text-decoration: none;
+	-webkit-transition: none;
+	transition: none;
+	outline: none;
+	box-shadow: none;
+}
+
+.redux-sidebar .redux-group-menu li a:hover {
+	background: #eaeaea;
+	color: #4f6df5;
+	opacity: 1;
+}
+
+.redux-sidebar .redux-group-tab-link-a i {
+	vertical-align: middle;
+	font-size: 1em;
+	position: absolute;
+	line-height: 1.4em;
+	color: #4f6df5;
+}
+
+.admin-color-fresh .redux-container-switch .cb-disable, .admin-color-fresh .redux-container-switch .cb-enable, .admin-color-fresh .ui-state-default, .admin-color-fresh .ui-widget-content .ui-state-default, .admin-color-fresh .ui-widget-header .ui-state-default {
+	background-color: #f5f5f5;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#f8f8f8), to(#f5f5f5));
+	background-image: -moz-linear-gradient(top, #f8f8f8, #f5f5f5);
+	background-image: -ms-linear-gradient(top, #f8f8f8, #f5f5f5);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #f8f8f8), color-stop(100%, #f5f5f5));
+	background-image: -webkit-linear-gradient(top, #f8f8f8, #f5f5f5);
+	background-image: -o-linear-gradient(top, #f8f8f8, #f5f5f5);
+	background-image: linear-gradient(top, #f8f8f8, #f5f5f5);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@from', endColorstr='@to', GradientType=0);
+	border-color: #ddd;
+	box-shadow: none;
+	line-height: 22px;
+	font-weight: 700;
+}
+
+.admin-color-fresh .redux-container-switch .cb-disable.selected {
+	background: #32373c !important;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#929292), to(#646464));
+	background-image: -moz-linear-gradient(top, #929292, #646464);
+	background-image: -ms-linear-gradient(top, #929292, #646464);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #929292), color-stop(100%, #646464));
+	background-image: -webkit-linear-gradient(top, #929292, #646464);
+	background-image: -o-linear-gradient(top, #929292, #646464);
+	background-image: linear-gradient(top, #929292, #646464);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@from', endColorstr='@to', GradientType=0);
+	border-color: #32373c!important;
+}
+
+#wpbody .redux-container-switch .cb-enable.selected, #wpbody .ui-buttonset .ui-state-active {
+	background: #4f6df5!important;
+	background-image: -khtml-gradient(linear, left top, left bottom, from(#008ec6), to(#0074a2));
+	background-image: -moz-linear-gradient(top, #008ec6, #0074a2);
+	background-image: -ms-linear-gradient(top, #008ec6, #0074a2);
+	background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, #008ec6), color-stop(100%, #0074a2));
+	background-image: -webkit-linear-gradient(top, #008ec6, #0074a2);
+	background-image: -o-linear-gradient(top, #008ec6, #0074a2);
+	background-image: linear-gradient(top, #008ec6, #0074a2);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='@from', endColorstr='@to', GradientType=0);
+	border-color: #4f6df5!important;
+	border-color: #4f6df5!important;
+	-webkit-box-shadow: inset 0 1px 0 #00abef, 0 1px 0 rgba(0, 0, 0, .15);
+	box-shadow: none!important;
+}
+
+.redux-main .redux-typography-container .input_wrapper input.mini {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 78%;
+    text-align: center;
+    margin: 0;
+    height: 35px;
+    top: 3px;
+    padding: 0 2px 0 5px;
+    text-decoration: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.redux-container .form-table>tbody>tr>th {
+    width: 35%;
+}
+
+.admin-color-fresh #redux-header {
+	background: #4f6df5;
+	border: none;
+}
+
+.redux-container #redux-header .display_header .redux-dev-mode-notice-container {display:none;}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.active a, .admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild a {
+	color: #222;
+	box-shadow: none;
+	text-shadow: none!important;
+}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.active.hasSubSections a, .admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild.hasSubSections a {
+	background: #fff;
+	-webkit-transition: all .2s;
+	-moz-transition: all .2s;
+	transition: all .2s;
+	color: #333;
+	width: auto;
+	border-bottom: 0;
+}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.active.hasSubSections ul.subsection li, .admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild.hasSubSections ul.subsection li {
+	border-top: 0 none !important
+}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.active.hasSubSections ul.subsection li a, .admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild.hasSubSections ul.subsection li a {
+	background: #e5e5e5!important;
+	width: auto;
+	border-top: 0 !important;
+	padding: 7px;
+	color: #333;
+	padding-left: 15px;
+	-webkit-transition: all .2;
+	-moz-transition: all .2;
+	-ms-transition: all .2;
+	-o-transition: all .2;
+	transition: all .2;
+}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild.hasSubSections ul.subsection li.active a, .wp-customizer .redux-sidebar .redux-group-menu li.activeChild.hasSubSections ul.subsection li.active a {
+	background: #4f6df5!important;
+	color: #fff!important;
+}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.active.hasSubSections .active a:after, .admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild.hasSubSections .active a:after, .wp-customizer .redux-sidebar .redux-group-menu li.active.hasSubSections .active a:after, .wp-customizer .redux-sidebar .redux-group-menu li.activeChild.hasSubSections .active a:after {
+	display:none;
+}
+
+.admin-color-fresh .redux-sidebar .redux-group-menu li.active.hasSubSections ul.subsection li a:hover, .admin-color-fresh .redux-sidebar .redux-group-menu li.activeChild.hasSubSections ul.subsection li a:hover {
+	color: #4f6df5!important;
+	background: #e5e5e5!important;
+}
+
+.redux-main .wp-picker-container .wp-color-result {
+	outline: 0;
+	margin: 0;
+	box-shadow: none;
+}
+
+.redux-container .wp-picker-container {
+	display: inline-block;
+}
+
+.redux-message.redux-notice {
+	display: none!important;
+}

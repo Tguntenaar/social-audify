@@ -1,0 +1,231 @@
+@charset "utf-8";
+.wpsu a{
+	cursor:pointer;
+}
+/* CSS Document */
+.wpsu .hide{
+	display:none;
+}
+.wpsu .head_area{
+	clear:both;
+	position:relative;
+}
+.wpsu .head_area a {
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    right: 0;
+	top:-90px;
+}
+.wpsu p.submit{
+	float:right;
+}
+.wpsu h2 {
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 19px;
+    padding: 9px 15px 4px 0;
+}
+.wpsu h2 span.dashicons{
+	font-size:30px;
+	margin-right:16px;
+}
+.wpsu code {
+    background-color: black;
+    border: 2px solid white;
+    color: white;
+    font-size: 14px;
+    padding: 10px;
+    position: relative;
+    right: -21%;
+    top: 0;
+}
+.wpsu code .yellow{
+	color:yellow;
+}
+.wpsu code .light_blue{
+	color:#0CF;
+}
+.wpsu .wpsu_settings{
+	padding:0 0 0 4px;
+}
+.wpsu .wpsu_settings > h3{
+	cursor:pointer;	
+	
+}
+.images_compression_report h3{
+	
+}
+.images_compression_report h3 a.op_linked{
+	font-size:12px;
+	float:right;
+}
+.images_compression_report h3 a.op_linked:hover{
+	text-decoration:underline;
+}
+
+
+.wpsu .wpsu_settings > h3 span.dashicons{
+	margin-right:4px;
+}
+.wpsu .wpsu_settings > ul.menu-class{
+	
+}
+
+.wpsu .wpsu_settings > ul.menu-class > li > div.banner_wrapper{
+	border:6px dashed #ccc;
+	width:90%;
+	min-height:30px;
+	cursor:pointer;
+	text-align:center;
+	padding:40px;
+	
+	
+}
+.wpsu .wpsu_settings > ul.menu-class > li > h4{
+	font-size:14px;
+}
+.wpsu .wpsu_settings > ul.menu-class > li > div.banner_wrapper span.dashicons{
+	font-size:60px;
+    position: relative;
+    top: -19px;	
+}
+.wpsu .wpsu_settings > ul.menu-class > li > div.banner_wrapper label{
+	
+	font-size:30px;
+	color:#ccc;
+	
+}
+#toplevel_page_gzip-ninja-speed-compression-gzip-ninja-speed-setting,
+#gzip-ninja-speed-compression{
+	display:none;
+}
+
+.wpsu .selection_div{
+	text-align:center;
+	margin:0 20%;
+}
+.wpsu .selection_div > div{
+	font-size:210px;
+	float:left;
+	
+}
+.wpsu .selection_div .selection_css{
+	border-right:10px solid #ddd;
+	color:#8ac007;
+	padding-right:4%;
+	margin-right:4%;
+	margin-top:4%;
+	cursor:pointer;
+}
+.wpsu .selection_div.settings .selection_css{
+	color:#8ac007;
+	font-size:92px;
+	border:none;
+}
+.wpsu .selection_div.settings .selection_css.disabled{
+	text-decoration:line-through;
+	color:#ddd;
+}
+.wpsu .selection_div .selection_js{
+	color:#8A2BE2;
+	cursor:pointer;
+	margin-top:4%;
+}
+.wpsu .selection_div.settings .selection_js{
+	color:#8A2BE2;
+	font-size:100px;
+}
+.wpsu .selection_div.settings .selection_js.disabled{
+	text-decoration:line-through;
+	color:#ddd;
+}
+.wpsu .form-table th{
+	width:50%;
+}
+.wpsu .selection_div > div.images_compression_report, 
+div.images_compression_report{
+	clear:both;
+	margin-top:120px;
+	font-size:12px;
+	text-align:left;
+	
+}
+a.wpsu_ct,
+a.wpsu_ctr,
+a.wpsu_ci{
+	font-weight:bold;
+	font-size:18px;
+}
+a.wpsu_ctr{
+	color:#393;
+}
+a.wpsu_ci{
+	color:#F00;
+}
+div.images_compression_report{
+	margin-top:0px;
+}
+div.images_compression_report ul{
+	
+}
+div.images_compression_report ul li{
+	
+}
+div.images_compression_report ul li a{
+	cursor:pointer;
+}
+li.wpsu_link_dir{
+	padding:6px 0 4px 8px;
+}
+li.wpsu_link_dir.wpsu_temp_text{
+	font-style: italic;
+	background-color:#ddd;
+	padding: 10px 20px 4px;
+}
+div.wpsu_actions{
+	clear:both;
+	float:right;
+}
+div.wpsu_actions a{
+	position:unset !important;
+}
+.wpsu_toggle{
+	cursor:pointer;
+	text-decoration:underline;
+}
+
+.selection_div.sub,
+.wpsu_toggle{
+	display:none;
+}
+.wpsu_ud.button {
+    position: relative;
+    top: -4px;
+}
+.gbb{ font-size:14px; color:#F00; }
+.mbb{ font-size:13px; color:#06F; }
+.kbb{ font-size:12px; color:#090; }
+.bbb{ font-size:11px; color:#666; }
+
+.wpsu_modes[data-mode="classic"]{
+	
+	
+}
+.wpsu_modes[data-mode="advanced"],
+.wpsu_modes[data-mode="booster"]{
+}
+.wpsu_modes[data-mode="advanced"]:hover{
+	background-color:#009;
+	color:#fff;
+}
+.wpsu_modes[data-mode="booster"]:hover{
+	background-color:#F90;
+	color:#fff;
+}
+.wpsu_booster_wrapper ul li ul {
+	list-style:circle;
+	width:100%;
+	float:left;
+	padding-left: 20px;
+}
