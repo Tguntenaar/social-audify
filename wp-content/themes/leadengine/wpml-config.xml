@@ -1,0 +1,27 @@
+<wpml-config>
+    <admin-texts>
+        <key name="redux_ThemeTek">
+			<key name="tek-business-phone" />
+			<key name="tek-business-email" />
+            <key name="tek-header-button-text" />
+			<key name="tek-modal-title" />
+			<key name="tek-modal-subtitle" />
+			<key name="tek-scroll-id" />
+			<key name="tek-button-new-page" />
+			<key name="tek-modal-contactf7-formid" />
+			<key name="tek-footer-text" />
+			<key name="tek-portfolio-related-posts-title" />
+			<key name="tek-blog-subtitle" />
+			<key name="tek-blog-header-form-id" />
+			<key name="tek-related-posts-title" />
+			<key name="tek-404-title" />
+			<key name="tek-404-subtitle" />
+			<key name="tek-404-back" />
+			<key name="tek-maintenance-title" />
+			<key name="tek-maintenance-content" />
+			<key name="tek-maintenance-contactf7-formid" />
+        </key>
+    </admin-texts>  
+</wpml-config>
+
+
