@@ -45,16 +45,21 @@
   );
 
   $campaign_blocks = array(
+    ["type" => "cam_rch",
+      "name" => "Reach",
+      "fb_name" => "reach",
+      "desc" => "The average of the reach"
+    ],
     ["type" => "cam_imp",
       "name" => "Impressions",
       "fb_name" => "impressions",
       "desc" => "The average of the impressions"
     ],
-    // ["type" => "cam_cpc",
-    //   "name" => "Cost per click",
-    //   "fb_name" => "cpc",
-    //   "desc" => "The average cost per click"
-    // ],
+    ["type" => "cam_cpc",
+      "name" => "Cost per click",
+      "fb_name" => "cpc",
+      "desc" => "The average cost per click"
+    ],
     ["type" => "cam_cpm",
       "name" => "Cost per mile",
       "fb_name" => "cpm",
@@ -80,5 +85,15 @@
       "fb_name" => "spend",
       "desc" => "The average amount spend"
     ],
+    ["type" => "cam_lcl",
+      "name" => "Link clicks",
+      "fb_name" => "unique_inline_link_clicks",
+      "desc" => "The average link clicks"
+    ],
+    ["type" => "cam_ras",
+      "name" => "Return on ad spent",
+      "fb_name" => "website_purchase_roas",
+      "desc" => "The average return on ads spend"
+    ]
   );
 ?>

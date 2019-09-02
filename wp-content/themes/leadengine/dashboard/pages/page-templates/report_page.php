@@ -135,9 +135,17 @@
         if (!array_key_exists($block['fb_name'], $graph_data_list)) {
           $graph_data_list[$block['fb_name']] = array();
         }
-        array_push($graph_data_list[$block['fb_name']], ((array)$campaign->insights)[$block['fb_name']]);
+
+        if(!isset(((array)$campaign->insights)[$block['fb_name']])) {
+            $push_object = "0";
+        } else {
+            $push_object = ((array)$campaign->insights)[$block['fb_name']];
+        }
+
+        array_push($graph_data_list[$block['fb_name']], $push_object);
       }
     }
+
     return array($graph_data_list, $graph_labels);
   }
 
@@ -159,6 +167,25 @@
   }
 
   $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
+
+
+  // foreach($avg_campaign as $key => $value) {
+  //     $length = 0;
+  //
+  //     if($value == NULL) {
+  //         foreach($avg_campaign as $key2 => $value2) {
+  //             if($value != NULL) {
+  //                 $length = count($value2);
+  //                 break;
+  //             }
+  //         }
+  //
+  //         $avg_campaign->$key = array_fill(0, $length, "0");
+  //
+  //     }
+  // }
+  //
+  var_dump($avg_campaign);
 ?>
 
 <head>
@@ -289,6 +316,7 @@
       <span class="facebook-inf-title" style="text-align:center; margin: 0; margin-top: 50px;">Campaign Stats:</span>
       <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics on the Ads or Campaigns you are running.</span><?php
       $counter = 1;
+
       foreach ($campaign_blocks as $item) {
         if (show_block($edit_mode, $report->{$item["type"]}, isset($avg_campaign->{$item["fb_name"]}))) {
           $float = $counter % 2 == 0 ? 'right' : 'left' ?>
@@ -364,6 +392,7 @@
       var blockNames = <?php echo json_encode($campaign_blocks); ?>;
       var labels = <?php echo json_encode($graph_labels); ?>;
       var data = <?php echo json_encode($graph_data_list); ?>;
+
 
       <?php
       if ($report->has_comp) { ?>

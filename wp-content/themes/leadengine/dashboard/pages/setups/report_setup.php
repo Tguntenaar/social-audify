@@ -161,6 +161,7 @@
             <div style="overflow-y:scroll;">
               <span class="name-label">On which level do you want a report?</span>
               <input type="radio" name="level" value="ads" checked/>Ads<br />
+              <input type="radio" name="level" value="adsets" />Ad sets<br />
               <input type="radio" name="level" value="campaigns"/>Campaigns
             </div>
           </div>
@@ -210,7 +211,8 @@
 
     var selectedAds = [], // TODO: deze kan weg straks.
     globalAdsResponse = {},
-    globalCampaignResponse = {};
+    globalCampaignResponse = {},
+    globalAdSetResponse;
 
     $(function() {
       <?php
@@ -236,6 +238,7 @@
 
         if (edge === 'ads') globalAdsResponse = response;
         if (edge === 'campaigns') globalCampaignResponse = response;
+        if (edge === 'adsets') globalAdSetResponse = response;
 
         if (response.data.length == 0) {
             $('#campaign-list').html('No data found.');
@@ -287,6 +290,7 @@
       // Api won't be called twice for the same edge.
       if (edge === 'ads' && !$.isEmptyObject(globalAdsResponse)) return Promise.resolve(globalAdsResponse);
       if (edge === 'campaign' && !$.isEmptyObject(globalCampaignResponse)) return Promise.resolve(globalCampaignResponse);
+      if (edge === 'adsets' && !$.isEmptyObject(globalAdSetResponse)) return Promise.resolve(globalAdSetResponse);
       // call facebook api.
       return new Promise(function (resolve, reject) {
         FB.api(getCampaignsQuery(Instance.client.ad_id, edge), function (response) {
@@ -336,21 +340,31 @@
         // console.log({id, name, insights});
         // data = [...data, {name: name, insights: rest.insights.data[0]}];
       // });
+      console.log("testt");
+      console.log(data);
 
+      function check_nan(value) {
+          return (Number.isNaN(value)) ? 0 : parseFloat(value);
+      }
 
       // sums up all the properties of each insights object inside the "data" array.
       sum = data.reduce(function(acc, cur) {
         return {
-          impressions: acc.impressions + parseFloat(cur.insights.impressions),
-          cpc: acc.cpc + parseFloat(cur.insights.cpc),
-          cpm: acc.cpm + parseFloat(cur.insights.cpm),
-          cpp: acc.cpp + parseFloat(cur.insights.cpp),
-          ctr: acc.ctr + parseFloat(cur.insights.ctr),
-          frequency: acc.frequency + parseFloat(cur.insights.frequency),
-          spend: acc.spend + parseFloat(cur.insights.spend),
+          reach: acc.reach + check_nan(parseFloat(cur.insights.reach)),
+          impressions: acc.impressions + check_nan(parseFloat(cur.insights.impressions)),
+          cpc: acc.cpc + check_nan(parseFloat(cur.insights.cpc)),
+          cpm: acc.cpm + check_nan(parseFloat(cur.insights.cpm)),
+          cpp: acc.cpp + check_nan(parseFloat(cur.insights.cpp)),
+          ctr: acc.ctr + check_nan(parseFloat(cur.insights.ctr)),
+          frequency: acc.frequency + check_nan(parseFloat(cur.insights.frequency)),
+          spend: acc.spend + check_nan(parseFloat(cur.insights.spend)),
+          unique_inline_link_clicks: acc.unique_inline_link_clicks + check_nan(parseFloat(cur.insights.unique_inline_link_clicks)),
+          website_purchase_roas: acc.website_purchase_roas + check_nan(parseFloat(cur.insights.website_purchase_roas))
         };
-      }, {impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0,});
+    }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
 
+    console.log("Sum: ");
+    console.log(sum);
       // divides sum into avg
       for (insight in sum) {
         avg[insight] = sum[insight] / data.length;
@@ -420,7 +434,15 @@
       loggedInPromise.then((value) => {
         // last check what edge the user selected
         var edge = $('[name=level]:checked').val();
-        var globalResponse = (edge === 'ads') ? globalAdsResponse : globalCampaignResponse;
+        // var globalResponse = (edge === 'ads') ? globalAdsResponse : globalCampaignResponse;
+
+        if(edge === 'ads') {
+            var globalResponse = globalAdsResponse;
+        } else if(edge === 'adsets') {
+            var globalResponse = globalAdSetResponse;
+        } else {
+            var globalResponse = globalCampaignResponse;
+        }
 
         Instance.client.chart_data = transformResponseData(globalResponse);
 

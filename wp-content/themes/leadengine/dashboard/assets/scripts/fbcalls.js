@@ -498,8 +498,8 @@ function getInstaQuerie2(iba_id, business_name) {
  * Edge is campaigns or ads
  */
 function getCampaignsQuery(act_id, edge) {
-    //return `/${act_id}/${edge}?fields=id,name,insights{impressions, cpc, cpm, cpp, ctr, frequency, spend}`;
-    return `/${act_id}/${edge}?fields=id,name,insights{impressions, cpm, cpp, ctr, frequency, spend}`;
+    return `/${act_id}/${edge}?fields=id,name,insights{reach, impressions, cpc, cpm, cpp, ctr, frequency, spend, unique_inline_link_clicks, website_purchase_roas}`;
+    // return `/${act_id}/${edge}?fields=id,name,insights{impressions, cpm, cpp, ctr, frequency, spend}`;
 }
 
 function handleResponseCoverphoto(response) {
