@@ -167,25 +167,7 @@
   }
 
   $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
-
-
-  // foreach($avg_campaign as $key => $value) {
-  //     $length = 0;
-  //
-  //     if($value == NULL) {
-  //         foreach($avg_campaign as $key2 => $value2) {
-  //             if($value != NULL) {
-  //                 $length = count($value2);
-  //                 break;
-  //             }
-  //         }
-  //
-  //         $avg_campaign->$key = array_fill(0, $length, "0");
-  //
-  //     }
-  // }
-  //
-  var_dump($avg_campaign);
+  var_dump($report);
 ?>
 
 <head>
@@ -340,8 +322,15 @@
                 <?php visibility_icon($edit_mode, $report->{$item["type"]}); ?></div>
               <span class="title-box facebook"><?php echo $item["name"]; ?></span>
               <div class="chart-info">
+
                 <span class="stat-box-title"><?php echo $item["desc"]; ?></span>
-                <span class="graph-procent" style="margin-top: 4px;"><?php echo substr($avg_campaign->{$item["fb_name"]}, 0, 6); ?></span>
+                <span class="graph-procent" style="margin-top: 4px;">
+                    <?php
+                        echo substr($avg_campaign->{$item["fb_name"]}, 0, 6);
+                        if($item["currency"]) {?>
+                        <span class="currency"> <?php echo $report->currency; ?> </span>
+                    <?php } ?>
+                </span>
 
               </div>
               <div class="inner custom-inner" style="padding: 0;">

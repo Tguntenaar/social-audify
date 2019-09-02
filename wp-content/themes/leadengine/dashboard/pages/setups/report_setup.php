@@ -203,6 +203,8 @@
       iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>
     };
 
+    var currency = "";
+
     // Selectable list - TODO : kan sws naar dashboard-header
     $('#client-list .audit-row, #compare-list .audit-row, .row-ad-accounts').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
@@ -235,6 +237,8 @@
       var campaignPromise = getCampaigns(edge);
 
       campaignPromise.then(function(response) {
+        currency = response.currency;
+        response = response[edge];
 
         if (edge === 'ads') globalAdsResponse = response;
         if (edge === 'campaigns') globalCampaignResponse = response;
@@ -318,6 +322,11 @@
       }
     }
 
+
+    function check_nan(value) {
+        return (Number.isNaN(value)) ? 0 : parseFloat(value);
+    }
+
     /**
      * uses the global <selectedAds> variable.
      * data = [{name: <name>, insights: {cpp: <cpp>, cpm: <cpm>}}, etc]
@@ -340,13 +349,8 @@
         // console.log({id, name, insights});
         // data = [...data, {name: name, insights: rest.insights.data[0]}];
       // });
-      console.log("testt");
+      console.log("test sum");
       console.log(data);
-
-      function check_nan(value) {
-          return (Number.isNaN(value)) ? 0 : parseFloat(value);
-      }
-
       // sums up all the properties of each insights object inside the "data" array.
       sum = data.reduce(function(acc, cur) {
         return {
@@ -445,6 +449,7 @@
         }
 
         Instance.client.chart_data = transformResponseData(globalResponse);
+        Instance.currency = currency;
 
         makeApiCalls(Instance);
 

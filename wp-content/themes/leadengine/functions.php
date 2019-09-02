@@ -249,10 +249,11 @@
     $page_info  = json_decode(stripslashes($_POST['page_info']), true);
     $options    = json_decode(stripslashes($_POST['options']), true);
     $competitor = json_decode(stripslashes($_POST['competitor']), true);
+    $currency   = json_decode(stripslashes($_POST['currency']), true);
 
     $page_name = $page_info['name'];
     $manual = (isset($page_info['manual'])) ? $page_info['manual'] : 0;
-    $slug = $report_control->create($page_name, $client, $options, $competitor, $manual);
+    $slug = $report_control->create($page_name, $client, $options, $competitor, $manual, $currency);
 
     wp_send_json(array('slug'=>$slug));
     wp_die();

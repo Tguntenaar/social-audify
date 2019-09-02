@@ -2242,6 +2242,12 @@ h4 {
 	margin-top: -4px;
 }
 
+.currency {
+	font-size: 16px !important;
+	font-weight: 100;
+	margin-left: -5px;
+}
+
 .graph-info {
 	color: #6e9d9c;
 	font-size: 12px;

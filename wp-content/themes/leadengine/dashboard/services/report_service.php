@@ -85,7 +85,7 @@ class report_service extends connection {
        FROM `User_report_visibility` WHERE user_id = %d", $report_id, get_current_user_id()));
   }
 
-  public function insert_data($id, $social_stats, $chart_data, $competitor = 0, $manual) {
+  public function insert_data($id, $social_stats, $chart_data, $competitor = 0, $manual, $currency) {
     if ($competitor) {
       return $this->dbwp->insert('Report_content',
       array(
@@ -100,6 +100,7 @@ class report_service extends connection {
         'report_id'     => $id,
         'social_stats'  => $social_stats,
         'chart_data'    => $chart_data,
+        'currency'      => $currency,
         'manual'        => $manual
       ));
   }
@@ -112,7 +113,7 @@ class report_service extends connection {
   }
 
 
-  private $content_fields = "introduction, social_advice, campaign_advice, conclusion, social_stats, chart_data, social_stats_compare, chart_data_compare, manual";
+  private $content_fields = "introduction, social_advice, campaign_advice, conclusion, social_stats, chart_data, social_stats_compare, chart_data_compare, manual, currency";
   private $visibility_fields = "soc_pl, soc_aml, soc_inf, soc_inaf, soc_iae, soc_plm, cam_imp, cam_cpc, cam_cpm, cam_cpp, cam_ctr, cam_frq, cam_spd, cam_rch, cam_lcl, cam_ras, graph_imp, graph_cpc, graph_cpm, graph_cpp, graph_ctr, graph_frq, graph_spd";
 }
 ?>
