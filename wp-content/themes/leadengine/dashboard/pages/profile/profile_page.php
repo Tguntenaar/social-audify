@@ -269,7 +269,7 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-              <i id="audit-exp" class="information fas fa-info"></i>
+              <i id="report-exp" class="information fas fa-info"></i>
               <!-- <a href="/tutorial/#1489503964921-3acbdde1-0dcf" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
@@ -323,7 +323,7 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-              <i id="audit-exp" class="information fas fa-info"></i> 
+              <i id="mail-exp" class="information fas fa-info"></i> 
               <!-- <a href="/tutorial/#1489503963784-5b2be039-5cee" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
@@ -540,18 +540,16 @@
         description: 'description',
       },
     }
-    ['profile', 'avatar', 'audit', 'report', 'mail', 'data'].forEach() {
 
+    ['profile', 'avatar', 'audit', 'report', 'mail', 'data'].forEach(elem) {
+      $(`#${elem}-exp`).on('click', function() {
+        showModal(initiateModal('errorModal', 'error', {
+          'text': `${explanations[elem].title}`,
+          'subtext': `${explanations[elem].description}`,
+        }));
+      });
     }
-    $(``).on('click', function() {
-      showModal(initiateModal('errorModal', 'error', {
-      'text': ``,
-      'subtext': `${explanation[].description}`,
-    }));
-    });
-
-
-
+    // iets ergens erin schrijven
   });
 </script>
 </html>
