@@ -229,20 +229,3 @@ function connectAccount(adId, clientId) {
 function logResponse(response) {
   console.log({response});
 }
-
-/**
- * Checks all inputs
- */
-// function selectClientFromList(client, listItemSelector, clickedDiv, competitor = false) {
-//   const {id, name} = client;
-//   // First Deselect All
-//   deselectAllClientFromList(listItemSelector);
-//   // Then select the newly clicked item from the list.
-//   if (competitor) {
-//     $(`.c_${id}`).prop('checked', true);
-//     clickedDiv.css('background-color', 'pink');
-//   } else {
-//     $(`.${id}`).prop('checked', true);
-//     clickedDiv.css('background-color', 'lightblue');
-//   }
-// }
