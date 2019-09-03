@@ -20,7 +20,7 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <title>Create Client</title>
+  <title>Create Contact</title>
 </head>
   <?php
     include(dirname(__FILE__)."/../header/dashboard_header.php");
@@ -33,13 +33,13 @@
     <div class="col-lg-6 client_left client_none">
       <div class="col-lg-12 white">
         <div class="content-title col-lg-12">
-          <span class="title">How to create a client?</span>
+          <span class="title">How to create a contact?</span>
           <ul>
-            <li><span class="number">1.</span> Fill in the name of the client in the form.</li>
+            <li><span class="number">1.</span> Fill in the name of the contact in the form.</li>
             <li><span class="number">2.</span> Search for the URL's.</li>
             <li><span class="number">3.</span> Copy the URL's into the form.</li>
             <li><span class="number">4.</span> Click the submit button.</li>
-            <li><span class="number">5.</span> Done. You created a client.</li>
+            <li><span class="number">5.</span> Done. You created a contact.</li>
           </ul>
         </div>
       </div>

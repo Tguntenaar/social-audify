@@ -48,52 +48,62 @@
     ["type" => "cam_rch",
       "name" => "Reach",
       "fb_name" => "reach",
-      "desc" => "The average of the reach"
+      "desc" => "The average of the reach",
+      "currency" => 0
     ],
     ["type" => "cam_imp",
       "name" => "Impressions",
       "fb_name" => "impressions",
-      "desc" => "The average of the impressions"
+      "desc" => "The average of the impressions",
+      "currency" => 0
     ],
     ["type" => "cam_cpc",
       "name" => "Cost per click",
       "fb_name" => "cpc",
-      "desc" => "The average cost per click"
+      "desc" => "The average cost per click",
+      "currency" => 1
     ],
     ["type" => "cam_cpm",
       "name" => "Cost per mile",
       "fb_name" => "cpm",
-      "desc" => "The average cost per mile"
+      "desc" => "The average cost per mile",
+      "currency" => 1
     ],
     ["type" => "cam_cpp",
       "name" => "Cost per pixel",
       "fb_name" => "cpp",
-      "desc" => "The average cost per pixel"
+      "desc" => "The average cost per pixel",
+      "currency" => 1
     ],
     ["type" => "cam_ctr",
       "name" => "Click through ratio",
       "fb_name" => "ctr",
-      "desc" => "The average ratio of the click throughs"
+      "desc" => "The average ratio of the click throughs",
+      "currency" => 0
     ],
     ["type" => "cam_frq",
       "name" => "Frequency",
       "fb_name" => "frequency",
-      "desc" => "The average frequency of the ads"
+      "desc" => "The average frequency of the ads",
+      "currency" => 0
     ],
     ["type" => "cam_spd",
       "name" => "Spend",
       "fb_name" => "spend",
-      "desc" => "The average amount spend"
+      "desc" => "The average amount spend",
+      "currency" => 1
     ],
     ["type" => "cam_lcl",
       "name" => "Link clicks",
       "fb_name" => "unique_inline_link_clicks",
-      "desc" => "The average link clicks"
+      "desc" => "The average link clicks",
+      "currency" => 0
     ],
     ["type" => "cam_ras",
       "name" => "Return on ad spent",
       "fb_name" => "website_purchase_roas",
-      "desc" => "The average return on ads spend"
+      "desc" => "The average return on ads spend",
+      "currency" => 0
     ]
   );
 ?>

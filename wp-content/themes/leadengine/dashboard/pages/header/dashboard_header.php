@@ -70,7 +70,7 @@
 
   <!-- Use this modal instead of alerts. -->
   <div id="errorModal" class="modal"></div>
-  
+
   <div class="white-screen" style="display: none;">
     <div class="wrap">
       <div class="loading">
@@ -110,7 +110,7 @@
       </div>
       <div class="stats">
         <div class="stat-block custom-height col-lg-4">
-          <span class="title">Clients</span>
+          <span class="title">Contacts</span>
           <span class="data"><?php echo $number_of_clients; ?></span>
         </div>
         <div class="stat-block custom-height col-lg-4">
@@ -127,7 +127,7 @@
           <a href="../dashboard/" class="responsive-item" ><li>Dashboard</li></a>
           <a href="../audit-dashboard/"><li><i class="fas fa-file-alt"></i></i>Audits</li></a>
           <a href="../report-dashboard/"><li><i class="fas fa-chart-line"></i>Reports</li></a>
-          <a href="../client-dashboard/"><li><i class="far fa-building"></i>Clients</li></a>
+          <a href="../client-dashboard/"><li><i class="far fa-building"></i>Contacts</li></a>
           <a href="../profile-page/"><li><i class="fas fa-cog"></i>Config</i></li></a>
           <a href="../search-page/" class="responsive-item search-icon" ><li>Search page</li></a>
           <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout" ><li><i class="fas fa-power-off"></i>Logout</i></a>

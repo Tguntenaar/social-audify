@@ -11,7 +11,7 @@ class report_controller {
   }
 
 
-  function create($name, $client, $options, $competitor, $manual) {
+  function create($name, $client, $options, $competitor, $manual, $currency) {
     $client_id = $client['id'];
     $social_stats = json_encode($client['data']);
     $chart_data =  json_encode($client['chart_data']);
@@ -51,7 +51,7 @@ class report_controller {
     $instance->update('post_id', $post_id);
 
     // insert the new data
-    $instance->insert_data($social_stats, $chart_data, 0, (int)$manual);
+    $instance->insert_data($social_stats, $chart_data, 0, (int)$manual, $currency);
 
     if ($competitor != 'false') {
       $compare_report_id = (int)$competitor['id'];

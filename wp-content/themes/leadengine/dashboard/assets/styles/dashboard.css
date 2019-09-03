@@ -341,12 +341,9 @@ header {
 }
 
 nav {
-    /* width: 80%;
-    height: auto;
-    margin: 0 auto; */
-		width: 100px;
-		height: auto;
-		margin: 0 auto;
+	width: 102px;
+	height: auto;
+	margin: 0 auto;
 }
 
 nav ul {
@@ -354,7 +351,6 @@ nav ul {
     height: auto;
     float: left;
     margin-top: 40px;
-		/* margin-left: 50px; */
 }
 
 nav ul li {
@@ -2240,6 +2236,12 @@ h4 {
 	position: relative;
 	z-index: 50;
 	margin-top: -4px;
+}
+
+.currency {
+	font-size: 16px !important;
+	font-weight: 100;
+	margin-left: -5px;
 }
 
 .graph-info {

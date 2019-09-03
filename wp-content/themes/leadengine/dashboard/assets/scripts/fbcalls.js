@@ -93,7 +93,8 @@ function makeFbPromise(client, competitor = 0) {
  * ! facebook en instagram options rekening mee houden.
  */
 function makeApiCalls(instance) {
-  const {client, competitor, page, options, ...iba_id} = instance;
+  const {client, competitor, page, options, currency, ...iba_id} = instance;
+
   var emptyPromise = Promise.resolve('This option is disabled');
 
   var igPromise = igPromiseComp = fbPromise = fbPromiseComp = emptyPromise;
@@ -169,7 +170,7 @@ function makeApiCalls(instance) {
     } else {
       console.log("hier2");
       // console.log(competitor.id);
-      post_ajax(client, page, options, competitor);
+      post_ajax(client, page, options, competitor, currency);
     }
 
   }).catch((reason) => {
@@ -216,7 +217,7 @@ function askToContinue(client, page, options, competitor, manualType) {
 }
 
 
-function post_ajax(client, page, options, competitor = false) {
+function post_ajax(client, page, options, competitor = false, currency = null) {
   if (typeof competitor !== 'object') {
     competitor = 'false';
   }
@@ -225,8 +226,12 @@ function post_ajax(client, page, options, competitor = false) {
     'client': JSON.stringify(client),
     'page_info' : JSON.stringify(page),
     'options' : JSON.stringify(options),
-    'competitor' : JSON.stringify(competitor)
+    'competitor' : JSON.stringify(competitor),
+    'currency' : JSON.stringify(currency)
   };
+
+  console.log("hier nu");
+  console.log(data);
 
   if (page.type === 'audit') {
     data.action = 'update_meta_audit';
@@ -498,7 +503,7 @@ function getInstaQuerie2(iba_id, business_name) {
  * Edge is campaigns or ads
  */
 function getCampaignsQuery(act_id, edge) {
-    return `/${act_id}/${edge}?fields=id,name,insights{reach, impressions, cpc, cpm, cpp, ctr, frequency, spend, unique_inline_link_clicks, website_purchase_roas}`;
+    return `/${act_id}?fields=currency,${edge}{id,name,insights{reach, impressions, cpc, cpm, cpp, ctr, frequency, spend, unique_inline_link_clicks, website_purchase_roas}}`;
     // return `/${act_id}/${edge}?fields=id,name,insights{impressions, cpm, cpp, ctr, frequency, spend}`;
 }
 

@@ -51,7 +51,7 @@
     <div class="modal-content">
       <span id="close_model" class='close'>&times;</span>
       <span><i class="fas fa-trash delete-this-audit" id="delete_button_client" style="left:20px; right:500px; width:16px;"></i></span>
-      <span class="modal-title">Edit Client:</span>
+      <span class="modal-title">Edit Contact:</span>
       <form id="edit-form" action="/process-client/?edit=true" method="post">
         <div class="" style="align:center">
           <div class="col-lg-6 edit-client-left">
@@ -100,12 +100,12 @@
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-height mobile-margin" style="height: 350px; text-align: center;">
       <div class="center-center">
         <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Create a client in a few steps.</h1>
-        <a class="create-audit-button client-button" href="/client-setup/">Create Client</a>
+        <a class="create-audit-button client-button" href="/client-setup/">Create Contact</a>
       </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12  right float-right no-margin" style="margin-top: 150px;">
       <div class="inner no-scroll client-dashboard">
-        <span class="title"><span class="title-background">Clients</span>
+        <span class="title"><span class="title-background">Contacts</span>
           <span class="count" id="counterSpan"><?php echo $number_of_clients; ?></span>
         </span>
         <input type="text" name="search" id="search-input" placeholder="Search..."/>
@@ -140,7 +140,7 @@
       $('#fb-login-wrapper').css({display: 'none'});
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
-    
+
     // Find 'selected' class in list of elements
     function findSelected(optionList) {
       var selected = optionList.find('option:selected');
@@ -150,7 +150,7 @@
       }
       return selected;
     }
-        
+
     $(function() {
       // Close the pop up form
       $('#close_model').click(function() {
