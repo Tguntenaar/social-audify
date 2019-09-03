@@ -217,7 +217,7 @@ function askToContinue(client, page, options, competitor, manualType) {
 }
 
 
-function post_ajax(client, page, options, competitor = false, currency = NULL) {
+function post_ajax(client, page, options, competitor = false, currency = null) {
   if (typeof competitor !== 'object') {
     competitor = 'false';
   }

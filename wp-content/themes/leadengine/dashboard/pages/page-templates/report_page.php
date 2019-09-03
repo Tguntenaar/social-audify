@@ -167,7 +167,6 @@
   }
 
   $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
-  var_dump($report);
 ?>
 
 <head>

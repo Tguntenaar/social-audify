@@ -49,24 +49,24 @@
   <!-- Initial block -->
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 100px;">
   <div class="create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <h3>Existing or New client?</h3>
+    <h3>Existing or New contact?</h3>
     <p>
-      Here you can choose to select a client you made previously or simply make a completely new client.
-      Selecting an existing client will retrieve your client list, which stores all clients from previous audits and reports.
-      When creating a new client you start from scratch and need to fill in a client form, after which this new client
-      will be added to your client list automatically for future use.
+      Here you can choose to select a contact you made previously or simply make a completely new contact.
+      Selecting an existing contact will retrieve your contact list, which stores all contacts from previous audits and reports.
+      When creating a new contact you start from scratch and need to fill in a contact form, after which this new contact
+      will be added to your contact list automatically for future use.
     </p>
     <div class="audit-option-center">
       <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option border-rightt audit-option-left" onclick="showIntro(false)">
         <div class="vertical-align">
-          <span class="option-title">Existing client</span>
-          <span class="option-text">Choose a client from your client list.</span>
+          <span class="option-title">Existing contact</span>
+          <span class="option-text">Choose a contact from your contact list.</span>
         </div>
       </div>
       <a href="../client-setup/?from=report" class="ol-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option audit-option-right">
         <div class="vertical-align">
-          <span class="option-title">Create new client</span>
-          <span class="option-text">Make a client and add it to your client list.</span>
+          <span class="option-title">Create new contact</span>
+          <span class="option-text">Make a contact and add it to your contact list.</span>
         </div>
       </a>
     </div>
@@ -100,7 +100,7 @@
           <!-- Choose a client -->
           <div class="tab">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Client</div>
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Contact</div>
             </div>
             <input type="text" name="search" id="search-input" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
