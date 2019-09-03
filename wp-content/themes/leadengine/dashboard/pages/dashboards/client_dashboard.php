@@ -99,7 +99,7 @@
   <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-height mobile-margin" style="height: 350px; text-align: center;">
       <div class="center-center">
-        <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Create a client in a few steps.</h1>
+        <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Create a contact in a few steps.</h1>
         <a class="create-audit-button client-button" href="/client-setup/">Create Contact</a>
       </div>
     </div>

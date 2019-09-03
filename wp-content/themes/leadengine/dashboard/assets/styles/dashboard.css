@@ -594,11 +594,19 @@ nav ul a:hover {
 	overflow: hidden;
 }
 
+.eplenation-banner {
+	font-size: 13px !important;
+	font-weight: 100;
+	margin-bottom: 20px;
+	margin-left: 15px;
+	display: block;
+}
+
 .video-options h3 {
 	font-size: 21px;
 	margin-left: 15px;
 	margin-top: 45px;
-	margin-bottom: 25px;
+	margin-bottom: 5px;
 }
 
 .video-options form {
@@ -2793,9 +2801,10 @@ label {
 	margin-bottom: 5px;
 }
 
-.custom-radio input[type="radio"]{
+.custom-radio input[type="radio"] {
 	display: inline-block;
 	width: 40px;
+	margin-bottom: 10px;
 }
 
 .csv-fields input[type=radio] {

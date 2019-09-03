@@ -269,6 +269,7 @@
     if ($edit_mode) { ?>
       <div class="video-options">
         <h3>Banner options:</h3>
+        <span class="eplenation-banner">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem <a href="https://www.google.nl">aperiam</a>.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
           <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> /> <span class="radio-label">Iframe</span>
           <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?>/> <span class="radio-label">Nothing</span>
