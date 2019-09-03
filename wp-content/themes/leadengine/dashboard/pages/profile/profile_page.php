@@ -106,7 +106,8 @@
           <div id="profile-avatar" class="profile-avatar">
             <?php echo do_shortcode('[avatar_upload]'); ?>
             <div class="profile-exp">
-                <i id="avatar-exp" class="information fas fa-info"></i><br /><div id="avatar-exp-text"><span class="title-exp">Avatar:</span> Your Avatar will be shown on the audit and report page. This could be your logo or a professional photo of yourself.</div>
+              <i id="avatar-exp" class="information fas fa-info"></i>
+              <!-- <i id="avatar-exp" class="information fas fa-info"></i><br /><div id="avatar-exp-text"><span class="title-exp">Avatar:</span> Your Avatar will be shown on the audit and report page. This could be your logo or a professional photo of yourself.</div> -->
             </div>
           </div>
 
@@ -217,7 +218,8 @@
             </form>
 
             <div class="profile-exp">
-                <a href="/tutorial/#1488725417825-2758920e-e7ef" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a>
+                <i id="audit-exp" class="information fas fa-info"></i>
+                <!-- <a href="/tutorial/#1488725417825-2758920e-e7ef" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
 
@@ -267,7 +269,8 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-                 <a href="/tutorial/#1489503964921-3acbdde1-0dcf" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a>
+              <i id="audit-exp" class="information fas fa-info"></i>
+              <!-- <a href="/tutorial/#1489503964921-3acbdde1-0dcf" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
 
@@ -320,7 +323,8 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-                <a href="/tutorial/#1489503963784-5b2be039-5cee" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a>
+              <i id="audit-exp" class="information fas fa-info"></i> 
+              <!-- <a href="/tutorial/#1489503963784-5b2be039-5cee" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
 
@@ -509,6 +513,45 @@
     $("#mail-click").on('click', function(event){
       document.getElementById('mail-settings').scrollIntoView(false);
     });
+
+    var explanations = {
+      profile: {
+        title: 'title',
+        description: 'description',
+      },
+      avatar: {
+        title: 'title',
+        description: 'description',
+      },
+      audit: {
+        title: 'title',
+        description: 'description',
+      },
+      report: {
+        title: 'title',
+        description: 'description',
+      },
+      mail: {
+        title: 'title',
+        description: 'description',
+      },
+      data: {
+        title: 'title',
+        description: 'description',
+      },
+    }
+    ['profile', 'avatar', 'audit', 'report', 'mail', 'data'].forEach() {
+
+    }
+    $(``).on('click', function() {
+      showModal(initiateModal('errorModal', 'error', {
+      'text': ``,
+      'subtext': `${explanation[].description}`,
+    }));
+    });
+
+
+
   });
 </script>
 </html>
