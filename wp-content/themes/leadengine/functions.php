@@ -365,7 +365,7 @@
       <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
     <p>
-      <label for="rcp_btw_number"><?php _e( 'Your FAT number', 'rcp' ); ?></label>
+      <label for="rcp_btw_number"><?php _e( 'Your VAT number', 'rcp' ); ?></label>
       <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo esc_attr( $btw_number ); ?>"/>
     </p>
     <?php

@@ -87,7 +87,7 @@
 </head>
 <body>
   <div id="confirmModal" class="modal"></div>
-  <div id="errorModal" class="modal"></div>
+
   <div class="profile-page">
       <div class="content-right y-scroll col-lg-9" style="padding-left: 25px;">
         <div class="acitivities col-lg-12">
@@ -101,13 +101,15 @@
           <div id="profile-member">
             <h3 class="h3-fix">Profile settings</h3>
             <?php echo do_shortcode('[rcp_profile_editor]'); ?>
+            <div class="profile-exp">
+              <i id="profile-exp" class="information fas fa-info"></i>
+            </div>
           </div>
 
           <div id="profile-avatar" class="profile-avatar">
             <?php echo do_shortcode('[avatar_upload]'); ?>
             <div class="profile-exp">
               <i id="avatar-exp" class="information fas fa-info"></i>
-              <!-- <i id="avatar-exp" class="information fas fa-info"></i><br /><div id="avatar-exp-text"><span class="title-exp">Avatar:</span> Your Avatar will be shown on the audit and report page. This could be your logo or a professional photo of yourself.</div> -->
             </div>
           </div>
 
@@ -219,7 +221,6 @@
 
             <div class="profile-exp">
                 <i id="audit-exp" class="information fas fa-info"></i>
-                <!-- <a href="/tutorial/#1488725417825-2758920e-e7ef" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
 
@@ -270,7 +271,6 @@
             </form>
             <div class="profile-exp">
               <i id="report-exp" class="information fas fa-info"></i>
-              <!-- <a href="/tutorial/#1489503964921-3acbdde1-0dcf" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
 
@@ -324,7 +324,6 @@
             </form>
             <div class="profile-exp">
               <i id="mail-exp" class="information fas fa-info"></i> 
-              <!-- <a href="/tutorial/#1489503963784-5b2be039-5cee" target="=_blank"><i id="audit-exp" class="information fas fa-info"></i></a> -->
             </div>
           </div>
 
@@ -487,15 +486,15 @@
 
 
     $("#phone-exp").on('click', function(event){
-        $("#phone-exp-text").toggle();
+      $("#phone-exp-text").toggle();
     });
 
     $("#mail-exp").on('click', function(event){
-        $("#mail-exp-text").toggle();
+      $("#mail-exp-text").toggle();
     });
 
     $("#avatar-exp").on('click', function(event){
-        $("#avatar-exp-text").toggle();
+      $("#avatar-exp-text").toggle();
     });
 
     $("#avatar-click").on('click', function(event){
@@ -516,40 +515,45 @@
 
     var explanations = {
       profile: {
-        title: 'title',
-        description: 'description',
+        title: 'Profile Fields',
+        description: 'Display name is what your leads and clients see on the \
+        audits. Add your phone number so your leads are able to call you after \
+        viewing your audits. Add your FAT number for [Bob]',
       },
       avatar: {
-        title: 'title',
-        description: 'description',
+        title: 'Avatar',
+        description: 'Leads and clients can see your avatar on audits and reports.',
       },
       audit: {
-        title: 'title',
-        description: 'description',
+        title: 'Audit Fields',
+        description: 'Facebook-, Instagram- and Website text can be edited by a \
+        slide bar on the audit page. Based on the score you give your to your \
+        leads data the right text will appear. This way you can make reports \
+        and audits even faster.<br><br>\
+        The visibility preference determines which blocks your audit will \
+        show by default',
       },
       report: {
-        title: 'title',
-        description: 'description',
+        title: 'Report Fields',
+        description: 'The visibility preference determines which blocks your \
+        report will show by default',
       },
       mail: {
-        title: 'title',
-        description: 'description',
+        title: 'Mail config',
+        description: 'The \"When\" tab let\'s you chose after how many days you \
+        send an automated mail to leads that didn\'t see their audit yet.<br> \
+        The \"What\" tab determines what content is inside the mail.',
       },
-      data: {
-        title: 'title',
-        description: 'description',
-      },
-    }
+    };
 
-    ['profile', 'avatar', 'audit', 'report', 'mail', 'data'].forEach(elem) {
+    ['profile', 'avatar', 'audit', 'report', 'mail'].forEach(function(elem) {
       $(`#${elem}-exp`).on('click', function() {
         showModal(initiateModal('errorModal', 'error', {
           'text': `${explanations[elem].title}`,
           'subtext': `${explanations[elem].description}`,
         }));
       });
-    }
-    // iets ergens erin schrijven
+    });
   });
 </script>
 </html>
