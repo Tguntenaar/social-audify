@@ -516,7 +516,9 @@
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: 'Display name is what you see on the audits. Add your phone number so your leads can call you after viewing your audits. Add your FAT number for ... Bob\'s reason',
+        description: 'Display name is what your leads and clients see on the \
+        audits. Add your phone number so your leads are able to call you after \
+        viewing your audits. Add your FAT number for [Bob]',
       },
       avatar: {
         title: 'Avatar',
@@ -524,15 +526,23 @@
       },
       audit: {
         title: 'Audit Fields',
-        description: 'Facebook-, Instagram- and Website text can be edited by a slide bar on the audit page. Based on the score you give your to your leads data.',
+        description: 'Facebook-, Instagram- and Website text can be edited by a \
+        slide bar on the audit page. Based on the score you give your to your \
+        leads data the right text will appear. This way you can make reports \
+        and audits even faster.<br><br>\
+        The visibility preference determines which blocks your audit will \
+        show by default',
       },
       report: {
-        title: 'title',
-        description: 'description',
+        title: 'Report Fields',
+        description: 'The visibility preference determines which blocks your \
+        report will show by default',
       },
       mail: {
         title: 'Mail config',
-        description: 'description',
+        description: 'The \"When\" tab let\'s you chose after how many days you \
+        send an automated mail to leads that didn\'t see their audit yet.<br> \
+        The \"What\" tab determines what content is inside the mail.',
       },
     };
 
