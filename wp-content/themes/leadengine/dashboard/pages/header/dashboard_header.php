@@ -13,7 +13,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
-  <script>var testing_git = false;</script>
+  <script>var testing_git = true;</script>
 </head>
 <body>
   <!-- Facebook JS SDK moet direct na de opening body tag -->
