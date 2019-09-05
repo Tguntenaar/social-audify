@@ -3980,7 +3980,7 @@ h4 {
 	}
 
 	.sub-header {
-		/* display: none; */
+		display: none;
 	}
 
 	nav {
@@ -4100,9 +4100,62 @@ h4 {
 	.report-compared-last-month {
 		margin-bottom: 100px;
 	}
+
+	.inner-scroll {
+		height: 230px !important;
+	}
+
+	.responsive-height {
+		height: 470px !important;
+	}
+
+	.responsive-padding {
+		padding-bottom: 100px !important;
+	}
+
+	.responsive-padding-report {
+		padding-bottom: 100px !important;
+	}
 }
 
 @media only screen and (max-width: 768px) {
+	.steps {
+		display: none !important;
+	}
+
+	.dot-nav {
+		display: none !important;
+	}
+
+	.inner {
+		overflow-y: visible;
+	}
+
+	.nav-buttons {
+		bottom: -8px;
+		left: 3px;
+	}
+
+	.graph-procent {
+		font-size: 32px;
+	}
+
+	.name-input {
+		width: 75% !important;
+	}
+
+	.custom-left {
+		padding-left: 10px !important;
+		padding-right: 10px !important;
+	}
+
+	.responsive-height {
+		overflow-y: visible;
+	}
+	.overview-audit-report .right .inner, .overview-audit-report .left .inner {
+		overflow: hidden;
+	}
+
 	.sub-header a,
 	.sub-header div,
 	.sub-header button {
@@ -4169,10 +4222,8 @@ h4 {
 	.video-options {
 		top: 0px;
 		margin-top: 0px;
-	}
-
-	.video-options {
-		width: 350px;
+		width: 300px;
+		height: 285px;
 	}
 
 	nav {

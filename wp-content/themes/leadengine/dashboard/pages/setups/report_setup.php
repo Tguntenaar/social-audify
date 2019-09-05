@@ -47,7 +47,7 @@
   </div>
 
   <!-- Initial block -->
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 100px;">
+  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding-report" style="padding-bottom: 100px;">
   <div class="create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <h3>Existing or New contact?</h3>
     <p>
@@ -73,7 +73,7 @@
   </div>
   <!-- Containers for multistep form -->
   <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left" style="height: 605px;">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
       <div class="inner height-auto">
         <span class="title title-audit-page">Create a report</span>
 

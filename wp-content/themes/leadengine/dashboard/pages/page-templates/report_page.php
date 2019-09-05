@@ -185,7 +185,7 @@
   <div id="confirmModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
 
-  <div class="sub-header col-lg-12"><?php
+  <div class="sub-header col-lg-12" style="display: block !important;"><?php
     if ($edit_mode) { ?>
       <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
     } ?>
