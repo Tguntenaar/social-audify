@@ -3800,6 +3800,11 @@ h4 {
 	display: none;
 }
 
+.tab {
+	width: 100%;
+	height: auto;
+}
+
 @media only screen and (max-width: 1200px) {
 	.competitor-stats,
 	.data-view {
@@ -4205,6 +4210,10 @@ h4 {
 		margin-left: 75px;
 	}
 
+	.modal-content {
+		width: 85% !important
+	}
+
 }
 
 
@@ -4261,9 +4270,20 @@ h4 {
 		margin-left: -15px;
 		float:left !important;
 	}
+
+	.edit-client-left {
+		display: none;
+	}
+
+	.edit-client-right {
+		width: 100%;
+	}
 }
 
 @media only screen and (max-width: 576px) {
+	.inner-scroll {
+		overflow-x: scroll;
+	}
 	.remove-on-mobile {
 			display: none;
 	}
@@ -4280,9 +4300,32 @@ h4 {
 	.mobile-margin {
 		margin-bottom: 30px;
 	}
+
+	.name-client {
+		display: block;
+		width: 100%;
+		float: left;
+	}
+
+	.overlay-ad-account {
+		position: relative;
+		width: 100%;
+	}
+
+	.overlay-ad-account p {
+		float: left;
+	}
+
+	.height-repsonsive-auto {
+		height: auto !important;
+	}
+
 }
 
 @media only screen and (max-width: 400px) {
+	.option-title {
+		font-size: 19px;
+	}
 	.stat-box {
 		width: 44%;
 		height: 32vw;

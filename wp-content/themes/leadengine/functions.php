@@ -361,8 +361,8 @@
     $number = get_user_meta($id, 'rcp_number', true );
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
     $encrypt_method = "AES-256-CBC";
-    $secret_key = 'This is my secret key';
-    $secret_iv = 'This is my secret iv';
+    $secret_key = 'ABk FA sjdanjk lallLL';
+    $secret_iv = 'SAAnkks ksj sknalSAFF';
     $key = hash('sha256', $secret_key);
     $iv = substr(hash('sha256', $secret_iv), 0, 16);
     ?>
@@ -386,8 +386,8 @@
     $number = get_user_meta( $user_id, 'rcp_number', true );
     $btw_number = get_user_meta( $user_id, 'rcp_btw_number', true );
     $encrypt_method = "AES-256-CBC";
-    $secret_key = 'This is my secret key';
-    $secret_iv = 'This is my secret iv';
+    $secret_key = 'ABk FA sjdanjk lallLL';
+    $secret_iv = 'TSAAnkks ksj sknalSAFF';
     // hash
     $key = hash('sha256', $secret_key);
     $iv = substr(hash('sha256', $secret_iv), 0, 16);
@@ -438,8 +438,8 @@
   function pw_rcp_save_user_fields_on_register( $posted, $user_id ) {
     $output = false;
     $encrypt_method = "AES-256-CBC";
-    $secret_key = 'This is my secret key';
-    $secret_iv = 'This is my secret iv';
+    $secret_key = 'ABk FA sjdanjk lallLL';
+    $secret_iv = 'SAAnkks ksj sknalSAFF';
     // hash
     $key = hash('sha256', $secret_key);
     $iv = substr(hash('sha256', $secret_iv), 0, 16);
@@ -460,8 +460,8 @@
      */
     function pw_rcp_save_user_fields_on_profile_save( $user_id ) {
         $encrypt_method = "AES-256-CBC";
-        $secret_key = 'This is my secret key';
-        $secret_iv = 'This is my secret iv';
+        $secret_key = 'ABk FA sjdanjk lallLL';
+        $secret_iv = 'SAAnkks ksj sknalSAFF';
         // hash
         $key = hash('sha256', $secret_key);
         $iv = substr(hash('sha256', $secret_iv), 0, 16);

@@ -106,8 +106,10 @@
             <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
               foreach($clients as $client) {
                 $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website, "ad_id"=>$client->ad_id];?>
-                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
-                   data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name;
+                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-repsonsive-auto audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
+                   data-client='<?php echo htmlentities(json_encode($data)); ?>'>
+
+                  <span class="name-client"><?php echo $client->name;?></span><?php
 
                   $ad_overlay = ($client->ad_id == NULL) ? "connect" : "change"; ?>
                   <div class="overlay-ad-account <?php echo $ad_overlay; ?>-ad-account">
