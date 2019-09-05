@@ -516,7 +516,7 @@
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: '<strong>Your phone number:</strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail:</strong> This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your FAT number for [Bob]',
+        description: '<strong>Your phone number:</strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail:</strong> This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
       },
       avatar: {
         title: 'Avatar',
@@ -525,12 +525,6 @@
       audit: {
         title: 'Audit Fields',
         description: '<strong>Audit text:</strong>In order to speed up the process of sending audits you can add a standard introduction, conclusion, facebook, instagram and website text. This text will automatically be added to every audit you create. You can still add / change this per individual audit after filling this out.<br /><br /><strong>Visibility audit:</strong>Here you can configure which parts of the audit you want to be visible for your lead. For example: if you don’t offer web development, maybe you only want to check if they have the pixel installed. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
-        // description: 'Facebook-, Instagram- and Website text can be edited by a \
-        // slide bar on the audit page. Based on the score you give your to your \
-        // leads data the right text will appear. This way you can make reports \
-        // and audits even faster.<br><br>\
-        // The visibility preference determines which blocks your audit will \
-        // show by default',
       },
       report: {
         title: 'Report Fields',
