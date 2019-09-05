@@ -457,7 +457,7 @@
               <div onclick="toggle_visibility('insta_lpd')" id="insta_lpd_icon" class="visibility"><?php
                 visibility_icon($edit_mode, $audit->insta_lpd); ?></div>
               <div class="chart-info">
-                <span class="stat-box-title">Likes on your posts by date on Instagram</span>
+                <span class="stat-box-title">Likes on your posts Instagram</span>
                 <span class="graph-procent" style="margin-top: -8px;">Average <?php
                   echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span>
                 <span class="graph-info"><?php

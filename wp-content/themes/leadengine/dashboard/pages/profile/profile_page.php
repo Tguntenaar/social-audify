@@ -323,7 +323,7 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-              <i id="mail-exp" class="information fas fa-info"></i> 
+              <i id="mail-exp" class="information fas fa-info"></i>
             </div>
           </div>
 
@@ -516,33 +516,29 @@
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: 'Display name is what your leads and clients see on the \
-        audits. Add your phone number so your leads are able to call you after \
-        viewing your audits. Add your FAT number for [Bob]',
+        description: '<strong>Your phone number:</strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail:</strong> This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your FAT number for [Bob]',
       },
       avatar: {
         title: 'Avatar',
-        description: 'Leads and clients can see your avatar on audits and reports.',
+        description: 'Your Avatar will be shown on the audit and report page. This could be your logo or a professional photo of yourself.',
       },
       audit: {
         title: 'Audit Fields',
-        description: 'Facebook-, Instagram- and Website text can be edited by a \
-        slide bar on the audit page. Based on the score you give your to your \
-        leads data the right text will appear. This way you can make reports \
-        and audits even faster.<br><br>\
-        The visibility preference determines which blocks your audit will \
-        show by default',
+        description: '<strong>Audit text:</strong>In order to speed up the process of sending audits you can add a standard introduction, conclusion, facebook, instagram and website text. This text will automatically be added to every audit you create. You can still add / change this per individual audit after filling this out.<br /><br /><strong>Visibility audit:</strong>Here you can configure which parts of the audit you want to be visible for your lead. For example: if you don’t offer web development, maybe you only want to check if they have the pixel installed. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
+        // description: 'Facebook-, Instagram- and Website text can be edited by a \
+        // slide bar on the audit page. Based on the score you give your to your \
+        // leads data the right text will appear. This way you can make reports \
+        // and audits even faster.<br><br>\
+        // The visibility preference determines which blocks your audit will \
+        // show by default',
       },
       report: {
         title: 'Report Fields',
-        description: 'The visibility preference determines which blocks your \
-        report will show by default',
+        description: '<strong>Report text</strong>In order to speed up the process of sending your monthly reports, you can add a standard introduction and conclusion text which will be included in every report you generate. You can still add / change the text in every individual report after filling this out.<br /><br /><strong>Visibility report:</strong>Here you can configure which parts of the report you want to be visible for your client. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
       },
       mail: {
         title: 'Mail config',
-        description: 'The \"When\" tab let\'s you chose after how many days you \
-        send an automated mail to leads that didn\'t see their audit yet.<br> \
-        The \"What\" tab determines what content is inside the mail.',
+        description: '<strong>When:</strong> If you want, we can send your leads automatic reminders if they do not view their audit. You can configure the amount of days between every single email you want to send here.</br ><br /> <strong>Copy: </strong>You can configure the emails we will send to your leads concerning the audit. Every email and follow up can be configured individually. Use #{name} to enter the name of the client in the email. The emails will be send from our server, but it will show your email address as the sender. They will reply to your email!',
       },
     };
 

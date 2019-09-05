@@ -2518,6 +2518,7 @@ h4 {
 
 .subtext {
 	margin-top: 15px !important;
+	font-weight: 100 !important;
 }
 
 .client_modal input[type="text"],
@@ -3669,10 +3670,12 @@ h4 {
 	width: 50%;
 	margin-left: 5%;
 	height: 240px;
-	border: 0;
-	border-bottom: 1px solid #2980b9;
+	border: 1px solid #e0e0e0;
 	font-size: 14px !important;
 	font-weight: 100;
+	padding-left: 10px;
+	padding-top: 10px;
+	border-radius: 3px;
 }
 
 #report-settings {
@@ -3684,6 +3687,11 @@ h4 {
 	border-left: 1px solid #2980b9;
 	margin-top: 30px;
 	/* margin-bottom: 70px; */
+}
+
+.profile-page i {
+	cursor: pointer;
+	color: #487dd7 !important;
 }
 
 #audit-settings ul,
@@ -3972,7 +3980,7 @@ h4 {
 	}
 
 	.sub-header {
-		display: none;
+		/* display: none; */
 	}
 
 	nav {
@@ -4095,6 +4103,23 @@ h4 {
 }
 
 @media only screen and (max-width: 768px) {
+	.sub-header a,
+	.sub-header div,
+	.sub-header button {
+		width: 100%;
+		display: block;
+		float: left;
+	}
+	.sub-header button {
+		text-align: left;
+	}
+	.sub-header {
+		height: auto;
+	}
+	#delete-this-audit {
+		position: absolute;
+		top: 0; right: 15px;
+	}
 	.report-dash-stat {
 		margin-top: 20px;
 	}
