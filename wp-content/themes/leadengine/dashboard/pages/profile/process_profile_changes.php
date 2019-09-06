@@ -98,65 +98,17 @@
     if_set_update_textfield($user, 'second_mail_text', 'second_mail_text', 'Mail_config');
     if_set_update_textfield($user, 'third_mail_text', 'third_mail_text', 'Mail_config');
 
-
-    $audit_visibility_fields = array(
-      'fb_likes',
-      'fb_pem',
-      'fb_apl',
-      'fb_ads',
-      'fb_dpp',
-      'fb_dph',
-      'fb_ntv',
-      'fb_tab',
-      'fb_loc',
-      'fb_cp',
-      'insta_ae',
-      'insta_nof',
-      'insta_nopf',
-      'insta_hashtag',
-      'insta_lpd',
-      'insta_nplm',
-      'website_ga',
-      'website_googletag',
-      'website_pixel',
-      'website_ws',
-      'website_mf',
-      'website_lt');
-
-    $report_visibility_fields = array(
-      'cam_imp',
-      'cam_cpc',
-      'cam_cpm',
-      'cam_cpp',
-      'cam_ctr',
-      'cam_frq',
-      'cam_spd',
-      'soc_pl',
-      'soc_aml',
-      'soc_inf',
-      'soc_inaf',
-      'soc_iae',
-      'soc_plm',
-      'graph_imp',
-      'graph_cpc',
-      'graph_cpm',
-      'graph_cpp',
-      'graph_ctr',
-      'graph_frq',
-      'graph_spd');
-
-
-    foreach ($audit_visibility_fields as $field) {
+    foreach ($audit_visibility_stat[0] as $field => $value) {
       if (isset($_POST["check-${field}"])) {
-        if ((int)$_POST["check-${field}"] xor (int)$audit_visibility_stat[0]->{$field}) {
+        if ((int)$_POST["check-${field}"] xor (int)$value) {
           $user->toggle_visibility($field, 'audit');
         }
       }
     }
 
-    foreach ($report_visibility_fields as $field) {
+    foreach ($report_visibility_stat[0] as $field => $value) {
       if (isset($_POST["check-${field}"])) {
-        if ((int)$_POST["check-${field}"] xor (int)$report_visibility_stat[0]->{$field}) {
+        if ((int)$_POST["check-${field}"] xor (int)$value) {
           $user->toggle_visibility($field, 'report');
         }
       }
@@ -164,7 +116,6 @@
 
     // clean var_dump
     // echo '<pre>' . var_export($report_visibility_stat[0], true) . '</pre>';
-
 
     if (true) {
       if (isset($_GET['settings'])) {

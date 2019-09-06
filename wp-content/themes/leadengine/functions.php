@@ -360,25 +360,37 @@
     $id = get_current_user_id();
     $number = get_user_meta($id, 'rcp_number', true );
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
+    $encrypt_method = "AES-256-CBC";
+    $secret_key = 'This is my secret key';
+    $secret_iv = 'This is my secret iv';
+    $key = hash('sha256', $secret_key);
+    $iv = substr(hash('sha256', $secret_iv), 0, 16);
     ?>
     <p>
       <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
     <p>
       <label for="rcp_btw_number"><?php _e( 'Your VAT number', 'rcp' ); ?></label>
-      <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo esc_attr( $btw_number ); ?>"/>
+      <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
     </p>
     <?php
   }
 
 
   add_action( 'rcp_edit_member_after', 'pw_rcp_add_member_edit_fields' );
+
   /**
    * Adds the custom fields to the member edit screen
    */
   function pw_rcp_add_member_edit_fields($user_id = 0) {
     $number = get_user_meta( $user_id, 'rcp_number', true );
     $btw_number = get_user_meta( $user_id, 'rcp_btw_number', true );
+    $encrypt_method = "AES-256-CBC";
+    $secret_key = 'This is my secret key';
+    $secret_iv = 'This is my secret iv';
+    // hash
+    $key = hash('sha256', $secret_key);
+    $iv = substr(hash('sha256', $secret_iv), 0, 16);
     ?>
     <tr valign="top">
       <th scope="row" valign="top">
@@ -394,7 +406,7 @@
         <label for="rcp_btw_number"><?php _e( 'FAT number', 'rcp' ); ?></label>
       </th>
       <td>
-        <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo esc_attr( $btw_number ); ?>"/>
+        <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
         <p class="description"><?php _e( 'The member\'s FAT number', 'rcp' ); ?></p>
       </td>
     </tr>
@@ -430,7 +442,7 @@
     $secret_iv = 'This is my secret iv';
     // hash
     $key = hash('sha256', $secret_key);
-
+    $iv = substr(hash('sha256', $secret_iv), 0, 16);
     $output = openssl_encrypt(sanitize_text_field( $posted['rcp_btw_number'] ), $encrypt_method, $key, 0, $iv);
     $output = base64_encode($output);
 
@@ -441,6 +453,31 @@
       update_user_meta( $user_id, 'rcp_btw_number', $output);
     }
   }
+
+  /**
+     * Stores the information submitted profile update
+     *
+     */
+    function pw_rcp_save_user_fields_on_profile_save( $user_id ) {
+        $encrypt_method = "AES-256-CBC";
+        $secret_key = 'This is my secret key';
+        $secret_iv = 'This is my secret iv';
+        // hash
+        $key = hash('sha256', $secret_key);
+        $iv = substr(hash('sha256', $secret_iv), 0, 16);
+
+        $output = openssl_encrypt(sanitize_text_field( $_POST['rcp_btw_number'] ), $encrypt_method, $key, 0, $iv);
+        $output = base64_encode($output);
+
+    	if( ! empty( $_POST['rcp_number'] ) ) {
+    		update_user_meta( $user_id, 'rcp_number', sanitize_text_field( $_POST['rcp_number'] ) );
+    	}
+    	if( ! empty( $_POST['rcp_btw_number'] ) ) {
+    		update_user_meta( $user_id, 'rcp_btw_number', $output);
+    	}
+    }
+    add_action( 'rcp_user_profile_updated', 'pw_rcp_save_user_fields_on_profile_save', 10 );
+    add_action( 'rcp_edit_member', 'pw_rcp_save_user_fields_on_profile_save', 10 );
 
 
   // -------------------------------------

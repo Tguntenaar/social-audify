@@ -12,11 +12,6 @@
       "desc" => "The amount of post per month",
       "is_icon" => 0
     ],
-    // ["type" => "fb_dpp",
-    //   "name" => "Dimension profile picture",
-    //   "fb_name" => "pf_picture_size",
-    //   "desc" => "The dimensions of the profile picture"
-    // ],
     ["type" => "fb_apl",
       "name" => "Average post length",
       "fb_name" => "avgMessageLength",
