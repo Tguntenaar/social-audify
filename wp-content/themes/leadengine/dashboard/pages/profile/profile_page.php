@@ -17,53 +17,6 @@
   $user = $user_control->get($user_id);
   $audit_visibility = $user->get_visibility('audit');
   $report_visibility = $user->get_visibility('report');
-  // Audit visibility table translations
-  $fbnames = array(
-    'fb_likes'=>'page likes',
-    'fb_pem'=>'post each month',
-    'fb_apl'=>'average post length',
-    'fb_ads'=>'ads running',
-    'fb_ntv'=>'native videos',
-    'fb_tab'=>'talking about the page',
-    'fb_loc'=>'is the location set',
-    'fb_cp' =>'can you post to the page');
-  $ignames = array(
-    'insta_ae'=>'average engagement',
-    'insta_nof'=>'number of followers',
-    'insta_nopf'=>'number of following',
-    'insta_hashtag'=>'hashtags',
-    'insta_lpd'=>'likes graph',
-    'insta_nplm'=>'post last month',
-    'insta_ac'=>'average comments',
-    'insta_al'=>'average likes');
-  $wbnames = array(
-    'website_ga'=>'google analytics',
-    'website_googletag'=>'google tagmanager',
-    'website_pixel'=>'facebook pixel',
-    'website_ws'=>'website_size',
-    'website_mf'=>'mobile friendly',
-    'website_lt'=>'load time');
-
-  // Report visibility table translations
-  $social_names = array(
-    'soc_pl'=>'facebook page likes',
-    'soc_aml'=>'facebook average message length',
-    'soc_inf'=>'instagram followers',
-    'soc_inaf'=>'instagram following',
-    'soc_iae'=>'instagram average ingagement',
-    'soc_plm'=>'instagram number post last month');
-  $campaign_names = array(
-    'cam_imp'=>'impressions',
-    'cam_cpc'=>'cost per click',
-    'cam_cpm'=>'cost per mile',
-    'cam_cpp'=>'cost per pixel',
-    'cam_ctr'=>'click through ratio',
-    'cam_frq'=>'frequency',
-    'cam_spd'=>'spend',
-    'cam_rch'=>'reach',
-    'cam_lcl'=>'link clicks',
-    'cam_ras'=>'return on ad spend');
-
 
   function print_list_checkboxes($blocks, $title, $visibility_list) {
     echo "<h4>${title}</h4>";
@@ -82,18 +35,6 @@
               </label>
             </div>";
     }
-
-    // foreach ($names as $dbname => $fullname) {
-    //   // wheather an value is checked
-    //   $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
-    //   echo " <div class='form-check'>
-    //           <input type='hidden' name='check-${dbname}' value='0'>
-    //           <input type='checkbox' name='check-${dbname}' value='1' class='form-check-input' id='check-${dbname}' ${checked}>
-    //           <label class='form-check-label' for='defaultCheck1'>
-    //             ${fullname}
-    //           </label>
-    //         </div>";
-    // }
   }
 
   // echo '<pre>' . var_export($report_visibility, true) . '</pre>';
