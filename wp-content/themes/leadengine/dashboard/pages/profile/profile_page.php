@@ -29,7 +29,9 @@
     'insta_nopf'=>'number of following',
     'insta_hashtag'=>'hashtags',
     'insta_lpd'=>'likes graph',
-    'insta_nplm'=>'post last month');
+    'insta_nplm'=>'post last month',
+    'insta_ac'=>'average comments',
+    'insta_al'=>'average likes');
   $wbnames = array(
     'website_ga'=>'google analytics',
     'website_googletag'=>'google tagmanager',
@@ -37,23 +39,15 @@
     'website_ws'=>'website_size',
     'website_mf'=>'mobile friendly',
     'website_lt'=>'load time');
+
   // Report visibility table translations
   $social_names = array(
-    'soc_pl'=>'page likes',
-    'soc_aml'=>'average message length',
+    'soc_pl'=>'facebook page likes',
+    'soc_aml'=>'facebook average message length',
     'soc_inf'=>'instagram followers',
     'soc_inaf'=>'instagram following',
     'soc_iae'=>'instagram average ingagement',
-    'soc_plm'=>'number post last month');
-  $graph_names = array(
-    'graph_imp'=>'impressions',
-    'graph_cpc'=>'cost per click',
-    'graph_cpm'=>'cost per mile',
-    'graph_cpp'=>'cost per pxiel',
-    'graph_ctr'=>'click through ratio',
-    'graph_frq'=>'frequency',
-    'graph_spd'=>'spend',
-  );
+    'soc_plm'=>'instagram number post last month');
   $campaign_names = array(
     'cam_imp'=>'impressions',
     'cam_cpc'=>'cost per click',
@@ -61,25 +55,30 @@
     'cam_cpp'=>'cost per pixel',
     'cam_ctr'=>'click through ratio',
     'cam_frq'=>'frequency',
-    'cam_spd'=>'spend');
+    'cam_spd'=>'spend',
+    'cam_rch'=>'reach',
+    'cam_lcl'=>'link clicks',
+    'cam_ras'=>'return on ad spend');
 
 
   function print_list_checkboxes($names, $title, $visibility_list) {
     echo "<h4>${title}</h4>";
     // key is how the fields are called in the database
     // value is what we show users
-    foreach ($names as $key => $value) {
+    foreach ($names as $dbname => $fullname) {
       // wheather an value is checked
-      $checked = ((array)$visibility_list[0])[$key] ? 'checked' : '';
+      $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
       echo " <div class='form-check'>
-              <input type='hidden' name='check-${key}' value='0'>
-              <input type='checkbox' name='check-${key}' value='1' class='form-check-input' id='check-${key}' ${checked}>
+              <input type='hidden' name='check-${dbname}' value='0'>
+              <input type='checkbox' name='check-${dbname}' value='1' class='form-check-input' id='check-${dbname}' ${checked}>
               <label class='form-check-label' for='defaultCheck1'>
-                ${value}
+                ${fullname}
               </label>
             </div>";
     }
   }
+
+  echo '<pre>' . var_export($report_visibility, true) . '</pre>';
 ?>
 <head>
   <meta charset="utf-8">
@@ -254,16 +253,12 @@
                 <ul>
                   <li id="social-report-visibility-item" class="active-menu-item">Social</li>
                   <li id="campaign-report-visibility-item">Campaign</li>
-                  <li id="graph-report-visibility-item">Graph</li>
                 </ul>
                 <div class="social-report-visibility-block">
                   <?php print_list_checkboxes($social_names, 'social', $report_visibility); ?>
                 </div>
                 <div class="campaign-report-visibility-block" style='display:none'>
                   <?php print_list_checkboxes($campaign_names, 'campaign', $report_visibility); ?>
-                </div>
-                <div class="graph-report-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($graph_names, 'graph', $report_visibility); ?>
                 </div>
               </div>
               <div class="error-display-report"></div>
@@ -439,8 +434,6 @@
     // new
     $("#social-report-visibility-item").click(function() { togglePreferenceUI('social', 'report-visibility'); });
     $("#campaign-report-visibility-item").click(function() { togglePreferenceUI('campaign', 'report-visibility'); });
-    $("#graph-report-visibility-item").click(function() { togglePreferenceUI('graph', 'report-visibility'); });
-
 
 
     /**
@@ -460,7 +453,7 @@
       } else if (type == 'audit-visibility') {
         blocks = ['fb', 'ig', 'wb'];
       } else if (type == 'report-visibility') {
-        blocks = ['social', 'campaign', 'graph'];
+        blocks = ['social', 'campaign'];
       } else if (type == 'what-mail') {
         blocks = ['first', 'second', 'third'];
       } else {
@@ -512,7 +505,7 @@
     $("#mail-click").on('click', function(event){
       document.getElementById('mail-settings').scrollIntoView(false);
     });
-
+ 
     var explanations = {
       profile: {
         title: 'Profile Fields',
