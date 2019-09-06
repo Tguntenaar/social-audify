@@ -17,60 +17,15 @@
   $user = $user_control->get($user_id);
   $audit_visibility = $user->get_visibility('audit');
   $report_visibility = $user->get_visibility('report');
-  // Audit visibility table translations
-  $fbnames = array(
-    'fb_likes'=>'page likes',
-    'fb_pem'=>'post each month',
-    'fb_apl'=>'average post length',
-    'fb_ads'=>'ads running',
-    'fb_ntv'=>'native videos',
-    'fb_tab'=>'talking about the page',
-    'fb_loc'=>'is the location set',
-    'fb_cp' =>'can you post to the page');
-  $ignames = array(
-    'insta_ae'=>'average engagement',
-    'insta_nof'=>'number of followers',
-    'insta_nopf'=>'number of following',
-    'insta_hashtag'=>'hashtags',
-    'insta_lpd'=>'likes graph',
-    'insta_nplm'=>'post last month',
-    'insta_ac'=>'average comments',
-    'insta_al'=>'average likes');
-  $wbnames = array(
-    'website_ga'=>'google analytics',
-    'website_googletag'=>'google tagmanager',
-    'website_pixel'=>'facebook pixel',
-    'website_ws'=>'website_size',
-    'website_mf'=>'mobile friendly',
-    'website_lt'=>'load time');
 
-  // Report visibility table translations
-  $social_names = array(
-    'soc_pl'=>'facebook page likes',
-    'soc_aml'=>'facebook average message length',
-    'soc_inf'=>'instagram followers',
-    'soc_inaf'=>'instagram following',
-    'soc_iae'=>'instagram average ingagement',
-    'soc_plm'=>'instagram number post last month');
-  $campaign_names = array(
-    'cam_imp'=>'impressions',
-    'cam_cpc'=>'cost per click',
-    'cam_cpm'=>'cost per mile',
-    'cam_cpp'=>'cost per pixel',
-    'cam_ctr'=>'click through ratio',
-    'cam_frq'=>'frequency',
-    'cam_spd'=>'spend',
-    'cam_rch'=>'reach',
-    'cam_lcl'=>'link clicks',
-    'cam_ras'=>'return on ad spend');
-
-
-  function print_list_checkboxes($names, $title, $visibility_list) {
+  function print_list_checkboxes($blocks, $title, $visibility_list) {
     echo "<h4>${title}</h4>";
     // key is how the fields are called in the database
     // value is what we show users
-    foreach ($names as $dbname => $fullname) {
+    foreach ($blocks as $block) {
       // wheather an value is checked
+      $dbname = $block['type'];
+      $fullname = $block['name'];
       $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
       echo " <div class='form-check'>
               <input type='hidden' name='check-${dbname}' value='0'>
@@ -143,13 +98,13 @@
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
                 <div class="fb-audit-visibility-block">
-                  <?php print_list_checkboxes($fbnames, 'facebook', $audit_visibility); ?>
+                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility); ?>
                 </div>
                 <div class="ig-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($ignames, 'instagram', $audit_visibility); ?>
+                  <?php print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
                 </div>
                 <div class="wb-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($wbnames, 'website', $audit_visibility); ?>
+                  <?php print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
                 </div>
               </div>
               <!-- conclusion -->
@@ -259,10 +214,10 @@
                   <li id="campaign-report-visibility-item">Campaign</li>
                 </ul>
                 <div class="social-report-visibility-block">
-                  <?php print_list_checkboxes($social_names, 'social', $report_visibility); ?>
+                  <?php print_list_checkboxes($social_blocks, 'social', $report_visibility); ?>
                 </div>
                 <div class="campaign-report-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($campaign_names, 'campaign', $report_visibility); ?>
+                  <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
                 </div>
               </div>
               <div class="error-display-report"></div>
