@@ -10,6 +10,10 @@
 <?php
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
+  
+  include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
+  include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
+
   $user = $user_control->get($user_id);
   $audit_visibility = $user->get_visibility('audit');
   $report_visibility = $user->get_visibility('report');
@@ -78,7 +82,7 @@
     }
   }
 
-  echo '<pre>' . var_export($report_visibility, true) . '</pre>';
+  // echo '<pre>' . var_export($report_visibility, true) . '</pre>';
 ?>
 <head>
   <meta charset="utf-8">
