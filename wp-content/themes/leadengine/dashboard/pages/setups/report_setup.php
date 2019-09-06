@@ -6,8 +6,10 @@
 <!--
   TODO:
 
-  test report zonder insta
-  only show clients with facebook in client list
+  
+  1. In de lijst met klanten -> laat geen klanten zien die al geen facebook hebben. 
+  2. Verander hoe de campagnes worden geselecteerd.
+  3. Verander hoe een ad account word geconnect
 
  -->
 <!DOCTYPE html>
@@ -35,6 +37,8 @@
     // $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
     $reports = $report_control->get_all();
+    // echo '<pre>' . var_export($clients, true) . '</pre>';
+
   ?>
 
   <div id="instagramErrorModal" class="modal"></div>
@@ -104,13 +108,14 @@
             </div>
             <input type="text" name="search" id="search-input" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
+
               foreach($clients as $client) {
                 $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website, "ad_id"=>$client->ad_id];?>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
                    data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name;
 
                   $ad_overlay = ($client->ad_id == NULL) ? "connect" : "change"; ?>
-                  <div class="overlay-ad-account <?php echo $ad_overlay; ?>-ad-account">
+                  <div class="overlay-ad-account <?php echo $ad_overlay;?>-ad-account">
                     <p><?php echo ucfirst($ad_overlay); ?> ad account</p>
                   </div>
                 </a><?php
@@ -366,9 +371,6 @@
           website_purchase_roas: acc.website_purchase_roas + check_nan(parseFloat(cur.insights.website_purchase_roas))
         };
     }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
-
-    console.log("Sum: ");
-    console.log(sum);
       // divides sum into avg
       for (insight in sum) {
         avg[insight] = sum[insight] / data.length;
@@ -379,7 +381,7 @@
     }
 
     $(function() {
-      // Connect Ad Account Modal
+      // Connect Ad Account Modal FIXME:
       var modalData = {
         text: 'Select the right ad account for the right campaigns',
         html: `<select size="2" id="ad-account-list" class="ad-account-list"></select>
@@ -392,21 +394,45 @@
 
       // Connect Ad Account
       $('.connect-ad-account, .change-ad-account').on('click', function() {
-
-        // hidden input een value geven.. Zodat het adAccountModal ook weet over welke client het gaat
-        var client =  $(this).parent('.audit-row').data('client');
-        $('#ad_id').val(client.ad_id);
+        
+        // 1. SET THE CLIENT
+        var client =  $(this).parent().data('client');
         $('#client_id').val(client.id);
-        // var client_id = JSON.parse($(this).closest("a").attr("data-client")).id;
 
-        getAdAccounts(client.id);
+        // 2. SET CURRENT AD ID
+        $('#ad_id').val(client.ad_id);
+
+        getAdAccounts();
         showModal(adAccountModal);
         $('#ad-account-list').focus();
       });
 
+      // 3. Update Ad id
       $('#adAccountConfirm').click(function() {
         if (selectedOption = findSelected($('#ad-account-list'))) {
-          connectAccount(selectedOption.val(), $('#client_id').val());
+
+          var clientId = $('#client_id').val();
+          var adId = selectedOption.val();
+
+          var clickedClient = $(`.campaign-${clientId}`);
+          // Change the data-client attribute
+          var clientDataAttribute = clickedClient.data('client');
+          console.log({clientDataAttribute, adId});
+          clientDataAttribute.ad_id = adId;
+          console.log({clientDataAttribute, adId});
+
+          clickedClient.data("client", clientDataAttribute);
+
+
+          // Change the class of the overlay
+          var overlay = clickedClient.find('div');
+          overlay.addClass('change-ad-account').removeClass('connect-ad-account');
+          // Change the link
+          var link = overlay.find('p');
+          link.text('Change ad account')
+
+          // Connect the account
+          connectAccount(selectedOption.val(), clientId);
         }
       });
 
