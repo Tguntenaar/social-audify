@@ -28,7 +28,7 @@
 
   <div id="instagramErrorModal" class="modal"></div>
   <div id="competitorModal" class="modal"></div>
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 25px;">
+  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->
   <div class="content-title col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -74,7 +74,7 @@
     </div>
     <!-- Containers for multistep form -->
     <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left" style="height: 605px;">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
         <div class="inner height-auto">
           <span class="title title-audit-page">Create a Audit</span>
 

@@ -3800,6 +3800,11 @@ h4 {
 	display: none;
 }
 
+.tab {
+	width: 100%;
+	height: auto;
+}
+
 @media only screen and (max-width: 1200px) {
 	.competitor-stats,
 	.data-view {
@@ -3980,7 +3985,7 @@ h4 {
 	}
 
 	.sub-header {
-		/* display: none; */
+		display: none;
 	}
 
 	nav {
@@ -4100,9 +4105,62 @@ h4 {
 	.report-compared-last-month {
 		margin-bottom: 100px;
 	}
+
+	.inner-scroll {
+		height: 230px !important;
+	}
+
+	.responsive-height {
+		height: 470px !important;
+	}
+
+	.responsive-padding {
+		padding-bottom: 100px !important;
+	}
+
+	.responsive-padding-report {
+		padding-bottom: 100px !important;
+	}
 }
 
 @media only screen and (max-width: 768px) {
+	.steps {
+		display: none !important;
+	}
+
+	.dot-nav {
+		display: none !important;
+	}
+
+	.inner {
+		overflow-y: visible;
+	}
+
+	.nav-buttons {
+		bottom: -8px;
+		left: 3px;
+	}
+
+	.graph-procent {
+		font-size: 32px;
+	}
+
+	.name-input {
+		width: 75% !important;
+	}
+
+	.custom-left {
+		padding-left: 10px !important;
+		padding-right: 10px !important;
+	}
+
+	.responsive-height {
+		overflow-y: visible;
+	}
+	.overview-audit-report .right .inner, .overview-audit-report .left .inner {
+		overflow: hidden;
+	}
+
 	.sub-header a,
 	.sub-header div,
 	.sub-header button {
@@ -4152,6 +4210,10 @@ h4 {
 		margin-left: 75px;
 	}
 
+	.modal-content {
+		width: 85% !important
+	}
+
 }
 
 
@@ -4169,10 +4231,8 @@ h4 {
 	.video-options {
 		top: 0px;
 		margin-top: 0px;
-	}
-
-	.video-options {
-		width: 350px;
+		width: 300px;
+		height: 285px;
 	}
 
 	nav {
@@ -4210,9 +4270,20 @@ h4 {
 		margin-left: -15px;
 		float:left !important;
 	}
+
+	.edit-client-left {
+		display: none;
+	}
+
+	.edit-client-right {
+		width: 100%;
+	}
 }
 
 @media only screen and (max-width: 576px) {
+	.inner-scroll {
+		overflow-x: scroll;
+	}
 	.remove-on-mobile {
 			display: none;
 	}
@@ -4229,9 +4300,32 @@ h4 {
 	.mobile-margin {
 		margin-bottom: 30px;
 	}
+
+	.name-client {
+		display: block;
+		width: 100%;
+		float: left;
+	}
+
+	.overlay-ad-account {
+		position: relative;
+		width: 100%;
+	}
+
+	.overlay-ad-account p {
+		float: left;
+	}
+
+	.height-repsonsive-auto {
+		height: auto !important;
+	}
+
 }
 
 @media only screen and (max-width: 400px) {
+	.option-title {
+		font-size: 19px;
+	}
 	.stat-box {
 		width: 44%;
 		height: 32vw;

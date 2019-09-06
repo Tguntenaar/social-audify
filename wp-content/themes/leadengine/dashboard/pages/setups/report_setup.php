@@ -47,7 +47,7 @@
   </div>
 
   <!-- Initial block -->
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 100px;">
+  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding-report" style="padding-bottom: 100px;">
   <div class="create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <h3>Existing or New contact?</h3>
     <p>
@@ -73,7 +73,7 @@
   </div>
   <!-- Containers for multistep form -->
   <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left" style="height: 605px;">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
       <div class="inner height-auto">
         <span class="title title-audit-page">Create a report</span>
 
@@ -106,8 +106,10 @@
             <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
               foreach($clients as $client) {
                 $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website, "ad_id"=>$client->ad_id];?>
-                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
-                   data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name;
+                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-repsonsive-auto audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
+                   data-client='<?php echo htmlentities(json_encode($data)); ?>'>
+
+                  <span class="name-client"><?php echo $client->name;?></span><?php
 
                   $ad_overlay = ($client->ad_id == NULL) ? "connect" : "change"; ?>
                   <div class="overlay-ad-account <?php echo $ad_overlay; ?>-ad-account">
