@@ -184,7 +184,7 @@ function getAdAccounts() {
         var ad_id = $('#ad_id').val();
         var selected = (ad_id == id) ? 'selected' : '';
 
-        var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name}</option>`;
+        var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
 
         $('#ad-account-list').append(str);
       });

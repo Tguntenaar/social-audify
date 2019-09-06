@@ -423,13 +423,12 @@
 
           clickedClient.data("client", clientDataAttribute);
 
-
           // Change the class of the overlay
           var overlay = clickedClient.find('div');
           overlay.addClass('change-ad-account').removeClass('connect-ad-account');
           // Change the link
           var link = overlay.find('p');
-          link.text('Change ad account')
+          link.text('Change ad account');
 
           // Connect the account
           connectAccount(selectedOption.val(), clientId);
