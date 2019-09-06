@@ -65,12 +65,14 @@
     'cam_ras'=>'return on ad spend');
 
 
-  function print_list_checkboxes($names, $title, $visibility_list) {
+  function print_list_checkboxes($blocks, $title, $visibility_list) {
     echo "<h4>${title}</h4>";
     // key is how the fields are called in the database
     // value is what we show users
-    foreach ($names as $dbname => $fullname) {
+    foreach ($blocks as $block) {
       // wheather an value is checked
+      $dbname = $block['type'];
+      $fullname = $block['name'];
       $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
       echo " <div class='form-check'>
               <input type='hidden' name='check-${dbname}' value='0'>
@@ -80,6 +82,18 @@
               </label>
             </div>";
     }
+
+    // foreach ($names as $dbname => $fullname) {
+    //   // wheather an value is checked
+    //   $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
+    //   echo " <div class='form-check'>
+    //           <input type='hidden' name='check-${dbname}' value='0'>
+    //           <input type='checkbox' name='check-${dbname}' value='1' class='form-check-input' id='check-${dbname}' ${checked}>
+    //           <label class='form-check-label' for='defaultCheck1'>
+    //             ${fullname}
+    //           </label>
+    //         </div>";
+    // }
   }
 
   // echo '<pre>' . var_export($report_visibility, true) . '</pre>';
@@ -143,13 +157,13 @@
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
                 <div class="fb-audit-visibility-block">
-                  <?php print_list_checkboxes($fbnames, 'facebook', $audit_visibility); ?>
+                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility); ?>
                 </div>
                 <div class="ig-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($ignames, 'instagram', $audit_visibility); ?>
+                  <?php print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
                 </div>
                 <div class="wb-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($wbnames, 'website', $audit_visibility); ?>
+                  <?php print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
                 </div>
               </div>
               <!-- conclusion -->
@@ -259,10 +273,10 @@
                   <li id="campaign-report-visibility-item">Campaign</li>
                 </ul>
                 <div class="social-report-visibility-block">
-                  <?php print_list_checkboxes($social_names, 'social', $report_visibility); ?>
+                  <?php print_list_checkboxes($social_blocks, 'social', $report_visibility); ?>
                 </div>
                 <div class="campaign-report-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($campaign_names, 'campaign', $report_visibility); ?>
+                  <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
                 </div>
               </div>
               <div class="error-display-report"></div>
