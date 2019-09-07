@@ -220,7 +220,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body class="custom-body">
-  <div class="sub-header col-lg-12" style="display: block !important;>
+  <div class="sub-header col-lg-12" style="display: block !important;">
 
     <?php if ($edit_mode) { ?>
       <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>

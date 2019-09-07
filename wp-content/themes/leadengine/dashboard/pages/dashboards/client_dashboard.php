@@ -54,7 +54,7 @@
       <span class="modal-title">Edit Contact:</span>
       <form id="edit-form" action="/process-client/?edit=true" method="post">
         <div class="" style="align:center">
-          <div class="col-lg-6 edit-client-left">
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 edit-client-left">
             <span class="input-tag">Name</span>
             <span class="input-tag">Facebook url</span>
             <span class="input-tag">Instagram url</span>
@@ -62,14 +62,14 @@
             <span class="input-tag">E-mail</span>
             <span class="input-tag">Ad Account</span>
           </div>
-          <div class="col-lg-6 edit-client-right">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 edit-client-right">
             <input type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed"><br />
             <input type="text" id="fb_url" name="facebook_url" min="5" placeholder="pageusername or url" name="facebook_url"><br />
             <input type="text" id="ig_url" name="instagram_url" min="5" max="30" placeholder="username or url" name="instagram_url"><br />
             <input type="text" id="wb_url" name="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex;?>"><br />
             <input type="email" id="mail_adress" name="client_mail" placeholder="mail@example.com"><br />
             <div id="ad-account-bttn-wrapper" style="display:none">
-              <button type="button" class="create-audit-button client-button connect-ad-account">Connect</button><br>
+              <span class="responsive-label-ad">Ad account</span><button type="button" class="create-audit-button client-button" id="connect-ad-account">Connect</button><br>
             </div>
             <div id="fb-login-wrapper" class="custom-fb-button">
               <div class="fb-login-button login-center"

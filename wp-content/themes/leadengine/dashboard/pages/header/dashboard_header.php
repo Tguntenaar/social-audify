@@ -80,6 +80,10 @@
     </div>
   </div>
 
+  <div id="instagramErrorModal" class="modal"></div>
+  <div id="competitorModal" class="modal"></div>
+  <div id="adAccountModal" class="modal"></div>
+
   <div class="sub-header col-lg-12">
     <a href="../dashboard/">
       <i class="fas fa-th-large"></i> &nbsp; Dashboard
