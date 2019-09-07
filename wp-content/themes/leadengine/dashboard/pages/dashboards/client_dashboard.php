@@ -46,7 +46,7 @@
   <!-- <div id="confirmAddAdAccountModal" class="modal"></div> -->
   <div id="confirmDeleteModal" class="modal"></div>
 
-  <!-- Edit client Modal TODO: -->
+  <!-- Edit client Modal TODO: dit moet in een modal-->
   <div id="edit-client-modal" class="modal client_modal" style="display:none">
     <div class="modal-content">
       <span id="close_model" class='close'>&times;</span>
@@ -69,7 +69,7 @@
             <input type="text" id="wb_url" name="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex;?>"><br />
             <input type="email" id="mail_adress" name="client_mail" placeholder="mail@example.com"><br />
             <div id="ad-account-bttn-wrapper" style="display:none">
-              <button type="button" class="create-audit-button client-button" id="connect-ad-account">Connect</button><br>
+              <button type="button" class="create-audit-button client-button connect-ad-account">Connect</button><br>
             </div>
             <div id="fb-login-wrapper" class="custom-fb-button">
               <div class="fb-login-button login-center"
@@ -141,15 +141,7 @@
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
 
-    // Find 'selected' class in list of elements
-    function findSelected(optionList) {
-      var selected = optionList.find('option:selected');
-      if (selected.length == 0) {
-        optionList.fadeOut(50).fadeIn(400);
-        return false;
-      }
-      return selected;
-    }
+    var globalAdAccounts = [];
 
     $(function() {
       // Close the pop up form
@@ -194,7 +186,7 @@
         });
       });
 
-      // Connect Ad Account Modal
+      // Connect Ad Account Modal FIXME:
       var modalData = {
         text: 'Select the right ad account for the right campaigns',
         html: `<select size="2" id="ad-account-list" class="ad-account-list"></select>`,
@@ -203,7 +195,11 @@
 
       var adAccountModal = initiateModal('adAccountModal', 'confirm', modalData);
 
-      $('#connect-ad-account').on('click', function() {
+      $('.connect-ad-account').on('click', function() {
+        // 1. SET CLIENT ID
+        // 2. SET CURRENT AD ID
+        // in client dashboard worden beide al geset in het eerste modal
+
         getAdAccounts();
         showModal(adAccountModal);
         $('#ad-account-list').focus();
@@ -211,11 +207,13 @@
 
       $('#adAccountConfirm').click(function() {
         if (selectedOption = findSelected($('#ad-account-list'))) {
+          // Change the button
+          $('.connect-ad-account').text('Change');
+
           connectAccount(selectedOption.val(), $("#client_id").val());
         }
       });
 
-      // TODO: dit moet echt anders
       // Create for every client an on click event listener
       var clientList = <?php echo json_encode($jsClients); ?>;
       for (var i = 0; i < clientList.length; i++) {
@@ -232,20 +230,14 @@
           $('#wb_url').val(`${wb}`);
           $('#ad_id').val(`${ad_id}`);
 
-          if (ad_id == null) {
-            $('#connect-ad-account').text('Connect');
-          } else {
-            $('#connect-ad-account').text('Change');
-          }
+          // Change the button
+          $('.connect-ad-account').text((ad_id == null) ? 'Connect' : 'Change');
         });
       }
 
       // Search function
-      var elems = $("#client-results .audit-row");
-      var counterSpan = $("#counterSpan");
-
       $(document).on('keyup', 'input#search-input', function() {
-        filterSearch($(this).val(), elems, counterSpan);
+        filterSearch($(this).val(), $("#client-results .audit-row"), $("#counterSpan"));
       });
     });
 	</script>

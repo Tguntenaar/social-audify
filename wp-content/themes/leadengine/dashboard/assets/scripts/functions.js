@@ -171,32 +171,39 @@ function parsePageInput(field) {
 }
 
 /**
- * Ad account functions for client dashboard and report setup
+ * Deze functie word zowel in client dashboard als in report setup gebruikt
  */
-function getAdAccounts(client_id) {
-  FB.api(getAdAccountsQuerie(), function (response) {
-    if (response && !response.error && response.data.length != 0) {
-      $('#ad-account-list').empty();
-      response.data.forEach(function(ad_account) {
-        const {name, id} = ad_account;
-
-        var ad_id = JSON.parse($('.campaign-'+client_id).attr("data-client")).ad_id;
-        var selected = (ad_id == id) ? 'selected' : '';
-
-        var str = `<option class="row-ad-accounts" onclick="connectAccount('${id}', '${client_id}')" value="${id}" ${selected}> ${name} </option>`;
-        $('#ad-account-list').append(str);
-      });
-    } else if (response.data.length == 0) {
-        $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
-    } else {
-      logResponse(response);
-    }
-  });
+function getAdAccounts() {
+  // Don't make the same request a second time
+  if (globalAdAccounts.length == 0) {
+    FB.api(getAdAccountsQuerie(), function (response) {
+      if (response && !response.error && response.data.length != 0) {
+  
+        response.data.forEach(function(ad_account) {
+          const {name, id} = ad_account;
+  
+          var ad_id = $('#ad_id').val();
+          var selected = (ad_id == id) ? 'selected' : '';
+  
+          var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
+  
+          $('#ad-account-list').append(str);
+        });
+        
+        globalAdAccounts = response.data;
+      } else if (response.data.length == 0) {
+          $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
+      } else {
+        logResponse(response);
+      }
+    });
+  }
 }
 
+/**
+ * Deze functie word zowel in client dashboard als report setup gebruikt
+ */
 function connectAccount(adId, clientId) {
-  var clientId = parseInt(clientId);
-
   $.ajax({
     type: "POST",
     url: ajaxurl,
@@ -208,22 +215,17 @@ function connectAccount(adId, clientId) {
     success: logResponse,
     error: logResponse,
   });
+}
 
 
-
-  var temp = JSON.parse($('.campaign-'+clientId).attr("data-client"));
-  temp.ad_id = adId;
-  $('.campaign-'+clientId).attr("data-client", JSON.stringify(temp));
-
-  // $('.campaign-'+clientId).closest("div").text("Change ad account");
-  $('.campaign-'+clientId).find("div").removeClass("connect-ad-account");
-  $('.campaign-'+clientId).find("div").addClass("change-ad-account");
-  $('.campaign-'+clientId).find("p").text("Change ad account");
-  // validateClient();
-  $('#adAccountModal').css({'display': 'none'});
-  $("#connect-ad-account").text('change');
-
-  return 'done';
+// Find 'selected' class in list of elements
+function findSelected(optionList) {
+  var selected = optionList.find('option:selected');
+  if (selected.length == 0) {
+    optionList.fadeOut(50).fadeIn(400);
+    return false;
+  }
+  return selected;
 }
 
 function logResponse(response) {
