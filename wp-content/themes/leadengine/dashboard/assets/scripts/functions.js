@@ -175,7 +175,7 @@ function parsePageInput(field) {
  */
 function getAdAccounts(ad_id) {
   // Don't make the same request a second time
-  if (globalAdAccounts.length == 0) {
+  if (Instance.adAccounts.length == 0) {
     FB.api(getAdAccountsQuerie(), function (response) {
       if (response && !response.error && response.data.length != 0) {
   
@@ -188,7 +188,7 @@ function getAdAccounts(ad_id) {
           $('#ad-account-list').append(str);
         });
         
-        globalAdAccounts = response.data;
+        Instance.adAccounts = response.data;
       } else if (response.data.length == 0) {
           $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
       } else {
@@ -197,7 +197,7 @@ function getAdAccounts(ad_id) {
     });
   } else {
     $('#ad-account-list').empty();
-    globalAdAccounts.forEach(function(account) {
+    Instance.adAccounts.forEach(function(account) {
       const {name, id} = account;
       var selected = (ad_id == id) ? 'selected' : '';
       var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;

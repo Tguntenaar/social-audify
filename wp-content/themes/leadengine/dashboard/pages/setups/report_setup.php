@@ -34,6 +34,7 @@
      * TODO: if statement of die wel bestaat
      * op de config page moet je je iba id kunnen veranderen
      */
+    
     // $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
     $reports = $report_control->get_all();
@@ -161,7 +162,7 @@
             </label>
           </div>
 
-          <!-- Chose campaign/ad level tab -->
+          <!-- Choose campaign/ad level tab -->
           <div class="tab custom-radio">
             <div style="overflow-y:scroll;">
               <span class="name-label">On which level do you want a report?</span>
@@ -275,11 +276,13 @@
         return valid;
       }).catch(function (reason) {
         console.log({reason});
-        // alert
+        
         showModal(initiateModal('errorModal', 'error', {
           'text': "Couldn't gather campaigns",
-          'subtext': `Chose another client.`,
+          'subtext': `Choose a candidate with a valid ad account.`,
         }));
+
+        nextPrev(-4);
 
         return false;
       });
@@ -317,7 +320,7 @@
       $('#campaign-list .selected').each(function(i, ad) {
         selectedAds = [...selectedAds, $(ad).data('id')];
       });
-
+      console.log(response);
       response.data.forEach(function(campaign) {
         const {id, name, ...rest} = campaign;
         if (selectedAds.includes(Number(id)) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.

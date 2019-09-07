@@ -78,6 +78,7 @@ function makeFbPromise(client, competitor = 0) {
   var nestedPromise = new Promise(function (resolve, reject) {
     FB.api(getFbCall(client.facebook), function (response) {
       if (response && !response.error) {
+        response = reponse;
         resolve(response);
       }
       var str = (competitor) ? 'competitor' : 'client';
@@ -168,8 +169,6 @@ function makeApiCalls(instance) {
 
       askToContinue(client, page, options, competitor, i);
     } else {
-      console.log("hier2");
-      // console.log(competitor.id);
       post_ajax(client, page, options, competitor, currency);
     }
 
@@ -177,18 +176,18 @@ function makeApiCalls(instance) {
     showBounceBall(false);
     console.log(`%c Reason is ${reason}`, 'color: red');
     console.log({reason});
-
+    
     var msg = (typeof reason == 'string') ? reason : reason.error.message;
-    // alert
+    // TODO: reject with reason.title & message
     showModal(initiateModal('errorModal', 'error', {
       'text': `${msg}`,
-      'subtext': `Chose another candidate.`,
+      'subtext': `Choose another candidate.`,
     }));
 
     if (Instance.page.type == 'audit') {
-      for (var i = (typeof reason === 'string' && reason.includes('competitor')) ? 1 : 0; i < 3; i++) {
-        nextPrev(-1);
-      }
+      nextPrev( (reason.includes('competitor')) ? -2 : -3);
+    } else if (Instance.page.type == 'report') {
+      nextPrev(-4);
     }
   });
 }
@@ -231,16 +230,13 @@ function post_ajax(client, page, options, competitor = false, currency = null) {
     'currency' : JSON.stringify(currency)
   };
 
-  console.log("hier nu");
-  console.log(data);
+  console.log({data});
 
   if (page.type === 'audit') {
     data.action = 'update_meta_audit';
   } else if (page.type === 'report') {
     data.action = 'update_meta_report';
   }
-
-  console.log({data});
 
   $.ajax({
     type: "POST",
@@ -263,7 +259,6 @@ function post_iba_id(iba_id) {
     'action': 'update_iba_id',
     'iba_id': iba_id,
   };
-  console.log("Sending post id to functionsphp");
 
   $.ajax({
     type: "POST",
@@ -355,9 +350,6 @@ function unpackMediaInfo(media, addHashtags) {
     averageComments,
     averageLikes
   };
-
-  console.log("test");
-  console.log(returnMedia);
 
   if (addHashtags) {
   returnMedia.hashtags = getHashtags(captions);
