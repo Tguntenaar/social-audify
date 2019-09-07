@@ -210,8 +210,6 @@
       iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>
     };
 
-    var currency = "";
-
     // Selectable list - TODO : kan sws naar dashboard-header
     $('#client-list .audit-row, #compare-list .audit-row, .row-ad-accounts').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
@@ -245,7 +243,7 @@
       var campaignPromise = getCampaigns(edge);
 
       campaignPromise.then(function(response) {
-        currency = response.currency;
+        Instance.currency = response.currency;
         response = response[edge];
 
         if (edge === 'ads') globalAdsResponse = response;
@@ -474,7 +472,6 @@
         }
 
         Instance.client.chart_data = transformResponseData(globalResponse);
-        Instance.currency = currency;
 
         makeApiCalls(Instance);
 
