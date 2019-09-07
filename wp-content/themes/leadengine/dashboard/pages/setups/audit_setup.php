@@ -183,9 +183,9 @@
       page : {
         type: 'audit',
         manual: 0,
-        competitor_manual: 0
+        competitor_manual: 0,
       },
-      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>
+      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>,
     }
 
     // Selectable list - TODO : kan wss naar dashboard-header

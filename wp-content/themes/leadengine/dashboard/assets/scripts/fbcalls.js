@@ -182,14 +182,13 @@ function makeApiCalls(instance) {
     // alert
     showModal(initiateModal('errorModal', 'error', {
       'text': `${msg}`,
-      'subtext': `Chose another client.`,
+      'subtext': `Chose another candidate.`,
     }));
 
     if (Instance.page.type == 'audit') {
-      
-      nextPrev(-1);
-      nextPrev(-1);
-      nextPrev(-1);
+      for (var i = (typeof reason === 'string' && reason.includes('competitor')) ? 1 : 0; i < 3; i++) {
+        nextPrev(-1);
+      }
     }
   });
 }
