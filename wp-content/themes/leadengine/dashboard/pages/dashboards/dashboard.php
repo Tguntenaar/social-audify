@@ -31,7 +31,7 @@
     $audit_values = calculate_monthly_amount($year_audits);
     $audit_daily_values = calculate_daily_amount($month_audits);
 
-    // Check if audits are viewed and counts
+    // Check how many audits are viewed
     $viewed_audit = $viewed_audit_month = 0;
 
     foreach ($year_audits as $audit) {
