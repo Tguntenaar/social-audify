@@ -219,7 +219,7 @@ function connectAccount(adId, clientId) {
 
 
 // Find 'selected' class in list of elements
-function findSelected(optionList) {
+function getSelectedAdAccount(optionList) {
   var selected = optionList.find('option:selected');
   if (selected.length == 0) {
     optionList.fadeOut(50).fadeIn(400);

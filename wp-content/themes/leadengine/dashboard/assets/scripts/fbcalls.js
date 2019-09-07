@@ -184,7 +184,9 @@ function makeApiCalls(instance) {
       'text': `${msg}`,
       'subtext': `Chose another client.`,
     }));
+
     if (Instance.page.type == 'audit') {
+      
       nextPrev(-1);
       nextPrev(-1);
       nextPrev(-1);

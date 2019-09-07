@@ -206,7 +206,7 @@
       });
 
       $('#adAccountConfirm').click(function() {
-        if (selectedOption = findSelected($('#ad-account-list'))) {
+        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
           // Change the button
           $('.connect-ad-account').text('Change');
 
