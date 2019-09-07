@@ -410,7 +410,7 @@
 
       // 3. Update Ad id
       $('#adAccountConfirm').click(function() {
-        if (selectedOption = findSelected($('#ad-account-list'))) {
+        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
 
           var clientId = $('#client_id').val();
           var adId = selectedOption.val();

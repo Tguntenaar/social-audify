@@ -181,7 +181,7 @@ function validateName() {
   return true;
 }
 
-// Find selected option in list
+// Find selected option in list 
 function findSelected(optionList) {
   var selected = $(optionList).find('.selected');
   console.log({selected});
