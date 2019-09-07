@@ -31,7 +31,7 @@
   <div class="content-title col-lg-12"> </div>
   <div class="col-lg-12 client_register_box">
     <div class="col-lg-6 client_left client_none">
-      <div class="col-lg-12 white">
+      <div class="col-lg-12">
         <div class="content-title col-lg-12">
           <span class="title">How to create a contact?</span>
           <ul>
@@ -45,7 +45,7 @@
       </div>
     </div>
     <div class="col-lg-6 client_right client-form">
-      <div class="col-lg-12 white">
+      <div class="col-lg-12">
         <div class="content-title col-lg-9">
           <span class="title">Fill in the form.</span>
         </div>
