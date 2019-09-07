@@ -200,7 +200,7 @@
         // 2. SET CURRENT AD ID
         // in client dashboard worden beide al geset in het eerste modal
 
-        getAdAccounts();
+        getAdAccounts($('#ad_id'));
         showModal(adAccountModal);
         $('#ad-account-list').focus();
       });

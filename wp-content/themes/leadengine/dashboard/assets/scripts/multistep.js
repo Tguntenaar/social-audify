@@ -57,7 +57,7 @@ function nextPrev(n) {
   if (n == 1 && !validateStep()) return false;
 
   // request campaigns or ads from facebook servers.
-  if (n === 1 && currentTab === 4 && Instance.page.type == 'report') showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
+  if (Instance.page.type == 'report' && n === 1 && currentTab === 4) showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
 
   // Hide the current tab:
   tab.eq(currentTab).css({'display':'none'});
@@ -88,8 +88,9 @@ function validateStep() {
   return false;
 }
 
+// TODO:
 function validateSelectedAds() {
-  return selectedAds.length !== 0;
+  return true
 }
 
 // TODO:

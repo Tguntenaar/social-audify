@@ -173,7 +173,7 @@ function parsePageInput(field) {
 /**
  * Deze functie word zowel in client dashboard als in report setup gebruikt
  */
-function getAdAccounts() {
+function getAdAccounts(ad_id) {
   // Don't make the same request a second time
   if (globalAdAccounts.length == 0) {
     FB.api(getAdAccountsQuerie(), function (response) {
@@ -182,9 +182,7 @@ function getAdAccounts() {
         response.data.forEach(function(ad_account) {
           const {name, id} = ad_account;
   
-          var ad_id = $('#ad_id').val();
           var selected = (ad_id == id) ? 'selected' : '';
-  
           var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
   
           $('#ad-account-list').append(str);
@@ -196,6 +194,14 @@ function getAdAccounts() {
       } else {
         logResponse(response);
       }
+    });
+  } else {
+    $('#ad-account-list').empty();
+    globalAdAccounts.forEach(function(account) {
+      const {name, id} = account;
+      var selected = (ad_id == id) ? 'selected' : '';
+      var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
+      $('#ad-account-list').append(str);
     });
   }
 }
