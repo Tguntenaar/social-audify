@@ -4230,6 +4230,18 @@ h4 {
 
 
 @media only screen and (max-width: 620px) {
+	.fb_iframe_widget_fluid {
+		margin-top: 20px;
+	}
+
+	.login-title {
+		margin-bottom: 60px;
+	}
+	
+	.content-title {
+		display: none;
+	}
+
 	.intro-video iframe,
 	.intro-video {
 		height: 300px !important;
