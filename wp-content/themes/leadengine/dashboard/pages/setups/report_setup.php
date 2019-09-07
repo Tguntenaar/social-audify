@@ -219,7 +219,8 @@
     var selectedAds = [], // TODO: deze kan weg straks.
     globalAdsResponse = {},
     globalCampaignResponse = {},
-    globalAdSetResponse;
+    globalAdSetResponse,
+    globalAdAccounts = [];
 
     $(function() {
       <?php
@@ -413,14 +414,11 @@
 
           var clientId = $('#client_id').val();
           var adId = selectedOption.val();
-
           var clickedClient = $(`.campaign-${clientId}`);
+
           // Change the data-client attribute
           var clientDataAttribute = clickedClient.data('client');
-          console.log({clientDataAttribute, adId});
           clientDataAttribute.ad_id = adId;
-          console.log({clientDataAttribute, adId});
-
           clickedClient.data("client", clientDataAttribute);
 
           // Change the class of the overlay

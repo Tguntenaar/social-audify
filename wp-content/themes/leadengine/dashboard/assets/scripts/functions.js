@@ -174,34 +174,36 @@ function parsePageInput(field) {
  * Deze functie word zowel in client dashboard als in report setup gebruikt
  */
 function getAdAccounts() {
-  // TODO: maak dit request maar 1 keer naar de facebook servers.
-  FB.api(getAdAccountsQuerie(), function (response) {
-    if (response && !response.error && response.data.length != 0) {
-
-      response.data.forEach(function(ad_account) {
-        const {name, id} = ad_account;
-
-        var ad_id = $('#ad_id').val();
-        var selected = (ad_id == id) ? 'selected' : '';
-
-        var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
-
-        $('#ad-account-list').append(str);
-      });
-    } else if (response.data.length == 0) {
-        $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
-    } else {
-      logResponse(response);
-    }
-  });
+  // Don't make the same request a second time
+  if (globalAdAccounts.length == 0) {
+    FB.api(getAdAccountsQuerie(), function (response) {
+      if (response && !response.error && response.data.length != 0) {
+  
+        response.data.forEach(function(ad_account) {
+          const {name, id} = ad_account;
+  
+          var ad_id = $('#ad_id').val();
+          var selected = (ad_id == id) ? 'selected' : '';
+  
+          var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
+  
+          $('#ad-account-list').append(str);
+        });
+        
+        globalAdAccounts = response.data;
+      } else if (response.data.length == 0) {
+          $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
+      } else {
+        logResponse(response);
+      }
+    });
+  }
 }
 
 /**
  * Deze functie word zowel in client dashboard als report setup gebruikt
  */
 function connectAccount(adId, clientId) {
-  var clientId = parseInt(clientId);
-
   $.ajax({
     type: "POST",
     url: ajaxurl,
@@ -213,9 +215,6 @@ function connectAccount(adId, clientId) {
     success: logResponse,
     error: logResponse,
   });
-
-  $('#adAccountModal').css({'display': 'none'});
-  return;
 }
 
 

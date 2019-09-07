@@ -141,6 +141,8 @@
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
 
+    var globalAdAccounts = [];
+
     $(function() {
       // Close the pop up form
       $('#close_model').click(function() {
@@ -206,7 +208,7 @@
       $('#adAccountConfirm').click(function() {
         if (selectedOption = findSelected($('#ad-account-list'))) {
           // Change the button
-          $('.connect-ad-account').text('Change')
+          $('.connect-ad-account').text('Change');
 
           connectAccount(selectedOption.val(), $("#client_id").val());
         }
