@@ -201,7 +201,8 @@
         var name = "<?php echo $newClient; ?>";
         var selected = $(`#client-list a[name=${name}]`);
         selected.parent().find('.audit-row').removeClass('selected');
-        selected.addClass('selected');<?php
+        selected.addClass('selected');
+        nextPrev(1);<?php
       } ?>
 
       // New Competitor Modal:
