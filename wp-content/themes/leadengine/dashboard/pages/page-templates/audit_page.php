@@ -218,29 +218,44 @@
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js"></script>
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    $(document).ready(function() {
+      $('#nav-icon2').click(function() {
+        $(this).toggleClass('open');
+        $('.mobile-hide').toggleClass('block');
+      });
+    });
+  </script>
 </head>
 <body class="custom-body">
   <div class="sub-header col-lg-12" style="display: block !important;">
+  <!-- Animated CSS stuff -->
+  <div id="nav-icon2">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+    <div class="mobile-hide">
+        <?php if ($edit_mode) { ?>
+          <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
+        <?php } ?>
 
-    <?php if ($edit_mode) { ?>
-      <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
-    <?php } ?>
+        Audit: <?php echo $audit->name; ?>
 
-    Audit: <?php echo $audit->name; ?>
+        <?php if ($edit_mode) { ?>
+          <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
+          <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
+          <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
+        <?php }
 
-    <?php if ($edit_mode) { ?>
-      <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
-      <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
-      <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
-    <?php }
-
-    if ($user_id === $author_id) {
-      if ($edit_mode) { ?>
-				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-      } else { ?>
-				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-      }
-    } ?>
+        if ($user_id === $author_id) {
+          if ($edit_mode) { ?>
+    				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+          } else { ?>
+    				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+          }
+        } ?>
+    </div>
   </div>
 
   <div id="shareModal" class="modal"></div>
@@ -269,7 +284,7 @@
     if ($edit_mode) { ?>
       <div class="video-options">
         <h3>Banner options:</h3>
-        <span class="eplenation-banner">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem <a href="https://www.google.nl">aperiam</a>.</span>
+        <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
           <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> /> <span class="radio-label">Iframe</span>
           <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?>/> <span class="radio-label">Nothing</span>
@@ -291,11 +306,11 @@
         <span class="audit-company-name">Social Audify <!-- TODO: Moet dynamisch --></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea input="text"  name="introduction" id="introduction"><?php echo $audit->introduction; ?></textarea>
+            <textarea input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $audit->introduction; ?></p><?php
+          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
         } ?>
       </div>
     </div><?php
@@ -648,11 +663,11 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea input="text"  name="conclusion" id="conclusion"><?php echo $audit->conclusion; ?></textarea>
+          <textarea input="text"  name="conclusion" id="conclusion"><?php if($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
-        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $audit->conclusion; ?></p><?php
+        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></p><?php
       } ?>
     </div>
   </section>
