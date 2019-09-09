@@ -51,22 +51,22 @@
         </div>
         <form class="col-lg-10 create_client_form" method="post" action="<?php echo $to; ?>">
           Name:<br>
-          <input type="text" name="client_name" pattern="^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$" placeholder="placeholder" title="Only letters are allowed." required>
+          <input type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed" required>
 
           Facebook Page:<br>
-          <input type="text" id="facebook_url" placeholder="pageusername or url" name="facebook_url" required>
+          <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" required>
           <button type="button" class="toggleClient" id="toggle_facebook" onclick="toggle_client_options('facebook')"><i class="fas fa-minus-circle"></i></button>
 
           Instagram:<br>
-          <input type="text" id="instagram_url" maxlength="50" placeholder="username or url" name="instagram_url" required>
+          <input type="text" id="instagram_url" name="instagram_url" placeholder="username or url"  maxlength="50" required>
           <button type="button" class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></button>
 
           Website:<br>
-          <input type="text" id="website_url" placeholder="https://example.com" name="website_url" pattern="<?php echo $website_regex;?>" required>
+          <input type="text" id="website_url" name="website_url" placeholder="https://example.com" pattern="<?php echo $website_regex;?>" required>
           <button type="button" class="toggleClient" id="toggle_website" onclick="toggle_client_options('website')"><i class="fas fa-minus-circle"></i></button>
 
           E-mail:<br>
-          <input type="email" name="client_mail" title="" placeholder="mail@example.com" required>
+          <input type="email" id="client_mail" name="client_mail" title="" placeholder="mail@example.com" required>
 
           <button type="submit">Submit</button>
         </form>

@@ -209,10 +209,10 @@
       var modalData = {
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
-            <input type="text" id="competitor-name" placeholder="Name of competitor">
+            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed">
             <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username">
-            <input type="text" id="instagram_url" placeholder="Instagram url, @username or username">
-            <input type="text" id="website_url" placeholder="Website url..">
+            <input type="text" id="instagram_url" placeholder="username or url">
+            <input type="text" id="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex;?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
         confirm: 'competitor_confirmed'
