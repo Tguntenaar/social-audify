@@ -146,7 +146,7 @@
           <div class="tab">
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
-              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." value="testing" required>
+              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." required>
             </label>
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report options:</span>
@@ -246,7 +246,7 @@
         // Set data-edge attribute of radio buttons.
         radioBtn.data('response', response);
 
-        if (response[edge].data.length == 0) {
+        if (!response.hasOwnProperty(edge) || response[edge].data.length == 0) {
           $('#campaign-list').html('No data found.');
           return;
         } else {
@@ -323,7 +323,13 @@
         selectedAds = [...selectedAds, $(ad).data('id')];
       });
       console.log(response);
-      response.data.forEach(function(campaign) {
+
+      var edge = $('[name=level]:checked').val();
+      // Als de response geen ads heeft.
+      if (!response.hasOwnProperty(edge)) {
+        return data;
+      }
+      response[edge].data.forEach(function(campaign) {
         const {id, name, ...rest} = campaign;
         if (selectedAds.includes(Number(id)) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.
           // TODO: check into this. insights.data.length array always 1?
