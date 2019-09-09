@@ -230,7 +230,7 @@
       });
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        parsePageInput(this);
+        parseClientInputFields(this);
       });
 
       $("#competitor_confirmed").click(function() {
@@ -241,12 +241,6 @@
           website : $(competitorModal).find('#website_url').val().replace("https://", "").replace("http://", ""),
         });
         nextPrev(1);
-      });
-
-      ['facebook', 'instagram', 'website'].forEach(function(elem) {
-        $(`#new-competitor-${elem}`).focusout(function() {
-          parsePageInput(this);
-        });
       });
 
       // Searchable lists

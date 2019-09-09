@@ -136,41 +136,37 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 }
 
 // Parse Client Info for client setup, audit setup and report setup.
-function parsePageInput(field) {
-  // if field is empty skip
-  console.log('parsing..');
-  if (!$(field).val()) {
+function parseClientInputFields(field) {
+
+  var unparsed = $(field).val();
+  
+  if (!unparsed) {
     return;
   }
 
-  var unparsed, parsed, pattern, matchedArray;
-  const fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
-
-  if ($(field).attr('id').includes('instagram')) {
-    pattern = '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?';
-  } else if ($(field).attr('id').includes('facebook')) {
-    pattern = '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_.\-]*)?';
-  } else {
-    // TODO: website
-    pattern = '(.*)';
+  var patterns = {
+    'facebook_url': '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_.\-]*)?',
+    'instagram_url': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?',
+    'website_url': '(.*)',
   }
 
-  unparsed = $(field).val();
-  matchedArray = unparsed.match(pattern);
+  var matchedArray = unparsed.match(patterns[field.id]);
 
   if (matchedArray !== null && matchedArray[1] !== 'undefined') {
-    parsed = matchedArray[1];
+    $(field).val(matchedArray[1]);
+    grabPageId(field, matchedArray[1]);
+  }
+}
 
-    $(field).val(parsed);
-    if ($(field).attr('id').includes('facebook')) {
-      const pageID = parsed.match(fbPageID);
-
-      if (pageID) {
-        $(field).val(pageID[1]);
-      }
+function grabPageId(field, found) {
+  if (field.id.includes('facebook')) {
+    var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
+    var pageID = found.match(fbPageID);
+  
+    if (pageID) {
+      $(field).val(pageID[1]);
     }
   }
-  return;
 }
 
 /**

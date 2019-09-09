@@ -111,7 +111,7 @@
       toggleClientOption('website');
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        parsePageInput(this);
+        parseClientInputFields(this);
       });
     // END OF DOCUMENT READY
     });
