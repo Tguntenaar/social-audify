@@ -38,7 +38,7 @@ function testBatch() {
 
 function makeIGpromise(iba, client, competitor = 0) {
   var firstPromise = new Promise(function (resolve, reject) {
-    // if (iba != null) { TODO: catch in the next promise zodat ie alsnog de insta querie uitvoertals het nodig is.
+    // if (iba != null) { TODO: catch in the next promise zodat ie alsnog de insta query uitvoertals het nodig is.
     //   resolve(iba);
     // } else {
       FB.api('/me/accounts?fields=instagram_business_account', function (response) {
@@ -54,8 +54,8 @@ function makeIGpromise(iba, client, competitor = 0) {
   var secondPromise = new Promise(function (resolve, reject) {
     firstPromise.then(function (iba_id) {
       if (typeof iba_id !== 'object') {
-
-        FB.api(getInstaQuerie2(iba_id, client.instagram), function (response) {
+        console.log(getInstaQuery(iba_id, client.instagram));
+        FB.api(getInstaQuery(iba_id, client.instagram), function (response) {
           if (response && !response.error) {
             response.iba_id = iba_id;
             resolve(response);
@@ -76,8 +76,11 @@ function makeIGpromise(iba, client, competitor = 0) {
 
 function makeFbPromise(client, competitor = 0) {
   var nestedPromise = new Promise(function (resolve, reject) {
-    FB.api(getFbCall(client.facebook), function (response) {
+    console.log(getFbQuery(client.facebook));
+    
+    FB.api(getFbQuery(client.facebook), function (response) {
       if (response && !response.error) {
+        response = reponse;
         resolve(response);
       }
       var str = (competitor) ? 'competitor' : 'client';
@@ -168,8 +171,6 @@ function makeApiCalls(instance) {
 
       askToContinue(client, page, options, competitor, i);
     } else {
-      console.log("hier2");
-      // console.log(competitor.id);
       post_ajax(client, page, options, competitor, currency);
     }
 
@@ -177,19 +178,18 @@ function makeApiCalls(instance) {
     showBounceBall(false);
     console.log(`%c Reason is ${reason}`, 'color: red');
     console.log({reason});
-
+    
     var msg = (typeof reason == 'string') ? reason : reason.error.message;
-    // alert
+    // TODO: reject with reason.title & message
     showModal(initiateModal('errorModal', 'error', {
       'text': `${msg}`,
-      'subtext': `Chose another client.`,
+      'subtext': `Choose another candidate.`,
     }));
 
     if (Instance.page.type == 'audit') {
-      
-      nextPrev(-1);
-      nextPrev(-1);
-      nextPrev(-1);
+      nextPrev( (reason.includes('competitor')) ? -2 : -3);
+    } else if (Instance.page.type == 'report') {
+      nextPrev(-4);
     }
   });
 }
@@ -232,16 +232,13 @@ function post_ajax(client, page, options, competitor = false, currency = null) {
     'currency' : JSON.stringify(currency)
   };
 
-  console.log("hier nu");
-  console.log(data);
+  console.log({data});
 
   if (page.type === 'audit') {
     data.action = 'update_meta_audit';
   } else if (page.type === 'report') {
     data.action = 'update_meta_report';
   }
-
-  console.log({data});
 
   $.ajax({
     type: "POST",
@@ -264,7 +261,6 @@ function post_iba_id(iba_id) {
     'action': 'update_iba_id',
     'iba_id': iba_id,
   };
-  console.log("Sending post id to functionsphp");
 
   $.ajax({
     type: "POST",
@@ -356,9 +352,6 @@ function unpackMediaInfo(media, addHashtags) {
     averageComments,
     averageLikes
   };
-
-  console.log("test");
-  console.log(returnMedia);
 
   if (addHashtags) {
   returnMedia.hashtags = getHashtags(captions);
@@ -489,15 +482,15 @@ function unpackPageInfo(response, report) {
   }
 }
 
-function getAdAccountsQuerie() {
+function getAdAccountsQuery() {
   return 'me/adaccounts?fields=name';
 }
 
-function getFbCall(page_name) {
+function getFbQuery(page_name) {
   return `/${page_name}?fields=country_page_likes,fan_count,picture{height, width},posts{message,created_time},albums{id,name,cover_photo.fields(images)}, location, videos, can_post, talking_about_count`;
 }
 
-function getInstaQuerie2(iba_id, business_name) {
+function getInstaQuery(iba_id, business_name) {
   return `${iba_id}?fields=business_discovery.username(${business_name}){username, media_count, followers_count, follows_count, media{timestamp, like_count, comments_count, caption}}`;
 }
 

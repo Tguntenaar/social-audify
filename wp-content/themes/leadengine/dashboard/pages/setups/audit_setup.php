@@ -183,9 +183,9 @@
       page : {
         type: 'audit',
         manual: 0,
-        competitor_manual: 0
+        competitor_manual: 0,
       },
-      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>
+      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>,
     }
 
     // Selectable list - TODO : kan wss naar dashboard-header
@@ -201,7 +201,8 @@
         var name = "<?php echo $newClient; ?>";
         var selected = $(`#client-list a[name=${name}]`);
         selected.parent().find('.audit-row').removeClass('selected');
-        selected.addClass('selected');<?php
+        selected.addClass('selected');
+        nextPrev(1);<?php
       } ?>
 
       // New Competitor Modal:

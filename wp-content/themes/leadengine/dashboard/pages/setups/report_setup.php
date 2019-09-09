@@ -6,10 +6,8 @@
 <!--
   TODO:
 
-  
   1. In de lijst met klanten -> laat geen klanten zien die al geen facebook hebben. 
   2. Verander hoe de campagnes worden geselecteerd.
-  3. Verander hoe een ad account word geconnect
 
  -->
 <!DOCTYPE html>
@@ -34,6 +32,7 @@
      * TODO: if statement of die wel bestaat
      * op de config page moet je je iba id kunnen veranderen
      */
+    
     // $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
     $reports = $report_control->get_all();
@@ -147,7 +146,7 @@
           <div class="tab">
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
-              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." required>
+              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." value="testing" required>
             </label>
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report options:</span>
@@ -163,13 +162,13 @@
             </label>
           </div>
 
-          <!-- Chose campaign/ad level tab -->
+          <!-- Choose campaign/ad level tab -->
           <div class="tab custom-radio">
             <div style="overflow-y:scroll;">
               <span class="name-label">On which level do you want a report?</span>
-              <input type="radio" name="level" value="ads" checked/>Ads<br />
-              <input type="radio" name="level" value="adsets" />Ad sets<br />
-              <input type="radio" name="level" value="campaigns"/>Campaigns
+              <input type="radio" name="level" value="ads" data-response="" checked/>Ads<br />
+              <input type="radio" name="level" value="adsets" data-response="" />Ad sets<br />
+              <input type="radio" name="level" value="campaigns" data-response="" />Campaigns
             </div>
           </div>
 
@@ -207,7 +206,8 @@
     // Report Instance - filled in multistep.
     var Instance = {
       page : { type: 'report' },
-      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>
+      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>,
+      adAccounts : [],
     };
 
     // Selectable list - TODO : kan sws naar dashboard-header
@@ -216,12 +216,6 @@
       $(this).addClass('selected');
     });
 
-    var selectedAds = [], // TODO: deze kan weg straks.
-    globalAdsResponse = {},
-    globalCampaignResponse = {},
-    globalAdSetResponse,
-    globalAdAccounts = [];
-
     $(function() {
       <?php
       if (isset($newClient)) { ?>
@@ -229,7 +223,8 @@
         const name = "<?php echo $newClient; ?>";
         var selected = $(`#client-list a[name=${name}]`);
         selected.parent().find('.audit-row').removeClass('selected');
-        selected.addClass('selected');<?php
+        selected.addClass('selected');
+        nextPrev(1);<?php
       } ?>
     });
 
@@ -239,71 +234,71 @@
       $('#campaign-list').html("<div class='lds-dual-ring'></div>");
 
       // Ads or campaign level
-      var edge = $('[name=level]:checked').val();
-      var campaignPromise = getCampaigns(edge);
+      var radioBtn= $('[name=level]:checked');
+      var edge = radioBtn.val();
+      var campaignPromise = makeAdPromise(radioBtn);
 
       campaignPromise.then(function(response) {
         Instance.currency = response.currency;
-        response = response[edge];
+        
+        console.log({response});
+        
+        // Set data-edge attribute of radio buttons.
+        radioBtn.data('response', response);
 
-        if (edge === 'ads') globalAdsResponse = response;
-        if (edge === 'campaigns') globalCampaignResponse = response;
-        if (edge === 'adsets') globalAdSetResponse = response;
-
-        if (response.data.length == 0) {
-            $('#campaign-list').html('No data found.');
+        if (response[edge].data.length == 0) {
+          $('#campaign-list').html('No data found.');
+          return;
         } else {
-            $('#campaign-list').empty();
-        }
+          $('#campaign-list').empty();
 
-        var active_ads = [];
+          var active_ads = [];
 
-        response.data.forEach(function(campaigns) {
-          const {id, name, ...insights} = campaigns;
+          response[edge].data.forEach(function(campaigns) {
+            const {id, name, ...insights} = campaigns;
 
-          if (!$.isEmptyObject(insights)) {
-            active_ads.push(campaigns);
+            if (!$.isEmptyObject(insights)) {
+              active_ads.push(campaigns);
+            }
+          });
+
+          if (active_ads.length == 0) {
+              $('#campaign-list').html(`No active ${edgeValue} running.`);
+          } else {
+              active_ads.forEach(function(ad) {
+                  // 1. Vul lijst met ads
+                  // voor de search bar => name="${ad.name.replace(/\s/g, '')}"
+                  var str = `<a class="audit-row competitors" data-id=${JSON.stringify(ad)} onclick="$(this).toggleClass('selected')">Name: ${ad.name}</a>`;
+                  $('#campaign-list').append(str);
+              });
           }
-        });
-
-        if (active_ads.length == 0) {
-            $('#campaign-list').html(`No active ${edge} running.`);
-        } else {
-            active_ads.forEach(function(campaigns) {
-                // zoals het nu gaat
-                var str = `<div class="audit-row competitors" onclick="addAdsOrCampaigns(this, ${campaigns['id']})">Name: ${campaigns['name']}</div>`;
-                $('#campaign-list').append(str);
-
-                // TODO: DONT DELETE THIS THOMAS IS HIER MEE BEZIG!!
-                // var str = `<a class="audit-row competitors" name="${campaigns.name.replace(/\s/g, '')}" data-campaigns="${JSON.stringify(campaigns)}" onclick="$(this).toggleClass('selected')">Name: ${campaigns.name}</a>`;
-                // $('#campaign-list').append(str);
-            });
         }
 
         return valid;
       }).catch(function (reason) {
         console.log({reason});
-        // FIXME:
-        var msg = (!!reason.error.message)? reason.error.message : reason.message;
-        // alert
+        
         showModal(initiateModal('errorModal', 'error', {
           'text': "Couldn't gather campaigns",
-          'subtext': `${msg} Chose another client.`,
+          'subtext': `Choose a candidate with a valid ad account.`,
         }));
+
+        nextPrev(-4);
 
         return false;
       });
     }
 
     // used in showActiveCampaigns
-    function getCampaigns(edge) {
+    function makeAdPromise(radioBtn) {
       // Api won't be called twice for the same edge.
-      if (edge === 'ads' && !$.isEmptyObject(globalAdsResponse)) return Promise.resolve(globalAdsResponse);
-      if (edge === 'campaign' && !$.isEmptyObject(globalCampaignResponse)) return Promise.resolve(globalCampaignResponse);
-      if (edge === 'adsets' && !$.isEmptyObject(globalAdSetResponse)) return Promise.resolve(globalAdSetResponse);
+      if (!$.isEmptyObject(radioBtn.data('response'))) 
+        return Promise.resolve(radioBtn.data('response'));
+      
       // call facebook api.
       return new Promise(function (resolve, reject) {
-        FB.api(getCampaignsQuery(Instance.client.ad_id, edge), function (response) {
+        console.log(getCampaignsQuery(Instance.client.ad_id, radioBtn.val()));
+        FB.api(getCampaignsQuery(Instance.client.ad_id, radioBtn.val()), function (response) {
           if (response && !response.error) {
             resolve(response);
           }
@@ -311,23 +306,6 @@
         });
       });
     }
-
-
-    // TODO: deze kan straks worden weggegooid.
-    function addAdsOrCampaigns(clickedDiv, campaignId) {
-      /**
-       * Als de campaign al in selected ads staat -> remove
-       * Anders voeg je hem toe.
-       */
-      if (selectedAds.includes(campaignId)) {
-        selectedAds.remove(campaignId);
-        $(clickedDiv).fadeTo(400, 1, () => {});
-      } else {
-        selectedAds = [...selectedAds, campaignId];
-        $(clickedDiv).fadeTo(400, 0.5, () => {});
-      }
-    }
-
 
     function check_nan(value) {
         return (Number.isNaN(value)) ? 0 : parseFloat(value);
@@ -339,7 +317,12 @@
      */
     function transformResponseData(response) {
       var data = [], avg = {}, sum, insight;
-
+      
+      var selectedAds = [];
+      $('#campaign-list .selected').each(function(i, ad) {
+        selectedAds = [...selectedAds, $(ad).data('id')];
+      });
+      console.log(response);
       response.data.forEach(function(campaign) {
         const {id, name, ...rest} = campaign;
         if (selectedAds.includes(Number(id)) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.
@@ -348,28 +331,19 @@
         }
       });
 
-      // TODO: Thomas is hier mee bezig
-      // $('#campaign-list .selected').forEach(function(selected) {
-        // console.log(selected);
-        // const {id, name, insights} = selected.data('campaign');
-        // console.log({id, name, insights});
-        // data = [...data, {name: name, insights: rest.insights.data[0]}];
-      // });
-      console.log("test sum");
-      console.log(data);
       // sums up all the properties of each insights object inside the "data" array.
       sum = data.reduce(function(acc, cur) {
         return {
-          reach: acc.reach + check_nan(parseFloat(cur.insights.reach)),
-          impressions: acc.impressions + check_nan(parseFloat(cur.insights.impressions)),
-          cpc: acc.cpc + check_nan(parseFloat(cur.insights.cpc)),
-          cpm: acc.cpm + check_nan(parseFloat(cur.insights.cpm)),
-          cpp: acc.cpp + check_nan(parseFloat(cur.insights.cpp)),
-          ctr: acc.ctr + check_nan(parseFloat(cur.insights.ctr)),
-          frequency: acc.frequency + check_nan(parseFloat(cur.insights.frequency)),
-          spend: acc.spend + check_nan(parseFloat(cur.insights.spend)),
-          unique_inline_link_clicks: acc.unique_inline_link_clicks + check_nan(parseFloat(cur.insights.unique_inline_link_clicks)),
-          website_purchase_roas: acc.website_purchase_roas + check_nan(parseFloat(cur.insights.website_purchase_roas))
+          reach: acc.reach + check_nan(cur.insights.reach),
+          impressions: acc.impressions + check_nan(cur.insights.impressions),
+          cpc: acc.cpc + check_nan(cur.insights.cpc),
+          cpm: acc.cpm + check_nan(cur.insights.cpm),
+          cpp: acc.cpp + check_nan(cur.insights.cpp),
+          ctr: acc.ctr + check_nan(cur.insights.ctr),
+          frequency: acc.frequency + check_nan(cur.insights.frequency),
+          spend: acc.spend + check_nan(cur.insights.spend),
+          unique_inline_link_clicks: acc.unique_inline_link_clicks + check_nan(cur.insights.unique_inline_link_clicks),
+          website_purchase_roas: acc.website_purchase_roas + check_nan(cur.insights.website_purchase_roas)
         };
     }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
       // divides sum into avg
@@ -382,7 +356,7 @@
     }
 
     $(function() {
-      // Connect Ad Account Modal FIXME:
+      // Connect Ad Account Modal
       var modalData = {
         text: 'Select the right ad account for the right campaigns',
         html: `<select size="2" id="ad-account-list" class="ad-account-list"></select>
@@ -403,7 +377,7 @@
         // 2. SET CURRENT AD ID
         $('#ad_id').val(client.ad_id);
 
-        getAdAccounts();
+        getAdAccounts(client.ad_id);
         showModal(adAccountModal);
         $('#ad-account-list').focus();
       });
@@ -460,18 +434,9 @@
 
       loggedInPromise.then((value) => {
         // last check what edge the user selected
-        var edge = $('[name=level]:checked').val();
-        // var globalResponse = (edge === 'ads') ? globalAdsResponse : globalCampaignResponse;
+        var response = $('[name=level]:checked').data('response');
 
-        if(edge === 'ads') {
-            var globalResponse = globalAdsResponse;
-        } else if(edge === 'adsets') {
-            var globalResponse = globalAdSetResponse;
-        } else {
-            var globalResponse = globalCampaignResponse;
-        }
-
-        Instance.client.chart_data = transformResponseData(globalResponse);
+        Instance.client.chart_data = transformResponseData(response);
 
         makeApiCalls(Instance);
 
