@@ -323,12 +323,12 @@
         selectedAds = [...selectedAds, $(ad).data('id')];
       });
       console.log(response);
-
+      
       var edge = $('[name=level]:checked').val();
-      // Als de response geen ads heeft.
       if (!response.hasOwnProperty(edge)) {
         return data;
-      }
+      } 
+
       response[edge].data.forEach(function(campaign) {
         const {id, name, ...rest} = campaign;
         if (selectedAds.includes(Number(id)) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.

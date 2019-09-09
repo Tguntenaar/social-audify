@@ -209,10 +209,10 @@
       var modalData = {
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
-            <input type="text" id="competitor-name" placeholder="Name of competitor">
-            <input type="text" id="facebook" placeholder="Facebook page url, page id or page username">
-            <input type="text" id="instagram" placeholder="Instagram url, @username or username">
-            <input type="text" id="website" placeholder="Website url..">
+            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed">
+            <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username">
+            <input type="text" id="instagram_url" placeholder="username or url">
+            <input type="text" id="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex;?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
         confirm: 'competitor_confirmed'
@@ -223,30 +223,24 @@
       $('#compare-list .new-compare').on('click', function() {
         var data = $(this).data('compare');
         $(competitorModal).find('#competitor-name').val(data.name);
-        $(competitorModal).find('#facebook').val(data.facebook);
-        $(competitorModal).find('#instagram').val(data.instagram);
-        $(competitorModal).find('#website').val(data.website);
+        $(competitorModal).find('#facebook_url').val(data.facebook);
+        $(competitorModal).find('#instagram_url').val(data.instagram);
+        $(competitorModal).find('#website_url').val(data.website);
         showModal(competitorModal);
       });
 
-      $('#facebook, #instagram, #website').focusout(function() {
-        parsePageInput(this);
+      $('#facebook_url, #instagram_url, #website_url').focusout(function() {
+        parseClientInputFields(this);
       });
 
       $("#competitor_confirmed").click(function() {
         $('#compare-list .new-compare').data('compare', {
           name : $(competitorModal).find('#competitor-name').val(),
-          facebook : $(competitorModal).find('#facebook').val(),
-          instagram : $(competitorModal).find('#instagram').val(),
-          website : $(competitorModal).find('#website').val().replace("https://", "").replace("http://", ""),
+          facebook : $(competitorModal).find('#facebook_url').val(),
+          instagram : $(competitorModal).find('#instagram_url').val(),
+          website : $(competitorModal).find('#website_url').val().replace("https://", "").replace("http://", ""),
         });
         nextPrev(1);
-      });
-
-      ['facebook', 'instagram', 'website'].forEach(function(elem) {
-        $(`#new-competitor-${elem}`).focusout(function() {
-          parsePageInput(this);
-        });
       });
 
       // Searchable lists
