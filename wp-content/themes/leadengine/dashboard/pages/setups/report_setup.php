@@ -6,10 +6,8 @@
 <!--
   TODO:
 
-  
   1. In de lijst met klanten -> laat geen klanten zien die al geen facebook hebben. 
   2. Verander hoe de campagnes worden geselecteerd.
-  3. Verander hoe een ad account word geconnect
 
  -->
 <!DOCTYPE html>
@@ -296,6 +294,7 @@
       
       // call facebook api.
       return new Promise(function (resolve, reject) {
+        console.log(getCampaignsQuery(Instance.client.ad_id, radioBtn.val()));
         FB.api(getCampaignsQuery(Instance.client.ad_id, radioBtn.val()), function (response) {
           if (response && !response.error) {
             resolve(response);

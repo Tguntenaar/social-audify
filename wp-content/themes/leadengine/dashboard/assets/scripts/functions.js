@@ -176,7 +176,8 @@ function parsePageInput(field) {
 function getAdAccounts(ad_id) {
   // Don't make the same request a second time
   if (Instance.adAccounts.length == 0) {
-    FB.api(getAdAccountsQuerie(), function (response) {
+    console.log(getAdAccountsQuery());
+    FB.api(getAdAccountsQuery(), function (response) {
       if (response && !response.error && response.data.length != 0) {
   
         response.data.forEach(function(ad_account) {
