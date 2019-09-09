@@ -137,6 +137,8 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 
 // Parse Client Info for client setup, audit setup and report setup.
 function parsePageInput(field) {
+  // if field is empty skip
+  console.log('parsing..');
   if (!$(field).val()) {
     return;
   }
@@ -145,11 +147,12 @@ function parsePageInput(field) {
   const fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
 
   if ($(field).attr('id').includes('instagram')) {
-    pattern = '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_\-]{0,28})?';
+    pattern = '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?';
   } else if ($(field).attr('id').includes('facebook')) {
-    pattern = '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_\-]*)?';
+    pattern = '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_.\-]*)?';
   } else {
-    pattern = '(.*)'; // FIXME:
+    // TODO: website
+    pattern = '(.*)';
   }
 
   unparsed = $(field).val();
