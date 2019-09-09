@@ -83,6 +83,7 @@ function validateStep() {
     case 3:
       return validateName();
     case 4:
+      $('.step').eq(currentTab).addClass('finish');
       return true; // showActiveCampaigns
   }
   return false;
