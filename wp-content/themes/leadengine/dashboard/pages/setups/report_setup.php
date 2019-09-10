@@ -22,12 +22,6 @@
   <?php
     include(dirname(__FILE__)."/../header/dashboard_header.php");
 
-    if (isset($_GET['cid'])) {
-      $new_client = $client_control->get($_GET['cid']);
-      // TODO : is not null check...
-      $newClient = $new_client->name;
-    }
-
     $user = $user_control->get($user_id);
     /**
      * TODO: if statement of die wel bestaat
@@ -112,7 +106,7 @@
               foreach($clients as $client) {
                 $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website, "ad_id"=>$client->ad_id];?>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-repsonsive-auto audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
-                   data-client='<?php echo htmlentities(json_encode($data)); ?>'>
+                   data-client='<?php echo htmlentities(json_encode($data)); ?>' id="client-<?php echo $client->id; ?>">
 
                   <span class="name-client"><?php echo $client->name;?></span><?php
 
@@ -219,11 +213,11 @@
 
     $(function() {
       <?php
-      if (isset($newClient)) { ?>
-      // TODO: open ad account modal hier ook;
+      if (isset($_GET['cid'])) { ?>
         showIntro(false);
-        const name = "<?php echo $newClient; ?>";
-        var selected = $(`#client-list a[name=${name}]`);
+        var id = "<?php echo $_GET['cid']; ?>";
+        var selected = $(`#client-list a[id=client-${id}]`);
+        // TODO: open ad account modal hier ook; && remove??
         selected.parent().find('.audit-row').removeClass('selected');
         selected.addClass('selected');<?php
       } ?>

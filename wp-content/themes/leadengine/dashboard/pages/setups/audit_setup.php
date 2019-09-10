@@ -15,12 +15,6 @@
     // Header
     include(dirname(__FILE__)."/../header/dashboard_header.php");
 
-    if (isset($_GET['cid'])) {
-      $new_client = $client_control->get($_GET['cid']);
-      // TODO : is not null check...
-      $newClient = $new_client->name;
-    }
-
     $user = $user_control->get($user_id);
     $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
@@ -107,7 +101,7 @@
               <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
                 foreach($clients as $client) {
                   $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
-                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row" name="<?php echo $client->name; ?>"
+                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
                     data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
                   </a><?php
                 } ?>
@@ -196,10 +190,11 @@
 
     $(function() {
       <?php
-      if (isset($newClient)) { ?>
+      if (isset($_GET['cid'])) { ?>
         showIntro(false);
-        var name = "<?php echo $newClient; ?>";
-        var selected = $(`#client-list a[name=${name}]`);
+        var id = "<?php echo $_GET['cid']; ?>";
+        var selected = $(`#client-list a[id=client-${id}]`);
+        // wrm zou iets geselecteerd zijn?
         selected.parent().find('.audit-row').removeClass('selected');
         selected.addClass('selected');
         nextPrev(1);<?php
