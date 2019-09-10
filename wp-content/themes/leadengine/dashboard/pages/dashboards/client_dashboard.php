@@ -10,7 +10,6 @@
 <?php
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
-  include(dirname(__FILE__)."/../../assets/php/client_regex.php");
 
   // TODO: 
   class clientMedia {
