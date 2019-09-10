@@ -200,7 +200,7 @@
       echo '<i class="far fa-eye'.$slash.'"></i>';
     }
   }
-  var_dump($audit);
+
   $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
   $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
   $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
