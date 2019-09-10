@@ -35,6 +35,21 @@ class audit_service extends connection {
         where id = %d", $id));
   }
 
+  public function get_all_audits() {
+    return $this->dbwp->get_results(
+      "SELECT a.*, d.manual, $this->template_fields, $this->visibility_fields, $this->crawl_fields, $this->data_fields
+        FROM Audit as a
+        LEFT JOIN Audit_template as t
+          ON t.audit_id = a.id
+        LEFT JOIN Audit_stat_visibility as v
+          ON v.audit_id = a.id
+        LEFT JOIN Audit_crawl as c
+          ON c.audit_id = a.id and c.competitor = 0
+        LEFT JOIN Audit_data as d
+          on d.audit_id = a.id and d.competitor = 0
+        WHERE a.create_date >= DATE(NOW()) - INTERVAL 7 DAY");
+  }
+
 
   public function get_competitor($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
