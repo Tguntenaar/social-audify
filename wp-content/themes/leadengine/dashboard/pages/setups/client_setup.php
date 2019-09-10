@@ -24,7 +24,6 @@
 </head>
   <?php
     include(dirname(__FILE__)."/../header/dashboard_header.php");
-    include(dirname(__FILE__)."/../../assets/php/client_regex.php");
   ?>
 
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
