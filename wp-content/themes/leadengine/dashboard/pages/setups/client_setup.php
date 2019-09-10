@@ -51,7 +51,7 @@
         </div>
         <form class="col-lg-10 create_client_form" method="post" action="<?php echo $to; ?>">
           Name:<br>
-          <input type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed" required>
+          <input maxlength="25" type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed" required>
 
           Facebook Page:<br>
           <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" required>

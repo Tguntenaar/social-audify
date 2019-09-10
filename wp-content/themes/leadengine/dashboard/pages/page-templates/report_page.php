@@ -238,7 +238,7 @@
         <span class="audit-company-name"><?php echo $author->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea input="text" name="introduction" id="introduction"><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></textarea>
+            <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
@@ -302,7 +302,7 @@
           <span class="title-report-box">Social Notes</span><?php
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#social_advice" method="post" enctype="multipart/form-data">
-              <textarea input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
+              <textarea maxlength="999" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
               <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
@@ -364,7 +364,7 @@
           <span class="title-report-box">Campaign Notes</span><?php
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#campaign_advice" method="post" enctype="multipart/form-data">
-              <textarea style="height: 330px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $report->campaign_advice; ?></textarea>
+              <textarea maxlength="999" style="height: 330px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $report->campaign_advice; ?></textarea>
               <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
@@ -381,7 +381,7 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea input="text" name="conclusion" id="conclusion"><?php if($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
+          <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>

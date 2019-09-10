@@ -871,6 +871,12 @@ nav ul a:hover {
 	display: none;
 }
 
+#wpua-file-existing {
+	background: #487dd7 !important;
+	border: 0;
+	color: #fff;
+}
+
 .overlay-ad-account p:hover {
 	opacity: 0.8;
 }
