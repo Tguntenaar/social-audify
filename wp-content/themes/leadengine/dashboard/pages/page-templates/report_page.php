@@ -235,7 +235,7 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo get_userdata($author_id)->display_name; ?></span><?php
+        <span class="audit-company-name"><?php echo $author->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea input="text" name="introduction" id="introduction"><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></textarea>

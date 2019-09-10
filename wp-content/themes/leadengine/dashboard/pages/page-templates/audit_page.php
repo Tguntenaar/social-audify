@@ -13,7 +13,6 @@
   $phoneMeta =  get_user_meta($author_id, 'rcp_number');
   $phone = isset($phoneMeta[0]) ? $phoneMeta[0] : "";
   $author = get_userdata($author_id);
-
   // Mode check
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
                 ($user_id == $author_id) : false;
@@ -303,7 +302,7 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text" id="introduction">
-        <span class="audit-company-name">Social Audify <!-- TODO: Moet dynamisch --></span><?php
+        <span class="audit-company-name"><?php echo $author->display_name;?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>

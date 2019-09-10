@@ -224,8 +224,7 @@
         const name = "<?php echo $newClient; ?>";
         var selected = $(`#client-list a[name=${name}]`);
         selected.parent().find('.audit-row').removeClass('selected');
-        selected.addClass('selected');
-        nextPrev(1);<?php
+        selected.addClass('selected');<?php
       } ?>
     });
 
@@ -398,8 +397,15 @@
 
           // Change the data-client attribute
           var clientDataAttribute = clickedClient.data('client');
+          console.log(clientDataAttribute);
+          console.log(typeof clientDataAttribute);
+          console.log(adId);
+          console.log(typeof adId);
+
           clientDataAttribute.ad_id = adId;
           clickedClient.data("client", clientDataAttribute);
+          console.log(clientDataAttribute);
+          console.log(clickedClient);
 
           // Change the class of the overlay
           var overlay = clickedClient.find('div');
