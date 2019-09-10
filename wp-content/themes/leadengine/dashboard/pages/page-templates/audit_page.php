@@ -910,6 +910,7 @@
       var advice = $('#' + type + '_advice');
 
       value.html(slider.val());
+
       slider.on('input', function(e) {
         value.html($(e.target).val());
         score.val($(e.target).val());
@@ -930,23 +931,40 @@
         one: <?php echo $user->range_number_fb_1; ?>,
         two: <?php echo $user->range_number_fb_2; ?>,
       }
-      var text_fb = {
-        one: '<?php echo $user->text_fb_1; ?>',
-        two: '<?php echo $user->text_fb_2; ?>',
-        three: '<?php echo $user->text_fb_3; ?>',
-      }
-      handleSlider('facebook', range_fb, text_fb); <?php
+      <?php if($audit->facebook_advice != "") { ?>
+          var text_fb = {
+            one: '<?php echo $audit->facebook_advice; ?>',
+            two: '<?php echo $audit->facebook_advice; ?>',
+            three: '<?php echo $audit->facebook_advice; ?>',
+          }
+      <?php } else { ?>
+          var text_fb = {
+            one: '<?php echo $user->text_fb_1; ?>',
+            two: '<?php echo $user->text_fb_2; ?>',
+            three: '<?php echo $user->text_fb_3; ?>',
+          }
+      <?php } ?>
+
+      <?php  ?> handleSlider('facebook', range_fb, text_fb); <?php
     }
     if ($audit->instagram_bit == "1") { ?>
       var range_ig = {
         one: <?php echo $user->range_number_insta_1; ?>,
         two: <?php echo $user->range_number_insta_2; ?>,
       }
-      var text_ig = {
-        one: '<?php echo $user->text_insta_1; ?>',
-        two: '<?php echo $user->text_insta_2; ?>',
-        three: '<?php echo $user->text_insta_3; ?>',
-      }
+      <?php if($audit->instagram_advice != "") { ?>
+          var text_ig = {
+            one: '<?php echo $audit->instagram_advice; ?>',
+            two: '<?php echo $audit->instagram_advice; ?>',
+            three: '<?php echo $audit->instagram_advice; ?>',
+          }
+      <?php } else { ?>
+          var text_ig = {
+            one: '<?php echo $user->text_insta_1; ?>',
+            two: '<?php echo $user->text_insta_2; ?>',
+            three: '<?php echo $user->text_insta_3; ?>',
+          }
+       <?php } ?>
       handleSlider('instagram', range_ig, text_ig); <?php
     }
     if ($audit->website_bit == "1") { ?>
@@ -954,11 +972,19 @@
         one: <?php echo $user->range_number_website_1; ?>,
         two: <?php echo $user->range_number_website_2; ?>,
       }
-      var text_ws = {
-        one: '<?php echo $user->text_website_1; ?>',
-        two: '<?php echo $user->text_website_2; ?>',
-        three: '<?php echo $user->text_website_3; ?>',
-      }
+      <?php if($audit->website_advice != "") { ?>
+          var text_ws = {
+            one: '<?php echo $audit->website_advice; ?>',
+            two: '<?php echo $audit->website_advice; ?>',
+            three: '<?php echo $audit->website_advice; ?>',
+          }
+      <?php } else {?>
+          var text_ws = {
+            one: '<?php echo $user->text_website_1; ?>',
+            two: '<?php echo $user->text_website_2; ?>',
+            three: '<?php echo $user->text_website_3; ?>',
+          }
+      <?php } ?>
       handleSlider('website', range_ws, text_ws); <?php
     }
   } ?>
