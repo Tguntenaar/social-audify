@@ -61,7 +61,7 @@
           <button type="button" class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></button>
 
           Website:<br>
-          <input type="text" id="website_url" name="website_url" placeholder="https://example.com" pattern="<?php echo $website_regex;?>" required>
+          <input type="text" id="website_url" name="website_url" placeholder="http://www.example.com" pattern="<?php echo $website_regex;?>" required>
           <button type="button" class="toggleClient" id="toggle_website" onclick="toggle_client_options('website')"><i class="fas fa-minus-circle"></i></button>
 
           E-mail:<br>
