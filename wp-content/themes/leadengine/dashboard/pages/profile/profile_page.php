@@ -98,7 +98,9 @@
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
                 <div class="fb-audit-visibility-block">
-                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility); ?>
+                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility); 
+                    print_list_checkboxes($facebook_ad_blocks, '', $audit_visibility);
+                  ?>
                 </div>
                 <div class="ig-audit-visibility-block" style='display:none'>
                   <?php print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>

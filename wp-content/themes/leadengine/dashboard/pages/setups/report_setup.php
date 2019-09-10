@@ -220,6 +220,7 @@
     $(function() {
       <?php
       if (isset($newClient)) { ?>
+      // TODO: open ad account modal hier ook;
         showIntro(false);
         const name = "<?php echo $newClient; ?>";
         var selected = $(`#client-list a[name=${name}]`);
@@ -374,7 +375,11 @@
 
       // Connect Ad Account
       $('.connect-ad-account, .change-ad-account').on('click', function() {
+        openAdAccountDialog(adAccountModal);
+      });
 
+      // TODO: deze moet openen  als newClient is geset maar scope problemen
+      function openAdAccountDialog(adAccountModal) {
         // 1. SET THE CLIENT
         var client =  $(this).parent().data('client');
         $('#client_id').val(client.id);
@@ -385,7 +390,7 @@
         getAdAccounts(client.ad_id);
         showModal(adAccountModal);
         $('#ad-account-list').focus();
-      });
+      }
 
       // 3. Update Ad id
       $('#adAccountConfirm').click(function() {
