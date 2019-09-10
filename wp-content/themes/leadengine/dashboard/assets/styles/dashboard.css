@@ -867,6 +867,10 @@ nav ul a:hover {
 	line-height: 50px;
 }
 
+#wpua-edit-attachment-existing {
+	display: none;
+}
+
 .overlay-ad-account p:hover {
 	opacity: 0.8;
 }
@@ -3702,7 +3706,7 @@ h4 {
 #audit-settings ul,
 #report-settings ul,
 #mail-settings ul {
-	height: 40px;
+	height: auto;
 	line-height: 40px;
 	width: 100%;
 	float: left;
@@ -4201,7 +4205,7 @@ h4 {
 	.sub-header #delete-this-audit {
 		width: 60px;
 	}
-	
+
 	.sub-header button {
 		text-align: left;
 	}

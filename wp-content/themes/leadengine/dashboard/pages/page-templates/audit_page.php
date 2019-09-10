@@ -201,7 +201,7 @@
       echo '<i class="far fa-eye'.$slash.'"></i>';
     }
   }
-
+  var_dump($audit);
   $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
   $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
   $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
@@ -374,9 +374,10 @@
                     </span><?php
                   } ?>
                 </div>
-              </div><?php
+              </div>
+             <?php } if (show_block($edit_mode, $audit->fb_ads_comp)) {
               if ($audit->has_comp) { ?>
-                <div class="stat-block col-lg-6" id="fb_ads">
+                <div class="stat-block col-lg-6" id="fb_ads_comp">
                   <div class="inner">
                     <span class="title-box facebook">Competitor running ads</span><?php
                     if (!$edit_mode) {
@@ -394,7 +395,7 @@
                         <input type="radio" name="ads_c" value="no" <?php  echo !$checked ? "checked" : ""; ?>> <span class="label_ads">No</span>
                       </form>
 
-                      <div onclick="toggle_visibility('fb_ads')" id="fb_ads_icon" class="visibility"><?php visibility_icon($edit_mode, $audit->fb_ads); ?></div>
+                      <div onclick="toggle_visibility('fb_ads_comp')" id="fb_ads_comp_icon" class="visibility"><?php visibility_icon($edit_mode, $audit->fb_ads_comp); ?></div>
                       <span class="explenation-ads">
                         <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $audit->competitor->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
@@ -402,7 +403,7 @@
                       </span><?php
                     } ?>
                   </div>
-                </div><?php
+               </div> <?php
               }
             } ?>
           </div>
