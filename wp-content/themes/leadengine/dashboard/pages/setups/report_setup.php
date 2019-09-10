@@ -318,17 +318,16 @@
      */
     function transformResponseData(response) {
       var data = [], avg = {}, sum, insight;
-      
+      var edge = $('[name=level]:checked').val();
       var selectedAds = [];
+      
+      if (!response.hasOwnProperty(edge)) {
+        return data;
+      }
+
       $('#campaign-list .selected').each(function(i, ad) {
         selectedAds = [...selectedAds, $(ad).data('id')];
       });
-
-      
-      var edge = $('[name=level]:checked').val();
-      if (!response.hasOwnProperty(edge)) {
-        return data;
-      } 
 
       response[edge].data.forEach(function(campaign) {
         const {id, name, ...rest} = campaign;
@@ -427,7 +426,19 @@
    });
 
     function submitForm() {
-      showBounceBall(true, 'Preparing report, wait a minute')
+      showBounceBall(true, 'Preparing report, wait a minute');
+
+      // validate number of ads selected
+      if ($('#campaign-list .selected').length < 1 || $('#campaign-list .selected').length > 5) {
+        var edge = $('[name=level]:checked').val();
+        var hiLo = ($('#campaign-list .selected').length > 5) ? 'high' : 'low';
+        showModal(initiateModal('errorModal', 'error', {
+          'text': `Number of ${edge} selected is too ${hiLo}`,
+          'subtext': `Please select between 1 and 5 ${edge}`,
+        }));
+        return showBounceBall(false);
+      } 
+
       var loggedInPromise = new Promise((resolve, reject) => {
         FB.getLoginStatus(function(response) {
           if (response.status === 'connected') {
@@ -451,6 +462,7 @@
         return false;
       }).catch((reason) => {
         showBounceBall(false);
+        // TODO: alert here
         console.log({ reason });
       });
     }
