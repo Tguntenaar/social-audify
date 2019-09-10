@@ -6,7 +6,8 @@
 <!--
   TODO:
 
-  1. In de lijst met klanten -> laat geen klanten zien die al geen facebook hebben. 
+
+  1. In de lijst met klanten -> laat geen klanten zien die al geen facebook hebben.
   2. Verander hoe de campagnes worden geselecteerd.
 
  -->
@@ -375,7 +376,7 @@
 
       // Connect Ad Account
       $('.connect-ad-account, .change-ad-account').on('click', function() {
-        
+
         // 1. SET THE CLIENT
         var client =  $(this).parent().data('client');
         $('#client_id').val(client.id);
@@ -444,6 +445,7 @@
 
         Instance.client.chart_data = transformResponseData(response);
 
+        // console.log(Instance);
         makeApiCalls(Instance);
 
         return false;

@@ -425,7 +425,7 @@ function unpackPageInfo(response, report) {
   var loc, vid, pst;
 
   if(response.location != null) { loc = 1; } else { loc = 0; }
-  if(response.native_videos != null) { vid = response.native_videos.data.length; } else { vid = 0; }
+  if(response.videos != null) { vid = response.videos.data.length; } else { vid = 0; }
   if(response.posts != null) { pst = response.posts.data; } else { pst = {}; }
 
   var country_page_likes = response.fan_count,

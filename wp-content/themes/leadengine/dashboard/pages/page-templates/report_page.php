@@ -167,6 +167,7 @@
   }
 
   $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
+
 ?>
 
 <head>
@@ -180,31 +181,48 @@
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js" charset="utf-8" defer></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    $(document).ready(function() {
+      $('#nav-icon2').click(function() {
+        $(this).toggleClass('open');
+        $('.mobile-hide').toggleClass('block');
+      });
+    });
+  </script>
 </head>
 <body class="custom-body">
   <div id="shareModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
 
-  <div class="sub-header col-lg-12" style="display: block !important;"><?php
-    if ($edit_mode) { ?>
-      <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
-    } ?>
+  <div class="sub-header col-lg-12" style="display: block !important;">
+      <!-- Animated CSS stuff -->
+      <div id="nav-icon2">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="mobile-hide">
+        <?php
+        if ($edit_mode) { ?>
+          <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
+        } ?>
 
-    Report: <?php echo $report->name;
+        Report: <?php echo $report->name;
 
-    if ($edit_mode) { ?>
-      <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
-      <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button><?php
-    }
+        if ($edit_mode) { ?>
+          <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
+          <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button><?php
+        }
 
-    if ($user_id === $author_id) {
-      if ($edit_mode) { ?>
-				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-      } else { ?>
-				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-      }
-    } ?>
+        if ($user_id === $author_id) {
+          if ($edit_mode) { ?>
+    				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+          } else { ?>
+    				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+          }
+      } ?>
+    </div>
   </div>
 
   <section class="content report-page custom-content min-height">
@@ -220,11 +238,11 @@
         <span class="audit-company-name"><?php echo get_userdata($author_id)->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea input="text" name="introduction" id="introduction"><?php echo $report->introduction; ?></textarea>
+            <textarea input="text" name="introduction" id="introduction"><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
-          <p><?php echo $report->introduction; ?></p><?php
+          <p><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></p><?php
         } ?>
       </div>
     </div>
@@ -363,11 +381,11 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea input="text" name="conclusion" id="conclusion"><?php echo $report->conclusion; ?></textarea>
+          <textarea input="text" name="conclusion" id="conclusion"><?php if($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
-        <p><?php echo $report->conclusion; ?></p><?php
+        <p><?php if($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></p><?php
       } ?>
     </div>
   </section>
