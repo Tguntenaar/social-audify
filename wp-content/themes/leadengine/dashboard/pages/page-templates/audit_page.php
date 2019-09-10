@@ -305,7 +305,7 @@
         <span class="audit-company-name"><?php echo $author->display_name;?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
+            <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
@@ -425,7 +425,7 @@
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="facebook_score" id="facebook_score" value='<?php echo $score['fb']; ?>'/>
-                    <textarea input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
+                    <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                     <input type="submit" value="Update" class="edite-button">
                   </form><?php
                 } else { ?>
@@ -580,7 +580,7 @@
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="instagram_score" id="instagram_score" value="<?php echo $score['ig']; ?>"/>
-                    <textarea input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
+                    <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                     <input type="submit" value="Update" class="edite-button" >
                   </form><?php
                 } else { ?>
@@ -640,7 +640,7 @@
             <span class="advice-title margin-advice-title">Website advice</span>
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
               <input type="hidden" name="website_score" id="website_score" value="<?php echo $score['wb']; ?>"/>
-              <textarea input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
+              <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
               <input type="submit" value="Update" class="edite-button">
             </form><?php
           } else { ?>
@@ -663,7 +663,7 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea input="text"  name="conclusion" id="conclusion"><?php if($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
+          <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>

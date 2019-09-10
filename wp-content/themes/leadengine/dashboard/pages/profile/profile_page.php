@@ -10,7 +10,7 @@
 <?php
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
-  
+
   include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
   include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
 
@@ -85,7 +85,7 @@
               <!-- intro -->
               <div class="intro-audit-block">
                 <h4>Introduction Audit</h4>
-                <textarea input="text"  name="introduction-audit" id="introduction-audit"><?php
+                <textarea maxlength="999" input="text"  name="introduction-audit" id="introduction-audit"><?php
                   echo trim($user->intro_audit);
                 ?></textarea>
               </div>
@@ -98,7 +98,7 @@
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
                 <div class="fb-audit-visibility-block">
-                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility); 
+                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility);
                     print_list_checkboxes($facebook_ad_blocks, '', $audit_visibility);
                   ?>
                 </div>
@@ -112,7 +112,7 @@
               <!-- conclusion -->
               <div class="conclusion-audit-block">
                 <h4>Conclusion Audit</h4>
-                <textarea  input="text"  name="conclusion-audit" id="conclusion-audit"><?php
+                <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
                   echo trim($user->conclusion_audit);
                 ?></textarea>
               </div>
@@ -122,20 +122,20 @@
                 <h4>Facebook Audit text</h4>
                 <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
                 <input type="text" id="range_facebook_1" name="range_facebook_1" placeholder="30" value="<?php echo $user->range_number_fb_1; ?>"/>
-                <textarea  input="text"  name="facebook-audit_1" id="facebook-audit_1"><?php
+                <textarea maxlength="999" input="text"  name="facebook-audit_1" id="facebook-audit_1"><?php
                   echo $user->text_fb_1;
                 ?></textarea>
 
                 <!-- Set standard text Facebook by range : 2 -->
                 <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
                 <input type="text" id="range_facebook_2" name="range_facebook_2" placeholder="60" value="<?php echo $user->range_number_fb_2; ?>" />
-                <textarea  input="text"  name="facebook-audit_2" id="facebook-audit_2"><?php
+                <textarea maxlength="999" input="text"  name="facebook-audit_2" id="facebook-audit_2"><?php
                   echo $user->text_fb_2;
                 ?></textarea>
 
                 <!-- Set standard text Facebook by range : 3 -->
                 <h6>The last range is less then or equal to 100</h6>
-                <textarea  input="text"  name="facebook-audit_3" id="facebook-audit_3"><?php
+                <textarea maxlength="999" input="text"  name="facebook-audit_3" id="facebook-audit_3"><?php
                   echo $user->text_fb_3;
                 ?></textarea>
               </div>
@@ -146,11 +146,11 @@
                 for ($i = 1; $i < 3; $i++) { ?>
                   <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
                   <input type="text" name="range_insta_<?php echo $i; ?>" id="range_insta_<?php echo $i; ?>" placeholder="30" value="<?php echo $user->{"range_number_insta_$i"}; ?>" />
-                  <textarea input="text" name="insta-audit_<?php echo $i; ?>" id="insta-audit_<?php echo $i; ?>"><?php echo $user->{"text_insta_$i"}; ?></textarea><?php
+                  <textarea maxlength="999" input="text" name="insta-audit_<?php echo $i; ?>" id="insta-audit_<?php echo $i; ?>"><?php echo $user->{"text_insta_$i"}; ?></textarea><?php
                 } ?>
 
                 <h6>The last range is less then or equal to 100</h6>
-                <textarea input="text" name="insta-audit_3" id="insta-audit_3"><?php echo $user->text_insta_3; ?></textarea>
+                <textarea maxlength="999" input="text" name="insta-audit_3" id="insta-audit_3"><?php echo $user->text_insta_3; ?></textarea>
               </div>
 
               <div class="wb-audit-block">
@@ -158,20 +158,20 @@
 
                 <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
                 <input type="text" id="range_website_1" name="range_website_1" placeholder="30" value="<?php echo $user->range_number_website_1; ?>" />
-                <textarea  input="text"  name="website-audit_1" id="website-audit_1"><?php
+                <textarea maxlength="999" input="text"  name="website-audit_1" id="website-audit_1"><?php
                   echo $user->text_website_1;
                 ?></textarea>
 
                 <!-- Set standard text Insta by range : 2 -->
                 <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
                 <input type="text" id="range_website_2" name="range_website_2" placeholder="60" value="<?php echo $user->range_number_website_2; ?>" />
-                <textarea  input="text"  name="website-audit_2" id="website-audit_2"><?php
+                <textarea maxlength="999" input="text"  name="website-audit_2" id="website-audit_2"><?php
                   echo $user->text_website_2;
                 ?></textarea>
 
                 <!-- Set standard text Insta by range : 3 -->
                 <h6>The last range is less then or equal to 100</h6>
-                <textarea input="text"  name="website-audit_3" id="website-audit_3"><?php
+                <textarea maxlength="999" input="text"  name="website-audit_3" id="website-audit_3"><?php
                   echo $user->text_website_3;
                 ?></textarea>
               </div>
@@ -197,14 +197,14 @@
               <!-- intro report -->
               <div class="intro-report-block">
                 <h4>Introduction Report</h4>
-                <textarea  input="text"  name="introduction-report" id="introduction-report"><?php
+                <textarea maxlength="999" input="text"  name="introduction-report" id="introduction-report"><?php
                   echo trim($user->intro_report);
                 ?></textarea>
               </div>
               <!-- conclusion report -->
               <div class="conclusion-report-block">
                 <h4>Conclusion Report</h4>
-                <textarea  input="text"  name="conclusion-report" id="conclusion-report"><?php
+                <textarea maxlength="999" input="text"  name="conclusion-report" id="conclusion-report"><?php
                   echo trim($user->conclusion_report);
                 ?></textarea>
               </div>
@@ -259,18 +259,18 @@
                 <!-- mail 1 block -->
                 <p>Use #{name} to type the name of receiver in the mail.</p>
                 <div class="first-what-mail-block" style="">
-                  <textarea  input="text" name="mail_text" id="mail_text"><?php
+                  <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
                     echo trim($user->mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
-                <div class="second-what-mail-block" style="display:none">
+                <div maxlength="1999" class="second-what-mail-block" style="display:none">
                   <textarea  input="text" name="second_mail_text" id="mail_text2"><?php
                     echo trim($user->second_mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
-                <div class="third-what-mail-block" style="display:none">
+                <div maxlength="1999" class="third-what-mail-block" style="display:none">
                   <textarea  input="text" name="third_mail_text" id="mail_text3"><?php
                     echo trim($user->third_mail_text);
                   ?></textarea>
@@ -466,7 +466,7 @@
     $("#mail-click").on('click', function(event){
       document.getElementById('mail-settings').scrollIntoView(false);
     });
- 
+
     var explanations = {
       profile: {
         title: 'Profile Fields',
