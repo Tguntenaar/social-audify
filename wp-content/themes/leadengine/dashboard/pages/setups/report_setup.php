@@ -269,7 +269,7 @@
               active_ads.forEach(function(ad) {
                   // 1. Vul lijst met ads
                   // voor de search bar => name="${ad.name.replace(/\s/g, '')}"
-                  var str = `<a class="audit-row competitors" data-id=${JSON.stringify(ad)} onclick="$(this).toggleClass('selected')">Name: ${ad.name}</a>`;
+                  var str = `<a class="audit-row competitors" data-id=${ad.id} onclick="$(this).toggleClass('selected')">Name: ${ad.name}</a>`;
                   $('#campaign-list').append(str);
               });
           }
@@ -323,7 +323,7 @@
       $('#campaign-list .selected').each(function(i, ad) {
         selectedAds = [...selectedAds, $(ad).data('id')];
       });
-      console.log(response);
+
       
       var edge = $('[name=level]:checked').val();
       if (!response.hasOwnProperty(edge)) {
