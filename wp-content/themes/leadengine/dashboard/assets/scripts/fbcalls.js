@@ -80,7 +80,6 @@ function makeFbPromise(client, competitor = 0) {
     
     FB.api(getFbQuery(client.facebook), function (response) {
       if (response && !response.error) {
-        response = reponse;
         resolve(response);
       }
       var str = (competitor) ? 'competitor' : 'client';
@@ -124,9 +123,6 @@ function makeApiCalls(instance) {
   if (competitor && page.type === 'audit') {
     promisesArray = [...promisesArray, igPromiseComp, fbPromiseComp];
   }
-
-  // TODO:
-  // var allReponses = allSkippingErrors(promisesArray);
 
   Promise.all(promisesArray).then(function (allResponses) {
 
