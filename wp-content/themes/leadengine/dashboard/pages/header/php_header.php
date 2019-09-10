@@ -19,7 +19,7 @@ include(dirname(__FILE__)."/../../models/client.php");
 include(dirname(__FILE__)."/../../models/audit.php");
 include(dirname(__FILE__)."/../../models/report.php");
 include(dirname(__FILE__)."/../../models/user.php");
-include(dirname(__FILE__)."/../../assets/php/client_regex.php");
+include(dirname(__FILE__)."/../../assets/php/global_regex.php");
 
 // Execute
 $user_id = get_current_user_id();
