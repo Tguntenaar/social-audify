@@ -138,7 +138,7 @@
             <div class="tab">
               <div class="custom-label">
                 <span class="name-label">Audit Name</span>
-                <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
+                <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" pattern="<?php echo $page_name_regex; ?>" required>
               </div>
               <div class="custom-label">
                 <span class="name-label">Audit options:</span>
@@ -209,10 +209,10 @@
       var modalData = {
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
-            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed">
+            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex; ?>" title="Only letters are allowed">
             <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username">
             <input type="text" id="instagram_url" placeholder="username or url">
-            <input type="text" id="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex;?>">
+            <input type="text" id="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex; ?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
         confirm: 'competitor_confirmed'

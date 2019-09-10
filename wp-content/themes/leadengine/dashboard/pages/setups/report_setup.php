@@ -147,7 +147,7 @@
           <div class="tab">
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
-              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." required>
+              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." placeholder="Report name.." pattern="<?php echo $page_name_regex;?>" maxlength="25" required>
             </label>
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report options:</span>
@@ -437,7 +437,7 @@
           'subtext': `Please select between 1 and 5 ${edge}`,
         }));
         return showBounceBall(false);
-      } 
+      }
 
       var loggedInPromise = new Promise((resolve, reject) => {
         FB.getLoginStatus(function(response) {
