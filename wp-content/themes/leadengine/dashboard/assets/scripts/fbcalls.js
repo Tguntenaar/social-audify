@@ -182,14 +182,11 @@ function makeApiCalls(instance) {
     // alert
     showModal(initiateModal('errorModal', 'error', {
       'text': `${msg}`,
-      'subtext': `Chose another client.`,
+      'subtext': `Choose another client.`,
     }));
 
     if (Instance.page.type == 'audit') {
-      
-      nextPrev(-1);
-      nextPrev(-1);
-      nextPrev(-1);
+      nextPrev(-2);
     }
   });
 }

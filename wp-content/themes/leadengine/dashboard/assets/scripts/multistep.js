@@ -1,6 +1,4 @@
 var currentTab = 0; // Current tab is set to be the first tab (0)
-var pathName = window.location.pathname;
-
 showTab(currentTab);
 
 function showIntro(display) {
@@ -14,6 +12,7 @@ function showTab(index) {
   // This function will display the specified tab of the form ...
   var tab = $('.tab');
   tab.eq(index).css({'display': 'block'});
+
   // ... and fix the previous button:
   $('#prevBtn').css({'display': index == 0 ? 'none' : 'inline'});
 
@@ -32,13 +31,11 @@ function showTab(index) {
         submitForm();
       }
     });
-
   } else {
     if ($('#nextBtn').html() !== 'Next') {
       $('#nextBtn').off('click');
       $('#nextBtn').html('Next');
     }
-    $('#nextBtn').css({'display':'inline'});
   }
 
   // Remove all active, and set active to current
@@ -50,11 +47,9 @@ function nextPrev(n) {
   // This function will figure out which tab to display
   var tab = $('.tab');
 
-  // Exit the function if any field in the current tab is invalid:
-  console.log('validating step..');
-
   // validate this step
-  if (n == 1 && !validateStep()) return false;
+  if (n == 1 && !validateStep()) 
+    return false;
 
   // request campaigns or ads from facebook servers.
   if (n === 1 && currentTab === 4 && Instance.page.type == 'report') showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
@@ -65,11 +60,9 @@ function nextPrev(n) {
   // Increase or decrease the current tab by 1:
   currentTab += n;
 
-  // if you have reached the end of the form... :
-  if (currentTab >= tab.length) return false;
-
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
+  // Display correct tab if length not exceeded
+  if (currentTab < tab.length) 
+    showTab(currentTab);
 }
 
 function validateStep() {
