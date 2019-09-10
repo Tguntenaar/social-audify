@@ -1,17 +1,17 @@
 <?php
   $facebook_ad_blocks = array(
-    ["type" => "fb_ads",
-      "name" => "Ads",
-      "fb_name" => "fb_ads",
-      "desc" => "Click here to watch if this page is currently running ads.",
-      "is_icon" => 1
-    ],
-    ["type" => "fb_ads_comp",
-      "name" => "Ads competitor",
-      "fb_name" => "fb_ads_comp",
-      "desc" => "Click here to watch if this page is currently running ads.",
-      "is_icon" => 1
-    ]
+      ["type" => "fb_ads",
+        "name" => "Ads",
+        "fb_name" => "fb_ads",
+        "desc" => "Click here to watch if this page is currently running ads.",
+        "is_icon" => 1
+      ],
+      ["type" => "fb_ads_comp",
+        "name" => "Ads competitor",
+        "fb_name" => "fb_ads_comp",
+        "desc" => "Click here to watch if this page is currently running ads.",
+        "is_icon" => 1
+      ]
   );
 
   $facebook_blocks = array(
