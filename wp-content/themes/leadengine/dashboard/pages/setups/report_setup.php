@@ -369,13 +369,13 @@
 
       // Connect Ad Account
       $('.connect-ad-account, .change-ad-account').on('click', function() {
-        openAdAccountDialog(adAccountModal);
+        openAdAccountDialog($(this), adAccountModal);
       });
 
       // TODO: deze moet openen  als newClient is geset maar scope problemen
-      function openAdAccountDialog(adAccountModal) {
+      function openAdAccountDialog(link, adAccountModal) {
         // 1. SET THE CLIENT
-        var client =  $(this).parent().data('client');
+        var client =  link.parent().data('client');
         $('#client_id').val(client.id);
 
         // 2. SET CURRENT AD ID

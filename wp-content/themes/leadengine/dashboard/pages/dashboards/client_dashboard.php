@@ -141,6 +141,10 @@
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
 
+    var Instance = {
+      adAccounts : [],
+    };
+
     var globalAdAccounts = [];
 
     $(function() {
@@ -195,7 +199,7 @@
 
       var adAccountModal = initiateModal('adAccountModal', 'confirm', modalData);
 
-      $('.connect-ad-account').on('click', function() {
+      $('#connect-ad-account').on('click', function() {
         // 1. SET CLIENT ID
         // 2. SET CURRENT AD ID
         // in client dashboard worden beide al geset in het eerste modal
@@ -206,10 +210,11 @@
       });
 
       $('#adAccountConfirm').click(function() {
+
         if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
           // Change the button
-          $('.connect-ad-account').text('Change');
-
+          $('#connect-ad-account').text('Change');
+          $('#ad_id').val(selectedOption.val());
           connectAccount(selectedOption.val(), $("#client_id").val());
         }
       });
