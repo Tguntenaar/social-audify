@@ -24,7 +24,7 @@
 
 <div class="a-container col-lg-12">
     <h2>Report overview</h2>
-    <div class="stat-container col-lg-12">
+    <div class="stat-container-a col-lg-12">
         <?php
             $reports = $report_control->get_all_reports();
             $report_count = sizeof($reports);

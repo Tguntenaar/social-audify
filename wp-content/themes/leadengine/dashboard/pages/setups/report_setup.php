@@ -27,7 +27,7 @@
      * TODO: if statement of die wel bestaat
      * op de config page moet je je iba id kunnen veranderen
      */
-    
+
     // $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
     $reports = $report_control->get_all();
@@ -235,9 +235,9 @@
 
       campaignPromise.then(function(response) {
         Instance.currency = response.currency;
-        
+
         console.log({response});
-        
+
         // Set data-edge attribute of radio buttons.
         radioBtn.data('response', response);
 
@@ -272,7 +272,7 @@
         return valid;
       }).catch(function (reason) {
         console.log({reason});
-        
+
         showModal(initiateModal('errorModal', 'error', {
           'text': "Couldn't gather campaigns",
           'subtext': `Choose a candidate with a valid ad account.`,
@@ -287,9 +287,9 @@
     // used in showActiveCampaigns
     function makeAdPromise(radioBtn) {
       // Api won't be called twice for the same edge.
-      if (!$.isEmptyObject(radioBtn.data('response'))) 
+      if (!$.isEmptyObject(radioBtn.data('response')))
         return Promise.resolve(radioBtn.data('response'));
-      
+
       // call facebook api.
       return new Promise(function (resolve, reject) {
         console.log(getCampaignsQuery(Instance.client.ad_id, radioBtn.val()));
@@ -303,7 +303,7 @@
     }
 
     function check_nan(value) {
-        return (Number.isNaN(value)) ? 0 : parseFloat(value);
+        return (Number.isNaN(value) || value === undefined) ? 0 : parseFloat(value);
     }
 
     /**
@@ -314,7 +314,7 @@
       var data = [], avg = {}, sum, insight;
       var edge = $('[name=level]:checked').val();
       var selectedAds = [];
-      
+
       if (!response.hasOwnProperty(edge)) {
         return data;
       }
@@ -333,6 +333,8 @@
 
       // sums up all the properties of each insights object inside the "data" array.
       sum = data.reduce(function(acc, cur) {
+          console.log("><");
+          console.log(cur.insights.unique_inline_link_clicks);
         return {
           reach: acc.reach + check_nan(cur.insights.reach),
           impressions: acc.impressions + check_nan(cur.insights.impressions),
@@ -346,6 +348,7 @@
           website_purchase_roas: acc.website_purchase_roas + check_nan(cur.insights.website_purchase_roas)
         };
     }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
+
       // divides sum into avg
       for (insight in sum) {
         avg[insight] = sum[insight] / data.length;
@@ -369,13 +372,13 @@
 
       // Connect Ad Account
       $('.connect-ad-account, .change-ad-account').on('click', function() {
-        openAdAccountDialog(adAccountModal);
+        openAdAccountDialog($(this), adAccountModal);
       });
 
       // TODO: deze moet openen  als newClient is geset maar scope problemen
-      function openAdAccountDialog(adAccountModal) {
+      function openAdAccountDialog(connectButton, adAccountModal) {
         // 1. SET THE CLIENT
-        var client =  $(this).parent().data('client');
+        var client =  connectButton.parent().data('client');
         $('#client_id').val(client.id);
 
         // 2. SET CURRENT AD ID

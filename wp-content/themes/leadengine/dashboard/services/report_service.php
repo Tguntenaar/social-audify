@@ -38,7 +38,8 @@ class report_service extends connection {
          ON c.report_id = r.id
        LEFT JOIN Report_stat_visibility as v
          ON v.report_id = r.id
-       WHERE r.create_date >= DATE(NOW()) - INTERVAL 7 DAY");
+       WHERE r.create_date >= DATE(NOW()) - INTERVAL 7 DAY
+       ORDER BY r.create_date DESC");
   }
 
 

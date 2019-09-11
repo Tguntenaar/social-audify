@@ -77,7 +77,7 @@ function makeIGpromise(iba, client, competitor = 0) {
 function makeFbPromise(client, competitor = 0) {
   var nestedPromise = new Promise(function (resolve, reject) {
     console.log(getFbQuery(client.facebook));
-    
+
     FB.api(getFbQuery(client.facebook), function (response) {
       if (response && !response.error) {
         resolve(response);
@@ -174,7 +174,7 @@ function makeApiCalls(instance) {
     showBounceBall(false);
     console.log(`%c Reason is ${reason}`, 'color: red');
     console.log({reason});
-    
+
     var msg = (typeof reason == 'string') ? reason : reason.error.message;
     // TODO: reject with reason.title & message
     showModal(initiateModal('errorModal', 'error', {

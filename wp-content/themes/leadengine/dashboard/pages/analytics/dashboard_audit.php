@@ -24,7 +24,7 @@
 
 <div class="a-container col-lg-12">
     <h2>Audit overview</h2>
-    <div class="stat-container col-lg-12">
+    <div class="stat-container-a col-lg-12">
         <?php
             $audits = $audit_control->get_all_audits();
             $audit_count = sizeof($audits);

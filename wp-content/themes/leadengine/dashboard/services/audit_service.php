@@ -47,7 +47,8 @@ class audit_service extends connection {
           ON c.audit_id = a.id and c.competitor = 0
         LEFT JOIN Audit_data as d
           on d.audit_id = a.id and d.competitor = 0
-        WHERE a.create_date >= DATE(NOW()) - INTERVAL 7 DAY");
+        WHERE a.create_date >= DATE(NOW()) - INTERVAL 7 DAY
+        ORDER BY a.create_date DESC");
   }
 
 

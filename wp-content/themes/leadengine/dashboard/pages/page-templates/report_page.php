@@ -405,13 +405,13 @@
       if ($report->has_comp) { ?>
         var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
         var compData = <?php echo json_encode($comp_graph_data_list); ?>;
-
         blockNames.forEach(function(block, index) {
           generateBarChart('canvas' + (index + 1), [data[block['fb_name']], compData[block['fb_name']]],
                                                   [labels, compLabels], [true, true]);
         });<?php
       } else { ?>
         blockNames.forEach(function(block, index) {
+          console.log([data[block['fb_name']]]);
           generateBarChart('canvas' + (index + 1), [data[block['fb_name']]], [labels], [true, true]);
         }); <?php
       } ?>
