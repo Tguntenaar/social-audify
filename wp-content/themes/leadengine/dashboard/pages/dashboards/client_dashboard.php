@@ -141,7 +141,6 @@
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
 
-    // var globalAdAccounts = [];
     var Instance = {
       adAccounts : [],
     };
@@ -209,6 +208,7 @@
       });
 
       $('#adAccountConfirm').click(function() {
+
         if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
           // Change the button
           $('#connect-ad-account').text('Change');

@@ -376,9 +376,9 @@
       });
 
       // TODO: deze moet openen  als newClient is geset maar scope problemen
-      function openAdAccountDialog(connectButton, adAccountModal) {
+      function openAdAccountDialog(link, adAccountModal) {
         // 1. SET THE CLIENT
-        var client =  connectButton.parent().data('client');
+        var client =  link.parent().data('client');
         $('#client_id').val(client.id);
 
         // 2. SET CURRENT AD ID
