@@ -96,22 +96,12 @@ class audit_service extends connection {
 
 
   // TODO : bovenste update functie is alles overkoepelende, volgende twee zijn eigenlijk overbodig...
-  public function update($id, $table, $field_name, $field_value) {
+  public function update($id, $table, $field_name, $field_value, $comp) {
     $priref = $table === 'Audit' ? 'id' : 'audit_id';
-    return $this->dbwp->update($table,
-      array($field_name => $field_value), array($priref => $id));
+    $where = $table == 'Audit_data' ? array($priref => $id, 'competitor' => $comp) : array($priref => $id);
+    return $this->dbwp->update($table, array($field_name => $field_value), $where);
   }
-
-  public function update_ad_field($id, $field_name, $field_value, $comp) {
-    return $this->dbwp->update('Audit_data',
-      array($field_name => json_encode($field_value)), array('audit_id' => $id, 'competitor' => $comp));
-  }
-
-  public function update_template($id, $field_name, $field_value) {
-    return $this->dbwp->update('Audit_template',
-      array($field_name => $field_value), array('audit_id' => $id));
-  }
-
+  
 
   public function toggle_config_visibility($id, $field_name) {
     // TODO : dit is nog niet attack-veilig, is wss een betere wp functie voor...

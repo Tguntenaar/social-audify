@@ -102,16 +102,10 @@ class audit {
   }
 
 
-  public function update($field_name, $value, $table = 'Audit') {
+  public function update($field_name, $value, $table = 'Audit', $comp = 0) {
     $this->sql_data->$field_name = $value;
-    return $this->service->update($this->id, $table, $field_name, $value);
+    return $this->service->update($this->id, $table, $field_name, $value, $comp);
   }
-
-  public function update_manual($field_name, $value, $comp) {
-    $this->sql_data->$field_name = $value;
-    return $this->service->update_ad_field($this->id, $field_name, $value, $comp);
-  }
-
 
   // Flips the current post status
   public function change_post_status() {
