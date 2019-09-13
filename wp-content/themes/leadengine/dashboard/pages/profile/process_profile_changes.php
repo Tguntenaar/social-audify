@@ -60,12 +60,12 @@
     if_set_update_textfield($user, 'conclusion-report', 'conclusion_report', 'Configtext');
 
 
-    if_set_update_int($user, 'range_facebook_1', 'range_number_fb_1', 'Configtext');
-    if_set_update_int($user, 'range_facebook_2', 'range_number_fb_2', 'Configtext');
+    if_set_update_int($user, 'range_fb_1', 'range_number_fb_1', 'Configtext');
+    if_set_update_int($user, 'range_fb_2', 'range_number_fb_2', 'Configtext');
 
-    if_set_update_textfield($user, 'facebook-audit_1', 'text_fb_1', 'Configtext');
-    if_set_update_textfield($user, 'facebook-audit_2', 'text_fb_2', 'Configtext');
-    if_set_update_textfield($user, 'facebook-audit_3', 'text_fb_3', 'Configtext');
+    if_set_update_textfield($user, 'fb-audit_1', 'text_fb_1', 'Configtext');
+    if_set_update_textfield($user, 'fb-audit_2', 'text_fb_2', 'Configtext');
+    if_set_update_textfield($user, 'fb-audit_3', 'text_fb_3', 'Configtext');
 
     /**
      * Instagram
