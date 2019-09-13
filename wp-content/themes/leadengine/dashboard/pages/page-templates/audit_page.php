@@ -3,7 +3,7 @@
 
 <?php
   $post_id = get_the_ID();
-  $author_id = (int)get_post_field('post_author', $post_id); // TODO:
+  $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
   $env = getenv('HTTP_HOST');
   $slug = get_post_field("post_name", $post_id);
@@ -13,6 +13,7 @@
   $phoneMeta =  get_user_meta($author_id, 'rcp_number');
   $phone = isset($phoneMeta[0]) ? $phoneMeta[0] : "";
   $author = get_userdata($author_id);
+
   // Mode check
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
                 ($user_id == $author_id) : false;
@@ -43,6 +44,7 @@
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
   }
+
   // Post handling
   if (isset($_POST['iframe'])) {
     $audit->update('video_iframe', base64_encode($_POST['iframe']), 'Audit_template');
@@ -58,69 +60,26 @@
     }
   }
 
+  function check_manual_instagram_postfields($audit, $competitor) {
+    $str = $competitor == 1 ? "comp-" : "";
+    // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
+    if (isset($_POST["{$str}followers_count"])) {
+      $instagram_data = array(
+        "followers_count"=> $_POST["{$str}followers_count"],
+        "avgEngagement"=> $_POST["{$str}avgEngagement"],
+        "postsLM"=> $_POST["{$str}postsLM"],
+        "follows_count"=> $_POST["{$str}follows_count"],
+        "averageComments"=> $_POST["{$str}averageComments"],
+        "averageLikes"=> $_POST["{$str}averageLikes"],
+      );
 
-  if (isset($_POST['followers_count']) || isset($_POST['avgEngagement']) ||
-      isset($_POST['postsLM']) || isset($_POST['follows_count']) ||
-      isset($_POST['averageLikes']) || isset($_POST['averageComments'])) {
-      
-      if (isset($_POST['followers_count'])) {
-        $audit->instagram_data->followers_count = $_POST['followers_count'];
-      }
-
-      if (isset($_POST['avgEngagement'])) {
-        $audit->instagram_data->avgEngagement = $_POST['avgEngagement'];
-      }
-
-      if (isset($_POST['postsLM'])) {
-        $audit->instagram_data->postsLM = $_POST['postsLM'];
-      }
-
-      if (isset($_POST['follows_count'])) {
-        $audit->instagram_data->follows_count = $_POST['follows_count'];
-      }
-
-      if (isset($_POST['averageComments'])) {
-        $audit->instagram_data->averageComments = $_POST['averageComments'];
-      }
-
-      if (isset($_POST['averageLikes'])) {
-        $audit->instagram_data->averageLikes = $_POST['averageLikes'];
-      }
-
-      $audit->update('instagram_data', json_encode($audit->instagram_data), 'Audit_data', 0);
+      $audit->update("instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
+    }
   }
 
-  if (isset($_POST['comp-followers_count']) || isset($_POST['comp-avgEngagement']) ||
-      isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) ||
-      isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])) {
-
-      if (isset($_POST['comp-followers_count'])) {
-        $audit->competitor->instagram_data->followers_count = $_POST['comp-followers_count'];
-      }
-
-      if (isset($_POST['comp-avgEngagement'])) {
-        $audit->competitor->instagram_data->avgEngagement = $_POST['comp-avgEngagement'];
-      }
-
-      if (isset($_POST['comp-postsLM'])) {
-        $audit->competitor->instagram_data->postsLM = $_POST['comp-postsLM'];
-      }
-
-      if (isset($_POST['comp-follows_count'])) {
-        $audit->competitor->instagram_data->follows_count = $_POST['comp-follows_count'];
-      }
-
-      if (isset($_POST['comp-averageComments'])) {
-        $audit->competitor->instagram_data->averageComments = $_POST['comp-averageComments'];
-      }
-
-      if (isset($_POST['comp-averageLikes'])) {
-        $audit->competitor->instagram_data->averageLikes = $_POST['comp-averageLikes'];
-      }
-
-      $audit->update('instagram_data', json_encode($audit->competitor->instagram_data), 'Audit_data', 1);
-  }
-
+  // Handle post
+  check_manual_instagram_postfields($audit, 0);
+  check_manual_instagram_postfields($audit, 1);
 
    // Overall scores
    $score = array(
@@ -335,7 +294,7 @@
               }
             }
 
-            // TODO : Nog geen mooie manier om competitor data weer te geven...
+            // TODO: Nog geen mooie manier om competitor data weer te geven...
             if (show_block($edit_mode, $audit->fb_ads)) { ?>
               <div class="stat-block col-lg-6" id="fb_ads">
                 <div class="inner">
@@ -982,6 +941,6 @@
       handleSlider('website', range_ws, text_ws); <?php
     }
   } ?>
-  // TODO : algemene update functie, die itereert over alle mogelijke velden
+  // TODO: algemene update functie, die itereert over alle mogelijke velden
   //        - en ze update als ze verandert zijn...
 </script>
