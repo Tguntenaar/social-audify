@@ -27,17 +27,13 @@
       $dbname = $block['type'];
       $fullname = $block['name'];
       $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
-      echo " <div class='form-check'>
-              <input type='hidden' name='check-${dbname}' value='0'>
-              <input type='checkbox' name='check-${dbname}' value='1' class='form-check-input' id='check-${dbname}' ${checked}>
-              <label class='form-check-label' for='defaultCheck1'>
-                ${fullname}
-              </label>
-            </div>";
+      echo "<div class='form-check'>
+        <input type='hidden' name='check-${dbname}' value='0'>
+        <input type='checkbox' name='check-${dbname}' value='1' class='form-check-input' id='check-${dbname}' ${checked}>
+        <label class='form-check-label' for='defaultCheck1'>${fullname}</label>
+      </div>";
     }
   }
-
-  // echo '<pre>' . var_export($report_visibility, true) . '</pre>';
 ?>
 <head>
   <meta charset="utf-8">
@@ -56,6 +52,7 @@
             <li id="report-click">Intro / conlusion Reports</li>
             <li id="mail-click">Mail config</li>
           </ul>
+          
           <div id="profile-member">
             <h3 class="h3-fix">Profile settings</h3>
             <?php echo do_shortcode('[rcp_profile_editor]'); ?>
@@ -97,16 +94,14 @@
                   <li id="ig-audit-visibility-item">Instagram</li>
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
-                <div class="fb-audit-visibility-block">
-                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility);
-                    print_list_checkboxes($facebook_ad_blocks, '', $audit_visibility);
-                  ?>
+                <div class="fb-audit-visibility-block"><?php
+                  print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
                 </div>
-                <div class="ig-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
+                <div class="ig-audit-visibility-block" style='display:none'><?php
+                  print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
                 </div>
-                <div class="wb-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
+                <div class="wb-audit-visibility-block" style='display:none'><?php
+                  print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
                 </div>
               </div>
               <!-- conclusion -->
@@ -119,80 +114,75 @@
 
               <div class="fb-audit-block">
                 <!-- Set standard text Facebook by range : 1 -->
-                <h4>Facebook Audit text</h4>
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_facebook_1" name="range_facebook_1" placeholder="30" value="<?php echo $user->range_number_fb_1; ?>"/>
-                <textarea maxlength="999" input="text"  name="facebook-audit_1" id="facebook-audit_1"><?php
-                  echo $user->text_fb_1;
-                ?></textarea>
+                <h4>Facebook Audit text</h4><?php
 
-                <!-- Set standard text Facebook by range : 2 -->
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_facebook_2" name="range_facebook_2" placeholder="60" value="<?php echo $user->range_number_fb_2; ?>" />
-                <textarea maxlength="999" input="text"  name="facebook-audit_2" id="facebook-audit_2"><?php
-                  echo $user->text_fb_2;
-                ?></textarea>
+                // TODO: Deze forloops kunnen beter...
+                for ($i = 1; $i < 3; $i++) { 
+                  $name = "range_facebook_$i" ?>
+                  <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
+                  <input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" placeholder="<?php echo $i * 30; ?>" value="<?php echo $user->{"range_number_fb_$i"}; ?>" />
+                  <textarea maxlength="999" input="text" name="facebook-audit_<?php echo $i; ?>" id="facebook-audit_<?php echo $i; ?>"><?php
+                    echo $user->{"text_fb_$i"}; ?>
+                  </textarea><?php
+                } ?>
 
                 <!-- Set standard text Facebook by range : 3 -->
                 <h6>The last range is less then or equal to 100</h6>
                 <textarea maxlength="999" input="text"  name="facebook-audit_3" id="facebook-audit_3"><?php
-                  echo $user->text_fb_3;
-                ?></textarea>
+                  echo $user->text_fb_3; ?>
+                </textarea>
               </div>
 
               <div class="ig-audit-block">
                 <h4>Instagram Audit text</h4><?php
-
-                for ($i = 1; $i < 3; $i++) { ?>
+                for ($i = 1; $i < 3; $i++) { 
+                  $name = "range_insta_$i" ?>
                   <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                  <input type="text" name="range_insta_<?php echo $i; ?>" id="range_insta_<?php echo $i; ?>" placeholder="30" value="<?php echo $user->{"range_number_insta_$i"}; ?>" />
-                  <textarea maxlength="999" input="text" name="insta-audit_<?php echo $i; ?>" id="insta-audit_<?php echo $i; ?>"><?php echo $user->{"text_insta_$i"}; ?></textarea><?php
+                  <input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" placeholder="<?php echo $i * 30; ?>" value="<?php echo $user->{"range_number_insta_$i"}; ?>" />
+                  <textarea maxlength="999" input="text" name="insta-audit_<?php echo $i; ?>" id="insta-audit_<?php echo $i; ?>"><?php
+                    echo $user->{"text_insta_$i"}; ?>
+                  </textarea><?php
                 } ?>
 
                 <h6>The last range is less then or equal to 100</h6>
-                <textarea maxlength="999" input="text" name="insta-audit_3" id="insta-audit_3"><?php echo $user->text_insta_3; ?></textarea>
+                <textarea maxlength="999" input="text" name="insta-audit_3" id="insta-audit_3"><?php echo 
+                  $user->text_insta_3; ?>
+                </textarea>
               </div>
 
               <div class="wb-audit-block">
-                <h4>Website Audit text</h4>
-
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_website_1" name="range_website_1" placeholder="30" value="<?php echo $user->range_number_website_1; ?>" />
-                <textarea maxlength="999" input="text"  name="website-audit_1" id="website-audit_1"><?php
-                  echo $user->text_website_1;
-                ?></textarea>
-
-                <!-- Set standard text Insta by range : 2 -->
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_website_2" name="range_website_2" placeholder="60" value="<?php echo $user->range_number_website_2; ?>" />
-                <textarea maxlength="999" input="text"  name="website-audit_2" id="website-audit_2"><?php
-                  echo $user->text_website_2;
-                ?></textarea>
+                <h4>Website Audit text</h4><?php
+                for ($i = 1; $i < 3; $i++) { 
+                  $name = "range_website_$i" ?>
+                  <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
+                  <input type="text" name="<?php echo $name; ?>" id="<?php echo $name; ?>" placeholder="<?php echo $i * 30; ?>" value="<?php echo $user->{"range_number_website_$i"}; ?>" />
+                  <textarea maxlength="999" input="text" name="website-audit_<?php echo $i; ?>" id="website-audit_<?php echo $i; ?>"><?php
+                    echo $user->{"text_website_$i"}; ?>
+                  </textarea><?php
+                } ?>
 
                 <!-- Set standard text Insta by range : 3 -->
                 <h6>The last range is less then or equal to 100</h6>
                 <textarea maxlength="999" input="text"  name="website-audit_3" id="website-audit_3"><?php
-                  echo $user->text_website_3;
-                ?></textarea>
+                  echo $user->text_website_3; ?>
+                </textarea>
               </div>
               <div class="error-display-audit"></div>
               <input type="submit" value="Update" class="update-button" >
             </form>
 
             <div class="profile-exp">
-                <i id="audit-exp" class="information fas fa-info"></i>
+              <i id="audit-exp" class="information fas fa-info"></i>
             </div>
           </div>
 
           <div id="report-settings">
             <h3 class="h3-fix">Report text</h3>
-
             <ul>
               <li id="intro-report-item" class="active-menu-item">Intro text</li>
               <li id="conclusion-report-item">Conclusion text</li>
               <li id="visibility-report-item">Visibility report</li>
             </ul>
-
             <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
               <!-- intro report -->
               <div class="intro-report-block">
@@ -332,6 +322,9 @@
 
       console.log($("#range_insta_1").val());
       console.log($("#range_insta_2").val());
+
+      // TODO: zijn deze checks niet onnodig? Maxvalue='' fixt client-side string length, en process_profile de php kant...
+      // - Dan kan de 'name' value ook weg bij input...
 
       if ($("#facebook-audit_1").val() > 999 || $("#facebook-audit_2").val() > 999 || $("#facebook-audit_3").val() > 999 ||
           $("#insta-audit_1").val() > 999 || $("#insta-audit_2").val() > 999 || $("#insta-audit_3").val() > 999 ||

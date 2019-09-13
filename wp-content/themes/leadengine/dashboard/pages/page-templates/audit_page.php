@@ -338,71 +338,44 @@
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
                     <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
                       <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
-
-                    <!-- <div class="comp-better">Competitor better<span class="competitor-round"></span></div> -->
                   </div>
                 </div><?php
               }
             }
-
-            // TODO : Nog geen mooie manier om competitor data weer te geven...
-            if (show_block($edit_mode, $audit->fb_ads)) { ?>
-              <div class="stat-block col-lg-6" id="fb_ads">
-                <div class="inner">
-                  <span class="title-box facebook">Running ads</span><?php
-                  if (!$edit_mode) {
-                    $class = $audit->facebook_data->runningAdds ? "check" : "times";
-                    $color = $audit->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
-
-                    <span class="explenation">Is the page currently running ads</span>
-                    <span class="data_animation">
-                      <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
-                    </span><?php
-                  } else { ?>
-                    <form class="ads-radio" action="">
-                      <?php $checked = $audit->facebook_data->runningAdds; ?>
-                      <input type="radio" name="ads" value="yes" <?php echo $checked ? "checked" : ""; ?>> <span class="label_ads">Yes</span>
-                      <input type="radio" name="ads" value="no" <?php  echo !$checked ? "checked" : ""; ?>> <span class="label_ads">No</span>
-                    </form>
-
-                    <div onclick="toggle_visibility('fb_ads')" id="fb_ads_icon" class="visibility"><?php visibility_icon($edit_mode, $audit->fb_ads); ?></div>
-                    <span class="explenation-ads">
-                      <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $audit->facebook_name .'/ads/'; ?>">
-                        Click here to watch if this page is currently running ads. (This can't be automated)
-                      </a>
-                    </span><?php
-                  } ?>
-                </div>
-              </div>
-             <?php } if (show_block($edit_mode, $audit->fb_ads_comp)) {
-              if ($audit->has_comp) { ?>
-                <div class="stat-block col-lg-6" id="fb_ads_comp">
+            foreach ($facebook_ad_blocks as $item) {
+              if (($audit->has_comp || !$item["is_comp"]) && show_block($edit_mode, $audit->{$item["type"]})) { 
+                $path = $item["is_comp"] ? $audit->competitor : $audit; ?>
+                <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
-                    <span class="title-box facebook">Competitor running ads</span><?php
+                    <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
                     if (!$edit_mode) {
-                      $class = $audit->competitor->facebook_data->runningAdds ? "check" : "times";
-                      $color = $audit->competitor->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
+                      $class = $path->facebook_data->runningAdds ? "check" : "times";
+                      $color = $path->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
 
-                      <span class="explenation">Is the competitor page currently running ads</span>
+                      <span class="explenation">Is the page currently running ads</span>
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
                     } else { ?>
-                      <form class="ads-radio" action="">
-                        <?php $checked = $audit->competitor->facebook_data->runningAdds; ?>
-                        <input type="radio" name="ads_c" value="yes" <?php echo $checked ? "checked" : ""; ?>> <span class="label_ads">Yes</span>
-                        <input type="radio" name="ads_c" value="no" <?php  echo !$checked ? "checked" : ""; ?>> <span class="label_ads">No</span>
+                      <form class="ads-radio" action=""><?php 
+                        $checked = $path->facebook_data->runningAdds; 
+                        $name = $item["is_comp"] ? "ads_c" : "ads"; ?>
+                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo $checked ? "checked" : ""; ?>/>
+                          <span class="label_ads">Yes</span>
+                        <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo !$checked ? "checked" : ""; ?>/>
+                          <span class="label_ads">No</span>
                       </form>
 
-                      <div onclick="toggle_visibility('fb_ads_comp')" id="fb_ads_comp_icon" class="visibility"><?php visibility_icon($edit_mode, $audit->fb_ads_comp); ?></div>
+                      <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item["type"]; ?>_icon" class="visibility">
+                        <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
                       <span class="explenation-ads">
-                        <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $audit->competitor->facebook_name .'/ads/'; ?>">
+                        <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
                         </a>
                       </span><?php
                     } ?>
                   </div>
-               </div> <?php
+                </div><?php
               }
             } ?>
           </div>
