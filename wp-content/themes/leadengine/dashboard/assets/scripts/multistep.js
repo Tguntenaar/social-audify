@@ -152,7 +152,7 @@ function validateCompetitorTab() {
 function validateName() {
   var nameInput = $('.name-input');
 
-  if (nameInput.val().length < 1 || nameInput.val().length > 25) {
+  if (!nameInput.val().match(/[a-zA-Z0-9]{3,25}/)) {
     nameInput.addClass('invalid');
     nameInput.focus();
     return false;

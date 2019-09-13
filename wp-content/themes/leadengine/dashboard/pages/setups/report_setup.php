@@ -141,7 +141,7 @@
           <div class="tab">
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
-              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." placeholder="Report name.." pattern="<?php echo $page_name_regex;?>" maxlength="25" required>
+              <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." placeholder="Report name.." maxlength="25" required>
             </label>
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report options:</span>

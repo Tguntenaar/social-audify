@@ -663,11 +663,15 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
+          <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php 
+            echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion; 
+          ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
-        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></p><?php
+        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+          echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion; 
+        ?></p><?php
       } ?>
     </div>
   </section>

@@ -132,7 +132,7 @@
             <div class="tab">
               <div class="custom-label">
                 <span class="name-label">Audit Name</span>
-                <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" pattern="<?php echo $page_name_regex; ?>" required>
+                <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
               </div>
               <div class="custom-label">
                 <span class="name-label">Audit options:</span>
