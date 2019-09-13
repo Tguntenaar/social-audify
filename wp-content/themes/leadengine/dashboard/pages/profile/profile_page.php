@@ -19,9 +19,9 @@
   $report_visibility = $user->get_visibility('report');
 
   $ranges = (object) array(
-    ["name" => "facebook", "code" => "fb"],
-    ["name" => "instagram", "code" => "ig"],
-    ["name" => "website", "code" => "wb"]
+    ["name" => "facebook", "code" => "fb", "db" => "fb"],
+    ["name" => "instagram", "code" => "ig", "db" => "insta"],
+    ["name" => "website", "code" => "wb", "db" => "website"]
   );
 
   function print_list_checkboxes($blocks, $title, $visibility_list) {
@@ -112,10 +112,9 @@
                 <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
                   echo trim($user->conclusion_audit);
                 ?></textarea>
-              </div>
+              </div><?php
 
-              <!-- Ranges -->
-              <?php
+              // ranges
               foreach ($ranges as $range) { 
                 $item = (object) $range; ?>
                 <div class="<?php echo $item->code; ?>-audit-block">
@@ -123,17 +122,17 @@
                   for ($i = 1; $i <= 3; $i++) { 
                     if ($i < 3) { ?>
                       <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                      <input type="text" name="<?php echo "range_{$item->code}_$i"; ?>" id="<?php echo "range_{$item->code}_$i"; ?>" 
-                          placeholder="<?php echo $i * 30; ?>" value="<?php echo $user->{"range_number_{$item->code}_$i"}; ?>"><?php
+                      <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                          value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
                     } else { ?>
-                      <h6>The last range is less then or equal to 100</h6><?php
+                      <h6>The last range is less than or equal to 100</h6><?php
                     } ?>
-                    <textarea maxlength="999" input="text" name="<?php echo "$item->name-audit_$i"; ?>"><?php
-                      echo $user->{"text_{$item->code}_$i"}; ?></textarea><?php
+                    <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
+                      echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
                   } ?>
                 </div><?php
               } ?> 
-
+              <!-- error notify -->
               <div class="error-display-audit"></div>
               <input type="submit" value="Update" class="update-button" >
             </form>
@@ -257,43 +256,17 @@
       $('#third-day-value').text($('#day_3').val());
     });
 
-    $("#mail_config").submit(function(e) {
+    $("#audit-form").submit(function(e) {
       e.preventDefault();
-      $('.error-display-mail').empty();
-
-      if (length_input($("#mail_text").val())) {
-        $('.error-display-mail').append("<span style='display: block; color: red; font-size: 14px;'>Text can't be longer then 1000 characters.</span>");
-        return;
-      }
-
-      if (!$.isNumeric($("#day_1").val()) || !$.isNumeric($("#day_2").val()) || !$.isNumeric($("#day_3").val())) {
-        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
-        return;
-      }
-
-      if ($("#day_1").val() < $("#day_2").val() && $("#day_2").val() < $("#day_3").val()) {
-        this.submit();
-      } else {
-        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller then Day 2 and Day2 smaller then Day 3.</span>");
-      }
-    });
-
-    $("#audit-form").submit(function(e){
-      e.preventDefault();
-
       $('.error-display-audit').empty();
 
-      console.log($("#insta-audit_1").val());
-      console.log($("#insta-audit_2").val());
-      console.log($("#insta-audit_3").val());
+      var location = $('#audit-form');
 
-      console.log($("#range_insta_1").val());
-      console.log($("#range_insta_2").val());
+      if (location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val() ||
+          location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val() ||
+          location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
 
-      if ($("#range_fb_1").val() > $("#range_fb_2").val() ||
-          $("#range_insta_1").val() > $("#range_insta_2").val() || $("#range_website_1").val() > $("#range_website_2").val()) {
-
-        $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller then the second one.</span>");
+        $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
         return;
       }
 
@@ -304,17 +277,25 @@
       e.preventDefault();
       $('.error-display-report').empty();
 
-      if (length_input($("#introduction-report").val()) || length_input($("#conclusion-report").val())) {
-        $('.error-display-report').append("<span style='display: block; color: red; font-size: 14px;'>Text can't be longer then 1000 characters.</span>");
-        return;
-      }
-
       this.submit();
     });
 
-    function length_input(input) {
-      return input.length > 999;
-    }
+    $("#mail_config").submit(function(e) {
+      e.preventDefault();
+      $('.error-display-mail').empty();
+
+      if (!$.isNumeric($("#day_1").val()) || !$.isNumeric($("#day_2").val()) || !$.isNumeric($("#day_3").val())) {
+        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
+        return;
+      }
+
+      if (($("#day_1").val() >= $("#day_2").val() || $("#day_2").val() >= $("#day_3").val())) {
+        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller than Day 2 and Day 2 smaller than Day 3.</span>");
+        return;
+      }
+      
+      this.submit();
+    });
 
     $("#intro-audit-item").click(function() { togglePreferenceUI('intro', 'audit') });
     $("#conclusion-audit-item").click(function() { togglePreferenceUI('conclusion', 'audit') });

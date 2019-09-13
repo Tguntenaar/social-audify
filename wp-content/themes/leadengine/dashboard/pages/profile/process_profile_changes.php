@@ -70,12 +70,12 @@
     /**
      * Instagram
      */
-    if_set_update_int($user, 'range_insta_1', 'range_number_insta_1', 'Configtext');
-    if_set_update_int($user, 'range_insta_2', 'range_number_insta_2', 'Configtext');
+    if_set_update_int($user, 'range_ig_1', 'range_number_insta_1', 'Configtext');
+    if_set_update_int($user, 'range_ig_2', 'range_number_insta_2', 'Configtext');
 
-    if_set_update_textfield($user, 'insta-audit_1', 'text_insta_1', 'Configtext');
-    if_set_update_textfield($user, 'insta-audit_2', 'text_insta_2', 'Configtext');
-    if_set_update_textfield($user, 'insta-audit_3', 'text_insta_3', 'Configtext');
+    if_set_update_textfield($user, 'ig-audit_1', 'text_insta_1', 'Configtext');
+    if_set_update_textfield($user, 'ig-audit_2', 'text_insta_2', 'Configtext');
+    if_set_update_textfield($user, 'ig-audit_3', 'text_insta_3', 'Configtext');
 
     /**
      * Website
@@ -83,9 +83,9 @@
     if_set_update_int($user, 'range_website_1', 'range_number_website_1', 'Configtext');
     if_set_update_int($user, 'range_website_2', 'range_number_website_2', 'Configtext');
 
-    if_set_update_textfield($user, 'website-audit_1', 'text_website_1', 'Configtext');
-    if_set_update_textfield($user, 'website-audit_2', 'text_website_2', 'Configtext');
-    if_set_update_textfield($user, 'website-audit_3', 'text_website_3', 'Configtext');
+    if_set_update_textfield($user, 'wb-audit_1', 'text_website_1', 'Configtext');
+    if_set_update_textfield($user, 'wb-audit_2', 'text_website_2', 'Configtext');
+    if_set_update_textfield($user, 'wb-audit_3', 'text_website_3', 'Configtext');
 
     /**
      * Mail
