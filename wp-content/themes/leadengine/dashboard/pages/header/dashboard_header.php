@@ -68,9 +68,6 @@
     });
   </script>
 
-  <!-- Use this modal instead of alerts. -->
-  <div id="errorModal" class="modal"></div>
-
   <div class="white-screen" style="display: none;">
     <div class="wrap">
       <div class="loading">
@@ -79,6 +76,10 @@
       </div>
     </div>
   </div>
+
+  
+  <!-- Global popup modals -->
+  <div id="errorModal" class="modal"></div>
 
   <div id="instagramErrorModal" class="modal"></div>
   <div id="competitorModal" class="modal"></div>
