@@ -35,6 +35,17 @@ class audit_service extends connection {
         where id = %d", $id));
   }
 
+  // TODO: get moet de competitor erbij ophalen in 1 keer
+  public function get_competitor($id) {
+    return $this->dbwp->get_results($this->dbwp->prepare(
+      "SELECT d.manual, $this->crawl_fields, $this->data_fields FROM Audit as a
+        INNER JOIN Audit_data as d
+          on d.audit_id = a.id and d.competitor = 1
+        LEFT JOIN Audit_crawl as c
+          ON c.audit_id = a.id and c.competitor = 1
+        where id = %d", $id));
+  }
+
   public function get_all_audits() {
     return $this->dbwp->get_results(
       "SELECT a.*, d.manual, $this->template_fields, $this->visibility_fields, $this->crawl_fields, $this->data_fields
@@ -49,17 +60,6 @@ class audit_service extends connection {
           on d.audit_id = a.id and d.competitor = 0
         WHERE a.create_date >= DATE(NOW()) - INTERVAL 7 DAY
         ORDER BY a.create_date DESC");
-  }
-
-
-  public function get_competitor($id) {
-    return $this->dbwp->get_results($this->dbwp->prepare(
-      "SELECT d.manual, $this->crawl_fields, $this->data_fields FROM Audit as a
-        INNER JOIN Audit_data as d
-          on d.audit_id = a.id and d.competitor = 1
-        LEFT JOIN Audit_crawl as c
-          ON c.audit_id = a.id and c.competitor = 1
-        where id = %d", $id));
   }
 
 

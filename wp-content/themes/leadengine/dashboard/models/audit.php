@@ -40,7 +40,7 @@ class audit {
   }
 
 
-  // TODO : Dit moet dynamischer kunnen...
+  // TODO: Dit moet dynamischer kunnen...
   public function get_competitor() {
     $result = $this->service->get_competitor($this->id);
     if ($this->has_comp = !empty($result)) {
@@ -48,7 +48,7 @@ class audit {
     }
   }
 
-  // TODO : Dit moet ook dynamischer kunnen...
+  // TODO: Dit moet ook dynamischer kunnen...
   public function decode_json() {
     $this->sql_data->facebook_data = json_decode($this->sql_data->facebook_data);
     $this->sql_data->instagram_data = json_decode($this->sql_data->instagram_data);

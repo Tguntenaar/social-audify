@@ -114,30 +114,22 @@
     return ($edit_mode || $visible);
   }
 
-  function getWebIcon($has_website, $value) {
-
-    if ($has_website) {
-      if ($value === '0') {
-        return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
-      }
-      elseif ($value === '1') {
-        return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
-      }
+  function getWebIcon($value, $has_website) {
+    if ($has_website && $value === '0') {
+      return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
+    } elseif ($has_website && $value === '1') {
+      return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
+    } else {
       return $value;
     }
-
     return "";
   }
 
   function getWebIconFacebook($value, $is_icon) {
-    if ($is_icon) {
-          if ($value == 0) {
-            return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
-          }
-          elseif ($value == 1) {
-            return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
-          }
-          return $value;
+    if ($is_icon && $value == 0) {
+      return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
+    } elseif ($is_icon && $value == 1) {
+      return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
 
     return $value;
@@ -191,7 +183,7 @@
         } ?>
 
         Audit: <?php echo $audit->name;
-        
+
         if ($edit_mode) { ?>
           <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
           <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
@@ -296,6 +288,7 @@
                 <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
                     <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
+                    // preview mode
                     if (!$edit_mode) {
                       $class = $path->facebook_data->runningAdds ? "check" : "times";
                       $color = $path->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
@@ -304,6 +297,7 @@
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
+                      // edit mode
                     } else { ?>
                       <form class="ads-radio" action=""><?php 
                         $checked = $path->facebook_data->runningAdds; 
@@ -432,20 +426,53 @@
           <div class="col-lg-6 instagram-right" style="float: right;">
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data"><?php
         }
-        function insta_block() {
+        
+        function competitor_code($audit, $edit_mode, $item) {
+          // Preview mode hide description animation
+          if (!$edit_mode) { ?>
+            <span class="data_animation"><?php
+          }
+          if ($audit->has_comp) { ?>
+            <span class="data-view">
+              <span class="comp-label">
+                You: <br />
+              </span><?php
+              manual_check($audit, $item, $edit_mode);?>
+            </span>
 
+            <!-- LEFT SIDE OF BLOCK -->
+            <span class="vertical-line"></span> 
+            <!-- RIGHT SIDE OF BLOCK -->
+
+              <span class="competitor-stats">
+                <span class="comp-label"><?php 
+                  echo ucfirst($audit->competitor_name); ?>: <br />
+                </span><?php
+                manual_check($audit, $item, $edit_mode);?>
+              </span><?php
+            
+          } else { // heeft geen competitor
+            manual_check($audit, $item, $edit_mode);
+          }
+          // Preview mode hide description animation
+          if (!$edit_mode) { ?>
+            </span>
+            <span class="explenation"><?php 
+              echo $item["desc"]; ?>
+            </span><?php 
+          }
         }
-        function edit_code() {
 
-        }
-        function competitor_code() {
+        function manual_check($audit, $item, $edit_mode) {
+          $base = ($audit->has_comp) ? $audit->competitor : $audit;
+          $value = $base->instagram_data->{$item['ig_name']};
+          $str = ($audit->has_comp) ? "comp-" : "";
 
-        }
-        function manual_code() {
-
-        }
-        function visibilty_code() {
-
+          if ($base->manual && $edit_mode) {?>
+            <input type="text" name="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
+          } else {
+            echo round($value, 2); ?></!--><?php
+          }
         }
 
 
@@ -458,68 +485,15 @@
                   echo $item["name"]; ?>
                 </span><?php
                 // Als preview mode laat description staan en hide client info
-                if (!$edit_mode) { ?>
-                  <span class="data_animation"><?php
-                }
-
-                // Als competitor
-                if ($audit->has_comp) { ?>
-                  <span class="data-view">
-                    <span class="comp-label">You: <br />
-                    </span><?php
-                    // Als manual aan staat en edit mode
-                    if ($audit->manual && $edit_mode) { ?>
-                      <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?>" /></span><?php 
-                    } else {
-                      // Als preview of niet manual
-                      echo round($audit->instagram_data->{$item["ig_name"]}, 2);
-                      // Preview mode
-                      if (!$edit_mode) { ?>
-                        </span><?php
-                      }
-                    } ?>
-                  </span>
-                  <span class="vertical-line"></span><?php 
-                  // Preview mode hide competitor info
-                  if (!$edit_mode) { ?>
-                    <span class="competitor-animation"><?php
-                  } ?>
-                  <span class="competitor-stats">
-                    <span class="comp-label"><?php 
-                      echo ucfirst($audit->competitor_name); ?>: <br />
-                    </span><?php 
-                  // Als competitor manual aanstaat && edit_mode
-                  if ($audit->competitor->manual && $edit_mode) { ?>
-                      <input type="text" name="comp-<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?>" /></span><?php
-                  } else {
-                    // Als competitor manual uitstaat
-                    echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); 
-                    if (!$edit_mode) { ?>
-                      </span><?php
-                    }
-                  }
-                } else { // heeft geen competitor
-                  if ($audit->manual) { ?>
-                    <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo $audit->instagram_data->{$item["ig_name"]}; ?>" /></span><?php 
-                  } else {
-                    echo $audit->instagram_data->{$item["ig_name"]}; ?></span><?php 
-                  }
-                } ?>
-                <!-- EINDE WEL OF GEEN COMP -->
-                </span><?php
-                // In preview mode show explanation
-                if (!$edit_mode) { ?>
-                  <span class="explenation"><?php 
-                    echo $item["desc"]; ?>
-                  </span><?php 
-                }
+                
+                competitor_code($audit, $edit_mode, $item);
                 // preview mode show visibility icon
                 visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                
+                  
               </div>
             </div><?php
           }
-        } // END OF INSTAGRAM BLOCKS LOOP
+        }
 
           if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
             <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php 
@@ -573,6 +547,7 @@
         <span class="sub-title">Statistics of your webpage.</span>
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
           <div class="inner custom-inner"><?php
+
             foreach ($website_blocks as $item) {
               if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
@@ -581,12 +556,12 @@
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
-                        </span><?php echo getWebIcon($audit->has_website, $audit->{$item["db_name"]}); ?></span>
+                        </span><?php echo getWebIcon($audit->{$item["db_name"]}, $audit->has_website); ?></span>
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                        <?php echo getWebIcon($audit->has_website, $audit->competitor->{$item["db_name"]}) ?></span><?php
+                        <?php echo getWebIcon($audit->competitor->{$item["db_name"]}, $audit->has_website) ?></span><?php
                     } else {
-                      echo getWebIcon($audit->has_website, $audit->{$item["db_name"]});
+                      echo getWebIcon($audit->{$item["db_name"]}, $audit->has_website);
                     } ?>
                     </span>
                     <?php 
@@ -681,7 +656,7 @@
         data: {...{action: 'crawl_data_check'}, ...commonPost}, // $.extend({}, commonPost, { 'action': 'crawl_data_check' })
         success: function (response) {
           console.log('retrieved response : ' + response);
-          if (response > <?php echo $audit->has_comp; ?>) {
+          if (response > <?php echo (int)$audit->has_comp ?>) {
             showModal(crawlModal);
           } else {
             setTimeout(function() { crawlFinishedCheck(); }, 8000);
