@@ -143,10 +143,12 @@
     return $value;
   }
 
-  function visibility_icon($edit_mode, $visible) {
+  function visibility_short_code($edit_mode, $visible, $item_type) {
     if ($edit_mode) {
-      $slash = $visible == 1 ? '' : '-slash';
-      echo '<i class="far fa-eye'.$slash.'"></i>';
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $item_type; ?>')" id="<?php echo $item_type; ?>_icon" class="visibility">
+        <i class="far fa-eye<?php echo $slash; ?>"></i> 
+      </div><?php
     }
   }
 
@@ -183,25 +185,20 @@
     <span></span>
     <span></span>
   </div>
-    <div class="mobile-hide">
-        <?php if ($edit_mode) { ?>
-          <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
-        <?php } ?>
+    <div class="mobile-hide"><?php 
+        if ($edit_mode) { ?>
+          <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php 
+        } ?>
 
-        Audit: <?php echo $audit->name; ?>
-
-        <?php if ($edit_mode) { ?>
+        Audit: <?php echo $audit->name;
+        
+        if ($edit_mode) { ?>
           <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
           <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
-        <?php }
-
-        if ($user_id === $author_id) {
-          if ($edit_mode) { ?>
-    				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-          } else { ?>
-    				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-          }
+          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+        } else { ?>
+          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
         } ?>
     </div>
   </div>
@@ -263,7 +260,7 @@
       </div>
     </div><?php
     if ($audit->facebook_bit == "1") { ?>
-      <div class=" col-lg-12 facebook-info" id="facebook-info">
+      <div class="col-lg-12 facebook-info" id="facebook-info">
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp; Facebook stats:</span>
         <span class="sub-title">Statistics of your Facebook page.</span>
         <div class="col-lg-6 left bottom-40">
@@ -277,6 +274,7 @@
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
                       </span><?php echo getWebIconFacebook(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span>
+                      <!--  -->
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
                         <?php echo getWebIconFacebook(round($audit->competitor->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span><?php
@@ -285,8 +283,9 @@
                     } ?>
                     </span>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
-                    <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
-                      <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
+                    <?php 
+                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); 
+                    ?>
                   </div>
                 </div><?php
               }
@@ -314,9 +313,9 @@
                         <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo !$checked ? "checked" : ""; ?>/>
                           <span class="label_ads">No</span>
                       </form>
-
-                      <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item["type"]; ?>_icon" class="visibility">
-                        <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
+                      <?php 
+                        visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); 
+                      ?>
                       <span class="explenation-ads">
                         <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
@@ -373,8 +372,10 @@
         <div class="col-lg-6 instagram-left" style="float:left;"><?php
           if (show_block($edit_mode, $audit->insta_hashtag) && (!$audit->manual) && isset($audit->instagram_data->hashtags[0][0])) { ?>
             <div class="col-lg-12 left custom-left" style="padding: 0;">
-              <div onclick="toggle_visibility('insta_hashtag')" id="insta_hashtag_icon" class="visibility">
-                <?php visibility_icon($edit_mode, $audit->insta_hashtag); ?></div>
+              <?php
+                visibility_short_code($edit_mode, $audit->insta_hashtag, 'insta_hashtag');
+              ?>
+              
               <div class="chart-info">
                 <span class="stat-box-title">Hashtags used</span>
                 <span class="graph-procent" style="margin-top: -2px;">Most used '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
@@ -390,9 +391,12 @@
           }
           if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
             <div class="col-lg-12 left custom-left" style="padding: 0;">
-              <div onclick="toggle_visibility('insta_lpd')" id="insta_lpd_icon" class="visibility"><?php
-                visibility_icon($edit_mode, $audit->insta_lpd); ?></div>
+              <?php
+                visibility_short_code($edit_mode, $audit->insta_lpd, 'insta_lpd');
+              ?>
+              
               <div class="chart-info">
+
                 <span class="stat-box-title">Likes on your posts Instagram</span>
                 <span class="graph-procent" style="margin-top: -8px;">Average <?php
                   echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span>
@@ -428,56 +432,90 @@
           <div class="col-lg-6 instagram-right" style="float: right;">
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data"><?php
         }
+        function insta_block() {
+
+        }
+        function edit_code() {
+
+        }
+        function competitor_code() {
+
+        }
+        function manual_code() {
+
+        }
+        function visibilty_code() {
+
+        }
+
 
         foreach ($instagram_blocks as $item) {
+          // Laat hem zien als edit mode aanstaat ?? of die bestaat in de database..
           if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
             <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
               <div class="inner">
-                <span class="title-box instagram"><?php echo $item["name"]; ?></span><?php
+                <span class="title-box instagram"><?php
+                  echo $item["name"]; ?>
+                </span><?php
+                // Als preview mode laat description staan en hide client info
                 if (!$edit_mode) { ?>
                   <span class="data_animation"><?php
                 }
+
+                // Als competitor
                 if ($audit->has_comp) { ?>
-                  <span class="data-view"><span class="comp-label">You: <br /></span><?php 
+                  <span class="data-view">
+                    <span class="comp-label">You: <br />
+                    </span><?php
+                    // Als manual aan staat en edit mode
                     if ($audit->manual && $edit_mode) { ?>
                       <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?>" /></span><?php 
                     } else {
+                      // Als preview of niet manual
                       echo round($audit->instagram_data->{$item["ig_name"]}, 2);
-                      if (!$edit_mode) { ?> 
+                      // Preview mode
+                      if (!$edit_mode) { ?>
                         </span><?php
                       }
                     } ?>
                   </span>
                   <span class="vertical-line"></span><?php 
+                  // Preview mode hide competitor info
                   if (!$edit_mode) { ?>
                     <span class="competitor-animation"><?php
                   } ?>
-                  <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span><?php 
-                  if ($audit->competitor->manual) {
-                    if ($edit_mode) { ?>
+                  <span class="competitor-stats">
+                    <span class="comp-label"><?php 
+                      echo ucfirst($audit->competitor_name); ?>: <br />
+                    </span><?php 
+                  // Als competitor manual aanstaat && edit_mode
+                  if ($audit->competitor->manual && $edit_mode) { ?>
                       <input type="text" name="comp-<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?>" /></span><?php
-                    } else { 
-                      echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2);
-                    }
-                    // TODO: deze twee if statements fix
                   } else {
+                    // Als competitor manual uitstaat
                     echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); 
-                    ?></span><?php
+                    if (!$edit_mode) { ?>
+                      </span><?php
+                    }
                   }
-                } else {
+                } else { // heeft geen competitor
                   if ($audit->manual) { ?>
                     <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo $audit->instagram_data->{$item["ig_name"]}; ?>" /></span><?php 
                   } else {
                     echo $audit->instagram_data->{$item["ig_name"]}; ?></span><?php 
                   }
                 } ?>
+                <!-- EINDE WEL OF GEEN COMP -->
                 </span><?php
+                // In preview mode show explanation
                 if (!$edit_mode) { ?>
-                  <span class="explenation"><?php echo $item["desc"]; ?></span><?php 
-                } ?>
-                <div onclick="toggle_visibility(`<?php echo $item['type']; ?>`)" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php 
-                  visibility_icon($edit_mode, $audit->{$item["type"]}); ?>
-                </div>
+                  <span class="explenation"><?php 
+                    echo $item["desc"]; ?>
+                  </span><?php 
+                }
+                // preview mode show visibility icon
+                visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                
               </div>
             </div><?php
           }
@@ -551,8 +589,9 @@
                       echo getWebIcon($audit->has_website, $audit->{$item["db_name"]});
                     } ?>
                     </span>
-                    <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php
-                      visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
+                    <?php 
+                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); 
+                    ?>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
                   </div>
                 </div><?php
