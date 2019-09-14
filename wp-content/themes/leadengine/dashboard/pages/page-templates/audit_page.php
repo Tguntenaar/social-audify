@@ -65,8 +65,8 @@
     // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
     if (isset($_POST["{$str}followers_count"])) {
       $instagram_data = array(
-        "followers_count"=> $_POST["{$str}followers_count"],
         "avgEngagement"=> $_POST["{$str}avgEngagement"],
+        "followers_count"=> $_POST["{$str}followers_count"],
         "postsLM"=> $_POST["{$str}postsLM"],
         "follows_count"=> $_POST["{$str}follows_count"],
         "averageComments"=> $_POST["{$str}averageComments"],
@@ -370,8 +370,7 @@
         <?php if ($audit->manual && $edit_mode) { ?><span class="manual-text"><span style="color: #e74c3c;">Attention: </span>There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!</span><?php } ?>
         <?php if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?><span class="manual-text" style="margin-top: 15px;"><span style=" color: #e74c3c;">Attention: </span>There is no competitor instagram or instagram business account found, so <a href="https://www.instagram.com/<?php echo $audit->competitor_name; ?>">click here</a> to gather your data!</span><?php } ?>
         <div style="clear:both"></div>
-        <div class="col-lg-6 instagram-left" style="float:left;">
-        <?php
+        <div class="col-lg-6 instagram-left" style="float:left;"><?php
           if (show_block($edit_mode, $audit->insta_hashtag) && (!$audit->manual) && isset($audit->instagram_data->hashtags[0][0])) { ?>
             <div class="col-lg-12 left custom-left" style="padding: 0;">
               <div onclick="toggle_visibility('insta_hashtag')" id="insta_hashtag_icon" class="visibility">
@@ -412,79 +411,88 @@
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
-                  <span class="round-color you-color"></span> <span class="space">You</span>
-                  <?php if ($audit->has_comp && !$audit->competitor->manual) { ?><span class="round-color competitor-color"></span> <?php echo ucfirst($audit->competitor_name); } ?>
+                  <span class="round-color you-color"></span> <span class="space">You</span><?php 
+                  if ($audit->has_comp && !$audit->competitor->manual) { ?>
+                    <span class="round-color competitor-color"></span><?php 
+                    echo ucfirst($audit->competitor_name); 
+                  } ?>
               </div>
             </div><?php
           } ?>
-        </div>
+        </div><?php
 
-        <?php if (($audit->manual == 1)) { ?>
-            <div class="col-lg-12 instagram-right" style="float: right;">
-                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data">
-        <?php } else {
-            ?><div class="col-lg-6 instagram-right" style="float: right;">
-                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data">
-        <?php
+        if (($audit->manual == 1)) { ?>
+          <div class="col-lg-12 instagram-right" style="float: right;">
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data"><?php 
+        } else { ?>
+          <div class="col-lg-6 instagram-right" style="float: right;">
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data"><?php
         }
-          foreach ($instagram_blocks as $item) {
-            if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
-              <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
-                <div class="inner">
-                  <span class="title-box instagram"><?php echo $item["name"]; ?></span>
-                  <?php if (!$edit_mode) { ?><span class="data_animation"><?php }
-                  if ($audit->has_comp) { ?>
-                    <span class="data-view"><span class="comp-label">You: <br /></span>
-                      <?php if ($audit->manual) {
-                                if ($edit_mode) { ?>
-                                    <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?>" /></span>
-                                <?php } else { ?>
-                                    <?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?><?php if (!$edit_mode) { ?></span><?php } ?>
-                                <?php } ?>
-                      <?php } else { ?>
-                          <?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?><?php if (!$edit_mode) { ?></span><?php } ?>
-                      <?php } ?>
-                    </span>
-                    <span class="vertical-line"></span>
-                    <?php if (!$edit_mode) { ?><span class="competitor-animation"><?php } ?>
-                        <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                         <?php if ($audit->competitor->manual) {
-                                    if ($edit_mode) { ?>
-                                        <input type="text" name="comp-<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?>" />
-                        </span>
-                    <?php if (!$edit_mode) { ?></span><?php } ?>
-                          <?php } else { ?>
-                              <?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?><?php if (!$edit_mode) { ?></span><?php }
-                                } ?>
-                      <?php } else { ?>
-                          <?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?></span>
-                      <?php }
 
-                  } else {
-                      if ($audit->manual) { ?>
-                          <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo $audit->instagram_data->{$item["ig_name"]}; ?>" /></span>
-
-                      <?php } else { ?>
-                          <?php echo $audit->instagram_data->{$item["ig_name"]}; ?></span>
-                      <?php }
-                  } ?>
+        foreach ($instagram_blocks as $item) {
+          if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
+            <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
+              <div class="inner">
+                <span class="title-box instagram"><?php echo $item["name"]; ?></span><?php
+                if (!$edit_mode) { ?>
+                  <span class="data_animation"><?php
+                }
+                if ($audit->has_comp) { ?>
+                  <span class="data-view"><span class="comp-label">You: <br /></span><?php 
+                    if ($audit->manual && $edit_mode) { ?>
+                      <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?>" /></span><?php 
+                    } else {
+                      echo round($audit->instagram_data->{$item["ig_name"]}, 2);
+                      if (!$edit_mode) { ?> 
+                        </span><?php
+                      }
+                    } ?>
                   </span>
-                  <?php if (!$edit_mode) { ?><span class="explenation"><?php echo $item["desc"]; ?></span><?php } ?>
-                  <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
-                    <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
+                  <span class="vertical-line"></span><?php 
+                  if (!$edit_mode) { ?>
+                    <span class="competitor-animation"><?php
+                  } ?>
+                  <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span><?php 
+                  if ($audit->competitor->manual) {
+                    if ($edit_mode) { ?>
+                      <input type="text" name="comp-<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?>" /></span><?php
+                    } else { 
+                      echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2);
+                    }
+                    // TODO: deze twee if statements fix
+                  } else {
+                    echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); 
+                    ?></span><?php
+                  }
+                } else {
+                  if ($audit->manual) { ?>
+                    <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo $audit->instagram_data->{$item["ig_name"]}; ?>" /></span><?php 
+                  } else {
+                    echo $audit->instagram_data->{$item["ig_name"]}; ?></span><?php 
+                  }
+                } ?>
+                </span><?php
+                if (!$edit_mode) { ?>
+                  <span class="explenation"><?php echo $item["desc"]; ?></span><?php 
+                } ?>
+                <div onclick="toggle_visibility(`<?php echo $item['type']; ?>`)" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php 
+                  visibility_icon($edit_mode, $audit->{$item["type"]}); ?>
                 </div>
-              </div><?php
-            }
+              </div>
+            </div><?php
           }
+        } // END OF INSTAGRAM BLOCKS LOOP
+
           if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
-            <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/>
-          <?php } ?>
-          </form>
-          <?php if ($audit->manual == 1) { ?>
-              <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; ">
-          <?php } else { ?>
-              <div class="col-lg-12 instagram-score" style="float:right; ">
-          <?php } ?>
+            <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php 
+          } ?>
+          </form><?php
+
+          if ($audit->manual == 1) { ?>
+            <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; "><?php 
+          } else { ?>
+            <div class="col-lg-12 instagram-score" style="float:right; "><?php 
+          } ?>
             <div class="col-lg-12 insta-score" >
               <div class="col-lg-12 align">
                 <span class="score-tag insta-advice-tag">Score</span><?php
