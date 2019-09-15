@@ -74,7 +74,7 @@ foreach($users as $user_id) {
                                                   ($day_difference == $mail_data->day_2) ||
                                                   ($day_difference == $mail_data->day_3))) {
 
-                    $link = "https://www.socialaudify.com/public/audit-" . $audit->name . "-" . $audit->id;
+                    $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
 
                     $i++;
                     // Create mail body

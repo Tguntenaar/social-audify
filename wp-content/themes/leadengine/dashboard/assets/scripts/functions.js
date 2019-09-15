@@ -95,6 +95,7 @@ function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   }, true);
 }
 
+// TODO: maak dit error bestendig.
 function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
   // Not dynamic, only works with comparing 2 values...
   var barData = new Array(), barLabels = new Array(),
