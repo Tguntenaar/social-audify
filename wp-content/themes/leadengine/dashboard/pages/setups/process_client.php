@@ -18,12 +18,12 @@
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $fb = get_fb_name($_POST['facebook_url']);
-    $ig = get_insta_name($_POST['instagram_url']);
-    $wb = str_replace("http://", "", str_replace("https://","",$_POST['website_url']));
-    $name = $_POST['client_name'];
-    $mail = $_POST['client_mail'];
-    $ad_id = $_POST['ad_id'];
+    $fb = get_fb_name(sanitize_text_field($_POST['facebook_url']));
+    $ig = get_insta_name(sanitize_text_field($_POST['instagram_url']));
+    $wb = str_replace("http://", "", str_replace("https://","",sanitize_text_field($_POST['website_url'])));
+    $name = sanitize_text_field($_POST['client_name']);
+    $mail = sanitize_email($_POST['client_mail']);
+    $ad_id = sanitize_text_field($_POST['ad_id']);
 
     if (isset($_GET['redirect']) && isset($_POST)) {
       if ($id = $client_control->create($name, $fb, $ig, $wb, $mail)) {
