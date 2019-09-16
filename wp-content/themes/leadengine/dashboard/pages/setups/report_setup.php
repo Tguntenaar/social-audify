@@ -223,6 +223,34 @@
       } ?>
     });
 
+    function toggleSelectedAds(that) {
+      if (that.hasClass('selected')) {
+        that.removeClass('selected');
+      } else {
+        if ($('#campaign-list .selected').length < 5) {
+          that.addClass('selected'); 
+        } else {
+          var edge = $('[name=level]:checked').val();
+          showModal(initiateModal('errorModal', 'error', {
+            'text': `Reached the maximum number of ${edge} selected`,
+            'subtext': `You can\'t select more than 5 ${edge}`,
+          }));
+        }
+      }
+    }
+
+    function escapeHtml(text) {
+      var map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+      };
+
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
     function showActiveCampaigns() {
       valid = true;
       // Show loading ring
@@ -263,11 +291,16 @@
               active_ads.forEach(function(ad) {
                   // 1. Vul lijst met ads
                   // voor de search bar => name="${ad.name.replace(/\s/g, '')}"
-                  var str = `<a class="audit-row competitors" data-id=${ad.id} onclick="$(this).toggleClass('selected')">Name: ${ad.name}</a>`;
+                  var str = `<a class="audit-row competitors" data-id=${ad.id} name="${ad.name}" onclick="toggleSelectedAds($(this))">Name: ${ad.name}</a>`;
                   $('#campaign-list').append(str);
               });
           }
         }
+        var elems = $(`#campaign-list .audit-row`);
+        $(document).on('keyup', `input#search-input-campaign`, function() {
+          console.log(elems);
+          filterSearch($(this).val(), elems);
+        });
 
         return valid;
       }).catch(function (reason) {
@@ -422,7 +455,7 @@
       });
 
       // Searchable lists
-      ['client', 'compare', 'campaign'].forEach(function(name) {
+      ['client', 'compare'].forEach(function(name) {
         var elems = $(`#${name}-list .audit-row`);
         var search = name == 'client' ? '' : `-${name}`;
 

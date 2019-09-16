@@ -1,6 +1,6 @@
 <?php
   // Patterns
-  $name_regex = '[a-zA-Z0-9]{3,25}';
+  $name_regex = '[a-zA-Z0-9 ]{3,25}';
 
   // TODO: 
   $fb_regex = '';
