@@ -3,49 +3,34 @@
  * Template Name: process profile changes
  */
 ?>
-<?php
 
+<?php
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // clean var_dump
-    // echo '<pre>' . var_export($_POST, true) . '</pre>';
     $user_id = get_current_user_id();
     include(dirname(__FILE__)."/../../services/connection.php");
     include(dirname(__FILE__)."/../../controllers/user_controller.php");
     include(dirname(__FILE__)."/../../models/user.php");
 
     $connection = new connection;
-
     $user_control = new user_controller($connection);
+    
     $user = $user_control->get($user_id);
 
     $audit_visibility_stat = $user->get_visibility('audit');
     $report_visibility_stat = $user->get_visibility('report');
 
-    function check_length($text) {
-      if (strlen($text) > 999) {
-        return 0;
-      }
-      return 1;
-    }
-
-    function check_interval($number) {
-      if (0 <= absint($number) && absint($number) <= 365) {
-        return 1;
-      }
-      return 0;
-    }
-
     function if_set_update_int($user, $post_field, $db_field, $table) {
-      if (isset($_POST[$post_field]) && check_interval($_POST[$post_field])) {
+      $absoluteInt = absint($_POST[$post_field]);
+      if (isset($_POST[$post_field]) && ($absoluteInt >= 0 && $absoluteInt <= 365)) {
         $user->update($table, $db_field, absint($_POST[$post_field]));
       }
     }
 
     function if_set_update_textfield($user, $post_field, $db_field, $table) {
-      if (isset($_POST[$post_field]) && check_length(trim($_POST[$post_field]))) {
+      if (isset($_POST[$post_field]) && trim($_POST[$post_field]) <= 999) {
         $user->update($table, $db_field, sanitize_textarea_field(trim($_POST[$post_field])));
       }
     }
@@ -113,9 +98,6 @@
         }
       }
     }
-
-    // clean var_dump
-    // echo '<pre>' . var_export($report_visibility_stat[0], true) . '</pre>';
 
     if (true) {
       if (isset($_GET['settings'])) {
