@@ -1,6 +1,7 @@
 <?php
   // Patterns
-  $name_regex = '[a-zA-Z0-9 ]{3,25}';
+  $name_regex = '[a-zA-Z0-9][a-zA-Z0-9 ]{2,25}';
+  // TODO: naam mag niet alleen uit spaties bestaan..
 
   // TODO: 
   $fb_regex = '';
