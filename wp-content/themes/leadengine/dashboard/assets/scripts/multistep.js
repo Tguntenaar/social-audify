@@ -15,14 +15,13 @@ function showTab(index) {
 
   // ... and fix the previous button:
   $('#prevBtn').css({'display': index == 0 ? 'none' : 'inline'});
+  tab.eq(index).find('input[type=text]').focus();
 
   // Fix the next button
   if (index == (tab.length - 1)) {
     // fix the create button
     var name = Instance.page.type.charAt(0).toUpperCase() + Instance.page.type.slice(1);
     $('#nextBtn').html(`Create ${name}`);
-
-    tab.eq(index).find('input[type=text]').focus();
 
     // change on click functionality.
     $('#nextBtn').on('click', function() {
@@ -144,7 +143,6 @@ function validateCompetitorTab() {
   }
 
   $('.step').eq(currentTab).addClass('finish');
-  $('.name-input').focus();
 
   return true;
 }
