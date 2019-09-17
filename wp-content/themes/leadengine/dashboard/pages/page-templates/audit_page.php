@@ -56,7 +56,7 @@
 
   foreach ($post_names as $post_name) {
     if (isset($_POST[$post_name])) {
-      $audit->update($post_name, $_POST[$post_name], 'Audit_template');
+      $audit->update($post_name, sanitize_textarea_field($_POST[$post_name]), 'Audit_template');
     }
   }
 
@@ -65,12 +65,12 @@
     // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
     if (isset($_POST["{$str}followers_count"])) {
       $instagram_data = array(
-        "avgEngagement"=> $_POST["{$str}avgEngagement"],
-        "followers_count"=> $_POST["{$str}followers_count"],
-        "postsLM"=> $_POST["{$str}postsLM"],
-        "follows_count"=> $_POST["{$str}follows_count"],
-        "averageComments"=> $_POST["{$str}averageComments"],
-        "averageLikes"=> $_POST["{$str}averageLikes"],
+        "avgEngagement"=> floatval($_POST["{$str}avgEngagement"]),
+        "followers_count"=> absint($_POST["{$str}followers_count"]),
+        "postsLM"=> absint($_POST["{$str}postsLM"]),
+        "follows_count"=> absint($_POST["{$str}follows_count"]),
+        "averageComments"=> floatval($_POST["{$str}averageComments"]),
+        "averageLikes"=> floatval($_POST["{$str}averageLikes"]),
       );
 
       $audit->update("instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
