@@ -15,6 +15,7 @@
 <html lang='en'>
 <head>
   <title>Create Report</title>
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/testresponses.js" charset="utf-8" defer></script>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js" charset="utf-8" defer></script>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js" charset="utf-8" defer></script>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css" type="text/css" />
@@ -262,6 +263,7 @@
       var campaignPromise = makeAdPromise(radioBtn);
 
       campaignPromise.then(function(response) {
+        response = JSON.parse(adsResponse);
         Instance.currency = response.currency;
 
         console.log({response});
@@ -356,13 +358,17 @@
         selectedAds = [...selectedAds, $(ad).data('id')];
       });
 
+
       response[edge].data.forEach(function(campaign) {
         const {id, name, ...rest} = campaign;
-        if (selectedAds.includes(Number(id)) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.
-          // TODO: check into this. insights.data.length array always 1?
+
+        if ((selectedAds.includes(id) || selectedAds.includes(Number(id))) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.
+          // TODO: check into this. insights.data.length array always 1?]
+          console.log("tst");
           data = [...data, {name: name, insights: rest.insights.data[0]}];
         }
       });
+
 
       // sums up all the properties of each insights object inside the "data" array.
       sum = data.reduce(function(acc, cur) {
@@ -381,6 +387,9 @@
           website_purchase_roas: acc.website_purchase_roas + check_nan(cur.insights.website_purchase_roas)
         };
     }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
+
+    console.log("3: ");
+    console.log(sum);
 
       // divides sum into avg
       for (insight in sum) {
