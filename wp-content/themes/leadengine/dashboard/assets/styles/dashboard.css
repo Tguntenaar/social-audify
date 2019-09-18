@@ -641,6 +641,10 @@ nav ul a:hover {
 	margin-top: 130px !important;
 }
 
+.audit-intro-text p {
+	font-weight: 100;
+}
+
 .intro-video {
 	width: 100% !important;
 	height: 500px;
