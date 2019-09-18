@@ -46,7 +46,7 @@
   }
 
   // Post handling
-  if (isset($_POST['iframe'])) {
+  if (isset($_POST['iframe']) && $edit_mode) {
     $audit->update('video_iframe', base64_encode($_POST['iframe']), 'Audit_template');
   }
 
@@ -55,7 +55,7 @@
                   'instagram_score', 'website_score'];
 
   foreach ($post_names as $post_name) {
-    if (isset($_POST[$post_name])) {
+    if (isset($_POST[$post_name]) && $edit_mode) {
       $audit->update($post_name, sanitize_textarea_field($_POST[$post_name]), 'Audit_template');
     }
   }
@@ -78,8 +78,10 @@
   }
 
   // Handle post
-  check_manual_instagram_postfields($audit, 0);
-  check_manual_instagram_postfields($audit, 1);
+  if ($edit_mode) {
+    check_manual_instagram_postfields($audit, 0);
+    check_manual_instagram_postfields($audit, 1);
+  }
 
    // Overall scores
    $score = array(

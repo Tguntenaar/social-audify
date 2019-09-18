@@ -60,22 +60,14 @@
     list($comp_graph_data_list, $comp_graph_labels) = create_graph_data($comp_data, $campaign_blocks);
   }
 
-  // Post handlers
-  if (isset($_POST['introduction'])) {
-    $report->update('introduction', sanitize_text_field($_POST['introduction']), 'Report_content');
-  }
+  $post_names =  ['introduction', 'conclusion', 'social_advice', 'campaign_advice'];
 
-  if (isset($_POST['social_advice'])) {
-    $report->update('social_advice', sanitize_text_field($_POST['social_advice']), 'Report_content');
+  foreach ($post_names as $post_name) {
+    if (isset($_POST[$post_name]) && $edit_mode) {
+      $report->update($post_name, sanitize_textarea_field($_POST[$post_name]), 'Report_content');
+    }
   }
-
-  if (isset($_POST['campaign_advice'])) {
-    $report->update('campaign_advice', sanitize_text_field($_POST['campaign_advice']), 'Report_content');
-  }
-
-  if (isset($_POST['conclusion'])) {
-    $report->update('conclusion', sanitize_text_field($_POST['conclusion']), 'Report_content');
-  }
+  
 
   if(isset($_POST['followers_count']) || isset($_POST['avgEngagement']) ||
      isset($_POST['postsLM']) || isset($_POST['follows_count']) ||
