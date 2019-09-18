@@ -168,6 +168,7 @@
 
   $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
 
+
 ?>
 
 <head>
@@ -247,6 +248,7 @@
       </div>
     </div>
 
+    <?php if($social_stats->instagram_data == NULL && $social_stats->facebook_data == NULL) { ?>
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
       <!-- Social Statistics -->
       <span class="facebook-inf-title" style="text-align:center; margin: 0;">Social Stats:</span>
@@ -310,6 +312,7 @@
           } ?>
         </div>
       </div>
+      <?php } ?>
 
       <!-- Campaign Statistics -->
       <div style="clear:both; margin-top: 90px;"></div>

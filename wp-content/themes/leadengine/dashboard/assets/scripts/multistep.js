@@ -47,7 +47,7 @@ function nextPrev(n) {
   var tab = $('.tab');
 
   // validate this step
-  if (n == 1 && !validateStep()) 
+  if (n == 1 && !validateStep())
     return false;
 
   // request campaigns or ads from facebook servers.
@@ -60,7 +60,7 @@ function nextPrev(n) {
   currentTab += n;
 
   // Display correct tab if length not exceeded
-  if (currentTab < tab.length) 
+  if (currentTab < tab.length)
     showTab(currentTab);
 }
 
@@ -102,7 +102,7 @@ function validateClient() {
     return false;
 
   // Instance.client = JSON.parse(selected.attr("data-client"));
-  // TODO: 
+  // TODO:
   Instance.client = selected.data('client');
 
   console.log(Instance.client.ad_id);
@@ -157,7 +157,7 @@ function validateName() {
   }
 
   // check if at least one options selected
-  if ($(".c_container > input[type=checkbox]:checked").length === 0) {
+  if ($(".c_container > input[type=checkbox]:checked").length === 0 && Instance.page.type == 'audit') {
     $('.c_container').css('color', 'red');
     return false;
   };
@@ -176,7 +176,7 @@ function validateName() {
   return true;
 }
 
-// Find selected option in list 
+// Find selected option in list
 function findSelected(optionList) {
   var selected = $(optionList).find('.selected');
   console.log({selected});
