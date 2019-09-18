@@ -49,7 +49,7 @@
                 }
 
 
-                $slug = strtolower('/audit-'.$report->name.'-'.$report->id.'/');
+                $slug = strtolower('report-'.$report->name.'-'.$report->id.'/');
 
                 ?><a href="<?php echo $slug; ?>" class="a-row col-xs-12 col-ms-12 col-md-12 col-lg-12"><?php
                     ?><div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $user; ?></div><?php

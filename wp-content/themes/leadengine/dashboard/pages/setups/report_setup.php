@@ -15,7 +15,6 @@
 <html lang='en'>
 <head>
   <title>Create Report</title>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/testresponses.js" charset="utf-8" defer></script>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js" charset="utf-8" defer></script>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js" charset="utf-8" defer></script>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css" type="text/css" />
@@ -217,7 +216,7 @@
         that.removeClass('selected');
       } else {
         if ($('#campaign-list .selected').length < 5) {
-          that.addClass('selected'); 
+          that.addClass('selected');
         } else {
           var edge = $('[name=level]:checked').val();
           showModal(initiateModal('errorModal', 'error', {
@@ -251,7 +250,6 @@
       var campaignPromise = makeAdPromise(radioBtn);
 
       campaignPromise.then(function(response) {
-        response = JSON.parse(adsResponse);
         Instance.currency = response.currency;
 
         console.log({response});
@@ -376,8 +374,6 @@
         };
     }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
 
-    console.log("3: ");
-    console.log(sum);
 
       // divides sum into avg
       for (insight in sum) {
