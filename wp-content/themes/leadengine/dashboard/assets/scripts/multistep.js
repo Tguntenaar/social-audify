@@ -157,7 +157,7 @@ function validateName() {
   }
 
   // check if at least one options selected
-  if ($(".c_container > input[type=checkbox]:checked").length === 0) {
+  if ($(".c_container > input[type=checkbox]:checked").length === 0 && Instance.page.type == 'audit') {
     $('.c_container').css('color', 'red');
     return false;
   };
