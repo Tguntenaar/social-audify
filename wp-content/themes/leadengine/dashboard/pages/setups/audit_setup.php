@@ -272,11 +272,10 @@
         // If makeApiCalls doesn't redirect...
         return false;
       }).catch((reason) => {
-        var modalData = {
+        showModal(initiateModal('errorModal', 'error', {
           'text': "Problem with Login Status",
           'subtext': "Please try again later or notify an admin if the issue persists"
-        }
-        showModal(initiateModal('errorModal', 'error', modalData));
+        }));
         showBounceBall(false);
       });
     }

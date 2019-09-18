@@ -212,18 +212,6 @@
       $(this).addClass('selected');
     });
 
-    $(function() {
-      <?php
-      if (isset($_GET['cid'])) { ?>
-        showIntro(false);
-        var id = "<?php echo $_GET['cid']; ?>";
-        var selected = $(`#client-list a[id=client-${id}]`);
-        // TODO: open ad account modal hier ook; && remove??
-        selected.parent().find('.audit-row').removeClass('selected');
-        selected.addClass('selected');<?php
-      } ?>
-    });
-
     function toggleSelectedAds(that) {
       if (that.hasClass('selected')) {
         that.removeClass('selected');
@@ -401,6 +389,16 @@
     }
 
     $(function() {
+      <?php
+      if (isset($_GET['cid'])) { ?>
+        showIntro(false);
+        var id = "<?php echo $_GET['cid']; ?>";
+        var selected = $(`#client-list a[id=client-${id}]`);
+        // TODO: open ad account modal hier ook; && remove??
+        selected.parent().find('.audit-row').removeClass('selected');
+        selected.addClass('selected');<?php
+      } ?>
+
       // Connect Ad Account Modal
       var modalData = {
         text: 'Select the right ad account for the right campaigns',
@@ -441,15 +439,9 @@
 
           // Change the data-client attribute
           var clientDataAttribute = clickedClient.data('client');
-          console.log(clientDataAttribute);
-          console.log(typeof clientDataAttribute);
-          console.log(adId);
-          console.log(typeof adId);
 
           clientDataAttribute.ad_id = adId;
           clickedClient.data("client", clientDataAttribute);
-          console.log(clientDataAttribute);
-          console.log(clickedClient);
 
           // Change the class of the overlay
           var overlay = clickedClient.find('div');
@@ -512,8 +504,15 @@
         return false;
       }).catch((reason) => {
         showBounceBall(false);
-        // TODO: alert here
-        console.log({ reason });
+        // var msg = (typeof reason == 'string') ? reason : reason.error.message;
+        // showModal(initiateModal('errorModal', 'error', {
+        //   'text': `${msg}`,
+        //   'subtext': `Please try again to login to Facebook`,
+        // })); // TODO: welke is beter? doe hetzelfde in audit setup
+        showModal(initiateModal('errorModal', 'error', {
+          'text': "Problem with Login Status",
+          'subtext': "Please try again later or notify an admin if the issue persists"
+        }));
       });
     }
   </script>

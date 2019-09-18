@@ -62,19 +62,19 @@
 
   // Post handlers
   if (isset($_POST['introduction'])) {
-    $report->update('introduction', $_POST['introduction'], 'Report_content');
+    $report->update('introduction', sanitize_text_field($_POST['introduction']), 'Report_content');
   }
 
   if (isset($_POST['social_advice'])) {
-    $report->update('social_advice', $_POST['social_advice'], 'Report_content');
+    $report->update('social_advice', sanitize_text_field($_POST['social_advice']), 'Report_content');
   }
 
   if (isset($_POST['campaign_advice'])) {
-    $report->update('campaign_advice', $_POST['campaign_advice'], 'Report_content');
+    $report->update('campaign_advice', sanitize_text_field($_POST['campaign_advice']), 'Report_content');
   }
 
   if (isset($_POST['conclusion'])) {
-    $report->update('conclusion', $_POST['conclusion'], 'Report_content');
+    $report->update('conclusion', sanitize_text_field($_POST['conclusion']), 'Report_content');
   }
 
   if(isset($_POST['followers_count']) || isset($_POST['avgEngagement']) ||
@@ -83,27 +83,27 @@
       $report->social_stats = json_decode($report->social_stats);
 
       if (isset($_POST['followers_count'])) {
-        $report->social_stats->instagram_data->followers_count = $_POST['followers_count'];
+        $report->social_stats->instagram_data->followers_count = absint($_POST['followers_count']);
       }
 
       if (isset($_POST['avgEngagement'])) {
-        $report->social_stats->instagram_data->avgEngagement = $_POST['avgEngagement'];
+        $report->social_stats->instagram_data->avgEngagement = floatval($_POST['avgEngagement']);
       }
 
       if (isset($_POST['postsLM'])) {
-        $report->social_stats->instagram_data->postsLM = $_POST['postsLM'];
+        $report->social_stats->instagram_data->postsLM = absint($_POST['postsLM']);
       }
 
       if (isset($_POST['follows_count'])) {
-        $report->social_stats->instagram_data->follows_count = $_POST['follows_count'];
+        $report->social_stats->instagram_data->follows_count = absint($_POST['follows_count']);
       }
 
       if (isset($_POST['averageComments'])) {
-        $report->instagram_data->instagram_data->averageComments = $_POST['averageComments'];
+        $report->instagram_data->instagram_data->averageComments = floatval($_POST['averageComments']);
       }
 
       if (isset($_POST['averageLikes'])) {
-        $report->social_stats->instagram_data->averageLikes = $_POST['averageLikes'];
+        $report->social_stats->instagram_data->averageLikes = floatval($_POST['averageLikes']);
       }
 
       $report->update('social_stats', json_encode($report->social_stats), 'Report_content');

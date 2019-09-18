@@ -150,14 +150,14 @@ function validateCompetitorTab() {
 function validateName() {
   var nameInput = $('.name-input');
 
-  if (!nameInput.val().match(/[a-zA-Z0-9]{3,25}/)) {
+  if (!nameInput.val().match(/[a-zA-Z0-9][a-zA-Z0-9 ]{2,25}/)) {
     nameInput.addClass('invalid');
     nameInput.focus();
     return false;
   }
 
   // check if at least one options selected
-  if ($(".c_container > input[type=checkbox]:checked").length === 0) {
+  if ($(".c_container > input[type=checkbox]:checked").length === 0 && Instance.page.type == 'audit') {
     $('.c_container').css('color', 'red');
     return false;
   };
