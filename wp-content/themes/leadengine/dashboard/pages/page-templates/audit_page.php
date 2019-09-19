@@ -473,7 +473,7 @@
           if ($base->manual && $edit_mode) {?>
             <input type="text" name="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
           } else {
-            echo round($value, 2); ?></!--><?php
+            echo round($value, 2);
           }
         }
 

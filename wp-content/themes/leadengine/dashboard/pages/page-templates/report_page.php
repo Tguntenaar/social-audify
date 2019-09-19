@@ -68,46 +68,18 @@
     }
   }
   
+  if (isset($_POST['followers_count']) && $edit_mode) {
+      
+      $social_stats =  array(
+        "avgEngagement"=> floatval($_POST["avgEngagement"]),
+        "followers_count"=> absint($_POST["followers_count"]),
+        "postsLM"=> absint($_POST["postsLM"]),
+        "follows_count"=> absint($_POST["follows_count"]),
+        "averageComments"=> floatval($_POST["averageComments"]),
+        "averageLikes"=> floatval($_POST["averageLikes"]),
+      );
 
-  if(isset($_POST['followers_count']) || isset($_POST['avgEngagement']) ||
-     isset($_POST['postsLM']) || isset($_POST['follows_count']) ||
-     isset($_POST['averageLikes']) || isset($_POST['averageComments'])) {
-      $report->social_stats = json_decode($report->social_stats);
-
-      if (isset($_POST['followers_count'])) {
-        $report->social_stats->instagram_data->followers_count = absint($_POST['followers_count']);
-      }
-
-      if (isset($_POST['avgEngagement'])) {
-        $report->social_stats->instagram_data->avgEngagement = floatval($_POST['avgEngagement']);
-      }
-
-      if (isset($_POST['postsLM'])) {
-        $report->social_stats->instagram_data->postsLM = absint($_POST['postsLM']);
-      }
-
-      if (isset($_POST['follows_count'])) {
-        $report->social_stats->instagram_data->follows_count = absint($_POST['follows_count']);
-      }
-
-      if (isset($_POST['averageComments'])) {
-        $report->instagram_data->instagram_data->averageComments = floatval($_POST['averageComments']);
-      }
-
-      if (isset($_POST['averageLikes'])) {
-        $report->social_stats->instagram_data->averageLikes = floatval($_POST['averageLikes']);
-      }
-
-      $report->update('social_stats', json_encode($report->social_stats), 'Report_content');
-
-      $report = $report_control->get($id);
-
-      // Graph data
-      $graph_data = json_decode($report->chart_data);
-
-      // Blocks data - last element in graph_data is the average.
-      $social_stats = json_decode($report->social_stats);
-      $avg_campaign = array_pop($graph_data)->insights;
+      $report->update('social_stats', json_encode($social_stats), 'Report_content');
   }
 
   function create_graph_data($graph_data, $campaign_blocks) {
@@ -128,7 +100,7 @@
           $graph_data_list[$block['fb_name']] = array();
         }
 
-        if(!isset(((array)$campaign->insights)[$block['fb_name']])) {
+        if (!isset(((array)$campaign->insights)[$block['fb_name']])) {
             $push_object = "0";
         } else {
             $push_object = ((array)$campaign->insights)[$block['fb_name']];
@@ -208,13 +180,11 @@
           <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button><?php
         }
 
-        if ($user_id === $author_id) {
-          if ($edit_mode) { ?>
-    				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-          } else { ?>
-    				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-          }
-      } ?>
+        if ($edit_mode) { ?>
+          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+        } else { ?>
+          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        } ?>
     </div>
   </div>
 
@@ -231,63 +201,85 @@
         <span class="audit-company-name"><?php echo $author->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></textarea>
+            <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
-          <p><?php if($report->introduction == NULL) { echo $user->intro_report; } else { echo $report->introduction; } ?></p><?php
+          <p><?php
+            echo ($report->introduction == NULL) ? $user->intro_report: $report->introduction; ?>
+          </p><?php
         } ?>
       </div>
-    </div>
+    </div> <?php 
 
-    <?php if($social_stats->instagram_data == NULL && $social_stats->facebook_data == NULL) { ?>
+    if ($social_stats->instagram_data == NULL && $social_stats->facebook_data == NULL) { ?>
+
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
       <!-- Social Statistics -->
       <span class="facebook-inf-title" style="text-align:center; margin: 0;">Social Stats:</span>
-      <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics of your Facebook and Instagram page.</span>
-      <?php if($report->manual && $edit_mode) { ?><span class="manual-text" style="width: 100%;"><span style="color: #e74c3c;">Attention: </span>There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> to gather your data!</span><?php } ?>
-      <?php if($report->manual && $edit_mode) { ?>
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data">
-      <?php }
+      <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics of your Facebook and Instagram page.</span><?php 
+      if ($report->manual && $edit_mode) { ?>
+        <span class="manual-text" style="width: 100%;">
+          <span style="color: #e74c3c;">Attention: </span>
+          There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> to gather your data!</span><?php 
+      }
+      if ($report->manual && $edit_mode) { ?>
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data"><?php 
+      }
       foreach ($social_blocks as $item) {
         if (show_block($edit_mode, $report->{$item["type"]}, isset($social_stats->{$item["data"]}->{$item["fb_name"]}))) { ?>
           <div class="col-lg-4 report-social-style" style="float: left; padding:5px;">
             <div class="stat-block col-lg-12">
-              <div class="inner">
-                <?php if(!$report->manual) { ?><span class="explenation"><?php echo $item["desc"]; ?></span><?php } ?>
-                <span class="title-box facebook"><?php echo $item["name"]; ?></span>
-                <?php if(!$report->manual) { ?><span class="data_animation"><?php }
+              <div class="inner"><?php 
+                if (!$report->manual) { ?>
+                  <span class="explenation"><?php 
+                    echo $item["desc"]; ?>
+                  </span><?php 
+                } ?>
+                <span class="title-box facebook"><?php 
+                  echo $item["name"]; ?>
+                </span><?php 
+                if (!$report->manual) { ?>
+                  <span class="data_animation"><?php 
+                }
 
-                  if($report->manual && !$item["fb"] && $edit_mode) {
-                    ?><input type="text" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /></span><?php
-                  } else {
-                    echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, 2);
-                  }
+                if ($report->manual && !$item["fb"] && $edit_mode) { ?>
+                  <input type="text" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /></span><?php
+                } else {
+                  echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, 2);
+                }
 
-                  if ($report->has_comp) {
-                    $percent = !isset($comp_social->{$item["data"]}->{$item["fb_name"]}) ? 0 :
-                                procent_calc($social_stats->{$item["data"]}->{$item["fb_name"]}, $comp_social->{$item["data"]}->{$item["fb_name"]});
+                if ($report->has_comp) {
+                  $percent = !isset($comp_social->{$item["data"]}->{$item["fb_name"]}) ? 0 :
+                              procent_calc($social_stats->{$item["data"]}->{$item["fb_name"]}, $comp_social->{$item["data"]}->{$item["fb_name"]});
 
-                    $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
-                    $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
+                  $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
+                  $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
 
-                    <span class="competitor-stats" style="color: <?php echo $color; ?>">
-                      <?php if($icon != "window-minimize") { ?>
-                          <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; margin-top: -3px; color: <?php echo $color; ?>"></i>
-                      <?php } ?>
-                      <span class="percentage"><?php echo $percent !== 0 ? "$percent%" : ""; ?></span>
-                    </span><?php
+                  <span class="competitor-stats" style="color: <?php echo $color; ?>"><?php 
+                  if ($icon != "window-minimize") { ?>
+                    <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; margin-top: -3px; color: <?php echo $color; ?>"></i><?php 
                   } ?>
-                <?php if(!$report->manual) { ?> </span> <?php } ?>
-                <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
-                  <?php visibility_icon($edit_mode, $report->{$item["type"]}); ?></div>
+                    <span class="percentage"><?php 
+                      echo $percent !== 0 ? "$percent%" : ""; ?>
+                      </span>
+                  </span><?php
+                } 
+                if (!$report->manual) { ?> 
+                  </span> <?php 
+                } ?>
+              <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php 
+                visibility_icon($edit_mode, $report->{$item["type"]}); ?>
               </div>
             </div>
           </div>
-        <?php
-        }
-      } ?>
-      <?php if($report->manual && $edit_mode) {?><input type="submit" class="edite-button" value="Update data" style="width: 150px !important; margin-left: 17px;"/></form><?php } ?>
+        </div> <?php
+      }
+    }
+    if ($report->manual && $edit_mode) { ?>
+      <input type="submit" class="edite-button" value="Update data" style="width: 150px !important; margin-left: 17px;"/>
+      </form><?php 
+    } ?>
 
       <div style="clear: both;"></div>
 
@@ -300,11 +292,11 @@
               <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
-            echo "<p>".$report->social_advice."</p>";
+            echo "<p>$report->social_advice</p>";
           } ?>
         </div>
-      </div>
-      <?php } ?>
+      </div> <?php
+      } ?>
 
       <!-- Campaign Statistics -->
       <div style="clear:both; margin-top: 90px;"></div>
@@ -324,11 +316,11 @@
                     $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
                     $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
 
-                    <span class="competitor-stats" style="z-index:555; color: <?php echo $color; ?>">
-                      <?php if($icon != "window-minimize") { ?>
-                          <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; color: <?php echo $color; ?>"></i>
-                      <?php } ?>
-                      <?php echo "$percent%"; ?>
+                    <span class="competitor-stats" style="z-index:555; color: <?php echo $color; ?>"><?php 
+                      if ($icon != "window-minimize") { ?>
+                          <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; color: <?php echo $color; ?>"></i><?php 
+                      }
+                      echo "$percent%"; ?>
                     </span><?php
                   } ?>
               <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
@@ -340,14 +332,14 @@
                 <span class="graph-procent" style="margin-top: 4px;">
                     <?php
                         echo substr($avg_campaign->{$item["fb_name"]}, 0, 6);
-                        if($item["currency"]) {?>
+                        if ($item["currency"]) {?>
                         <span class="currency"> <?php echo $report->currency; ?> </span>
                     <?php } ?>
                 </span>
 
               </div>
               <div class="inner custom-inner" style="padding: 0;">
-                <canvas id="<?php echo "canvas".$counter; ?>" class="chart-instagram"  style="height: 292px;"></canvas>
+                <canvas id="<?php echo "canvas$counter"; ?>" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
             </div>
           </div><?php
@@ -363,7 +355,7 @@
               <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
-            echo "<p>".$report->campaign_advice."</p>";
+            echo "<p>$report->campaign_advice</p>";
           } ?>
         </div>
       </div>
@@ -376,11 +368,13 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
+          <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
-        <p><?php if($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></p><?php
+        <p><?php 
+          echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
+        </p><?php
       } ?>
     </div>
   </section>
@@ -419,7 +413,7 @@
         var icon = field.find('i');
         field.html("<div class='lds-dual-ring'></div>");
 
-        if(typeof icon[0] !== 'undefined') {
+        if (typeof icon[0] !== 'undefined') {
           var visible = icon.attr('class').endsWith("-slash");
           var html = '<i class="far fa-eye' + (visible ? '"' : '-slash"') + '></i>'
 
