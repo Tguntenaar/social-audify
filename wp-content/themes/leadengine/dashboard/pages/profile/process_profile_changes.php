@@ -9,7 +9,6 @@
   ini_set("display_errors", 1);
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $user_id = get_current_user_id();
     include(dirname(__FILE__)."/../../services/connection.php");
     include(dirname(__FILE__)."/../../controllers/user_controller.php");
     include(dirname(__FILE__)."/../../models/user.php");
@@ -17,99 +16,86 @@
     $connection = new connection;
     $user_control = new user_controller($connection);
     
-    $user = $user_control->get($user_id);
+    $user = $user_control->get(get_current_user_id());
 
-    $audit_visibility_stat = $user->get_visibility('audit');
-    $report_visibility_stat = $user->get_visibility('report');
+    $post_list = array(
+      'introduction-audit' => 'intro_audit',
+      'conclusion-audit' => 'conclusion_audit',
+      'introduction-report' => 'intro_report',
+      'conclusion-report' => 'conclusion_report',
+      'range_fb_1' => 'range_number_fb_1',
+      'range_fb_2' => 'range_number_fb_2',
+      'fb-audit_1' => 'text_fb_1',
+      'fb-audit_2' => 'text_fb_2',
+      'fb-audit_3' => 'text_fb_3',
+      'range_ig_1' => 'range_number_insta_1',
+      'range_ig_2' => 'range_number_insta_2',
+      'ig-audit_1' => 'text_insta_1',
+      'ig-audit_2' => 'text_insta_2',
+      'ig-audit_3' => 'text_insta_3',
+      'range_wb_1' => 'range_number_website_1',
+      'range_wb_2' => 'range_number_website_2',
+      'wb-audit_1' => 'text_website_1',
+      'wb-audit_2' => 'text_website_2',
+      'wb-audit_3' => 'text_website_3',
+    );
 
-    function if_set_update_int($user, $post_field, $db_field, $table) {
-      $absoluteInt = absint($_POST[$post_field]);
-      if (isset($_POST[$post_field]) && ($absoluteInt >= 0 && $absoluteInt <= 365)) {
-        $user->update($table, $db_field, absint($_POST[$post_field]));
+    $post_list_mail = array(
+      'day_1' => 'day_1',
+      'day_2' => 'day_2',
+      'day_3' => 'day_3',
+      'mail_text' => 'mail_text',
+      'second_mail_text' => 'second_mail_text',
+      'third_mail_text' => 'third_mail_text',
+    );
+
+    // TODO ; meer input validation    
+    function check_input_valid($input) {
+      if (is_int($input) && absint($input) >= 0 && absint($input) <= 365) {
+        return true;
       }
+      return trim($input) <= 999;
     }
 
-    function if_set_update_textfield($user, $post_field, $db_field, $table) {
-      if (isset($_POST[$post_field]) && trim($_POST[$post_field]) <= 999) {
-        $user->update($table, $db_field, sanitize_textarea_field(trim($_POST[$post_field])));
+    function fill_values_list($post_list, $user, $output) {
+      foreach ($post_list as $post_name => $db_field) {
+        if (isset($_POST[$post_name])) {
+          $value = $_POST[$post_name];
+
+          if (check_input_valid($value) && $value != $user->{$db_field}) {
+            $output[$db_field] = $value;
+          }
+        }
       }
+      return $output;
     }
 
-    /**
-     * Facebook
-     */
-    if_set_update_textfield($user, 'introduction-audit', 'intro_audit', 'Configtext');
-    if_set_update_textfield($user, 'conclusion-audit', 'conclusion_audit', 'Configtext');
+    $values_list = fill_values_list($post_list, $user, array());
+    if (count($values_list) > 0) {
+      $user->update_list('Configtext', $values_list);
+    }
 
-    if_set_update_textfield($user, 'introduction-report', 'intro_report', 'Configtext');
-    if_set_update_textfield($user, 'conclusion-report', 'conclusion_report', 'Configtext');
+    $values_list_mail = fill_values_list($post_list_mail, $user, array());
+    if (count($values_list_mail) > 0) {
+      $user->update_list('Mail_config', $values_list_mail);
+    }
 
-
-    if_set_update_int($user, 'range_fb_1', 'range_number_fb_1', 'Configtext');
-    if_set_update_int($user, 'range_fb_2', 'range_number_fb_2', 'Configtext');
-
-    if_set_update_textfield($user, 'fb-audit_1', 'text_fb_1', 'Configtext');
-    if_set_update_textfield($user, 'fb-audit_2', 'text_fb_2', 'Configtext');
-    if_set_update_textfield($user, 'fb-audit_3', 'text_fb_3', 'Configtext');
-
-    /**
-     * Instagram
-     */
-    if_set_update_int($user, 'range_ig_1', 'range_number_insta_1', 'Configtext');
-    if_set_update_int($user, 'range_ig_2', 'range_number_insta_2', 'Configtext');
-
-    if_set_update_textfield($user, 'ig-audit_1', 'text_insta_1', 'Configtext');
-    if_set_update_textfield($user, 'ig-audit_2', 'text_insta_2', 'Configtext');
-    if_set_update_textfield($user, 'ig-audit_3', 'text_insta_3', 'Configtext');
-
-    /**
-     * Website
-     */
-    if_set_update_int($user, 'range_website_1', 'range_number_website_1', 'Configtext');
-    if_set_update_int($user, 'range_website_2', 'range_number_website_2', 'Configtext');
-
-    if_set_update_textfield($user, 'wb-audit_1', 'text_website_1', 'Configtext');
-    if_set_update_textfield($user, 'wb-audit_2', 'text_website_2', 'Configtext');
-    if_set_update_textfield($user, 'wb-audit_3', 'text_website_3', 'Configtext');
-
-    /**
-     * Mail
-     */
-    if_set_update_int($user, 'day_1', 'day_1', 'Mail_config');
-    if_set_update_int($user, 'day_2', 'day_2', 'Mail_config');
-    if_set_update_int($user, 'day_3', 'day_3', 'Mail_config');
-
-    if_set_update_textfield($user, 'mail_text', 'mail_text', 'Mail_config');
-    if_set_update_textfield($user, 'second_mail_text', 'second_mail_text', 'Mail_config');
-    if_set_update_textfield($user, 'third_mail_text', 'third_mail_text', 'Mail_config');
-
-    foreach ($audit_visibility_stat[0] as $field => $value) {
-      if (isset($_POST["check-${field}"])) {
-        if ((int)$_POST["check-${field}"] xor (int)$value) {
-          $user->toggle_visibility($field, 'audit');
+    function update_visibility($visibility_list, $type, $user) {
+      foreach ($visibility_list as $field => $value) {
+        if (isset($_POST["check-${field}"]) && (int)$_POST["check-${field}"] != (int)$value) {
+          $user->toggle_visibility($field, $type);
         }
       }
     }
 
-    foreach ($report_visibility_stat[0] as $field => $value) {
-      if (isset($_POST["check-${field}"])) {
-        if ((int)$_POST["check-${field}"] xor (int)$value) {
-          $user->toggle_visibility($field, 'report');
-        }
-      }
-    }
+    update_visibility($user->get_visibility('audit')[0], 'audit', $user);
+    update_visibility($user->get_visibility('report')[0], 'report', $user);
 
-    if (true) {
-      if (isset($_GET['settings'])) {
-        header("Location: https://".getenv('HTTP_HOST')."/profile-page/#".$_GET['settings']."-settings", true, 303);
-      } else {
-        header("Location: https://".getenv('HTTP_HOST')."/profile-page", true, 303);
-      }
-      exit();
-    }
+    $current_section = isset($_GET['settings']) ? "/#{$_GET['settings']}-settings" : "";
+    header("Location: https://".getenv('HTTP_HOST')."/profile-page".$current_section, true, 303);
   } else {
-    header("HTTP/1.0 404 Not Found", true, 404);
     include(dirname(__FILE__)."/../../../404.php");
+    header("HTTP/1.0 404 Not Found", true, 404);
   }
-  exit();
+  // exit();
 ?>

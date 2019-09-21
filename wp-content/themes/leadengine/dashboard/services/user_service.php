@@ -83,6 +83,12 @@ class user_service extends connection {
       array($field_name => $field_value), array($id_field => $id));
   }
 
+  public function update_list($id, $list_values, $table) {
+    $id_field = $table === 'User' ? 'id':'user_id';
+    return $this->dbwp->update($table, $list_values, array($id_field => $id));
+  }
+  
+
   public function delete($user_id) {
     $this->dbwp->delete('Client', array( 'user_id' => $user_id ));
     $this->dbwp->delete('User', array( 'id' => $user_id ));

@@ -121,8 +121,8 @@
                   <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
                   for ($i = 1; $i <= 3; $i++) { 
                     if ($i < 3) { ?>
-                      <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                      <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                      <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                      <input maxlength="2" type="text" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
                           value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
                     } else { ?>
                       <h6>The last range is less than or equal to 100</h6><?php
@@ -153,14 +153,14 @@
               <!-- intro report -->
               <div class="intro-report-block">
                 <h4>Introduction Report</h4>
-                <textarea maxlength="999" input="text"  name="introduction-report" id="introduction-report"><?php
+                <textarea maxlength="999" input="text"  name="introduction-report"><?php
                   echo trim($user->intro_report);
                 ?></textarea>
               </div>
               <!-- conclusion report -->
               <div class="conclusion-report-block">
                 <h4>Conclusion Report</h4>
-                <textarea maxlength="999" input="text"  name="conclusion-report" id="conclusion-report"><?php
+                <textarea maxlength="999" input="text"  name="conclusion-report"><?php
                   echo trim($user->conclusion_report);
                 ?></textarea>
               </div>
@@ -289,7 +289,7 @@
         return;
       }
 
-      if (($("#day_1").val() >= $("#day_2").val() || $("#day_2").val() >= $("#day_3").val())) {
+      if (parseInt($("#day_1").val()) >= parseInt($("#day_2").val()) || parseInt($("#day_2").val()) >= parseInt($("#day_3").val())) {
         $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller than Day 2 and Day 2 smaller than Day 3.</span>");
         return;
       }
