@@ -5,10 +5,7 @@
 ?>
 <!--
   TODO:
-
-
   1. In de lijst met klanten -> laat geen klanten zien die al geen facebook hebben.
-  2. Verander hoe de campagnes worden geselecteerd.
 
  -->
 <!DOCTYPE html>
@@ -31,12 +28,7 @@
     // $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
     $reports = $report_control->get_all();
-    // echo '<pre>' . var_export($clients, true) . '</pre>';
-
   ?>
-
-  <!-- <div id="instagramErrorModal" class="modal"></div>
-  <div id="adAccountModal" class="modal"></div> -->
 
   <!-- back button -->
   <div class="content-title col-xs-9 col-sm-9 col-md-9 col-lg-9">
@@ -252,43 +244,19 @@
       campaignPromise.then(function(response) {
         Instance.currency = response.currency;
 
-        console.log({response});
-
         // Set data-edge attribute of radio buttons.
         radioBtn.data('response', response);
+        console.log({response});
 
         if (!response.hasOwnProperty(edge) || response[edge].data.length == 0) {
           $('#campaign-list').html('No data found.');
           return;
         } else {
           $('#campaign-list').empty();
-
-          var active_ads = [];
-
-          response[edge].data.forEach(function(campaigns) {
-            const {id, name, ...insights} = campaigns;
-
-            if (!$.isEmptyObject(insights)) {
-              active_ads.push(campaigns);
-            }
-          });
-
-          if (active_ads.length == 0) {
-              $('#campaign-list').html(`No active ${edgeValue} running.`);
-          } else {
-              active_ads.forEach(function(ad) {
-                  // 1. Vul lijst met ads
-                  // voor de search bar => name="${ad.name.replace(/\s/g, '')}"
-                  var str = `<a class="audit-row competitors" data-id=${ad.id} name="${ad.name}" onclick="toggleSelectedAds($(this))">Name: ${ad.name}</a>`;
-                  $('#campaign-list').append(str);
-              });
-          }
+          placeAdsInList($('#campaign-list'), edge, filterActiveAds(response, edge));
         }
-        var elems = $(`#campaign-list .audit-row`);
-        $(document).on('keyup', `input#search-input-campaign`, function() {
-          console.log(elems);
-          filterSearch($(this).val(), elems);
-        });
+
+        initSearchBar('campaign');
 
         return valid;
       }).catch(function (reason) {
@@ -305,7 +273,30 @@
       });
     }
 
-    // used in showActiveCampaigns
+    function filterActiveAds(response, edge) {
+      var active_ads = [];
+      response[edge].data.forEach(function(campaigns) {
+        const {id, name, ...insights} = campaigns;
+
+        // Als insights niet bestaat zorgt object destruction ervoor dat insights == {}
+        if (!$.isEmptyObject(insights)) {
+          active_ads.push(campaigns);
+        }
+      });
+      return active_ads;
+    }
+
+    function placeAdsInList(list, edge, ads) {
+      if (ads.length == 0) {
+        list.html(`No active ${edge} running.`);
+      } else {
+        ads.forEach(function(ad) {
+          var str = `<a class="audit-row competitors" data-id=${ad.id} name="${ad.name}" onclick="toggleSelectedAds($(this))">Name: ${ad.name}</a>`;
+          list.append(str);
+        });
+      }
+    }
+
     function makeAdPromise(radioBtn) {
       // Api won't be called twice for the same edge.
       if (!$.isEmptyObject(radioBtn.data('response')))
@@ -332,7 +323,7 @@
      * data = [{name: <name>, insights: {cpp: <cpp>, cpm: <cpm>}}, etc]
      */
     function transformResponseData(response) {
-      var data = [], avg = {}, sum, insight;
+      var data = [], insight;
       var edge = $('[name=level]:checked').val();
       var selectedAds = [];
 
@@ -349,17 +340,20 @@
         const {id, name, ...rest} = campaign;
 
         if ((selectedAds.includes(id) || selectedAds.includes(Number(id))) && !$.isEmptyObject(rest)) { // Als the campaign is geselecteerd en hij insights heeft.
-          // TODO: check into this. insights.data.length array always 1?]
-          console.log("tst");
           data = [...data, {name: name, insights: rest.insights.data[0]}];
         }
       });
 
+      var avg = calculateAverageObject(data);
+      
+      data = [...data, {name:'average', insights: avg}];
+      return data;
+    }
 
-      // sums up all the properties of each insights object inside the "data" array.
-      sum = data.reduce(function(acc, cur) {
-          console.log("><");
-          console.log(cur.insights.unique_inline_link_clicks);
+    function calculateAverageObject(data) {
+      var avg = {};
+      // dit kan dus een stuk dynamischer
+      var sum = data.reduce(function(acc, cur) {
         return {
           reach: acc.reach + check_nan(cur.insights.reach),
           impressions: acc.impressions + check_nan(cur.insights.impressions),
@@ -372,16 +366,13 @@
           unique_inline_link_clicks: acc.unique_inline_link_clicks + check_nan(cur.insights.unique_inline_link_clicks),
           website_purchase_roas: acc.website_purchase_roas + check_nan(cur.insights.website_purchase_roas)
         };
-    }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
-
-
+      }, {reach: 0, impressions: 0, cpc: 0, cpm: 0, cpp: 0, ctr: 0, frequency: 0, spend: 0, unique_inline_link_clicks: 0, website_purchase_roas: 0});
       // divides sum into avg
-      for (insight in sum) {
+
+      for (var insight in sum) {
         avg[insight] = sum[insight] / data.length;
       }
-
-      data = [...data, {name:'average', insights: avg}];
-      return data;
+      return avg;
     }
 
     $(function() {
@@ -453,15 +444,19 @@
 
       // Searchable lists
       ['client', 'compare'].forEach(function(name) {
-        var elems = $(`#${name}-list .audit-row`);
-        var search = name == 'client' ? '' : `-${name}`;
-
-        $(document).on('keyup', `input#search-input${search}`, function() {
-          console.log(elems);
-          filterSearch($(this).val(), elems);
-        });
+        initSearchBar(name);
       });
-   });
+    });
+
+    function initSearchBar(name) {
+      var elems = $(`#${name}-list .audit-row`);
+      var search = name == 'client' ? '' : `-${name}`;
+
+      $(document).on('keyup', `input#search-input${search}`, function() {
+        console.log(elems);
+        filterSearch($(this).val(), elems);
+      });
+    }
 
     function submitForm() {
       showBounceBall(true, 'Preparing report, wait a minute');
