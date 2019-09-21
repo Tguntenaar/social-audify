@@ -28,8 +28,13 @@ class user {
     return $this->service->toggle_config_visibility($this->id, $field, $type);
   }
 
+
   public function update($table, $field_name, $value) {
     return $this->service->update($this->id, $field_name, $value, $table);
+  }
+
+  public function update_list($table, $list_values) {
+    return $this->service->update_list($this->id, $list_values, $table);
   }
 
   public function delete() {

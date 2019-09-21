@@ -32,7 +32,7 @@ class audit_service extends connection {
           ON c.audit_id = a.id and c.competitor = 0
         LEFT JOIN Audit_data as d
           on d.audit_id = a.id and d.competitor = 0
-        where id = %d", $id));
+        WHERE id = %d", $id));
   }
 
   // TODO: get moet de competitor erbij ophalen in 1 keer
