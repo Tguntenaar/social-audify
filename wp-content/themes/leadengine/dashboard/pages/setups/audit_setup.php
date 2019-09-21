@@ -20,8 +20,6 @@
     $clients = $client_control->get_all();
   ?>
 
-  <!-- <div id="instagramErrorModal" class="modal"></div>
-  <div id="competitorModal" class="modal"></div> -->
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->
@@ -70,14 +68,14 @@
     <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
         <div class="inner height-auto">
-          <span class="title title-audit-page">Create a Audit</span>
+          <span class="title title-audit-page">Create an Audit</span>
 
           <!-- One "tab" for each step in the form: -->
           <form id="regForm" class="submit-audit" action="">
 
             <!-- Facebook tab -->
             <div class="tab">
-              <span class="login-title">Login to retrieve the data of Facebook that is needed to create a Audit.</span>
+              <span class="login-title">Login to retrieve the data of Facebook that is needed to create an Audit.</span>
               <div class="fb-login-button login-center"
                   data-scope="manage_pages,instagram_basic,instagram_manage_insights,ads_read"
                   auth_type="rerequest"
