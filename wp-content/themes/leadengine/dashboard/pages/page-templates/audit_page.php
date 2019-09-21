@@ -439,7 +439,7 @@
               <span class="comp-label">
                 You: <br />
               </span><?php
-              manual_check($audit, $item, $edit_mode);?>
+              manual_check($audit, $item, $edit_mode, 0);?>
             </span>
 
             <!-- LEFT SIDE OF BLOCK -->
@@ -450,11 +450,11 @@
                 <span class="comp-label"><?php 
                   echo ucfirst($audit->competitor_name); ?>: <br />
                 </span><?php
-                manual_check($audit, $item, $edit_mode);?>
+                manual_check($audit, $item, $edit_mode, 1);?>
               </span><?php
             
           } else { // heeft geen competitor
-            manual_check($audit, $item, $edit_mode);
+            manual_check($audit, $item, $edit_mode, 0);
           }
           // Preview mode hide description animation
           if (!$edit_mode) { ?>
@@ -465,15 +465,15 @@
           }
         }
 
-        function manual_check($audit, $item, $edit_mode) {
-          $base = ($audit->has_comp) ? $audit->competitor : $audit;
+        function manual_check($audit, $item, $edit_mode, $comp) {
+          $base = ($comp) ? $audit->competitor : $audit;
           $value = $base->instagram_data->{$item['ig_name']};
-          $str = ($audit->has_comp) ? "comp-" : "";
+          $str = ($comp) ? "comp-" : "";
 
           if ($base->manual && $edit_mode) {?>
             <input type="text" name="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
           } else {
-            echo round($value, 2); ?></!--><?php
+            echo round($value, 2);
           }
         }
 
