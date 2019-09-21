@@ -1,12 +1,49 @@
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab);
 
+if ($('#nextBtn').length) {
+  $('#nextBtn').on('click', function() {
+    firstLogin();
+  });
+}
+
+
 function showIntro(display) {
   types = display ? ['block', 'none'] : ['none', 'block'];
   $('.create-block-box').css({'display': types[0]});
   $('.back').css({'display': types[1]});
   $('.overview-audit-report .left').css({'display': types[1]});
 }
+
+function firstLogin() {
+  showModal(initiateModal('errorModal', 'error', {
+    'text': "You are not logged in",
+    'subtext': "In order to create an audit you have to log in to facebook."
+  }));
+}
+
+/**
+ *  Getloginstatus maakt gebruik van de cache de tweede parameter true forceert
+ *  een roundtrip naar de facebook servers.
+ *  Gets called when the user is finished with the facebook login button.
+ * */
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+      nextPrev(1);
+      $('#nextBtn').off('click');
+      $('#nextBtn').on('click', function() {
+        nextPrev(1);
+      });
+    } else {
+      $('#nextBtn').off('click');
+      $('#nextBtn').on('click', function() {
+        firstLogin();
+      });
+    }
+  }, true);
+}
+
 
 function showTab(index) {
   // This function will display the specified tab of the form ...

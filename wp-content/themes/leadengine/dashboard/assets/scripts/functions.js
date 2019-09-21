@@ -7,21 +7,6 @@ jQuery.fn.scrollTo = function(elem) {
 };
 
 /**
- *  Getloginstatus maakt gebruik van de cache de tweede parameter true forceert
- *  een roundtrip naar de facebook servers.
- *  Gets called when the user is finished with the facebook login button.
- *  !!!Keep outside document ready scope!!
- * */
-function checkLoginState() {
-  console.log('check login state');
-  FB.getLoginStatus(function(response) {
-    if (response.status === 'connected') {
-      nextPrev(1);
-    } // else?
-  }, true);
-}
-
-/**
  * array.remove(anything)
  */
 Array.prototype.remove = function() {
