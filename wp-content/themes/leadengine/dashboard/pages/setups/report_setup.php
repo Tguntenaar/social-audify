@@ -171,7 +171,7 @@
           <div>
             <div class="nav-buttons">
               <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-              <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+              <button type="button" id="nextBtn">Next</button>
             </div>
           </div>
 

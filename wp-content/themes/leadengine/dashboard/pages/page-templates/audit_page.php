@@ -47,7 +47,8 @@
 
   // Post handling
   if (isset($_POST['iframe']) && $edit_mode) {
-    $audit->update('video_iframe', base64_encode($_POST['iframe']), 'Audit_template');
+    $value=  ($_POST['video-option'] == 'nothing') ? NULL : base64_encode($_POST['iframe']);
+    $audit->update('video_iframe', $value, 'Audit_template');
   }
 
   $post_names =  ['introduction', 'conclusion', 'facebook_advice', 
@@ -225,8 +226,8 @@
         <h3>Banner options:</h3>
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
-          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> /> <span class="radio-label">Iframe</span>
-          <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?>/> <span class="radio-label">Nothing</span>
+          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="iframe"/> <span class="radio-label">Iframe</span>
+          <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?> value="nothing"/> <span class="radio-label">Nothing</span>
           <div id="iframe-input" <?php echo $display_iframe; ?> >
             <input type="text" id="iframe-input" name="iframe" placeholder="Insert iframe(Loom/Youtube etc.)" pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))"
                    value='<?php if ($audit->video_iframe != NULL) { echo '<iframe '. stripslashes(base64_decode($audit->video_iframe)) .'</iframe>'; }?>'/>
@@ -703,6 +704,7 @@
       iframe.addClass("block");
       iframe.removeClass("none");
     });
+
     $("#nothing-option").click(function() {
       iframe.addClass("none");
       iframe.removeClass("block");
