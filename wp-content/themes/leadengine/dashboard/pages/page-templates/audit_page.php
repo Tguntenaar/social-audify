@@ -57,7 +57,7 @@
 
   foreach ($post_names as $post_name) {
     if (isset($_POST[$post_name]) && $edit_mode) {
-      $audit->update($post_name, sanitize_textarea_field($_POST[$post_name]), 'Audit_template');
+      $audit->update($post_name, sanitize_textarea_field(stripslashes($_POST[$post_name])), 'Audit_template');
     }
   }
 
@@ -432,7 +432,7 @@
         
         function competitor_code($audit, $edit_mode, $item) {
           // Preview mode hide description animation
-          if (!$edit_mode) { ?>
+          if (!$audit->manual) { ?>
             <span class="data_animation"><?php
           }
           if ($audit->has_comp) { ?>
@@ -458,11 +458,9 @@
             manual_check($audit, $item, $edit_mode, 0);
           }
           // Preview mode hide description animation
-          if (!$edit_mode) { ?>
+          if (!$audit->manual) { ?>
             </span>
-            <span class="explenation"><?php 
-              echo $item["desc"]; ?>
-            </span><?php 
+            <span class="explenation"><?php echo $item["desc"]; ?></span><?php 
           }
         }
 
@@ -477,7 +475,6 @@
             echo round($value, 2);
           }
         }
-
 
         foreach ($instagram_blocks as $item) {
           // Laat hem zien als edit mode aanstaat ?? of die bestaat in de database..
@@ -498,10 +495,10 @@
           }
         }
 
-          if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
-            <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php 
-          } ?>
-          </form><?php
+        if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
+          <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php 
+        } ?>
+        </form><?php
 
           if ($audit->manual == 1) { ?>
             <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; "><?php 

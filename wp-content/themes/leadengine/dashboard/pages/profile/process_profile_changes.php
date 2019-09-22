@@ -63,7 +63,7 @@
           $value = $_POST[$post_name];
 
           if (check_input_valid($value) && $value != $user->{$db_field}) {
-            $output[$db_field] = $value;
+            $output[$db_field] = sanitize_textarea_field(stripslashes($value));
           }
         }
       }
@@ -97,5 +97,4 @@
     include(dirname(__FILE__)."/../../../404.php");
     header("HTTP/1.0 404 Not Found", true, 404);
   }
-  // exit();
 ?>
