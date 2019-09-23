@@ -104,7 +104,7 @@
     <?php } ?>
 
     <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
-      <h4 style="padding-left: 15px;">Status recent send Reports and Audits</h4>
+      <h4 style="padding-left: 15px;">Status recent sent Reports and Audits</h4>
       <hr style="margin-left: 15px;" class="under-line" />
         <div class="overflow-x">
         <div class="acitivities">
@@ -139,7 +139,7 @@
 
           <!-- AUDIT STATS -->
           <div class="stat-box">
-            <span class="stat-box-title">Audits send</span>
+            <span class="stat-box-title">Audits sent</span>
             <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
             <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
           </div>
@@ -160,7 +160,7 @@
 
           <!-- REPORT STATS -->
           <div class="stat-box">
-            <span class="stat-box-title">Reports send</span>
+            <span class="stat-box-title">Reports sent</span>
             <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
             <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
           </div>

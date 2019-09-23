@@ -64,7 +64,7 @@
 
   foreach ($post_names as $post_name) {
     if (isset($_POST[$post_name]) && $edit_mode) {
-      $report->update($post_name, sanitize_textarea_field($_POST[$post_name]), 'Report_content');
+      $report->update($post_name, sanitize_textarea_field(stripslashes($_POST[$post_name])), 'Report_content');
     }
   }
   
