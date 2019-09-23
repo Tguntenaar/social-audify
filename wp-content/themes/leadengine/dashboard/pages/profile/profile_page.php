@@ -214,7 +214,7 @@
                 </ul>
                 <!-- mail 1 block -->
                 <p>Use #{name} to type the name of receiver in the mail.</p>
-                <div class="first-what-mail-block" style="">
+                <div class="first-what-mail-block">
                   <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
                     echo trim($user->mail_text);
                   ?></textarea>
@@ -399,7 +399,7 @@
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: '<strong>Your phone number:</strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail:</strong> This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
+        description: '<strong>Your phone number: </strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail: </strong>This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
       },
       avatar: {
         title: 'Avatar',
@@ -407,15 +407,15 @@
       },
       audit: {
         title: 'Audit Fields',
-        description: '<strong>Audit text:</strong>In order to speed up the process of sending audits you can add a standard introduction, conclusion, facebook, instagram and website text. This text will automatically be added to every audit you create. You can still add / change this per individual audit after filling this out.<br /><br /><strong>Visibility audit:</strong>Here you can configure which parts of the audit you want to be visible for your lead. For example: if you don’t offer web development, maybe you only want to check if they have the pixel installed. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
+        description: '<strong>Audit text: </strong>In order to speed up the process of sending audits you can add a standard introduction, conclusion, facebook, instagram and website text. This text will automatically be added to every audit you create. You can still add / change this per individual audit after filling this out.<br /><br /><strong>Visibility audit: </strong>Here you can configure which parts of the audit you want to be visible for your lead. For example: if you don’t offer web development, maybe you only want to check if they have the pixel installed. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
       },
       report: {
         title: 'Report Fields',
-        description: '<strong>Report text</strong>In order to speed up the process of sending your monthly reports, you can add a standard introduction and conclusion text which will be included in every report you generate. You can still add / change the text in every individual report after filling this out.<br /><br /><strong>Visibility report:</strong>Here you can configure which parts of the report you want to be visible for your client. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
+        description: '<strong>Report text: </strong>In order to speed up the process of sending your monthly reports, you can add a standard introduction and conclusion text which will be included in every report you generate. You can still add / change the text in every individual report after filling this out.<br /><br /><strong>Visibility report: </strong>Here you can configure which parts of the report you want to be visible for your client. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
       },
       mail: {
         title: 'Mail config',
-        description: '<strong>When:</strong> If you want, we can send your leads automatic reminders if they do not view their audit. You can configure the amount of days between every single email you want to send here.</br ><br /> <strong>Copy: </strong>You can configure the emails we will send to your leads concerning the audit. Every email and follow up can be configured individually. Use #{name} to enter the name of the client in the email. The emails will be send from our server, but it will show your email address as the sender. They will reply to your email!',
+        description: '<strong>When: </strong>If you want, we can send your leads automatic reminders if they do not view their audit. You can configure the amount of days between every single email you want to send here.</br ><br /> <strong>Copy: </strong>You can configure the emails we will send to your leads concerning the audit. Every email and follow up can be configured individually. Use #{name} to enter the name of the client in the email. The emails will be send from our server, but it will show your email address as the sender. They will reply to your email!',
       },
     };
 
