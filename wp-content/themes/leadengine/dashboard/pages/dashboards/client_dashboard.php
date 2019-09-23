@@ -65,7 +65,7 @@
           <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 edit-client-right">
             <input maxlength="25" type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters and numbers are allowed"><br />
             <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" ><br />
-            <input type="text" id="instagram_url" name="instagram_url" placeholder="username or url"><br />
+            <input type="text" id="instagram_url" name="instagram_url" placeholder="Instagram username or url"><br />
             <input type="text" id="website_url" name="website_url" placeholder="www.website.com" pattern="<?php echo $website_regex;?>"><br />
             <input type="email" id="mail_adress" name="client_mail" placeholder="mail@example.com"><br />
             <div id="ad-account-bttn-wrapper" style="display:none">

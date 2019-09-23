@@ -57,7 +57,7 @@
           <button type="button" class="toggleClient" id="toggle_facebook" onclick="toggle_client_options('facebook')"><i class="fas fa-minus-circle"></i></button>
 
           Instagram:<br>
-          <input type="text" id="instagram_url" name="instagram_url" placeholder="username or url"  maxlength="50" required>
+          <input type="text" id="instagram_url" name="instagram_url" placeholder="Instagram username or url"  maxlength="50" required>
           <button type="button" class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></button>
 
           Website:<br>
