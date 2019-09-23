@@ -125,7 +125,7 @@
                       <input maxlength="2" type="text" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
                           value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
                     } else { ?>
-                      <h6>The last range is less than or equal to 100</h6><?php
+                      <h6>The last range is less than or equal to 100 percent</h6><?php
                     } ?>
                     <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
                       echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
