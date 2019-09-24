@@ -67,7 +67,7 @@
       $report->update($post_name, sanitize_textarea_field($_POST[$post_name]), 'Report_content');
     }
   }
-  
+
 
   if(isset($_POST['followers_count']) || isset($_POST['avgEngagement']) ||
      isset($_POST['postsLM']) || isset($_POST['follows_count']) ||
@@ -240,7 +240,8 @@
       </div>
     </div>
 
-    <?php if($social_stats->instagram_data == NULL && $social_stats->facebook_data == NULL) { ?>
+    <?php if($social_stats->instagram_data != NULL
+             && $social_stats->facebook_data != NULL) { ?>
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
       <!-- Social Statistics -->
       <span class="facebook-inf-title" style="text-align:center; margin: 0;">Social Stats:</span>
