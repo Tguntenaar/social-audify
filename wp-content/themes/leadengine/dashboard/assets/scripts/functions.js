@@ -7,21 +7,6 @@ jQuery.fn.scrollTo = function(elem) {
 };
 
 /**
- *  Getloginstatus maakt gebruik van de cache de tweede parameter true forceert
- *  een roundtrip naar de facebook servers.
- *  Gets called when the user is finished with the facebook login button.
- *  !!!Keep outside document ready scope!!
- * */
-function checkLoginState() {
-  console.log('check login state');
-  FB.getLoginStatus(function(response) {
-    if (response.status === 'connected') {
-      nextPrev(1);
-    } // else?
-  }, true);
-}
-
-/**
  * array.remove(anything)
  */
 Array.prototype.remove = function() {
@@ -95,6 +80,7 @@ function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   }, true);
 }
 
+// TODO: maak dit error bestendig.
 function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
   // Not dynamic, only works with comparing 2 values...
   var barData = new Array(), barLabels = new Array(),
@@ -136,66 +122,72 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 }
 
 // Parse Client Info for client setup, audit setup and report setup.
-function parsePageInput(field) {
-  if (!$(field).val()) {
+function parseClientInputFields(field) {
+
+  var unparsed = $(field).val();
+  
+  if (!unparsed) {
     return;
   }
 
-  var unparsed, parsed, pattern, matchedArray;
-  const fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
-
-  if ($(field).attr('id').includes('instagram')) {
-    pattern = '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_\-]{0,28})?';
-  } else if ($(field).attr('id').includes('facebook')) {
-    pattern = '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_\-]*)?';
-  } else {
-    pattern = '(.*)'; // FIXME:
+  var patterns = {
+    'facebook_url': '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_.\-]*)?',
+    'instagram_url': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?',
+    'website_url': '(.*)',
   }
 
-  unparsed = $(field).val();
-  matchedArray = unparsed.match(pattern);
+  var matchedArray = unparsed.match(patterns[field.id]);
 
   if (matchedArray !== null && matchedArray[1] !== 'undefined') {
-    parsed = matchedArray[1];
+    $(field).val(matchedArray[1]);
+    grabPageId(field, matchedArray[1]);
+  }
+}
 
-    $(field).val(parsed);
-    if ($(field).attr('id').includes('facebook')) {
-      const pageID = parsed.match(fbPageID);
-
-      if (pageID) {
-        $(field).val(pageID[1]);
-      }
+function grabPageId(field, found) {
+  if (field.id.includes('facebook')) {
+    var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
+    var pageID = found.match(fbPageID);
+  
+    if (pageID) {
+      $(field).val(pageID[1]);
     }
   }
-  return;
 }
 
 /**
  * Deze functie word zowel in client dashboard als in report setup gebruikt
  */
-function getAdAccounts() {
+function getAdAccounts(ad_id) {
   // Don't make the same request a second time
-  if (globalAdAccounts.length == 0) {
-    FB.api(getAdAccountsQuerie(), function (response) {
+  if (Instance.adAccounts.length == 0) {
+    console.log(getAdAccountsQuery());
+    FB.api(getAdAccountsQuery(), function (response) {
       if (response && !response.error && response.data.length != 0) {
   
         response.data.forEach(function(ad_account) {
           const {name, id} = ad_account;
   
-          var ad_id = $('#ad_id').val();
           var selected = (ad_id == id) ? 'selected' : '';
-  
           var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
   
           $('#ad-account-list').append(str);
         });
         
-        globalAdAccounts = response.data;
+        Instance.adAccounts = response.data;
       } else if (response.data.length == 0) {
           $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
       } else {
         logResponse(response);
       }
+    });
+  } else {
+    $('#ad-account-list').empty();
+    Instance.adAccounts.forEach(function(account) {
+      const {name, id} = account;
+      var selected = (ad_id == id) ? 'selected' : '';
+      var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
+      $('#ad-account-list').append(str);
     });
   }
 }

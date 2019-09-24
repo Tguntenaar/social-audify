@@ -7,9 +7,9 @@
       "is_icon" => 0
     ],
     ["type" => "fb_pem",
-      "name" => "Post each month",
+      "name" => "Posts each month",
       "fb_name" => "totalPostLastMonth",
-      "desc" => "The amount of post per month.",
+      "desc" => "The number of posts per month.",
       "is_icon" => 0
     ],
     ["type" => "fb_apl",
@@ -44,6 +44,21 @@
      ]
   );
 
+  $facebook_ad_blocks = array(
+    ["type" => "fb_ads",
+      "name" => "Running ads",
+      "fb_name" => "fb_ads",
+      "desc" => "Click here to watch if this page is currently running ads.",
+      "is_comp" => 0
+    ],
+    ["type" => "fb_ads_comp",
+      "name" => "Competitor running ads",
+      "fb_name" => "fb_ads_comp",
+      "desc" => "Click here to watch if this page is currently running ads.",
+      "is_comp" => 1
+    ]
+);
+
   $instagram_blocks = array(
     ["type" => "insta_nof",
       "name" => "Followers",
@@ -56,9 +71,9 @@
       "desc" => "Average engagement."
     ],
     ["type" => "insta_nplm",
-      "name" => "Number of post last month.",
+      "name" => "Number of posts last month.",
       "ig_name" => "postsLM",
-      "desc" => "Number of post last month."
+      "desc" => "Number of posts last month."
     ],
     ["type" => "insta_nopf",
       "name" => "Following",

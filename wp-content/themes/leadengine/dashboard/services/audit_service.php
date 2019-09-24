@@ -32,10 +32,10 @@ class audit_service extends connection {
           ON c.audit_id = a.id and c.competitor = 0
         LEFT JOIN Audit_data as d
           on d.audit_id = a.id and d.competitor = 0
-        where id = %d", $id));
+        WHERE id = %d", $id));
   }
 
-
+  // TODO: get moet de competitor erbij ophalen in 1 keer
   public function get_competitor($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
       "SELECT d.manual, $this->crawl_fields, $this->data_fields FROM Audit as a
@@ -44,6 +44,22 @@ class audit_service extends connection {
         LEFT JOIN Audit_crawl as c
           ON c.audit_id = a.id and c.competitor = 1
         where id = %d", $id));
+  }
+
+  public function get_all_audits() {
+    return $this->dbwp->get_results(
+      "SELECT a.*, d.manual, $this->template_fields, $this->visibility_fields, $this->crawl_fields, $this->data_fields
+        FROM Audit as a
+        LEFT JOIN Audit_template as t
+          ON t.audit_id = a.id
+        LEFT JOIN Audit_stat_visibility as v
+          ON v.audit_id = a.id
+        LEFT JOIN Audit_crawl as c
+          ON c.audit_id = a.id and c.competitor = 0
+        LEFT JOIN Audit_data as d
+          on d.audit_id = a.id and d.competitor = 0
+        WHERE a.create_date >= DATE(NOW()) - INTERVAL 7 DAY
+        ORDER BY a.create_date DESC");
   }
 
 
@@ -73,29 +89,19 @@ class audit_service extends connection {
   }
 
 
-  public function website_check($id) { 
+  public function website_check($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
       "SELECT COUNT(*) AS count FROM Audit_crawl WHERE audit_id = %d", $id))[0];
   }
 
 
   // TODO : bovenste update functie is alles overkoepelende, volgende twee zijn eigenlijk overbodig...
-  public function update($id, $table, $field_name, $field_value) {
+  public function update($id, $table, $field_name, $field_value, $comp) {
     $priref = $table === 'Audit' ? 'id' : 'audit_id';
-    return $this->dbwp->update($table,
-      array($field_name => $field_value), array($priref => $id));
+    $where = $table == 'Audit_data' ? array($priref => $id, 'competitor' => $comp) : array($priref => $id);
+    return $this->dbwp->update($table, array($field_name => $field_value), $where);
   }
-
-  public function update_ad_field($id, $field_name, $field_value, $comp) {
-    return $this->dbwp->update('Audit_data',
-      array($field_name => json_encode($field_value)), array('audit_id' => $id, 'competitor' => $comp));
-  }
-
-  public function update_template($id, $field_name, $field_value) {
-    return $this->dbwp->update('Audit_template',
-      array($field_name => $field_value), array('audit_id' => $id));
-  }
-
+  
 
   public function toggle_config_visibility($id, $field_name) {
     // TODO : dit is nog niet attack-veilig, is wss een betere wp functie voor...
@@ -136,7 +142,7 @@ class audit_service extends connection {
 
 
   private $template_fields = "introduction, conclusion, facebook_advice, instagram_advice, website_advice, facebook_score, instagram_score, website_score, video_iframe";
-  private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads";
+  private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp";
   private $crawl_fields = "facebook_pixel, google_analytics, google_tagmanager, mobile_friendly, load_time, website_size";
   private $data_fields = "facebook_name, facebook_data, instagram_name, instagram_data";
 }

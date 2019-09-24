@@ -641,6 +641,10 @@ nav ul a:hover {
 	margin-top: 130px !important;
 }
 
+.audit-intro-text p {
+	font-weight: 100;
+}
+
 .intro-video {
 	width: 100% !important;
 	height: 500px;
@@ -867,6 +871,16 @@ nav ul a:hover {
 	line-height: 50px;
 }
 
+#wpua-edit-attachment-existing {
+	display: none;
+}
+
+#wpua-file-existing {
+	background: #487dd7 !important;
+	border: 0;
+	color: #fff;
+}
+
 .overlay-ad-account p:hover {
 	opacity: 0.8;
 }
@@ -928,7 +942,6 @@ nav ul a:hover {
 		float:left;
 		overflow-y: scroll;
 		padding-left: 5px;
-		padding-right: 5px;
 }
 
 .overview-audit-report .right .inner .title,
@@ -1761,7 +1774,7 @@ textarea {
 }
 
 .chart-instagram {
-	 margin-top: 160px !important;
+	 margin-top: 150px !important;
 }
 
 .container-chart {
@@ -2039,14 +2052,15 @@ h3 {
 }
 
 .audit-intro-text textarea{
-	background: #f5f6fa;
+	/* background: #f5f6fa; */
 }
 
 .audit-company-name {
 	width: 100%;
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 	font-size: 24px;
 	color: #6e9d9c;
+	display: block;
 }
 
 h4 {
@@ -2973,6 +2987,10 @@ label {
 	background-color:#f7f7f7;
 }
 
+#nav-icon2 {
+	display: none;
+}
+
 /* On mouse-over, add a grey background color */
 .c_container:hover input ~ .checkmark {
   opacity: 0.7;
@@ -3608,6 +3626,13 @@ tr input {
 	position: relative;
 }
 
+#mail-settings textarea {
+	border: 1px solid #e0e0e0;
+	width: 50%;
+	border-radius: 2px;
+	padding: 10px;
+}
+
 .information {
 	margin-left: 10px;
 }
@@ -3697,7 +3722,7 @@ h4 {
 #audit-settings ul,
 #report-settings ul,
 #mail-settings ul {
-	height: 40px;
+	height: auto;
 	line-height: 40px;
 	width: 100%;
 	float: left;
@@ -3792,7 +3817,8 @@ h4 {
    text-align: center;
 }
 
-#nav-icon1 {
+#nav-icon1,
+#nav-icon2 {
 	display: none;
 }
 
@@ -3807,6 +3833,39 @@ h4 {
 
 .responsive-label-ad {
 	display: none;
+}
+
+/* Analytics dashboard */
+.a-container {
+	padding: 20px;
+	height: 100vh;
+	background: #ecf0f1;
+	overflow-y: scroll;
+}
+
+.stat-container-a {
+	margin-top: 15px;
+	height: 550px;
+	overflow-y: scroll;
+	margin-bottom: 15px;
+}
+
+.a-row {
+	height: 50px;
+	line-height: 50px;
+	float:left;
+	border-bottom: 1px solid grey;
+	color: #000;
+}
+
+.a-col {
+	float: left;
+
+}
+
+.analytics-stats {
+	margin-left: 15px;
+	margin-top: 15px;
 }
 
 @media only screen and (max-width: 1200px) {
@@ -3915,7 +3974,8 @@ h4 {
 		font-size: 14px !important;
 	}
 
-	#nav-icon1 {
+	#nav-icon1,
+	#nav-icon2 {
 		display: block;
 		width: 30px;
 		height: 30px;
@@ -3933,7 +3993,8 @@ h4 {
 		cursor: pointer;
 	}
 
-	#nav-icon1 span {
+	#nav-icon1 span,
+	#nav-icon2 span{
 		display: block;
 		position: absolute;
 		height: 3px;
@@ -3951,19 +4012,23 @@ h4 {
 		transition: .25s ease-in-out;
 	}
 
-	#nav-icon1 span:nth-child(1) {
+	#nav-icon1 span:nth-child(1),
+	#nav-icon2 span:nth-child(1) {
 		top: 0px;
 	}
 
-	#nav-icon1 span:nth-child(2) {
+	#nav-icon1 span:nth-child(2),
+	#nav-icon2 span:nth-child(2) {
 		top: 9px;
 	}
 
-	#nav-icon1 span:nth-child(3) {
+	#nav-icon1 span:nth-child(3),
+	#nav-icon2 span:nth-child(3) {
 		top: 18px;
 	}
 
-	#nav-icon1.open span:nth-child(1) {
+	#nav-icon1.open span:nth-child(1),
+	#nav-icon2.open span:nth-child(1) {
 		top: 9px;
 		-webkit-transform: rotate(135deg);
 		-moz-transform: rotate(135deg);
@@ -3971,12 +4036,14 @@ h4 {
 		transform: rotate(135deg);
 	}
 
-	#nav-icon1.open span:nth-child(2) {
+	#nav-icon1.open span:nth-child(2),
+	#nav-icon2.open span:nth-child(2) {
 		opacity: 0;
 		left: -60px;
 	}
 
-	#nav-icon1.open span:nth-child(3) {
+	#nav-icon1.open span:nth-child(3),
+	#nav-icon2.open span:nth-child(3) {
 		top: 9px;
 		-webkit-transform: rotate(-135deg);
 		-moz-transform: rotate(-135deg);
@@ -4136,6 +4203,10 @@ h4 {
 }
 
 @media only screen and (max-width: 768px) {
+	.mobile-hide {
+		display: none;
+	}
+
 	.steps {
 		display: none !important;
 	}
@@ -4174,18 +4245,40 @@ h4 {
 	}
 
 	.sub-header a,
-	.sub-header div,
+	.sub-header #delete-this-audit,
 	.sub-header button {
 		width: 100%;
 		display: block;
 		float: left;
 	}
+	.sub-header #delete-this-audit {
+		width: 60px;
+	}
+
 	.sub-header button {
 		text-align: left;
 	}
 	.sub-header {
+		min-height:60px;
 		height: auto;
 	}
+
+	#nav-icon2 {
+		display: block;
+		left: 30px;
+		top: 20px;
+		position: absolute;
+	}
+
+	#copy_link,
+	#mail_link {
+		padding: 0;
+	}
+
+	.home-link {
+		margin-top: 50px;
+	}
+
 	#delete-this-audit {
 		position: absolute;
 		top: 0; right: 15px;
@@ -4230,6 +4323,18 @@ h4 {
 
 
 @media only screen and (max-width: 620px) {
+	.fb_iframe_widget_fluid {
+		margin-top: 20px;
+	}
+
+	.login-title {
+		margin-bottom: 60px;
+	}
+
+	.content-title {
+		display: none;
+	}
+
 	.intro-video iframe,
 	.intro-video {
 		height: 300px !important;

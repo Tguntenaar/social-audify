@@ -13,7 +13,6 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
-  <script>var testing_git = 'thomas git test';</script>
 </head>
 <body>
   <!-- Facebook JS SDK moet direct na de opening body tag -->
@@ -40,7 +39,12 @@
             if (path.includes('client-dashboard')) {
               showConnectAdAccount()
             } else {
-              nextPrev(1); // skip facebook step if already logged in
+              // skip facebook step if already logged in
+              nextPrev(1);
+              // try to skip client step 
+              if (path.includes('audit-setup')) {
+                nextPrev(1);
+              } 
             }
           } else {
             $('.submitBttn').css('display', 'none');
@@ -68,9 +72,6 @@
     });
   </script>
 
-  <!-- Use this modal instead of alerts. -->
-  <div id="errorModal" class="modal"></div>
-
   <div class="white-screen" style="display: none;">
     <div class="wrap">
       <div class="loading">
@@ -79,6 +80,10 @@
       </div>
     </div>
   </div>
+
+  
+  <!-- Global popup modals -->
+  <div id="errorModal" class="modal"></div>
 
   <div id="instagramErrorModal" class="modal"></div>
   <div id="competitorModal" class="modal"></div>

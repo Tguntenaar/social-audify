@@ -74,11 +74,18 @@ class audit_controller {
 
 
   function get($id) {
-    // TODO: check if not false
+    // TODO: check if not false && dynamisch competitor ophalen/ decode
     $sql_audit = $this->service->get($id);
-    return new audit($this->service, $sql_audit[0]);
+    $audit = new audit($this->service, $sql_audit[0]);
+    $audit->get_competitor();
+    $audit->decode_json();
+    return $audit;
   }
 
+  public function update($audit_id, $field_name, $value, $table = 'Audit', $comp = 0) {
+    $this->sql_data->$field_name = $value;
+    return $this->service->update($audit_id, $table, $field_name, $value, $comp);
+  }
 
   function get_all($months = NULL, $user_id = NULL) {
     $user = $user_id == NULL ? get_current_user_id() : $user_id;
@@ -90,6 +97,10 @@ class audit_controller {
     }
 
     return $return_audits;
+  }
+
+  function get_all_audits() {
+     return  $this->service->get_all_audits();
   }
 
 

@@ -403,11 +403,11 @@
     </tr>
     <tr valign="top">
       <th scope="row" valign="top">
-        <label for="rcp_btw_number"><?php _e( 'FAT number', 'rcp' ); ?></label>
+        <label for="rcp_btw_number"><?php _e( 'VAT number', 'rcp' ); ?></label>
       </th>
       <td>
         <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
-        <p class="description"><?php _e( 'The member\'s FAT number', 'rcp' ); ?></p>
+        <p class="description"><?php _e( 'The member\'s VAT number', 'rcp' ); ?></p>
       </td>
     </tr>
     <?php
@@ -426,7 +426,7 @@
       rcp_errors()->add( 'invalid_profession', __( 'Please enter your phone number', 'rcp' ), 'register' );
     }
     if (empty( $posted['rcp_btw_number'])) {
-      rcp_errors()->add( 'invalid_location', __( 'Please enter your FAT number', 'rcp' ), 'register' );
+      rcp_errors()->add( 'invalid_location', __( 'Please enter your VAT number', 'rcp' ), 'register' );
     }
   }
 

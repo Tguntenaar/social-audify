@@ -57,11 +57,11 @@ class report {
 		}
   }
 
-  public function insert_data($social_stats, $chart_data, $competitor = 0, $manual, $currency = NULL) {
+  public function insert_data($social_stats, $chart_data, $competitor = 0, $manual, $currency = NULL, $instagram_name = NULL) {
     if ($competitor == 0) {
       $this->sql_data->social_stats = $social_stats;
       $this->sql_data->chart_data = $chart_data;
-      return $this->service->insert_data($this->id, $social_stats, $chart_data, $competitor, $manual, $currency);
+      return $this->service->insert_data($this->id, $social_stats, $chart_data, $competitor, $manual, $currency, $instagram_name);
     }
 
     if ($competitor == 1) {

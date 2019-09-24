@@ -10,7 +10,7 @@
 <?php
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
-  
+
   include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
   include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
 
@@ -18,26 +18,24 @@
   $audit_visibility = $user->get_visibility('audit');
   $report_visibility = $user->get_visibility('report');
 
+  $ranges = (object) array(
+    ["name" => "facebook", "code" => "fb", "db" => "fb"],
+    ["name" => "instagram", "code" => "ig", "db" => "insta"],
+    ["name" => "website", "code" => "wb", "db" => "website"]
+  );
+
   function print_list_checkboxes($blocks, $title, $visibility_list) {
     echo "<h4>${title}</h4>";
-    // key is how the fields are called in the database
-    // value is what we show users
     foreach ($blocks as $block) {
-      // wheather an value is checked
-      $dbname = $block['type'];
-      $fullname = $block['name'];
-      $checked = ((array)$visibility_list[0])[$dbname] ? 'checked' : '';
-      echo " <div class='form-check'>
-              <input type='hidden' name='check-${dbname}' value='0'>
-              <input type='checkbox' name='check-${dbname}' value='1' class='form-check-input' id='check-${dbname}' ${checked}>
-              <label class='form-check-label' for='defaultCheck1'>
-                ${fullname}
-              </label>
-            </div>";
+      $item = (object) $block;
+      $checked = $visibility_list[0]->{$item->type} ? 'checked' : '';
+      echo "<div class='form-check'>
+        <input type='hidden' name='check-$item->type' value='0'>
+        <input type='checkbox' name='check-$item->type' class='form-check-input' value='1' id='check-$item->type' $checked>
+        <label class='form-check-label' for='defaultCheck1'>$item->name</label>
+      </div>";
     }
   }
-
-  // echo '<pre>' . var_export($report_visibility, true) . '</pre>';
 ?>
 <head>
   <meta charset="utf-8">
@@ -56,6 +54,7 @@
             <li id="report-click">Intro / conlusion Reports</li>
             <li id="mail-click">Mail config</li>
           </ul>
+          
           <div id="profile-member">
             <h3 class="h3-fix">Profile settings</h3>
             <?php echo do_shortcode('[rcp_profile_editor]'); ?>
@@ -85,7 +84,7 @@
               <!-- intro -->
               <div class="intro-audit-block">
                 <h4>Introduction Audit</h4>
-                <textarea input="text"  name="introduction-audit" id="introduction-audit"><?php
+                <textarea maxlength="999" input="text"  name="introduction-audit" id="introduction-audit"><?php
                   echo trim($user->intro_audit);
                 ?></textarea>
               </div>
@@ -97,112 +96,71 @@
                   <li id="ig-audit-visibility-item">Instagram</li>
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
-                <div class="fb-audit-visibility-block">
-                  <?php print_list_checkboxes($facebook_blocks, 'facebook', $audit_visibility); ?>
+                <div class="fb-audit-visibility-block"><?php
+                  print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
                 </div>
-                <div class="ig-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
+                <div class="ig-audit-visibility-block" style='display:none'><?php
+                  print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
                 </div>
-                <div class="wb-audit-visibility-block" style='display:none'>
-                  <?php print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
+                <div class="wb-audit-visibility-block" style='display:none'><?php
+                  print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
                 </div>
               </div>
               <!-- conclusion -->
               <div class="conclusion-audit-block">
                 <h4>Conclusion Audit</h4>
-                <textarea  input="text"  name="conclusion-audit" id="conclusion-audit"><?php
+                <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
                   echo trim($user->conclusion_audit);
                 ?></textarea>
-              </div>
+              </div><?php
 
-              <div class="fb-audit-block">
-                <!-- Set standard text Facebook by range : 1 -->
-                <h4>Facebook Audit text</h4>
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_facebook_1" name="range_facebook_1" placeholder="30" value="<?php echo $user->range_number_fb_1; ?>"/>
-                <textarea  input="text"  name="facebook-audit_1" id="facebook-audit_1"><?php
-                  echo $user->text_fb_1;
-                ?></textarea>
-
-                <!-- Set standard text Facebook by range : 2 -->
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_facebook_2" name="range_facebook_2" placeholder="60" value="<?php echo $user->range_number_fb_2; ?>" />
-                <textarea  input="text"  name="facebook-audit_2" id="facebook-audit_2"><?php
-                  echo $user->text_fb_2;
-                ?></textarea>
-
-                <!-- Set standard text Facebook by range : 3 -->
-                <h6>The last range is less then or equal to 100</h6>
-                <textarea  input="text"  name="facebook-audit_3" id="facebook-audit_3"><?php
-                  echo $user->text_fb_3;
-                ?></textarea>
-              </div>
-
-              <div class="ig-audit-block">
-                <h4>Instagram Audit text</h4><?php
-
-                for ($i = 1; $i < 3; $i++) { ?>
-                  <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                  <input type="text" name="range_insta_<?php echo $i; ?>" id="range_insta_<?php echo $i; ?>" placeholder="30" value="<?php echo $user->{"range_number_insta_$i"}; ?>" />
-                  <textarea input="text" name="insta-audit_<?php echo $i; ?>" id="insta-audit_<?php echo $i; ?>"><?php echo $user->{"text_insta_$i"}; ?></textarea><?php
-                } ?>
-
-                <h6>The last range is less then or equal to 100</h6>
-                <textarea input="text" name="insta-audit_3" id="insta-audit_3"><?php echo $user->text_insta_3; ?></textarea>
-              </div>
-
-              <div class="wb-audit-block">
-                <h4>Website Audit text</h4>
-
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_website_1" name="range_website_1" placeholder="30" value="<?php echo $user->range_number_website_1; ?>" />
-                <textarea  input="text"  name="website-audit_1" id="website-audit_1"><?php
-                  echo $user->text_website_1;
-                ?></textarea>
-
-                <!-- Set standard text Insta by range : 2 -->
-                <h6>Show this text till the range that you select, this way it faster to create an audit</h6>
-                <input type="text" id="range_website_2" name="range_website_2" placeholder="60" value="<?php echo $user->range_number_website_2; ?>" />
-                <textarea  input="text"  name="website-audit_2" id="website-audit_2"><?php
-                  echo $user->text_website_2;
-                ?></textarea>
-
-                <!-- Set standard text Insta by range : 3 -->
-                <h6>The last range is less then or equal to 100</h6>
-                <textarea input="text"  name="website-audit_3" id="website-audit_3"><?php
-                  echo $user->text_website_3;
-                ?></textarea>
-              </div>
+              // ranges
+              foreach ($ranges as $range) { 
+                $item = (object) $range; ?>
+                <div class="<?php echo $item->code; ?>-audit-block">
+                  <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
+                  for ($i = 1; $i <= 3; $i++) { 
+                    if ($i < 3) { ?>
+                      <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                      <input maxlength="2" type="text" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                          value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
+                    } else { ?>
+                      <h6>The last range is less than or equal to 100 percent</h6><?php
+                    } ?>
+                    <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
+                      echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
+                  } ?>
+                </div><?php
+              } ?> 
+              <!-- error notify -->
               <div class="error-display-audit"></div>
               <input type="submit" value="Update" class="update-button" >
             </form>
 
             <div class="profile-exp">
-                <i id="audit-exp" class="information fas fa-info"></i>
+              <i id="audit-exp" class="information fas fa-info"></i>
             </div>
           </div>
 
           <div id="report-settings">
             <h3 class="h3-fix">Report text</h3>
-
             <ul>
               <li id="intro-report-item" class="active-menu-item">Intro text</li>
               <li id="conclusion-report-item">Conclusion text</li>
               <li id="visibility-report-item">Visibility report</li>
             </ul>
-
             <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
               <!-- intro report -->
               <div class="intro-report-block">
                 <h4>Introduction Report</h4>
-                <textarea  input="text"  name="introduction-report" id="introduction-report"><?php
+                <textarea maxlength="999" input="text"  name="introduction-report"><?php
                   echo trim($user->intro_report);
                 ?></textarea>
               </div>
               <!-- conclusion report -->
               <div class="conclusion-report-block">
                 <h4>Conclusion Report</h4>
-                <textarea  input="text"  name="conclusion-report" id="conclusion-report"><?php
+                <textarea maxlength="999" input="text"  name="conclusion-report"><?php
                   echo trim($user->conclusion_report);
                 ?></textarea>
               </div>
@@ -256,19 +214,19 @@
                 </ul>
                 <!-- mail 1 block -->
                 <p>Use #{name} to type the name of receiver in the mail.</p>
-                <div class="first-what-mail-block" style="">
-                  <textarea  input="text" name="mail_text" id="mail_text"><?php
+                <div class="first-what-mail-block">
+                  <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
                     echo trim($user->mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
-                <div class="second-what-mail-block" style="display:none">
+                <div maxlength="1999" class="second-what-mail-block" style="display:none">
                   <textarea  input="text" name="second_mail_text" id="mail_text2"><?php
                     echo trim($user->second_mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
-                <div class="third-what-mail-block" style="display:none">
+                <div maxlength="1999" class="third-what-mail-block" style="display:none">
                   <textarea  input="text" name="third_mail_text" id="mail_text3"><?php
                     echo trim($user->third_mail_text);
                   ?></textarea>
@@ -298,52 +256,17 @@
       $('#third-day-value').text($('#day_3').val());
     });
 
-    $("#mail_config").submit(function(e) {
+    $("#audit-form").submit(function(e) {
       e.preventDefault();
-      $('.error-display-mail').empty();
-
-      if (length_input($("#mail_text").val())) {
-        $('.error-display-mail').append("<span style='display: block; color: red; font-size: 14px;'>Text can't be longer then 1000 characters.</span>");
-        return;
-      }
-
-      if (!$.isNumeric($("#day_1").val()) || !$.isNumeric($("#day_2").val()) || !$.isNumeric($("#day_3").val())) {
-        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
-        return;
-      }
-
-      if ($("#day_1").val() < $("#day_2").val() && $("#day_2").val() < $("#day_3").val()) {
-        this.submit();
-      } else {
-        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller then Day 2 and Day2 smaller then Day 3.</span>");
-      }
-    });
-
-    $("#audit-form").submit(function(e){
-      e.preventDefault();
-
       $('.error-display-audit').empty();
 
-      console.log($("#insta-audit_1").val());
-      console.log($("#insta-audit_2").val());
-      console.log($("#insta-audit_3").val());
+      var location = $('#audit-form');
 
-      console.log($("#range_insta_1").val());
-      console.log($("#range_insta_2").val());
+      if (location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val() ||
+          location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val() ||
+          location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
 
-      if ($("#facebook-audit_1").val() > 999 || $("#facebook-audit_2").val() > 999 || $("#facebook-audit_3").val() > 999 ||
-          $("#insta-audit_1").val() > 999 || $("#insta-audit_2").val() > 999 || $("#insta-audit_3").val() > 999 ||
-          $("#website-audit_1").val() > 999 || $("#website-audit_2").val() > 999 || $("#website-audit_3").val() > 999 ||
-          $("#conclusion-audit").val() > 999 || $("#introduction-audit").val() > 999) {
-
-        $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>Text can't be longer then 1000 characters.</span>");
-        return;
-      }
-
-      if ($("#range_facebook_1").val() > $("#range_facebook_2").val() ||
-          $("#range_insta_1").val() > $("#range_insta_2").val() || $("#range_website_1").val() > $("#range_website_2").val()) {
-
-        $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller then the second one.</span>");
+        $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
         return;
       }
 
@@ -354,17 +277,25 @@
       e.preventDefault();
       $('.error-display-report').empty();
 
-      if (length_input($("#introduction-report").val()) || length_input($("#conclusion-report").val())) {
-        $('.error-display-report').append("<span style='display: block; color: red; font-size: 14px;'>Text can't be longer then 1000 characters.</span>");
-        return;
-      }
-
       this.submit();
     });
 
-    function length_input(input) {
-      return input.length > 999;
-    }
+    $("#mail_config").submit(function(e) {
+      e.preventDefault();
+      $('.error-display-mail').empty();
+
+      if (!$.isNumeric($("#day_1").val()) || !$.isNumeric($("#day_2").val()) || !$.isNumeric($("#day_3").val())) {
+        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
+        return;
+      }
+
+      if (parseInt($("#day_1").val()) >= parseInt($("#day_2").val()) || parseInt($("#day_2").val()) >= parseInt($("#day_3").val())) {
+        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller than Day 2 and Day 2 smaller than Day 3.</span>");
+        return;
+      }
+      
+      this.submit();
+    });
 
     $("#intro-audit-item").click(function() { togglePreferenceUI('intro', 'audit') });
     $("#conclusion-audit-item").click(function() { togglePreferenceUI('conclusion', 'audit') });
@@ -464,11 +395,11 @@
     $("#mail-click").on('click', function(event){
       document.getElementById('mail-settings').scrollIntoView(false);
     });
- 
+
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: '<strong>Your phone number:</strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail:</strong> This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
+        description: '<strong>Your phone number: </strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail: </strong>This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
       },
       avatar: {
         title: 'Avatar',
@@ -476,15 +407,15 @@
       },
       audit: {
         title: 'Audit Fields',
-        description: '<strong>Audit text:</strong>In order to speed up the process of sending audits you can add a standard introduction, conclusion, facebook, instagram and website text. This text will automatically be added to every audit you create. You can still add / change this per individual audit after filling this out.<br /><br /><strong>Visibility audit:</strong>Here you can configure which parts of the audit you want to be visible for your lead. For example: if you don’t offer web development, maybe you only want to check if they have the pixel installed. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
+        description: '<strong>Audit text: </strong>In order to speed up the process of sending audits you can add a standard introduction, conclusion, facebook, instagram and website text. This text will automatically be added to every audit you create. You can still add / change this per individual audit after filling this out.<br /><br /><strong>Visibility audit: </strong>Here you can configure which parts of the audit you want to be visible for your lead. For example: if you don’t offer web development, maybe you only want to check if they have the pixel installed. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
       },
       report: {
         title: 'Report Fields',
-        description: '<strong>Report text</strong>In order to speed up the process of sending your monthly reports, you can add a standard introduction and conclusion text which will be included in every report you generate. You can still add / change the text in every individual report after filling this out.<br /><br /><strong>Visibility report:</strong>Here you can configure which parts of the report you want to be visible for your client. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
+        description: '<strong>Report text: </strong>In order to speed up the process of sending your monthly reports, you can add a standard introduction and conclusion text which will be included in every report you generate. You can still add / change the text in every individual report after filling this out.<br /><br /><strong>Visibility report: </strong>Here you can configure which parts of the report you want to be visible for your client. Of course, you can still decide to turn the visibility of individual parts on/off for every audit.',
       },
       mail: {
         title: 'Mail config',
-        description: '<strong>When:</strong> If you want, we can send your leads automatic reminders if they do not view their audit. You can configure the amount of days between every single email you want to send here.</br ><br /> <strong>Copy: </strong>You can configure the emails we will send to your leads concerning the audit. Every email and follow up can be configured individually. Use #{name} to enter the name of the client in the email. The emails will be send from our server, but it will show your email address as the sender. They will reply to your email!',
+        description: '<strong>When: </strong>If you want, we can send your leads automatic reminders if they do not view their audit. You can configure the amount of days between every single email you want to send here.</br ><br /> <strong>Copy: </strong>You can configure the emails we will send to your leads concerning the audit. Every email and follow up can be configured individually. Use #{name} to enter the name of the client in the email. The emails will be send from our server, but it will show your email address as the sender. They will reply to your email!',
       },
     };
 

@@ -40,7 +40,7 @@ class audit {
   }
 
 
-  // TODO : Dit moet dynamischer kunnen...
+  // TODO: Dit moet dynamischer kunnen...
   public function get_competitor() {
     $result = $this->service->get_competitor($this->id);
     if ($this->has_comp = !empty($result)) {
@@ -48,7 +48,7 @@ class audit {
     }
   }
 
-  // TODO : Dit moet ook dynamischer kunnen...
+  // TODO: Dit moet ook dynamischer kunnen...
   public function decode_json() {
     $this->sql_data->facebook_data = json_decode($this->sql_data->facebook_data);
     $this->sql_data->instagram_data = json_decode($this->sql_data->instagram_data);
@@ -102,16 +102,10 @@ class audit {
   }
 
 
-  public function update($field_name, $value, $table = 'Audit') {
+  public function update($field_name, $value, $table = 'Audit', $comp = 0) {
     $this->sql_data->$field_name = $value;
-    return $this->service->update($this->id, $table, $field_name, $value);
+    return $this->service->update($this->id, $table, $field_name, $value, $comp);
   }
-
-  public function update_manual($field_name, $value, $comp) {
-    $this->sql_data->$field_name = $value;
-    return $this->service->update_ad_field($this->id, $field_name, $value, $comp);
-  }
-
 
   // Flips the current post status
   public function change_post_status() {

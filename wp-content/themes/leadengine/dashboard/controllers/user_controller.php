@@ -22,9 +22,9 @@ class user_controller {
     $sql_user = $this->service->get($id);
 
     if(isset($sql_user[0])) {
-        return new user($this->service, $sql_user[0]);
+      return new user($this->service, $sql_user[0]);
     } else {
-        return NULL;
+      return NULL;
     }
   }
 

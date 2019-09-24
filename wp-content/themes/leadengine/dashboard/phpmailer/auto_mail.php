@@ -49,89 +49,80 @@ foreach($users as $user_id) {
     $mail_data = $user_control->get($user_id->ID);
 
     // Check if it is a socialaudify user
-    if($mail_data->day_1 != 0) {
-        $audits = $audit_control->get_all(NULL, $user_id->ID);
+    if(isset($mail_data)) {
 
-        $i = 0;
-        foreach($audits as $audit) {
-            if($audit->mail_bit == 0) {
-                continue;
-            }
+        // Check if mail fields are set
+        if($mail_data->day_1 != 0 || $mail_data->day_2 != 0
+           || $mail_data->day_3 != 0) {
 
-            $client = $client_control->get($audit->client_id);
-            $temp = array();
-            $earlier = new DateTime($audit->create_date);
-            $later = new DateTime(date('Y-m-d H:i:s'));
-            $day_difference = $later->diff($earlier)->format("%a");
+            $audits = $audit_control->get_all(NULL, $user_id->ID);
 
-            // Check if audit is viewed and if we have to send a auto mail
-            if($audit->view_time == NULL && (($day_difference == $mail_data->day_1) ||
-                                              ($day_difference == $mail_data->day_2) ||
-                                              ($day_difference == $mail_data->day_3))) {
-                $link = "https://www.socialaudify.com/public/audit-" . $audit->name . "-" . $audit->id;
-
-                array_push($temp, $audit->name, $link);
-                array_push($audit_send_list, array());
-                array_push($audit_send_list[$i], $temp);
-
-                $i++;
-
-                // Create mail body
-                if($day_difference == $mail_data->day_1) {
-                    $body_string = str_replace("#{name}", $client->name, $mail_data->mail_text);
-
-                } else if($day_difference == $mail_data->day_2) {
-                    $body_string = str_replace("#{name}", $client->name, $mail_data->second_mail_text);
-                } else {
-                    $body_string = str_replace("#{name}", $client->name, $mail_data->third_mail_text);
+            $i = 0;
+            foreach($audits as $audit) {
+                if($audit->mail_bit == 0) {
+                    continue;
                 }
 
-                $body_string = str_replace("\n", "<br />", $body_string);
+                $client = $client_control->get($audit->client_id);
+                $temp = array();
+                $earlier = new DateTime($audit->create_date);
+                $later = new DateTime(date('Y-m-d H:i:s'));
+                $day_difference = $later->diff($earlier)->format("%a");
 
-                // foreach($audit_send_list as $audit_send)  {
+                // Check if audit is viewed and if we have to send a auto mail
+                if($audit->view_time == NULL && (($day_difference == $mail_data->day_1) ||
+                                                  ($day_difference == $mail_data->day_2) ||
+                                                  ($day_difference == $mail_data->day_3))) {
+
+                    $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
+
+                    $i++;
+                    // Create mail body
+                    if($day_difference == $mail_data->day_1) {
+                        $body_string = str_replace("#{name}", $client->name, $mail_data->mail_text);
+
+                    } else if($day_difference == $mail_data->day_2) {
+                        $body_string = str_replace("#{name}", $client->name, $mail_data->second_mail_text);
+                    } else {
+                        $body_string = str_replace("#{name}", $client->name, $mail_data->third_mail_text);
+                    }
+
+                    $body_string = str_replace("\n", "<br />", $body_string);
+
                     $body_string .= "<br /><br />";
-                    $body_string .= "Audit: " . $audit_send_list[0][0][0] . ".<br />";
-                    $body_string .= 'Link: <a href='. $audit_send_list[0][0][1] .'>' . $audit_send_list[0][0][1] . "</a>.<br /><br />";
-                // }
+                    $body_string .= "Audit: " . $audit->name . ".<br />";
+                    $body_string .= 'Link: <a href='. $link .' title="Audit link">' . $audit->name . "</a>.<br /><br />";
 
-                // echo $client->mail . "<br />";
+                    // Instantiation and passing `true` enables exceptions
+                    $mail = new PHPMailer(true);
 
+                    try {
+                        //Server settings
+                        $mail->SMTPDebug = 0;                                       // Enable verbose debug output
+                        $mail->isSMTP();                                            // Set mailer to use SMTP
+                        $mail->Host       = 'smtp.transip.email';                   // Specify main and backup SMTP servers
+                        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                        $mail->Username   = 'socialaudify@vps.transip.email';       // SMTP username
+                        $mail->Password   = 'XQhkUjNxqxBsaZrq';                     // SMTP password
+                        $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
+                        $mail->Port       = 465;                                    // TCP port to connect to
 
-                // Instantiation and passing `true` enables exceptions
-                $mail = new PHPMailer(true);
+                        //Recipients
+                        $mail->setFrom('automail@socialaudify.com', $user_id->display_name);
+                        $mail->addAddress($client->mail, $client->name);     // Add a recipient              // Name is optional
+                        $mail->addReplyTo($user_id->user_email, $user_id->display_name);
 
-                try {
-                    //Server settings
-                    $mail->SMTPDebug = 2;                                       // Enable verbose debug output
-                    $mail->isSMTP();                                            // Set mailer to use SMTP
-                    $mail->Host       = 'smtp.transip.email';                   // Specify main and backup SMTP servers
-                    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-                    $mail->Username   = 'socialaudify@vps.transip.email';       // SMTP username
-                    $mail->Password   = 'XQhkUjNxqxBsaZrq';                     // SMTP password
-                    $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-                    $mail->Port       = 465;                                    // TCP port to connect to
+                         // Content
+                         $mail->isHTML(true);                                  // Set email format to HTML
+                         $mail->Subject = 'Hi, a reminder to open the audit we made for you!';
+                         $mail->Body    = $body_string;
+                         $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-                    //Recipients
-                    $mail->setFrom('automail@socialaudify.com', $user_id->display_name);
-                    $mail->addAddress($client->mail, $client->name);     // Add a recipient              // Name is optional
-                    $mail->addReplyTo($user_id->user_email, $user_id->display_name);
-                     // $mail->addCC('cc@example.com');
-                     // $mail->addBCC('bcc@example.com');
-
-                     // Attachments
-                     // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
-                     // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
-
-                     // Content
-                     $mail->isHTML(true);                                  // Set email format to HTML
-                     $mail->Subject = 'Hi, a reminder to open the audit we made for you!';
-                     $mail->Body    = $body_string;
-                     $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-                     $mail->send();
-                     echo 'Message has been sent';
-                } catch (Exception $e) {
-                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                         $mail->send();
+                         echo 'Message has been sent';
+                    } catch (Exception $e) {
+                        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                    }
                 }
             }
         }

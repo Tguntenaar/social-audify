@@ -51,7 +51,7 @@ class report_controller {
     $instance->update('post_id', $post_id);
 
     // insert the new data
-    $instance->insert_data($social_stats, $chart_data, 0, (int)$manual, $currency);
+    $instance->insert_data($social_stats, $chart_data, 0, (int)$manual, $currency, $client['instagram']);
 
     if ($competitor != 'false') {
       $compare_report_id = (int)$competitor['id'];
@@ -82,6 +82,9 @@ class report_controller {
     return $return_reports;
   }
 
+  function get_all_reports() {
+     return $this->service->get_all_reports();
+  }
 
   function get_amount($date = NULL, $user_id = NULL) {
     $user = $user_id == NULL ? get_current_user_id() : $user_id;

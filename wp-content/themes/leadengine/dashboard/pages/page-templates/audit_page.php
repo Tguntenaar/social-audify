@@ -3,7 +3,7 @@
 
 <?php
   $post_id = get_the_ID();
-  $author_id = (int)get_post_field('post_author', $post_id); // TODO:
+  $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
   $env = getenv('HTTP_HOST');
   $slug = get_post_field("post_name", $post_id);
@@ -41,97 +41,48 @@
   // Define authority hash
   $auth_hash = hash('sha256', 'what'.$post_id.'who'.$audit->id.'how'.$user_id);
 
-  // Get competitor data & decode json data (TODO : dynamisch dit beiden laten gebeuren...)
-  $audit->get_competitor();
-  $audit->decode_json();
-
-  $has_comp_bit = ($audit->has_comp) ? 1 : 0;
-
   if ($audit->manual == 0) {
-      $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
+    $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
   }
 
   // Post handling
-  if (isset($_POST['iframe'])) {
-    $audit->update('video_iframe', base64_encode($_POST['iframe']), 'Audit_template');
+  if (isset($_POST['iframe']) && $edit_mode) {
+    $value=  ($_POST['video-option'] == 'nothing') ? NULL : base64_encode($_POST['iframe']);
+    $audit->update('video_iframe', $value, 'Audit_template');
   }
 
-  foreach (['introduction', 'conclusion', 'facebook_advice', 'instagram_advice',
-            'website_advice', 'facebook_score', 'instagram_score', 'website_score'] as $post_name) {
-    if (isset($_POST[$post_name])) {
-      $audit->update($post_name, $_POST[$post_name], 'Audit_template');
+  $post_names =  ['introduction', 'conclusion', 'facebook_advice',
+                  'instagram_advice','website_advice', 'facebook_score',
+                  'instagram_score', 'website_score'];
+
+  foreach ($post_names as $post_name) {
+    if (isset($_POST[$post_name]) && $edit_mode) {
+      $audit->update($post_name, sanitize_textarea_field(stripslashes($_POST[$post_name])), 'Audit_template');
     }
   }
 
-    // Update competitor insta manual
-    if (isset($_POST['followers_count']) || isset($_POST['avgEngagement']) ||
-       isset($_POST['postsLM']) || isset($_POST['follows_count']) ||
-       isset($_POST['averageLikes']) || isset($_POST['averageComments'])) {
-        if (isset($_POST['followers_count'])) {
-          $audit->instagram_data->followers_count = $_POST['followers_count'];
-        }
+  function check_manual_instagram_postfields($audit, $competitor) {
+    $str = $competitor == 1 ? "comp-" : "";
+    // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
+    if (isset($_POST["{$str}followers_count"])) {
+      $instagram_data = array(
+        "avgEngagement"=> floatval($_POST["{$str}avgEngagement"]),
+        "followers_count"=> absint($_POST["{$str}followers_count"]),
+        "postsLM"=> absint($_POST["{$str}postsLM"]),
+        "follows_count"=> absint($_POST["{$str}follows_count"]),
+        "averageComments"=> floatval($_POST["{$str}averageComments"]),
+        "averageLikes"=> floatval($_POST["{$str}averageLikes"]),
+      );
 
-        if (isset($_POST['avgEngagement'])) {
-          $audit->instagram_data->avgEngagement = $_POST['avgEngagement'];
-        }
-
-        if (isset($_POST['postsLM'])) {
-          $audit->instagram_data->postsLM = $_POST['postsLM'];
-        }
-
-        if (isset($_POST['follows_count'])) {
-          $audit->instagram_data->follows_count = $_POST['follows_count'];
-        }
-
-        if (isset($_POST['averageComments'])) {
-          $audit->instagram_data->averageComments = $_POST['averageComments'];
-        }
-
-        if (isset($_POST['averageLikes'])) {
-          $audit->instagram_data->averageLikes = $_POST['averageLikes'];
-        }
-
-        $audit->update_manual('instagram_data', $audit->instagram_data, 0);
-
-        $audit = $audit_control->get($id);
-        $audit->get_competitor();
-        $audit->decode_json();
+      $audit->update("instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
     }
+  }
 
-    // Update competitor insta manual
-    if (isset($_POST['comp-followers_count']) || isset($_POST['comp-avgEngagement']) ||
-       isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) ||
-       isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])) {
-        if (isset($_POST['comp-followers_count'])) {
-          $audit->competitor->instagram_data->followers_count = $_POST['comp-followers_count'];
-        }
-
-        if (isset($_POST['comp-avgEngagement'])) {
-          $audit->competitor->instagram_data->avgEngagement = $_POST['comp-avgEngagement'];
-        }
-
-        if (isset($_POST['comp-postsLM'])) {
-          $audit->competitor->instagram_data->postsLM = $_POST['comp-postsLM'];
-        }
-
-        if (isset($_POST['comp-follows_count'])) {
-          $audit->competitor->instagram_data->follows_count = $_POST['comp-follows_count'];
-        }
-
-        if (isset($_POST['comp-averageComments'])) {
-          $audit->competitor->instagram_data->averageComments = $_POST['comp-averageComments'];
-        }
-
-        if (isset($_POST['comp-averageLikes'])) {
-          $audit->competitor->instagram_data->averageLikes = $_POST['comp-averageLikes'];
-        }
-
-        $audit->update_manual('instagram_data', $audit->competitor->instagram_data, 1);
-
-        $audit = $audit_control->get($id);
-        $audit->get_competitor();
-        $audit->decode_json();
-    }
+  // Handle post
+  if ($edit_mode) {
+    check_manual_instagram_postfields($audit, 0);
+    check_manual_instagram_postfields($audit, 1);
+  }
 
    // Overall scores
    $score = array(
@@ -166,39 +117,33 @@
     return ($edit_mode || $visible);
   }
 
-  function getWebIcon($has_website, $value) {
-
-    if ($has_website) {
-      if ($value === '0') {
-        return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
-      }
-      elseif ($value === '1') {
-        return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
-      }
+  function getWebIcon($value, $has_website) {
+    if ($has_website && $value === '0') {
+      return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
+    } elseif ($has_website && $value === '1') {
+      return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
+    } else {
       return $value;
     }
-
     return "";
   }
 
   function getWebIconFacebook($value, $is_icon) {
-    if ($is_icon) {
-          if ($value == 0) {
-            return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
-          }
-          elseif ($value == 1) {
-            return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
-          }
-          return $value;
+    if ($is_icon && $value == 0) {
+      return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
+    } elseif ($is_icon && $value == 1) {
+      return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
 
     return $value;
   }
 
-  function visibility_icon($edit_mode, $visible) {
+  function visibility_short_code($edit_mode, $visible, $item_type) {
     if ($edit_mode) {
-      $slash = $visible == 1 ? '' : '-slash';
-      echo '<i class="far fa-eye'.$slash.'"></i>';
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $item_type; ?>')" id="<?php echo $item_type; ?>_icon" class="visibility">
+        <i class="far fa-eye<?php echo $slash; ?>"></i>
+      </div><?php
     }
   }
 
@@ -218,29 +163,39 @@
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js"></script>
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    $(document).ready(function() {
+      $('#nav-icon2').click(function() {
+        $(this).toggleClass('open');
+        $('.mobile-hide').toggleClass('block');
+      });
+    });
+  </script>
 </head>
 <body class="custom-body">
   <div class="sub-header col-lg-12" style="display: block !important;">
+  <!-- Animated CSS stuff -->
+  <div id="nav-icon2">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+    <div class="mobile-hide"><?php
+        if ($edit_mode) { ?>
+          <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
+        } ?>
 
-    <?php if ($edit_mode) { ?>
-      <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
-    <?php } ?>
+        Audit: <?php echo $audit->name;
 
-    Audit: <?php echo $audit->name; ?>
-
-    <?php if ($edit_mode) { ?>
-      <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
-      <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
-      <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
-    <?php }
-
-    if ($user_id === $author_id) {
-      if ($edit_mode) { ?>
-				<a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-      } else { ?>
-				<a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-      }
-    } ?>
+        if ($edit_mode) { ?>
+          <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
+          <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
+          <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
+          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+        } else { ?>
+          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        } ?>
+    </div>
   </div>
 
   <div id="shareModal" class="modal"></div>
@@ -269,10 +224,10 @@
     if ($edit_mode) { ?>
       <div class="video-options">
         <h3>Banner options:</h3>
-        <span class="eplenation-banner">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem <a href="https://www.google.nl">aperiam</a>.</span>
+        <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
-          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> /> <span class="radio-label">Iframe</span>
-          <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?>/> <span class="radio-label">Nothing</span>
+          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="iframe"/> <span class="radio-label">Iframe</span>
+          <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?> value="nothing"/> <span class="radio-label">Nothing</span>
           <div id="iframe-input" <?php echo $display_iframe; ?> >
             <input type="text" id="iframe-input" name="iframe" placeholder="Insert iframe(Loom/Youtube etc.)" pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))"
                    value='<?php if ($audit->video_iframe != NULL) { echo '<iframe '. stripslashes(base64_decode($audit->video_iframe)) .'</iframe>'; }?>'/>
@@ -288,19 +243,19 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text" id="introduction">
-        <span class="audit-company-name">Social Audify <!-- TODO: Moet dynamisch --></span><?php
+        <span class="audit-company-name"><?php echo $author->display_name;?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea input="text"  name="introduction" id="introduction"><?php echo $audit->introduction; ?></textarea>
+            <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $audit->introduction; ?></p><?php
+          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
         } ?>
       </div>
     </div><?php
     if ($audit->facebook_bit == "1") { ?>
-      <div class=" col-lg-12 facebook-info" id="facebook-info">
+      <div class="col-lg-12 facebook-info" id="facebook-info">
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp; Facebook stats:</span>
         <span class="sub-title">Statistics of your Facebook page.</span>
         <div class="col-lg-6 left bottom-40">
@@ -314,6 +269,7 @@
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
                       </span><?php echo getWebIconFacebook(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span>
+                      <!--  -->
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
                         <?php echo getWebIconFacebook(round($audit->competitor->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span><?php
@@ -322,66 +278,43 @@
                     } ?>
                     </span>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
-                    <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
-                      <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
-
-                    <!-- <div class="comp-better">Competitor better<span class="competitor-round"></span></div> -->
+                    <?php
+                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
+                    ?>
                   </div>
                 </div><?php
               }
             }
-
-            // TODO : Nog geen mooie manier om competitor data weer te geven...
-            if (show_block($edit_mode, $audit->fb_ads)) { ?>
-              <div class="stat-block col-lg-6" id="fb_ads">
-                <div class="inner">
-                  <span class="title-box facebook">Running ads</span><?php
-                  if (!$edit_mode) {
-                    $class = $audit->facebook_data->runningAdds ? "check" : "times";
-                    $color = $audit->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
-
-                    <span class="explenation">Is the page currently running ads</span>
-                    <span class="data_animation">
-                      <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
-                    </span><?php
-                  } else { ?>
-                    <form class="ads-radio" action="">
-                      <?php $checked = $audit->facebook_data->runningAdds; ?>
-                      <input type="radio" name="ads" value="yes" <?php echo $checked ? "checked" : ""; ?>> <span class="label_ads">Yes</span>
-                      <input type="radio" name="ads" value="no" <?php  echo !$checked ? "checked" : ""; ?>> <span class="label_ads">No</span>
-                    </form>
-
-                    <div onclick="toggle_visibility('fb_ads')" id="fb_ads_icon" class="visibility"><?php visibility_icon($edit_mode, $audit->fb_ads); ?></div>
-                    <span class="explenation-ads">
-                      <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $audit->facebook_name .'/ads/'; ?>">
-                        Click here to watch if this page is currently running ads. (This can't be automated)
-                      </a>
-                    </span><?php
-                  } ?>
-                </div>
-              </div><?php
-              if ($audit->has_comp) { ?>
+            foreach ($facebook_ad_blocks as $item) {
+              if (($audit->has_comp || !$item["is_comp"]) && show_block($edit_mode, $audit->{$item["type"]})) {
+                $path = $item["is_comp"] ? $audit->competitor : $audit; ?>
                 <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
-                    <span class="title-box facebook">Competitor running ads</span><?php
+                    <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
+                    // preview mode
                     if (!$edit_mode) {
-                      $class = $audit->competitor->facebook_data->runningAdds ? "check" : "times";
-                      $color = $audit->competitor->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
+                      $class = $path->facebook_data->runningAdds ? "check" : "times";
+                      $color = $path->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
 
-                      <span class="explenation">Is the competitor page currently running ads</span>
+                      <span class="explenation">Is the page currently running ads</span>
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
+                      // edit mode
                     } else { ?>
-                      <form class="ads-radio" action="">
-                        <?php $checked = $audit->competitor->facebook_data->runningAdds; ?>
-                        <input type="radio" name="ads_c" value="yes" <?php echo $checked ? "checked" : ""; ?>> <span class="label_ads">Yes</span>
-                        <input type="radio" name="ads_c" value="no" <?php  echo !$checked ? "checked" : ""; ?>> <span class="label_ads">No</span>
+                      <form class="ads-radio" action=""><?php
+                        $checked = $path->facebook_data->runningAdds;
+                        $name = $item["is_comp"] ? "ads_c" : "ads"; ?>
+                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo $checked ? "checked" : ""; ?>/>
+                          <span class="label_ads">Yes</span>
+                        <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo !$checked ? "checked" : ""; ?>/>
+                          <span class="label_ads">No</span>
                       </form>
-
-                      <div onclick="toggle_visibility('fb_ads')" id="fb_ads_icon" class="visibility"><?php visibility_icon($edit_mode, $audit->fb_ads); ?></div>
+                      <?php
+                        visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
+                      ?>
                       <span class="explenation-ads">
-                        <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $audit->competitor->facebook_name .'/ads/'; ?>">
+                        <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
                         </a>
                       </span><?php
@@ -410,7 +343,7 @@
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="facebook_score" id="facebook_score" value='<?php echo $score['fb']; ?>'/>
-                    <textarea input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
+                    <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                     <input type="submit" value="Update" class="edite-button">
                   </form><?php
                 } else { ?>
@@ -433,15 +366,16 @@
         <?php if ($audit->manual && $edit_mode) { ?><span class="manual-text"><span style="color: #e74c3c;">Attention: </span>There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!</span><?php } ?>
         <?php if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?><span class="manual-text" style="margin-top: 15px;"><span style=" color: #e74c3c;">Attention: </span>There is no competitor instagram or instagram business account found, so <a href="https://www.instagram.com/<?php echo $audit->competitor_name; ?>">click here</a> to gather your data!</span><?php } ?>
         <div style="clear:both"></div>
-        <div class="col-lg-6 instagram-left" style="float:left;">
-        <?php
+        <div class="col-lg-6 instagram-left" style="float:left;"><?php
           if (show_block($edit_mode, $audit->insta_hashtag) && (!$audit->manual) && isset($audit->instagram_data->hashtags[0][0])) { ?>
             <div class="col-lg-12 left custom-left" style="padding: 0;">
-              <div onclick="toggle_visibility('insta_hashtag')" id="insta_hashtag_icon" class="visibility">
-                <?php visibility_icon($edit_mode, $audit->insta_hashtag); ?></div>
+              <?php
+                visibility_short_code($edit_mode, $audit->insta_hashtag, 'insta_hashtag');
+              ?>
+
               <div class="chart-info">
                 <span class="stat-box-title">Hashtags used</span>
-                <span class="graph-procent" style="margin-top: -2px;">Most used '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
+                <span class="graph-procent" style="margin-top: 4px;">Most used '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
               </div>
               <div class="inner custom-inner" style="padding: 0;">
                 <canvas id="hashtag-chart" class="chart-instagram"  style="height: 292px;"></canvas>
@@ -454,11 +388,14 @@
           }
           if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
             <div class="col-lg-12 left custom-left" style="padding: 0;">
-              <div onclick="toggle_visibility('insta_lpd')" id="insta_lpd_icon" class="visibility"><?php
-                visibility_icon($edit_mode, $audit->insta_lpd); ?></div>
+              <?php
+                visibility_short_code($edit_mode, $audit->insta_lpd, 'insta_lpd');
+              ?>
+
               <div class="chart-info">
+
                 <span class="stat-box-title">Likes on your posts Instagram</span>
-                <span class="graph-procent" style="margin-top: -8px;">Average <?php
+                <span class="graph-procent" style="margin-top: 2px;">Average <?php
                   echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span>
                 <span class="graph-info"><?php
                   if ($audit->has_comp && (isset($audit->competitor) && !$audit->competitor->manual)) {
@@ -475,79 +412,101 @@
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
-                  <span class="round-color you-color"></span> <span class="space">You</span>
-                  <?php if ($audit->has_comp && !$audit->competitor->manual) { ?><span class="round-color competitor-color"></span> <?php echo ucfirst($audit->competitor_name); } ?>
+                  <span class="round-color you-color"></span> <span class="space">You</span><?php
+                  if ($audit->has_comp && !$audit->competitor->manual) { ?>
+                    <span class="round-color competitor-color" style="margin-right: 4px;"></span><?php
+                    echo ucfirst($audit->competitor_name);
+                  } ?>
               </div>
             </div><?php
           } ?>
-        </div>
+        </div><?php
 
-        <?php if (($audit->manual == 1)) { ?>
-            <div class="col-lg-12 instagram-right" style="float: right;">
-                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data">
-        <?php } else {
-            ?><div class="col-lg-6 instagram-right" style="float: right;">
-                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data">
-        <?php
+        if (($audit->manual == 1)) { ?>
+          <div class="col-lg-12 instagram-right" style="float: right;">
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data"><?php
+        } else { ?>
+          <div class="col-lg-6 instagram-right" style="float: right;">
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data"><?php
         }
-          foreach ($instagram_blocks as $item) {
-            if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
-              <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
-                <div class="inner">
-                  <span class="title-box instagram"><?php echo $item["name"]; ?></span>
-                  <?php if (!$edit_mode) { ?><span class="data_animation"><?php }
-                  if ($audit->has_comp) { ?>
-                    <span class="data-view"><span class="comp-label">You: <br /></span>
-                      <?php if ($audit->manual) {
-                                if ($edit_mode) { ?>
-                                    <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?>" /></span>
-                                <?php } else { ?>
-                                    <?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?><?php if (!$edit_mode) { ?></span><?php } ?>
-                                <?php } ?>
-                      <?php } else { ?>
-                          <?php echo round($audit->instagram_data->{$item["ig_name"]}, 2); ?><?php if (!$edit_mode) { ?></span><?php } ?>
-                      <?php } ?>
-                    </span>
-                    <span class="vertical-line"></span>
-                    <?php if (!$edit_mode) { ?><span class="competitor-animation"><?php } ?>
-                        <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                         <?php if ($audit->competitor->manual) {
-                                    if ($edit_mode) { ?>
-                                        <input type="text" name="comp-<?php echo $item["ig_name"]; ?>" value="<?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?>" />
-                        </span>
-                    <?php if (!$edit_mode) { ?></span><?php } ?>
-                          <?php } else { ?>
-                              <?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?><?php if (!$edit_mode) { ?></span><?php }
-                                } ?>
-                      <?php } else { ?>
-                          <?php echo round($audit->competitor->instagram_data->{$item["ig_name"]}, 2); ?></span>
-                      <?php }
 
-                  } else {
-                      if ($audit->manual) { ?>
-                          <input type="text" name="<?php echo $item["ig_name"]; ?>" value="<?php echo $audit->instagram_data->{$item["ig_name"]}; ?>" /></span>
-
-                      <?php } else { ?>
-                          <?php echo $audit->instagram_data->{$item["ig_name"]}; ?></span>
-                      <?php }
-                  } ?>
-                  </span>
-                  <?php if (!$edit_mode) { ?><span class="explenation"><?php echo $item["desc"]; ?></span><?php } ?>
-                  <div onclick="toggle_visibility('<?php echo $item["type"]; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
-                    <?php visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
-                </div>
-              </div><?php
-            }
+        function competitor_code($audit, $edit_mode, $item) {
+          // Preview mode hide description animation
+          if (!$audit->manual) { ?>
+            <span class="data_animation"><?php
           }
-          if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
-            <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/>
-            </form>
-          <?php } ?>
-          <?php if ($audit->manual == 1) { ?>
-              <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; ">
-          <?php } else { ?>
-              <div class="col-lg-12 instagram-score" style="float:right; ">
-          <?php } ?>
+          if ($audit->has_comp) { ?>
+            <span class="data-view">
+              <span class="comp-label">
+                You: <br />
+              </span><?php
+              manual_check($audit, $item, $edit_mode, 0);?>
+            </span>
+
+            <!-- LEFT SIDE OF BLOCK -->
+            <span class="vertical-line"></span>
+            <!-- RIGHT SIDE OF BLOCK -->
+
+              <span class="competitor-stats">
+                <span class="comp-label"><?php
+                  echo ucfirst($audit->competitor_name); ?>: <br />
+                </span><?php
+                manual_check($audit, $item, $edit_mode, 1);?>
+              </span><?php
+
+          } else { // heeft geen competitor
+            manual_check($audit, $item, $edit_mode, 0);
+          }
+          // Preview mode hide description animation
+          if (!$audit->manual) { ?>
+            </span>
+            <span class="explenation"><?php
+              echo $item["desc"]; ?>
+            </span><?php
+          }
+        }
+
+        function manual_check($audit, $item, $edit_mode, $comp) {
+          $base = ($comp) ? $audit->competitor : $audit;
+          $value = $base->instagram_data->{$item['ig_name']};
+          $str = ($comp) ? "comp-" : "";
+
+          if ($base->manual && $edit_mode) {?>
+            <input type="text" name="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
+          } else {
+            echo round($value, 2);
+          }
+        }
+
+        foreach ($instagram_blocks as $item) {
+          // Laat hem zien als edit mode aanstaat ?? of die bestaat in de database..
+          if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
+            <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
+              <div class="inner">
+                <span class="title-box instagram"><?php
+                  echo $item["name"]; ?>
+                </span><?php
+                // Als preview mode laat description staan en hide client info
+
+                competitor_code($audit, $edit_mode, $item);
+                // preview mode show visibility icon
+                visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+
+              </div>
+            </div><?php
+          }
+        }
+
+        if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
+          <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php 
+        } ?>
+        </form><?php
+
+          if ($audit->manual == 1) { ?>
+            <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; "><?php
+          } else { ?>
+            <div class="col-lg-12 instagram-score" style="float:right; "><?php
+          } ?>
             <div class="col-lg-12 insta-score" >
               <div class="col-lg-12 align">
                 <span class="score-tag insta-advice-tag">Score</span><?php
@@ -565,7 +524,7 @@
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="instagram_score" id="instagram_score" value="<?php echo $score['ig']; ?>"/>
-                    <textarea input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
+                    <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                     <input type="submit" value="Update" class="edite-button" >
                   </form><?php
                 } else { ?>
@@ -590,6 +549,7 @@
         <span class="sub-title">Statistics of your webpage.</span>
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
           <div class="inner custom-inner"><?php
+
             foreach ($website_blocks as $item) {
               if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
@@ -598,16 +558,17 @@
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
-                        </span><?php echo getWebIcon($audit->has_website, $audit->{$item["db_name"]}); ?></span>
+                        </span><?php echo getWebIcon($audit->{$item["db_name"]}, $audit->has_website); ?></span>
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                        <?php echo getWebIcon($audit->has_website, $audit->competitor->{$item["db_name"]}) ?></span><?php
+                        <?php echo getWebIcon($audit->competitor->{$item["db_name"]}, $audit->has_website) ?></span><?php
                     } else {
-                      echo getWebIcon($audit->has_website, $audit->{$item["db_name"]});
+                      echo getWebIcon($audit->{$item["db_name"]}, $audit->has_website);
                     } ?>
                     </span>
-                    <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php
-                      visibility_icon($edit_mode, $audit->{$item["type"]}); ?></div>
+                    <?php
+                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
+                    ?>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
                   </div>
                 </div><?php
@@ -625,7 +586,7 @@
             <span class="advice-title margin-advice-title">Website advice</span>
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
               <input type="hidden" name="website_score" id="website_score" value="<?php echo $score['wb']; ?>"/>
-              <textarea input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
+              <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
               <input type="submit" value="Update" class="edite-button">
             </form><?php
           } else { ?>
@@ -648,11 +609,15 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea input="text"  name="conclusion" id="conclusion"><?php echo $audit->conclusion; ?></textarea>
+          <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php
+            echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
+          ?></textarea>
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
-        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $audit->conclusion; ?></p><?php
+        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+          echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
+        ?></p><?php
       } ?>
     </div>
   </section>
@@ -693,7 +658,7 @@
         data: {...{action: 'crawl_data_check'}, ...commonPost}, // $.extend({}, commonPost, { 'action': 'crawl_data_check' })
         success: function (response) {
           console.log('retrieved response : ' + response);
-          if (response > <?php echo $has_comp_bit; ?>) {
+          if (response > <?php echo (int)$audit->has_comp ?>) {
             showModal(crawlModal);
           } else {
             setTimeout(function() { crawlFinishedCheck(); }, 8000);
@@ -738,6 +703,7 @@
       iframe.addClass("block");
       iframe.removeClass("none");
     });
+
     $("#nothing-option").click(function() {
       iframe.addClass("none");
       iframe.removeClass("block");
@@ -895,6 +861,7 @@
       var advice = $('#' + type + '_advice');
 
       value.html(slider.val());
+
       slider.on('input', function(e) {
         value.html($(e.target).val());
         score.val($(e.target).val());
@@ -915,23 +882,40 @@
         one: <?php echo $user->range_number_fb_1; ?>,
         two: <?php echo $user->range_number_fb_2; ?>,
       }
-      var text_fb = {
-        one: '<?php echo $user->text_fb_1; ?>',
-        two: '<?php echo $user->text_fb_2; ?>',
-        three: '<?php echo $user->text_fb_3; ?>',
-      }
-      handleSlider('facebook', range_fb, text_fb); <?php
+      <?php if($audit->facebook_advice != "") { ?>
+          var text_fb = {
+            one: '<?php echo $audit->facebook_advice; ?>',
+            two: '<?php echo $audit->facebook_advice; ?>',
+            three: '<?php echo $audit->facebook_advice; ?>',
+          }
+      <?php } else { ?>
+          var text_fb = {
+            one: '<?php echo $user->text_fb_1; ?>',
+            two: '<?php echo $user->text_fb_2; ?>',
+            three: '<?php echo $user->text_fb_3; ?>',
+          }
+      <?php } ?>
+
+      <?php  ?> handleSlider('facebook', range_fb, text_fb); <?php
     }
     if ($audit->instagram_bit == "1") { ?>
       var range_ig = {
         one: <?php echo $user->range_number_insta_1; ?>,
         two: <?php echo $user->range_number_insta_2; ?>,
       }
-      var text_ig = {
-        one: '<?php echo $user->text_insta_1; ?>',
-        two: '<?php echo $user->text_insta_2; ?>',
-        three: '<?php echo $user->text_insta_3; ?>',
-      }
+      <?php if($audit->instagram_advice != "") { ?>
+          var text_ig = {
+            one: '<?php echo $audit->instagram_advice; ?>',
+            two: '<?php echo $audit->instagram_advice; ?>',
+            three: '<?php echo $audit->instagram_advice; ?>',
+          }
+      <?php } else { ?>
+          var text_ig = {
+            one: '<?php echo $user->text_insta_1; ?>',
+            two: '<?php echo $user->text_insta_2; ?>',
+            three: '<?php echo $user->text_insta_3; ?>',
+          }
+       <?php } ?>
       handleSlider('instagram', range_ig, text_ig); <?php
     }
     if ($audit->website_bit == "1") { ?>
@@ -939,14 +923,22 @@
         one: <?php echo $user->range_number_website_1; ?>,
         two: <?php echo $user->range_number_website_2; ?>,
       }
-      var text_ws = {
-        one: '<?php echo $user->text_website_1; ?>',
-        two: '<?php echo $user->text_website_2; ?>',
-        three: '<?php echo $user->text_website_3; ?>',
-      }
+      <?php if($audit->website_advice != "") { ?>
+          var text_ws = {
+            one: '<?php echo $audit->website_advice; ?>',
+            two: '<?php echo $audit->website_advice; ?>',
+            three: '<?php echo $audit->website_advice; ?>',
+          }
+      <?php } else {?>
+          var text_ws = {
+            one: '<?php echo $user->text_website_1; ?>',
+            two: '<?php echo $user->text_website_2; ?>',
+            three: '<?php echo $user->text_website_3; ?>',
+          }
+      <?php } ?>
       handleSlider('website', range_ws, text_ws); <?php
     }
   } ?>
-  // TODO : algemene update functie, die itereert over alle mogelijke velden
+  // TODO: algemene update functie, die itereert over alle mogelijke velden
   //        - en ze update als ze verandert zijn...
 </script>

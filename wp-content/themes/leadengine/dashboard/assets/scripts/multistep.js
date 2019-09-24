@@ -1,7 +1,12 @@
 var currentTab = 0; // Current tab is set to be the first tab (0)
-var pathName = window.location.pathname;
-
 showTab(currentTab);
+
+if ($('#nextBtn').length) {
+  $('#nextBtn').on('click', function() {
+    firstLogin();
+  });
+}
+
 
 function showIntro(display) {
   types = display ? ['block', 'none'] : ['none', 'block'];
@@ -10,20 +15,50 @@ function showIntro(display) {
   $('.overview-audit-report .left').css({'display': types[1]});
 }
 
+function firstLogin() {
+  showModal(initiateModal('errorModal', 'error', {
+    'text': "You are not logged in",
+    'subtext': "In order to create an audit you have to log in to facebook."
+  }));
+}
+
+/**
+ *  Getloginstatus maakt gebruik van de cache de tweede parameter true forceert
+ *  een roundtrip naar de facebook servers.
+ *  Gets called when the user is finished with the facebook login button.
+ * */
+function checkLoginState() {
+  FB.getLoginStatus(function(response) {
+    if (response.status === 'connected') {
+      nextPrev(1);
+      $('#nextBtn').off('click');
+      $('#nextBtn').on('click', function() {
+        nextPrev(1);
+      });
+    } else {
+      $('#nextBtn').off('click');
+      $('#nextBtn').on('click', function() {
+        firstLogin();
+      });
+    }
+  }, true);
+}
+
+
 function showTab(index) {
   // This function will display the specified tab of the form ...
   var tab = $('.tab');
   tab.eq(index).css({'display': 'block'});
+
   // ... and fix the previous button:
   $('#prevBtn').css({'display': index == 0 ? 'none' : 'inline'});
+  tab.eq(index).find('input[type=text]').focus();
 
   // Fix the next button
   if (index == (tab.length - 1)) {
     // fix the create button
     var name = Instance.page.type.charAt(0).toUpperCase() + Instance.page.type.slice(1);
     $('#nextBtn').html(`Create ${name}`);
-
-    tab.eq(index).find('input[type=text]').focus();
 
     // change on click functionality.
     $('#nextBtn').on('click', function() {
@@ -32,13 +67,11 @@ function showTab(index) {
         submitForm();
       }
     });
-
   } else {
     if ($('#nextBtn').html() !== 'Next') {
       $('#nextBtn').off('click');
       $('#nextBtn').html('Next');
     }
-    $('#nextBtn').css({'display':'inline'});
   }
 
   // Remove all active, and set active to current
@@ -50,14 +83,12 @@ function nextPrev(n) {
   // This function will figure out which tab to display
   var tab = $('.tab');
 
-  // Exit the function if any field in the current tab is invalid:
-  console.log('validating step..');
-
   // validate this step
-  if (n == 1 && !validateStep()) return false;
+  if (n == 1 && !validateStep())
+    return false;
 
   // request campaigns or ads from facebook servers.
-  if (n === 1 && currentTab === 4 && Instance.page.type == 'report') showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
+  if (Instance.page.type == 'report' && n === 1 && currentTab === 4) showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
 
   // Hide the current tab:
   tab.eq(currentTab).css({'display':'none'});
@@ -65,11 +96,9 @@ function nextPrev(n) {
   // Increase or decrease the current tab by 1:
   currentTab += n;
 
-  // if you have reached the end of the form... :
-  if (currentTab >= tab.length) return false;
-
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
+  // Display correct tab if length not exceeded
+  if (currentTab < tab.length)
+    showTab(currentTab);
 }
 
 function validateStep() {
@@ -83,13 +112,15 @@ function validateStep() {
     case 3:
       return validateName();
     case 4:
+      $('.step').eq(currentTab).addClass('finish');
       return true; // showActiveCampaigns
   }
   return false;
 }
 
+// TODO:
 function validateSelectedAds() {
-  return selectedAds.length !== 0;
+  return true
 }
 
 // TODO:
@@ -107,10 +138,12 @@ function validateClient() {
   if (!(selected = findSelected($('#client-list'))))
     return false;
 
-  Instance.client = JSON.parse(selected.attr("data-client"));
-  // console.log(JSON.paselected.attr("data-client"));
+  // Instance.client = JSON.parse(selected.attr("data-client"));
+  // TODO:
+  Instance.client = selected.data('client');
 
-  // console.log(Instance.client.ad_id);
+  console.log(Instance.client.ad_id);
+
   // Stop progress if client has no ad_id
   if (Instance.page.type == 'report' && !Instance.client.ad_id) {
     $('#client-list').fadeOut(50).fadeIn(400);
@@ -147,7 +180,6 @@ function validateCompetitorTab() {
   }
 
   $('.step').eq(currentTab).addClass('finish');
-  $('.name-input').focus();
 
   return true;
 }
@@ -155,14 +187,14 @@ function validateCompetitorTab() {
 function validateName() {
   var nameInput = $('.name-input');
 
-  if (nameInput.val().length < 1 || nameInput.val().length > 25) {
+  if (!nameInput.val().match(/[a-zA-Z0-9][a-zA-Z0-9 ]{2,25}/)) {
     nameInput.addClass('invalid');
     nameInput.focus();
     return false;
   }
 
   // check if at least one options selected
-  if ($(".c_container > input[type=checkbox]:checked").length === 0) {
+  if ($(".c_container > input[type=checkbox]:checked").length === 0 && Instance.page.type == 'audit') {
     $('.c_container').css('color', 'red');
     return false;
   };
@@ -181,7 +213,7 @@ function validateName() {
   return true;
 }
 
-// Find selected option in list 
+// Find selected option in list
 function findSelected(optionList) {
   var selected = $(optionList).find('.selected');
   console.log({selected});

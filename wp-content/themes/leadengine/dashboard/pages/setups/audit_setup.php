@@ -15,19 +15,11 @@
     // Header
     include(dirname(__FILE__)."/../header/dashboard_header.php");
 
-    if (isset($_GET['cid'])) {
-      $new_client = $client_control->get($_GET['cid']);
-      // TODO : is not null check...
-      $newClient = $new_client->name;
-    }
-
     $user = $user_control->get($user_id);
     $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
   ?>
 
-  <!-- <div id="instagramErrorModal" class="modal"></div>
-  <div id="competitorModal" class="modal"></div> -->
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->
@@ -76,14 +68,14 @@
     <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
         <div class="inner height-auto">
-          <span class="title title-audit-page">Create a Audit</span>
+          <span class="title title-audit-page">Create an Audit</span>
 
           <!-- One "tab" for each step in the form: -->
           <form id="regForm" class="submit-audit" action="">
 
             <!-- Facebook tab -->
             <div class="tab">
-              <span class="login-title">Login to retrieve the data of Facebook that is needed to create a Audit.</span>
+              <span class="login-title">Login to retrieve the data of Facebook that is needed to create an Audit.</span>
               <div class="fb-login-button login-center"
                   data-scope="manage_pages,instagram_basic,instagram_manage_insights,ads_read"
                   auth_type="rerequest"
@@ -107,7 +99,7 @@
               <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
                 foreach($clients as $client) {
                   $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
-                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row" name="<?php echo $client->name; ?>"
+                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
                     data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
                   </a><?php
                 } ?>
@@ -160,7 +152,7 @@
             <div>
               <div class="nav-buttons">
                 <button type="button" id="prevBtn" onclick="nextPrev(-1)">Previous</button>
-                <button type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                <button type="button" id="nextBtn">Next</button>
               </div>
             </div>
 
@@ -183,9 +175,9 @@
       page : {
         type: 'audit',
         manual: 0,
-        competitor_manual: 0
+        competitor_manual: 0,
       },
-      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>
+      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>,
     }
 
     // Selectable list - TODO : kan wss naar dashboard-header
@@ -196,10 +188,11 @@
 
     $(function() {
       <?php
-      if (isset($newClient)) { ?>
+      if (isset($_GET['cid'])) { ?>
         showIntro(false);
-        var name = "<?php echo $newClient; ?>";
-        var selected = $(`#client-list a[name=${name}]`);
+        var id = "<?php echo $_GET['cid']; ?>";
+        var selected = $(`#client-list a[id=client-${id}]`);
+        // wrm zou iets geselecteerd zijn?
         selected.parent().find('.audit-row').removeClass('selected');
         selected.addClass('selected');<?php
       } ?>
@@ -208,10 +201,10 @@
       var modalData = {
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
-            <input type="text" id="competitor-name" placeholder="Name of competitor">
-            <input type="text" id="facebook" placeholder="Facebook page url, page id or page username">
-            <input type="text" id="instagram" placeholder="Instagram url, @username or username">
-            <input type="text" id="website" placeholder="Website url..">
+            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex; ?>" title="Only letters are allowed">
+            <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username">
+            <input type="text" id="instagram_url" placeholder="Instagram username or url">
+            <input type="text" id="website_url" placeholder="https://www.example.com" pattern="<?php echo $website_regex; ?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
         confirm: 'competitor_confirmed'
@@ -222,30 +215,24 @@
       $('#compare-list .new-compare').on('click', function() {
         var data = $(this).data('compare');
         $(competitorModal).find('#competitor-name').val(data.name);
-        $(competitorModal).find('#facebook').val(data.facebook);
-        $(competitorModal).find('#instagram').val(data.instagram);
-        $(competitorModal).find('#website').val(data.website);
+        $(competitorModal).find('#facebook_url').val(data.facebook);
+        $(competitorModal).find('#instagram_url').val(data.instagram);
+        $(competitorModal).find('#website_url').val(data.website);
         showModal(competitorModal);
       });
 
-      $('#facebook, #instagram, #website').focusout(function() {
-        parsePageInput(this);
+      $('#facebook_url, #instagram_url, #website_url').focusout(function() {
+        parseClientInputFields(this);
       });
 
       $("#competitor_confirmed").click(function() {
         $('#compare-list .new-compare').data('compare', {
           name : $(competitorModal).find('#competitor-name').val(),
-          facebook : $(competitorModal).find('#facebook').val(),
-          instagram : $(competitorModal).find('#instagram').val(),
-          website : $(competitorModal).find('#website').val().replace("https://", "").replace("http://", ""),
+          facebook : $(competitorModal).find('#facebook_url').val(),
+          instagram : $(competitorModal).find('#instagram_url').val(),
+          website : $(competitorModal).find('#website_url').val().replace("https://", "").replace("http://", ""),
         });
         nextPrev(1);
-      });
-
-      ['facebook', 'instagram', 'website'].forEach(function(elem) {
-        $(`#new-competitor-${elem}`).focusout(function() {
-          parsePageInput(this);
-        });
       });
 
       // Searchable lists
@@ -283,11 +270,10 @@
         // If makeApiCalls doesn't redirect...
         return false;
       }).catch((reason) => {
-        var modalData = {
+        showModal(initiateModal('errorModal', 'error', {
           'text': "Problem with Login Status",
           'subtext': "Please try again later or notify an admin if the issue persists"
-        }
-        showModal(initiateModal('errorModal', 'error', modalData));
+        }));
         showBounceBall(false);
       });
     }
