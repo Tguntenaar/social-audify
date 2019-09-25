@@ -40,6 +40,7 @@
               showConnectAdAccount()
             } else {
               if ($('#nextBtn').length) {
+                $('#nextBtn').off('click');
                 $('#nextBtn').on('click', function() {
                   nextPrev(1);
                 });

@@ -131,7 +131,7 @@ function validateFacebookLogin() {
     $('.step').eq(currentTab).addClass('finish');
   }
 
-  return valid
+  return valid;
 }
 
 function validateClient() {
