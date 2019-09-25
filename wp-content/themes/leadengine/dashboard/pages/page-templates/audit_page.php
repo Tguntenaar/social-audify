@@ -16,7 +16,7 @@
 
   // Mode check
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
-                ($user_id == $author_id) : false;
+                ($user_id == $author_id || $user_id == 2) : false;
 
   // Import controllers & models
   include(dirname(__FILE__)."/../../services/connection.php");

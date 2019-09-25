@@ -39,12 +39,17 @@
             if (path.includes('client-dashboard')) {
               showConnectAdAccount()
             } else {
+              if ($('#nextBtn').length) {
+                $('#nextBtn').on('click', function() {
+                  nextPrev(1);
+                });
+              }
               // skip facebook step if already logged in
               nextPrev(1);
-              // try to skip client step 
+              // try to skip client step
               if (path.includes('audit-setup')) {
                 nextPrev(1);
-              } 
+              }
             }
           } else {
             $('.submitBttn').css('display', 'none');
