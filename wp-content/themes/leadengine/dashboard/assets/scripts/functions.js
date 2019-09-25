@@ -47,6 +47,76 @@ function filterSearch(value, links, counterSpan = null) {
   }
 }
 
+function generateAreaChart(canvas, bar_data, bar_labels) {
+    var i = 0.1;
+    var counter = 1;
+    const backgroundColors = [];
+    const data_array = [];
+    const label_array = [];
+
+    bar_data.forEach(function(element) {
+
+        element.forEach(function(e) {
+            data_array.push(e);
+
+            if(counter == 1) {
+                backgroundColors.push(`rgba(72, 125, 215, ${i})`);
+            } else {
+                backgroundColors.push(`rgba(238, 82, 83, ${i})`);
+            }
+
+            i = i + 0.1;
+        });
+
+        counter++;
+        i = 0.2;
+    });
+
+    bar_labels.forEach(function(element) {
+
+        element.forEach(function(e) {
+            label_array.push(e);
+
+        });
+
+    });
+
+    $.getScript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js", function () {
+        new Chart(canvas, {
+            type: 'polarArea',
+            data: {
+                datasets: [{
+                    data: data_array,
+                    backgroundColor: backgroundColors,
+                    label: 'My dataset' // for legend
+                }],
+                labels: label_array
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: ''
+                },
+                scale: {
+                    ticks: {
+                        beginAtZero: true
+                    },
+                    reverse: false
+                },
+                animation: {
+                    animateRotate: false,
+                    animateScale: true
+                }
+            }
+        });
+    }, true);
+
+}
+
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   // More can be added..?
   const backgroundColors = ["rgba(72, 125, 215, 0.1)", "rgba(238, 82, 83, 0.1)"];
@@ -125,7 +195,7 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 function parseClientInputFields(field) {
 
   var unparsed = $(field).val();
-  
+
   if (!unparsed) {
     return;
   }
@@ -148,7 +218,7 @@ function grabPageId(field, found) {
   if (field.id.includes('facebook')) {
     var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
     var pageID = found.match(fbPageID);
-  
+
     if (pageID) {
       $(field).val(pageID[1]);
     }
@@ -164,16 +234,16 @@ function getAdAccounts(ad_id) {
     console.log(getAdAccountsQuery());
     FB.api(getAdAccountsQuery(), function (response) {
       if (response && !response.error && response.data.length != 0) {
-  
+
         response.data.forEach(function(ad_account) {
           const {name, id} = ad_account;
-  
+
           var selected = (ad_id == id) ? 'selected' : '';
           var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
-  
+
           $('#ad-account-list').append(str);
         });
-        
+
         Instance.adAccounts = response.data;
       } else if (response.data.length == 0) {
           $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');

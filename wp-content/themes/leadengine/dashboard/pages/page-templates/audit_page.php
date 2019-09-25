@@ -377,9 +377,13 @@
                 <span class="stat-box-title">Hashtags used</span>
                 <span class="graph-procent" style="margin-top: 4px;">Most used '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
               </div>
-              <div class="inner custom-inner" style="padding: 0;">
+              <!-- <div class="inner custom-inner" style="padding: 0;">
                 <canvas id="hashtag-chart" class="chart-instagram"  style="height: 292px;"></canvas>
+              </div> -->
+              <div class="inner custom-inner" style="padding: 0;">
+                <canvas id="hashtag-chart-new" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
+
               <div class="legend">
                   <span class="round-color you-color"></span> <span class="space">You</span>
                   <?php if ($audit->has_comp && !$audit->competitor->manual) { ?><span class="round-color competitor-color"></span> <?php echo ucfirst($audit->competitor_name); } ?>
@@ -498,7 +502,7 @@
         }
 
         if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
-          <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php 
+          <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php
         } ?>
         </form><?php
 
@@ -690,7 +694,8 @@
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
 
     generateChart('lpd-chart', data_array, allLines, [true, true]);
-    generateBarChart('hashtag-chart', bar_data, bar_labels, [true, true]);<?php
+    generateBarChart('hashtag-chart', bar_data, bar_labels, [true, true]);
+    generateAreaChart('hashtag-chart-new', bar_data, bar_labels);<?php
   } ?>
 
   <?php
@@ -875,6 +880,11 @@
         }
       });
     }
+    <?php
+        function replace_lbs($string) {
+            echo preg_replace("/\r|\n/", '\n', $string);
+        }
+    ?>
 
     <?php
     if ($audit->facebook_bit == "1") { ?>
@@ -883,16 +893,17 @@
         two: <?php echo $user->range_number_fb_2; ?>,
       }
       <?php if($audit->facebook_advice != "") { ?>
+
           var text_fb = {
-            one: '<?php echo $audit->facebook_advice; ?>',
-            two: '<?php echo $audit->facebook_advice; ?>',
-            three: '<?php echo $audit->facebook_advice; ?>',
+            one: '<?php replace_lbs($audit->facebook_advice); ?>',
+            two: '<?php replace_lbs($audit->facebook_advice); ?>',
+            three: '<?php replace_lbs($audit->facebook_advice); ?>',
           }
       <?php } else { ?>
           var text_fb = {
-            one: '<?php echo $user->text_fb_1; ?>',
-            two: '<?php echo $user->text_fb_2; ?>',
-            three: '<?php echo $user->text_fb_3; ?>',
+            one: '<?php replace_lbs($user->text_fb_1); ?>',
+            two: '<?php replace_lbs($user->text_fb_2); ?>',
+            three: '<?php replace_lbs($user->text_fb_3); ?>',
           }
       <?php } ?>
 
@@ -905,15 +916,15 @@
       }
       <?php if($audit->instagram_advice != "") { ?>
           var text_ig = {
-            one: '<?php echo $audit->instagram_advice; ?>',
-            two: '<?php echo $audit->instagram_advice; ?>',
-            three: '<?php echo $audit->instagram_advice; ?>',
+            one: '<?php replace_lbs($audit->instagram_advice); ?>',
+            two: '<?php replace_lbs($audit->instagram_advice); ?>',
+            three: '<?php replace_lbs($audit->instagram_advice); ?>',
           }
       <?php } else { ?>
           var text_ig = {
-            one: '<?php echo $user->text_insta_1; ?>',
-            two: '<?php echo $user->text_insta_2; ?>',
-            three: '<?php echo $user->text_insta_3; ?>',
+            one: '<?php replace_lbs($user->text_insta_1); ?>',
+            two: '<?php replace_lbs($user->text_insta_2); ?>',
+            three: '<?php replace_lbs($user->text_insta_3); ?>',
           }
        <?php } ?>
       handleSlider('instagram', range_ig, text_ig); <?php
@@ -925,15 +936,15 @@
       }
       <?php if($audit->website_advice != "") { ?>
           var text_ws = {
-            one: '<?php echo $audit->website_advice; ?>',
-            two: '<?php echo $audit->website_advice; ?>',
-            three: '<?php echo $audit->website_advice; ?>',
+            one: '<?php replace_lbs($audit->website_advice); ?>',
+            two: '<?php replace_lbs($audit->website_advice); ?>',
+            three: '<?php replace_lbs($audit->website_advice); ?>',
           }
       <?php } else {?>
           var text_ws = {
-            one: '<?php echo $user->text_website_1; ?>',
-            two: '<?php echo $user->text_website_2; ?>',
-            three: '<?php echo $user->text_website_3; ?>',
+            one: '<?php replace_lbs($user->text_website_1); ?>',
+            two: '<?php replace_lbs($user->text_website_2); ?>',
+            three: '<?php replace_lbs($user->text_website_3); ?>',
           }
       <?php } ?>
       handleSlider('website', range_ws, text_ws); <?php
