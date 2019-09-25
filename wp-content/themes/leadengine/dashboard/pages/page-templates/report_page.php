@@ -67,9 +67,9 @@
       $report->update($post_name, sanitize_textarea_field(stripslashes($_POST[$post_name])), 'Report_content');
     }
   }
-  
+
   if (isset($_POST['followers_count']) && $edit_mode) {
-      
+
       $social_stats =  array(
         "avgEngagement"=> floatval($_POST["avgEngagement"]),
         "followers_count"=> absint($_POST["followers_count"]),
@@ -210,37 +210,39 @@
           </p><?php
         } ?>
       </div>
-    </div> <?php 
+    </div> <?php
 
-    if ($social_stats->instagram_data == NULL && $social_stats->facebook_data == NULL) { ?>
+    if($social_stats->instagram_data != NULL
+        && $social_stats->facebook_data != NULL) { ?>
 
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
       <!-- Social Statistics -->
       <span class="facebook-inf-title" style="text-align:center; margin: 0;">Social Stats:</span>
-      <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics of your Facebook and Instagram page.</span><?php 
+      <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics of your Facebook and Instagram page.</span><?php
       if ($report->manual && $edit_mode) { ?>
         <span class="manual-text" style="width: 100%;">
           <span style="color: #e74c3c;">Attention: </span>
-          There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> to gather your data!</span><?php 
+          There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> to gather your data!</span><?php
       }
+      ?><div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="float:left; height: auto;"><?php
       if ($report->manual && $edit_mode) { ?>
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data"><?php 
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data"><?php
       }
       foreach ($social_blocks as $item) {
         if (show_block($edit_mode, $report->{$item["type"]}, isset($social_stats->{$item["data"]}->{$item["fb_name"]}))) { ?>
-          <div class="col-lg-4 report-social-style" style="float: left; padding:5px;">
+          <div class="col-lg-6 report-social-style" style="float: left; padding:5px;">
             <div class="stat-block col-lg-12">
-              <div class="inner"><?php 
+              <div class="inner"><?php
                 if (!$report->manual) { ?>
-                  <span class="explenation"><?php 
+                  <span class="explenation"><?php
                     echo $item["desc"]; ?>
-                  </span><?php 
+                  </span><?php
                 } ?>
-                <span class="title-box facebook"><?php 
+                <span class="title-box facebook"><?php
                   echo $item["name"]; ?>
-                </span><?php 
+                </span><?php
                 if (!$report->manual) { ?>
-                  <span class="data_animation"><?php 
+                  <span class="data_animation"><?php
                 }
 
                 if ($report->manual && !$item["fb"] && $edit_mode) { ?>
@@ -253,22 +255,23 @@
                   $percent = !isset($comp_social->{$item["data"]}->{$item["fb_name"]}) ? 0 :
                               procent_calc($social_stats->{$item["data"]}->{$item["fb_name"]}, $comp_social->{$item["data"]}->{$item["fb_name"]});
 
-                  $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
+                  // $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
+                  $color = "#2980b9";
                   $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
 
-                  <span class="competitor-stats" style="color: <?php echo $color; ?>"><?php 
+                  <span class="competitor-stats" style="color: <?php echo $color; ?>"><?php
                   if ($icon != "window-minimize") { ?>
-                    <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; margin-top: -3px; color: <?php echo $color; ?>"></i><?php 
+                    <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; margin-top: -3px; color: <?php echo $color; ?>"></i><?php
                   } ?>
-                    <span class="percentage"><?php 
+                    <span class="percentage"><?php
                       echo $percent !== 0 ? "$percent%" : ""; ?>
                       </span>
                   </span><?php
-                } 
-                if (!$report->manual) { ?> 
-                  </span> <?php 
+                }
+                if (!$report->manual) { ?>
+                  </span> <?php
                 } ?>
-              <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php 
+              <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php
                 visibility_icon($edit_mode, $report->{$item["type"]}); ?>
               </div>
             </div>
@@ -276,25 +279,27 @@
         </div> <?php
       }
     }
+    ?></div><?php
     if ($report->manual && $edit_mode) { ?>
       <input type="submit" class="edite-button" value="Update data" style="width: 150px !important; margin-left: 17px;"/>
-      </form><?php 
+      </form><?php
     } ?>
 
-      <div style="clear: both;"></div>
+      <!-- <div style="clear: both;"></div> -->
 
-      <div class="col-lg-6 float outer-chart" style="padding-left: 15px;">
-        <div class="col-lg-12 inner-chart">
+      <div class="col-lg-6 float outer-chart" style="padding-left: 15px; margin-top: 25px;">
+        <div class="col-lg-12 inner-chart" style="height: 460px;">
           <span class="title-report-box">Social Notes</span><?php
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#social_advice" method="post" enctype="multipart/form-data">
-              <textarea maxlength="999" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
+              <textarea maxlength="999" style="height: 290px;" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
               <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
             echo "<p>$report->social_advice</p>";
           } ?>
         </div>
+      </div>
       </div> <?php
       } ?>
 
@@ -313,12 +318,13 @@
                 <?php
                   if ($report->has_comp) {
                     $percent = procent_calc($avg_campaign->{$item["fb_name"]}, $comp_campaign->{$item["fb_name"]});
-                    $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
+                    // $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
+                    $color = "#2980b9";
                     $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
 
-                    <span class="competitor-stats" style="z-index:555; color: <?php echo $color; ?>"><?php 
+                    <span class="competitor-stats" style="z-index:555; color: <?php echo $color; ?>"><?php
                       if ($icon != "window-minimize") { ?>
-                          <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; color: <?php echo $color; ?>"></i><?php 
+                          <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; color: <?php echo $color; ?>"></i><?php
                       }
                       echo "$percent%"; ?>
                     </span><?php
@@ -372,7 +378,7 @@
           <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
-        <p><?php 
+        <p><?php
           echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
         </p><?php
       } ?>

@@ -54,7 +54,7 @@
             <li id="report-click">Intro / conlusion Reports</li>
             <li id="mail-click">Mail config</li>
           </ul>
-          
+
           <div id="profile-member">
             <h3 class="h3-fix">Profile settings</h3>
             <?php echo do_shortcode('[rcp_profile_editor]'); ?>
@@ -115,11 +115,11 @@
               </div><?php
 
               // ranges
-              foreach ($ranges as $range) { 
+              foreach ($ranges as $range) {
                 $item = (object) $range; ?>
                 <div class="<?php echo $item->code; ?>-audit-block">
                   <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
-                  for ($i = 1; $i <= 3; $i++) { 
+                  for ($i = 1; $i <= 3; $i++) {
                     if ($i < 3) { ?>
                       <h6>Show this text up to the selected range, making it faster to create an audit</h6>
                       <input maxlength="2" type="text" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
@@ -131,7 +131,7 @@
                       echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
                   } ?>
                 </div><?php
-              } ?> 
+              } ?>
               <!-- error notify -->
               <div class="error-display-audit"></div>
               <input type="submit" value="Update" class="update-button" >
@@ -239,7 +239,7 @@
             </div>
           </div>
 
-          <div id="mail-settings">
+          <div id="account-settings">
             <h3 class="h3-fix">Your data</h3>
             <?php echo do_shortcode("[subscription_details]"); ?>
           </div>
@@ -293,7 +293,7 @@
         $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller than Day 2 and Day 2 smaller than Day 3.</span>");
         return;
       }
-      
+
       this.submit();
     });
 

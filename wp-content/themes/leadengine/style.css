@@ -104,10 +104,15 @@ License URI: license.txt
     background: #2980b9 !important;
 }
 
+.rcp_form input[type=checkbox] {
+    z-index: 555;
+    position: relative;
+}
+
 .rcp_login_data label {
     display: inline-block;
     float: left;
-    margin-top: -25px;
+    margin-top: -20px; 
 }
 
 #rcp_user_remember + label {

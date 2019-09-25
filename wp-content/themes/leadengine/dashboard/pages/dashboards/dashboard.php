@@ -138,19 +138,19 @@
           <div style="clear:both"></div>
 
           <!-- AUDIT STATS -->
-          <div class="stat-box">
+          <div class="stat-box" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">Audits sent</span>
             <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
             <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
           </div>
-          <div class="stat-box">
+          <div class="stat-box" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">Audits opened</span>
             <span class="stat-box-data"> <?php echo $viewed_audit; ?> </span>
             <span class="stat-box-procent ">
               <?php echo percent_diff($viewed_audit_month, $viewed_audit - $viewed_audit_month, true); ?>
             </span>
           </div>
-          <div class="stat-box">
+          <div class="stat-box" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">Open rate</span>
             <span class="stat-box-data"><?php echo percent_print($open_rate_audit); ?></span>
             <span class="stat-box-procent ">
@@ -159,21 +159,21 @@
           </div>
 
           <!-- REPORT STATS -->
-          <div class="stat-box">
+          <div class="stat-box" style="border-top: 2px solid #2980b9;">
             <span class="stat-box-title">Reports sent</span>
             <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
             <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
           </div>
-          <div class="stat-box">
+          <div class="stat-box" style="border-top: 2px solid #2980b9;">
             <span class="stat-box-title">Reports opened</span>
             <span class="stat-box-data"> <?php echo $viewed_report; ?> </span>
             <span class="stat-box-procent ">
               <?php echo percent_diff($viewed_report_month, $viewed_report - $viewed_report_month, true); ?>
             </span>
           </div>
-          <div class="stat-box">
+          <div class="stat-box" style="border-top: 2px solid #2980b9;">
             <span class="stat-box-title">Open rate</span>
-            <span class="stat-box-data"><?php echo percent_print($open_rate_report); ?></span>
+            <span class="stat-box-data" ><?php echo percent_print($open_rate_report); ?></span>
             <span class="stat-box-procent ">
               <?php echo percent_diff($prev_open_rate_report, $open_rate_report, true); ?>
             </span>
@@ -184,7 +184,7 @@
         <div class="report-compared-last-month col-xs-12 col-sm-12 col-md-12 col-lg-6">
           <h4>Compared to previous Months</h4>
           <hr class="under-line" />
-          <div class="graph-box">
+          <div class="graph-box" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">% increase in number of audits this month</span>
             <span class="graph-procent"><?php echo percent_print($yearly_increase_audit, $alter_percent_audit); ?></span>
             <span class="graph-info">
@@ -193,7 +193,7 @@
             </span>
             <canvas id="chart-audit"></canvas>
           </div>
-          <div class="graph-box">
+          <div class="graph-box" style="border-top: 2px solid #2980b9;">
             <span class="stat-box-title">% increase in number of reports this month</span>
             <span class="graph-procent"><?php echo percent_print($yearly_increase_report, $alter_percent_report); ?></span>
             <span class="graph-info">
