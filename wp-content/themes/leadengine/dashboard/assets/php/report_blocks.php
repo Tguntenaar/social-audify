@@ -64,15 +64,15 @@
       "currency" => 1
     ],
     ["type" => "cam_cpm",
-      "name" => "Cost per mile",
+      "name" => "Cost per mille",
       "fb_name" => "cpm",
-      "desc" => "Average cost per mile",
+      "desc" => "The average cost for 1,000 impressions",
       "currency" => 1
     ],
     ["type" => "cam_cpp",
       "name" => "Cost per pixel",
       "fb_name" => "cpp",
-      "desc" => "Average cost per pixel",
+      "desc" => "The average cost to reach 1,000 people. This metric is estimated.",
       "currency" => 1
     ],
     ["type" => "cam_ctr",
