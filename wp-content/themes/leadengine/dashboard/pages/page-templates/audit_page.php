@@ -382,11 +382,8 @@
                 <span class="stat-box-title">Hashtags used</span>
                 <span class="graph-procent" style="margin-top: 4px;">Most used '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
               </div>
-              <!-- <div class="inner custom-inner" style="padding: 0;">
-                <canvas id="hashtag-chart" class="chart-instagram"  style="height: 292px;"></canvas>
-              </div> -->
               <div class="inner custom-inner" style="padding: 0;">
-                <canvas id="hashtag-chart-new" class="chart-instagram"  style="height: 292px;"></canvas>
+                <canvas id="hashtag-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
 
               <div class="legend">
@@ -699,7 +696,7 @@
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
 
     generateChart('lpd-chart', data_array, allLines, [true, true]);
-    generateAreaChart('hashtag-chart-new', bar_data, bar_labels);<?php
+    generateAreaChart('hashtag-chart', bar_data, bar_labels);<?php
   } ?>
 
   <?php

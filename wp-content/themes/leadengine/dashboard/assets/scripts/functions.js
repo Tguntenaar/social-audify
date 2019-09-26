@@ -47,75 +47,6 @@ function filterSearch(value, links, counterSpan = null) {
   }
 }
 
-function generateAreaChart(canvas, bar_data, bar_labels) {
-    var i = 0.1;
-    var counter = 1;
-    const backgroundColors = [];
-    const data_array = [];
-    const label_array = [];
-
-    bar_data.forEach(function(element) {
-
-        element.forEach(function(e) {
-            data_array.push(e);
-
-            if(counter == 1) {
-                backgroundColors.push(`rgba(72, 125, 215, ${i})`);
-            } else {
-                backgroundColors.push(`rgba(238, 82, 83, ${i})`);
-            }
-
-            i = i + 0.1;
-        });
-
-        counter++;
-        i = 0.2;
-    });
-
-    bar_labels.forEach(function(element) {
-
-        element.forEach(function(e) {
-            label_array.push(e);
-
-        });
-
-    });
-
-    $.getScript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js", function () {
-        new Chart(canvas, {
-            type: 'polarArea',
-            data: {
-                datasets: [{
-                    data: data_array,
-                    backgroundColor: backgroundColors,
-                    label: 'My dataset' // for legend
-                }],
-                labels: label_array
-            },
-            options: {
-                responsive: true,
-                legend: {
-                    position: 'right',
-                },
-                title: {
-                    display: true,
-                    text: ''
-                },
-                scale: {
-                    ticks: {
-                        beginAtZero: true
-                    },
-                    reverse: false
-                },
-                animation: {
-                    animateRotate: false,
-                    animateScale: true
-                }
-            }
-        });
-    }, true);
-
-}
 
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   // More can be added..?
@@ -146,6 +77,32 @@ function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
         legend: { display: false },
         scales: { xAxes: [{ display: axes[0] }], yAxes: [{ display: axes[1] }] }
       }
+    });
+  }, true);
+}
+
+function generateAreaChart(canvas, data, labels) {
+  backgroundColors = [];
+  for (var i = 0; i < data[0].length; i++) {
+    backgroundColors.push(`rgba(72, 125, 215, ${0.2 + (i * 0.15)})`)
+  }
+
+  if (data.length > 1) {
+    for (var i = 0; i < data[0].length; i++) {
+      backgroundColors.push(`rgba(238, 82, 83, ${0.2 + (i * 0.15)})`)
+    }
+  }
+  $.getScript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js", function () {
+    new Chart(canvas, {
+      type: 'polarArea',
+      data: {
+        datasets: [{
+          data: [].concat.apply([], data),
+          backgroundColor: backgroundColors,
+        }],
+        labels: [].concat.apply([], labels)
+      },
+      options: { legend: { position: 'right' }, title: { display: true } }
     });
   }, true);
 }
