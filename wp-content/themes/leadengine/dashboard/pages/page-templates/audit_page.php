@@ -744,6 +744,27 @@
     };
 
     $(document).ready(function() {
+      // On change of an text area show update all
+      $("textarea").on('keyup paste change', function() {
+        $("#universal-update").show(600);
+      });
+
+      $("input[type=range]").on('mouseup', function() {
+        var data = {action: 'textareas', ...commonPost};
+        var translate = {
+          'facebook_range': 'facebook_score',
+          'instagram_range': 'instagram_score',
+          'website_range': 'website_score',
+        }
+        data[translate[$(this).prop('id')]] = $(this).val();
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: data,
+          success: logResponse,
+          error: logResponse,
+        });
+      });
 
       $('#universal-update').on('click', function() {
         // TODO: set alleen de areas die zijn aangepast.
@@ -754,8 +775,6 @@
           website_advice: $('#website_advice').val(),
           conclusion: $('#conclusion').val(),
         };
-        
-        console.log('posting..');
         $.ajax({
           type: "POST",
           url: ajaxurl,
@@ -763,10 +782,6 @@
           success: $('#universal-update').hide(600),
           error: logResponse,
         });
-      });
-
-      $("textarea").on('keyup paste change', function() {
-        $("#universal-update").show(600);
       });
 
       // IFrame Submit
