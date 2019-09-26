@@ -1698,7 +1698,7 @@ nav ul a:hover {
 		height: 25px !important;
 		margin-left: -12px !important;
 		margin-bottom: 0;
-		left: !important;
+		/* left: !important; */
 		top: 10px;
 }
 
@@ -1708,7 +1708,7 @@ nav ul a:hover {
 	margin-left: -12px !important;
 	margin-bottom: 0 !important;
 	top: 10px;
-	left: !important;
+	/* left: !important; */
 }
 
 .custom-body {
@@ -1886,6 +1886,17 @@ h3 {
 	text-align: center;
 	line-height: 30px;
 	border: 0;
+}
+
+/* update all button */
+.floating-update {
+	position: fixed;
+	z-index: 55555; 
+	bottom: 6px;
+	right: 16px;
+	border-radius: 2px;
+	width: 13%;
+	display: none;
 }
 
 .agree,
@@ -2509,7 +2520,7 @@ h4 {
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
-    /* z-index: 55555555 !important; /* Sit on top */ */
+    /* z-index: 55555555 !important; /* Sit on top */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
@@ -3135,7 +3146,7 @@ input[type="submit"] {
 	width: auto;
 	padding: 7px 14px;
 	background: #c0392b;
-	out
+	/* out */
 }
 
 #nextBtn:hover,

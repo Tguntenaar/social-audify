@@ -180,17 +180,6 @@
       <span></span>
       <span></span>
     </div>
-    <style>
-      .floating-update {
-        position: fixed;
-        z-index: 55555; 
-        bottom: 6px;
-        right: 16px;
-        border-radius: 2px;
-        width: 13%;
-        display: none;
-      }
-    </style>
 
     <button id="universal-update" class="advice-button floating-update">
       Update All
