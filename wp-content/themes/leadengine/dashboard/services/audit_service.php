@@ -140,6 +140,10 @@ class audit_service extends connection {
     return $this->dbwp->delete('Audit', array('id' => $id));
   }
 
+  public function get_template_fields() {
+    return $this->template_fields;
+  }
+
 
   private $template_fields = "introduction, conclusion, facebook_advice, instagram_advice, website_advice, facebook_score, instagram_score, website_score, video_iframe";
   private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp";

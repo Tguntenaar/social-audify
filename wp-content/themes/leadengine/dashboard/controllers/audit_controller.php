@@ -83,7 +83,6 @@ class audit_controller {
   }
 
   public function update($audit_id, $field_name, $value, $table = 'Audit', $comp = 0) {
-    $this->sql_data->$field_name = $value;
     return $this->service->update($audit_id, $table, $field_name, $value, $comp);
   }
 
@@ -115,6 +114,10 @@ class audit_controller {
 
   public function get_id($post_id) {
     return $this->service->get_id($post_id)->id;
+  }
+
+  public function get_area_fields() {
+    return explode(", ", $this->service->get_template_fields());
   }
 }
 ?>

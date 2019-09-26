@@ -173,13 +173,29 @@
   </script>
 </head>
 <body class="custom-body">
-  <div class="sub-header col-lg-12" style="display: block !important;">
-  <!-- Animated CSS stuff -->
-  <div id="nav-icon2">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
+    <div class="sub-header col-lg-12" style="display: block !important;">
+    <!-- Animated CSS stuff -->
+    <div id="nav-icon2">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <style>
+      .floating-update {
+        position: fixed;
+        z-index: 55555; 
+        bottom: 6px;
+        right: 16px;
+        border-radius: 2px;
+        width: 13%;
+        display: none;
+      }
+    </style>
+
+    <button id="universal-update" class="advice-button floating-update">
+      Update All
+    </button>
+
     <div class="mobile-hide"><?php
         if ($edit_mode) { ?>
           <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
@@ -242,7 +258,7 @@
       <div class="client-profile-picture">
         <?php echo get_avatar($author_id, 32); ?>
       </div>
-      <div class="audit-intro-text" id="introduction">
+      <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo $author->display_name;?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
@@ -606,7 +622,7 @@
       </div><?php
     } ?>
   </section>
-  <section class="audit-conclusion col-lg-12" id="conclusion">
+  <section class="audit-conclusion col-lg-12">
     <div class="left-conlusion col-lg-7">
       <h3>Conclusion</h3>
       <hr class="under-line" />
@@ -655,11 +671,11 @@
       $('#reload_page').click(function() {
         location.reload();
       });
-
+     
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: {...{action: 'crawl_data_check'}, ...commonPost}, // $.extend({}, commonPost, { 'action': 'crawl_data_check' })
+        data: {action: 'crawl_data_check', ...commonPost},
         success: function (response) {
           console.log('retrieved response : ' + response);
           if (response > <?php echo (int)$audit->has_comp ?>) {
@@ -694,7 +710,6 @@
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
 
     generateChart('lpd-chart', data_array, allLines, [true, true]);
-    generateBarChart('hashtag-chart', bar_data, bar_labels, [true, true]);
     generateAreaChart('hashtag-chart-new', bar_data, bar_labels);<?php
   } ?>
 
@@ -732,7 +747,7 @@
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: $.extend({}, commonPost, { action: 'toggle_visibility', field: field_name }),
+          data: {action: 'toggle_visibility', field: field_name , ...commonPost},
           success: function () { field.html(icon) },
           error: logResponse,
         });
@@ -740,6 +755,30 @@
     };
 
     $(document).ready(function() {
+
+      $('#universal-update').on('click', function() {
+        // TODO: set alleen de areas die zijn aangepast.
+        var areas = {
+          introduction: $('#introduction').val(),
+          facebook_advice: $('#facebook_advice').val(),
+          instagram_advice: $('#instagram_advice').val(),
+          website_advice: $('#website_advice').val(),
+          conclusion: $('#conclusion').val(),
+        };
+        
+        console.log('posting..');
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: {action: 'textareas', ...areas, ...commonPost},
+          success: $('#universal-update').hide(600),
+          error: logResponse,
+        });
+      });
+
+      $("textarea").on('keyup paste change', function() {
+        $("#universal-update").show(600);
+      });
 
       // IFrame Submit
       $("#banner-form").submit(function(e){

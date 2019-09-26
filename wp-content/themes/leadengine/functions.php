@@ -227,6 +227,27 @@
     wp_die();
   }
 
+  add_action( 'wp_ajax_textareas', 'update_areas');
+  add_action( 'wp_ajax_nopriv_textareas', 'not_logged_in');
+
+  function update_areas() {
+    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+    $connection = new connection;
+    $type = $_POST['type'];
+    if ($type == 'audit') {
+      require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
+      $audit_control = new audit_controller($connection);
+      $fields = $audit_control->get_area_fields();
+      foreach($fields as $field) {
+        if (isset($_POST[$field])) {
+          $id = $_POST[$_POST['type']];
+          $audit_control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), 'Audit_template');
+        }
+      }
+    }
+    wp_send_json(array('succes'=>'1'));
+    wp_die();
+  }
 
   add_action( 'wp_ajax_update_meta_report', 'create_report');
   add_action( 'wp_ajax_nopriv_update_meta_report', 'not_logged_in');
