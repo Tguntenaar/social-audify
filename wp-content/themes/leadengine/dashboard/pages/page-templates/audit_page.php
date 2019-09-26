@@ -825,9 +825,11 @@
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: $.extend({}, commonPost, { action: 'flip_mail',
-              value: $("#mail_bit_check").is(':checked')
-            }),
+            data: { 
+              action: 'flip_mail',
+              value: $("#mail_bit_check").is(':checked'),
+              ...commonPost
+            },
             success: logResponse,
             error: function (errorThrown) {
               console.log(errorThrown);
@@ -857,7 +859,7 @@
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: $.extend({}, commonPost, { 'action': 'delete_page' }),
+          data: {'action': 'delete_page', ...commonPost},
           success: function () {
             window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
           },
@@ -873,11 +875,12 @@
       });
 
       function update_ads(button, competitor) {
-        var data = $.extend({}, commonPost, {
+        var data = {
           action: 'update_ads_audit',
           competitor: (competitor) ? 'true' : 'false',
-          ads: button
-        });
+          ads: button,
+          ...commonPost
+        };
 
         $.ajax({
           type: "POST",
@@ -918,14 +921,12 @@
           advice.val(text.three);
         }
       });
-    }
-    <?php
-        function replace_lbs($string) {
-            echo preg_replace("/\r|\n/", '\n', $string);
-        }
-    ?>
+    }<?php
 
-    <?php
+    function replace_lbs($string) {
+        echo preg_replace("/\r|\n/", '\n', $string);
+    }
+  
     if ($audit->facebook_bit == "1") { ?>
       var range_fb = {
         one: <?php echo $user->range_number_fb_1; ?>,
