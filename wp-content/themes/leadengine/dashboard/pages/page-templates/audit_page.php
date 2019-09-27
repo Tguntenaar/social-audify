@@ -796,15 +796,15 @@
           }
         }<?php
       }?>
-
+      
       // IFrame Submit
-      $("#banner-form").submit(function(e){
+      $("#banner-form").submit(function(e) {
         e.preventDefault();
         var updated = $('form input[name="iframe"]').val();
         $('form input[name="iframe"]').val(updated.replace('<iframe','').replace('</iframe>',''));
         this.submit();
       });
-
+     
       // Share & Track Modal
       var modalData = {
         'text': "This link is copied to your clipboard:",
