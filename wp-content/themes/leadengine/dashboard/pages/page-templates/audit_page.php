@@ -89,31 +89,6 @@
     }
   }
 
-
-  // FIXME: flikker weg wanner het via functions php gaat
-  // function check_manual_instagram_postfields($audit, $competitor) {
-  //   $str = $competitor == 1 ? "comp-" : "";
-  //   // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
-  //   if (isset($_POST["{$str}followers_count"])) {
-  //     $instagram_data = array(
-  //       "avgEngagement"=> floatval($_POST["{$str}avgEngagement"]),
-  //       "followers_count"=> absint($_POST["{$str}followers_count"]),
-  //       "postsLM"=> absint($_POST["{$str}postsLM"]),
-  //       "follows_count"=> absint($_POST["{$str}follows_count"]),
-  //       "averageComments"=> floatval($_POST["{$str}averageComments"]),
-  //       "averageLikes"=> floatval($_POST["{$str}averageLikes"]),
-  //     );
-
-  //     $audit->update("instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
-  //   }
-  // }
-
-  // FIXME: Handle post
-  // if ($edit_mode) {
-  //   check_manual_instagram_postfields($audit_control, $id, 0);
-  //   check_manual_instagram_postfields($audit_control, $id, 1);
-  // }
-
    // Overall scores
    $score = array(
     'fb' => $audit->facebook_score  != NULL ? $audit->facebook_score : 50,
@@ -262,10 +237,10 @@
 
     if ($edit_mode) { ?>
       <div class="video-options">
-        <h3>Banner options:</h3>
+        <h3>Video banner:</h3>
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
-          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="iframe"/> <span class="radio-label">Iframe</span>
+          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="video"/> <span class="radio-label">Iframe</span>
           <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?> value="nothing"/> <span class="radio-label">Nothing</span>
           <div id="iframe-input" <?php echo $display_iframe; ?> >
             <input type="text" id="iframe-input" name="iframe" placeholder="Insert iframe(Loom/Youtube etc.)" pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))"
@@ -286,7 +261,6 @@
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
-            <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
           <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
@@ -383,7 +357,6 @@
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="facebook_score" id="facebook_score" value='<?php echo $score['fb']; ?>'/>
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
-                    <input type="submit" value="Update" class="edite-button">
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p>
@@ -535,11 +508,7 @@
               </div>
             </div><?php
           }
-        }
-
-        if ($audit->manual || (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
-          <input type="submit" class="edite-button" value="Update data" style="margin-left: 10px;"/><?php
-        } ?>
+        }?>
         </form><?php
 
           if ($audit->manual == 1) { ?>
@@ -565,7 +534,6 @@
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="instagram_score" id="instagram_score" value="<?php echo $score['ig']; ?>"/>
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
-                    <input type="submit" value="Update" class="edite-button" >
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
@@ -627,7 +595,6 @@
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
               <input type="hidden" name="website_score" id="website_score" value="<?php echo $score['wb']; ?>"/>
               <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
-              <input type="submit" value="Update" class="edite-button">
             </form><?php
           } else { ?>
             <span class="score-text"><?php echo $score['wb']; ?>%</span>
@@ -652,7 +619,6 @@
           <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php
             echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
           ?></textarea>
-          <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
         <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
