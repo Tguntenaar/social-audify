@@ -99,7 +99,7 @@
               <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
                 foreach($clients as $client) {
                   $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
-                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
+                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
                     data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
                   </a><?php
                 } ?>
@@ -108,6 +108,7 @@
 
             <!-- Chosing an competitor -->
             <div class="tab" >
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding" id="show-client"></div>
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
                 <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Competitor</div>
               </div>
@@ -184,6 +185,11 @@
     $('.audit-row').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
       $(this).addClass('selected');
+    });
+
+    $('.audit-row.client').on('click', function() {
+      nextPrev(1);
+      $('#show-client').text(`Selected client = ${$(this).prop('name')}`);
     });
 
     $(function() {
