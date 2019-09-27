@@ -240,7 +240,7 @@
         <h3>Video banner:</h3>
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
-          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="video"/> <span class="radio-label">Iframe</span>
+          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="iframe"/> <span class="radio-label">Video</span>
           <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?> value="nothing"/> <span class="radio-label">Nothing</span>
           <div id="iframe-input" <?php echo $display_iframe; ?> >
             <input type="text" id="iframe-input" name="iframe" placeholder="Insert iframe(Loom/Youtube etc.)" pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))"
