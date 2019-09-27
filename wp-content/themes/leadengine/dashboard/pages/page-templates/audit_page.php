@@ -51,6 +51,36 @@
     $audit->update('video_iframe', $value, 'Audit_template');
   }
 
+  function advice_equal_to_user($user, $audit, $type) {
+    if (
+      $type == 'fb' &&
+      ($user->text_fb_1 == $audit->facebook_advice ||
+      $user->text_fb_2 == $audit->facebook_advice ||
+      $user->text_fb_3 == $audit->facebook_advice)
+    ) {
+      return true;
+    }
+    if (
+      $type == 'ig' &&
+      ($user->text_insta_1 == $audit->instagram_advice ||
+      $user->text_insta_2 == $audit->instagram_advice ||
+      $user->text_insta_3 == $audit->instagram_advice)
+    ) {
+      return true;
+    }
+    if (
+      $type == 'wb' &&
+      ($user->text_website_1 == $audit->website_advice ||
+      $user->text_website_2 == $audit->website_advice ||
+      $user->text_website_3 == $audit->website_advice)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  var_dump(advice_equal_to_user($user, $audit, 'ig'));
+
   $post_names =  ['introduction', 'conclusion', 'facebook_advice',
                   'instagram_advice','website_advice', 'facebook_score',
                   'instagram_score', 'website_score'];
@@ -251,11 +281,11 @@
         <span class="audit-company-name"><?php echo $author->display_name;?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
+            <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
             <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
+          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
         } ?>
       </div>
     </div><?php
@@ -744,6 +774,18 @@
       // On change of an text area show update all
       $("textarea").on('keyup paste change', function() {
         $("#universal-update").show(600);
+        // Enable navigation prompt
+        window.onbeforeunload = function() {
+            return true; // TODO: add message?
+        };
+        var advice_type = ($(this).prop('id').includes('_advice')) ? $(this).prop('id').replace('_advice', '') : false;
+        if (advice_type) {
+          // disable slider text
+          handleSlider(advice_type);
+        }
+        if ($(this).val() == '' && $(this).prop('id').includes('_advice')) {
+          handleSlider(advice_type); // TODO: add parameters 
+        }
       });
 
       $("input[type=range]").on('mouseup', function() {
@@ -776,7 +818,11 @@
           type: "POST",
           url: ajaxurl,
           data: {action: 'textareas', ...areas, ...commonPost},
-          success: $('#universal-update').hide(600),
+          success: function(response) {
+            // Remove navigation prompt
+            window.onbeforeunload = null;
+            $('#universal-update').hide(600);
+          },
           error: logResponse,
         });
       });
@@ -902,94 +948,107 @@
     });
 
     // Dynamic slider functions
-    function handleSlider(type, range, text) {
+    function handleSlider(type, range = false, text = false) {
       var value = $('#' + type + '_value');
       var score = $('#' + type + '_score');
       var slider = $('#' + type + '_range');
       var advice = $('#' + type + '_advice');
-
+      // set
       value.html(slider.val());
 
+      slider.off('input'); 
       slider.on('input', function(e) {
         value.html($(e.target).val());
         score.val($(e.target).val());
-
-        if ($(e.target).val() < range.one) {
-          advice.val(text.one);
-        } else if ($(e.target).val() < range.two) {
-          advice.val(text.two);
-        } else {
-          advice.val(text.three);
+        if (text) {
+          changeAdvice($(e.target).val(), range, advice, text);
         }
       });
-    }<?php
+    }
 
-    function replace_lbs($string) {
+    function changeAdvice(sliderValue, range, adviceArea, text) {
+      if (sliderValue < range.one) {
+        adviceArea.val(text.one);
+      } else if (sliderValue < range.two) {
+        adviceArea.val(text.two);
+      } else {
+        adviceArea.val(text.three);
+      }
+    }
+    
+    <?php
+
+      function replace_lbs($string) {
         echo preg_replace("/\r|\n/", '\n', $string);
-    }
-  
-    if ($audit->facebook_bit == "1") { ?>
-      var range_fb = {
-        one: <?php echo $user->range_number_fb_1; ?>,
-        two: <?php echo $user->range_number_fb_2; ?>,
       }
-      <?php if($audit->facebook_advice != "") { ?>
+    ?>
 
-          var text_fb = {
-            one: '<?php replace_lbs($audit->facebook_advice); ?>',
-            two: '<?php replace_lbs($audit->facebook_advice); ?>',
-            three: '<?php replace_lbs($audit->facebook_advice); ?>',
-          }
-      <?php } else { ?>
-          var text_fb = {
-            one: '<?php replace_lbs($user->text_fb_1); ?>',
-            two: '<?php replace_lbs($user->text_fb_2); ?>',
-            three: '<?php replace_lbs($user->text_fb_3); ?>',
-          }
-      <?php } ?>
-
-      <?php  ?> handleSlider('facebook', range_fb, text_fb); <?php
-    }
-    if ($audit->instagram_bit == "1") { ?>
-      var range_ig = {
-        one: <?php echo $user->range_number_insta_1; ?>,
-        two: <?php echo $user->range_number_insta_2; ?>,
+    var sliderData = {<?php 
+      if ($audit->facebook_bit == "1") { ?>
+        fb: { <?php 
+          if ($audit->facebook_advice != "" && !advice_equal_to_user($user, $audit, 'fb')) { ?>
+            range: false,
+            text: false,<?php 
+          } else { ?>
+            range: {
+              one: <?php echo $user->range_number_fb_1; ?>,
+              two: <?php echo $user->range_number_fb_2; ?>,
+            },
+            text: {
+              one: '<?php replace_lbs($user->text_fb_1); ?>',
+              two: '<?php replace_lbs($user->text_fb_2); ?>',
+              three: '<?php replace_lbs($user->text_fb_3); ?>',
+            },<?php 
+          } ?>
+        },<?php 
       }
-      <?php if($audit->instagram_advice != "") { ?>
-          var text_ig = {
-            one: '<?php replace_lbs($audit->instagram_advice); ?>',
-            two: '<?php replace_lbs($audit->instagram_advice); ?>',
-            three: '<?php replace_lbs($audit->instagram_advice); ?>',
-          }
-      <?php } else { ?>
-          var text_ig = {
-            one: '<?php replace_lbs($user->text_insta_1); ?>',
-            two: '<?php replace_lbs($user->text_insta_2); ?>',
-            three: '<?php replace_lbs($user->text_insta_3); ?>',
-          }
-       <?php } ?>
-      handleSlider('instagram', range_ig, text_ig); <?php
-    }
-    if ($audit->website_bit == "1") { ?>
-      var range_ws = {
-        one: <?php echo $user->range_number_website_1; ?>,
-        two: <?php echo $user->range_number_website_2; ?>,
+      if ($audit->instagram_bit == "1") { ?>
+        ig: {<?php 
+          if ($audit->instagram_advice != "" && !advice_equal_to_user($user, $audit, 'ig')) { ?>
+            range: false,
+            text: false,<?php 
+          } else { ?>
+            range: {
+              one: <?php echo $user->range_number_insta_1; ?>,
+              two: <?php echo $user->range_number_insta_2; ?>,
+            },
+            text: {
+              one: '<?php replace_lbs($user->text_insta_1); ?>',
+              two: '<?php replace_lbs($user->text_insta_2); ?>',
+              three: '<?php replace_lbs($user->text_insta_3); ?>',
+            },<?php 
+          } ?>
+        }, <?php 
       }
-      <?php if($audit->website_advice != "") { ?>
-          var text_ws = {
-            one: '<?php replace_lbs($audit->website_advice); ?>',
-            two: '<?php replace_lbs($audit->website_advice); ?>',
-            three: '<?php replace_lbs($audit->website_advice); ?>',
-          }
-      <?php } else {?>
-          var text_ws = {
-            one: '<?php replace_lbs($user->text_website_1); ?>',
-            two: '<?php replace_lbs($user->text_website_2); ?>',
-            three: '<?php replace_lbs($user->text_website_3); ?>',
-          }
-      <?php } ?>
-      handleSlider('website', range_ws, text_ws); <?php
+      if ($audit->website_bit == "1") { ?>
+        wb: {<?php 
+          if ($audit->website_advice != "" && !advice_equal_to_user($user, $audit, 'wb')) { ?>
+            range: false, // disabled slider text
+            text: false,<?php 
+          } else { ?>
+            range: {
+              one: <?php echo $user->range_number_website_1; ?>,
+              two: <?php echo $user->range_number_website_2; ?>,
+            },
+            text: {
+              one: '<?php replace_lbs($user->text_website_1); ?>',
+              two: '<?php replace_lbs($user->text_website_2); ?>',
+              three: '<?php replace_lbs($user->text_website_3); ?>',
+            },<?php 
+          } ?>
+        },<?php
+      } ?>
     }
+    if (!!sliderData.fb) {
+      handleSlider('facebook', sliderData.fb.range, sliderData.fb.text);
+    } 
+    if (!!sliderData.ig) {
+      handleSlider('instagram', sliderData.ig.range, sliderData.ig.text);
+    }
+    if (!!sliderData.wb) {
+      handleSlider('website', sliderData.wb.range, sliderData.wb.text);
+    }
+    <?php
   } ?>
   // TODO: algemene update functie, die itereert over alle mogelijke velden
   //        - en ze update als ze verandert zijn...
