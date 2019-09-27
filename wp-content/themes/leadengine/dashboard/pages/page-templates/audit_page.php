@@ -79,16 +79,6 @@
     return false;
   }
 
-  $post_names =  ['introduction', 'conclusion', 'facebook_advice',
-                  'instagram_advice','website_advice', 'facebook_score',
-                  'instagram_score', 'website_score'];
-
-  foreach ($post_names as $post_name) {
-    if (isset($_POST[$post_name]) && $edit_mode) {
-      $audit->update($post_name, sanitize_textarea_field(stripslashes($_POST[$post_name])), 'Audit_template');
-    }
-  }
-
    // Overall scores
    $score = array(
     'fb' => $audit->facebook_score  != NULL ? $audit->facebook_score : 50,
@@ -218,11 +208,6 @@
   <div id="crawlModal" class="modal"></div>
 
   <section class="content white custom-content min-height">
-    <!-- TODO: hidden? -->
-    <div class="call-to-action-container">
-      <a href="callto:<?php echo $phone; ?>" class="call-to-call"><i class="fas fa-phone"></i></a>
-      <a href="mailto:<?php echo $author->user_email; ?>" class="call-to-mail"><i class="fas fa-envelope"></i></a>
-    </div>
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link"
            value=<?php echo "https://".$env."/public/".$slug; ?> />
 
@@ -346,7 +331,7 @@
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="facebook_value"></span>%</span>
                   <div class="slidecontainer">
-                    <input type="range" min="1" max="100" value="<?php echo $score['fb']; ?>" class="slider" id="facebook_range">
+                    <input type="range" min="1" max="100" value="<?php echo $score['fb']; ?>" class="slider" id="facebook_score">
                   </div><?php
                 } else { ?>
                   <span class="score-text"><?php echo $score['fb']; ?>%</span><?php
@@ -355,7 +340,6 @@
                 <span class="advice-title">Facebook advice</span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="facebook_score" id="facebook_score" value='<?php echo $score['fb']; ?>'/>
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                   </form><?php
                 } else { ?>
@@ -485,7 +469,7 @@
           $str = ($comp) ? "comp-" : "";
 
           if ($base->manual && $edit_mode) {?>
-            <input type="text" name="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
+            <input type="text" id="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
           } else {
             echo round($value, 2);
           }
@@ -522,7 +506,7 @@
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="instagram_value"></span>%</span>
                   <div class="slidecontainer">
-                    <input type="range" min="1" max="100" value="<?php echo $score['ig']; ?>" class="slider" id="instagram_range">
+                    <input type="range" min="1" max="100" value="<?php echo $score['ig']; ?>" class="slider" id="instagram_score">
                   </div><?php
                 } else { ?>
                   <span class="score-text"><?php echo $score['ig']; ?>%</span><?php
@@ -532,7 +516,6 @@
                 <span class="advice-title">Instagram advice</span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="instagram_score" id="instagram_score" value="<?php echo $score['ig']; ?>"/>
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                   </form><?php
                 } else { ?>
@@ -589,11 +572,11 @@
           if ($edit_mode) { ?>
             <span class="score-text"><span id="website_value"></span>%</span>
             <div class="slidecontainer">
-              <input type="range" min="1" max="100" value="<?php echo $score['wb']; ?>" class="slider" id="website_range">
+              <input type="range" min="1" max="100" value="<?php echo $score['wb']; ?>" class="slider" id="website_score">
             </div>
             <span class="advice-title margin-advice-title">Website advice</span>
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
-              <input type="hidden" name="website_score" id="website_score" value="<?php echo $score['wb']; ?>"/>
+              
               <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
             </form><?php
           } else { ?>
@@ -644,7 +627,7 @@
   }
 
   <?php
-  if (!$audit->has_website) { ?>
+  if ($audit->website_bit && !$audit->has_website) { ?>
     function crawlFinishedCheck() {
       console.log("test");
       var modalData = {
@@ -739,86 +722,78 @@
     $(function() { 
       <?php
       if ($edit_mode) { ?>
-        // On change of input instagram manual
-        $("#manual-ig-form").find('input[type=text]').on('keyup paste change', function() {
-          $("#universal-update").show(600);
-        });
-
         // On change of an text area show update all
-        $("textarea").on('keyup paste change', function() {
+        $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
           $(this).data('changed', true);
-          $("#universal-update").show(600);
-          // Enable navigation prompt
-          window.onbeforeunload = function() {
-              return true; // TODO: add message?
-          };
-          var advice_type = ($(this).prop('id').includes('_advice')) ? $(this).prop('id').replace('_advice', '') : false;
-          if (advice_type) {
-            // disable slider text
-            handleSlider(advice_type);
-          }
-          if ($(this).val() == '' && $(this).prop('id').includes('_advice')) {
-            // activate TODO: add parameters. To activate slider
-            handleSlider(advice_type);
-          }
-        });
+          toggleUpdate(true);
 
-        $("input[type=range]").on('mouseup', function() {
-          var data = {action: 'textareas', ...commonPost};
-          var translate = {
-            'facebook_range': 'facebook_score',
-            'instagram_range': 'instagram_score',
-            'website_range': 'website_score',
+          var propId = $(this).prop('id');
+          // Disable slider
+          if ($(this).is('textarea') && propId.includes('_advice')) {
+            var adviceType = propId.replace('_advice', '');
+            handleSlider(adviceType);
+          
+            // Enable slider if value is empty
+            if ($(this).val() == '') {
+              type = (propId.includes('facebook')) ? 'fb' : (propId.includes('instagram')) ? 'ig' : 'wb';
+              if (!!sliderData[type]) {
+                handleSlider(adviceType, sliderData[type].range, sliderData[type].text);
+              }
+            }
           }
-          data[translate[$(this).prop('id')]] = $(this).val();
-          $.ajax({
-            type: "POST",
-            url: ajaxurl,
-            data: data,
-            success: logResponse,
-            error: logResponse,
-          });
-        });
-
-        var manualData = getInstagramFields({});
-
-        $('#universal-update').on('click', function() {
-          updateTextAreas();
         });
         
-        function updateTextAreas() {
-          var areas = getChangedTextAreas();
-          var igFields = getInstagramFields();
-          if ($.isEmptyObject(areas) && $.isEmptyObject(igFields)) { return }
-          $.ajax({
-            type: "POST",
-            url: ajaxurl,
-            data: {action: 'textareas', ...areas, ...igFields, ...commonPost},
-            success: function(response) {
-              // Remove navigation prompt
-              window.onbeforeunload = null;
-              $('#universal-update').hide(600);
-            },
-            error: logResponse,
-          });
+        /**
+         * Enables prompt
+         */
+        function toggleUpdate(show) {
+          if (show) {
+            $("#universal-update").show(600);
+            window.onbeforeunload = () => true;
+          } else { 
+            $("#universal-update").hide(300);
+            window.onbeforeunload = undefined;
+          }
         }
 
-        function getInstagramFields(manualData = null) {
+        $("input[type=range]").on('mouseup', function() {
+          $(this).data('changed', true);
+          toggleUpdate(true);
+        });
+
+        $('#universal-update').on('click', function() {
+          updateAll();
+        });
+
+        function getChanged(selector, allowAll = false) {
           var changed = {};
-          $("#manual-ig-form input[type=text]").each(function(index, element) {
-            changed[$(this).prop('name')] = $(this).prop('value');
+          $(selector).each(function(index, element) {
+            if (allowAll || $(this).data('changed')) {
+              changed[$(this).prop('id')] = $(this).val();
+            }
           });
           return changed;
         }
-
-        function getChangedTextAreas() {
-          var changedAreas = {};
-          $('textarea').each(function(index, element) {
-            if ($(element).data('changed')) {
-              changedAreas[$(this).prop('id')] = $(this).val();
-            }
-          });
-          return changedAreas;
+        
+        function updateAll() {
+          var data = {
+            ...getChanged('textarea'),
+            ...getChanged("#manual-ig-form input[type=text]", true),
+            ...getChanged("input[type=range]"),
+          };
+          console.log(data);
+          if (!$.isEmptyObject(data)) {
+            $.ajax({
+              type: "POST",
+              url: ajaxurl,
+              data: {action: 'universal_update', ...data, ...commonPost},
+              success: function(response) {
+                toggleUpdate(false);
+                console.log(response);
+              },
+              error: logResponse,
+            });
+          }
         }<?php
       }?>
 
@@ -945,8 +920,7 @@
     // Dynamic slider functions
     function handleSlider(type, range = false, text = false) {
       var value = $('#' + type + '_value');
-      var score = $('#' + type + '_score');
-      var slider = $('#' + type + '_range');
+      var slider = $('#' + type + '_score');
       var advice = $('#' + type + '_advice');
       // set
       value.html(slider.val());
@@ -954,7 +928,6 @@
       slider.off('input'); 
       slider.on('input', function(e) {
         value.html($(e.target).val());
-        score.val($(e.target).val());
         if (text) {
           changeAdvice($(e.target).val(), range, advice, text);
         }

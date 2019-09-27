@@ -232,12 +232,14 @@
       });
 
       $("#competitor_confirmed").click(function() {
-        $('#compare-list .new-compare').data('compare', {
+        var newCompare = $('#compare-list .new-compare');
+        newCompare.data('compare', {
           name : $(competitorModal).find('#competitor-name').val(),
           facebook : $(competitorModal).find('#facebook_url').val(),
           instagram : $(competitorModal).find('#instagram_url').val(),
           website : $(competitorModal).find('#website_url').val().replace("https://", "").replace("http://", ""),
         });
+        newCompare.html(`New Competitor <span style="color:grey;">(${newCompare.data('compare').name})</span>`);
         nextPrev(1);
       });
 

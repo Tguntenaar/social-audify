@@ -229,6 +229,7 @@
 
   function check_manual_instagram_postfields($audit_control, $id, $competitor) {
     $str = $competitor == 1 ? "comp-" : "";
+
     if (isset($_POST["{$str}followers_count"])) {
       $instagram_data = array(
         "avgEngagement"=> floatval($_POST["{$str}avgEngagement"]),
@@ -243,18 +244,20 @@
     }
   }
 
-  add_action( 'wp_ajax_textareas', 'update_areas');
-  add_action( 'wp_ajax_nopriv_textareas', 'not_logged_in');
+  add_action( 'wp_ajax_universal_update', 'update_all');
+  add_action( 'wp_ajax_nopriv_universal_update', 'not_logged_in');
 
-  function update_areas() {
+  function update_all() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
     $type = $_POST['type'];
+
     if ($type == 'audit') {
       require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
       $audit_control = new audit_controller($connection);
       $id = $_POST[$_POST['type']];
       $fields = $audit_control->get_area_fields();
+
       foreach($fields as $field) {
         if (isset($_POST[$field])) {
           $audit_control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), 'Audit_template');
@@ -263,6 +266,7 @@
       check_manual_instagram_postfields($audit_control, $id, 0);
       check_manual_instagram_postfields($audit_control, $id, 1);
     }
+
     wp_send_json(array('succes'=>'1'));
     wp_die();
   }
