@@ -79,8 +79,6 @@
     return false;
   }
 
-  var_dump(advice_equal_to_user($user, $audit, 'ig'));
-
   $post_names =  ['introduction', 'conclusion', 'facebook_advice',
                   'instagram_advice','website_advice', 'facebook_score',
                   'instagram_score', 'website_score'];
@@ -91,28 +89,30 @@
     }
   }
 
-  function check_manual_instagram_postfields($audit, $competitor) {
-    $str = $competitor == 1 ? "comp-" : "";
-    // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
-    if (isset($_POST["{$str}followers_count"])) {
-      $instagram_data = array(
-        "avgEngagement"=> floatval($_POST["{$str}avgEngagement"]),
-        "followers_count"=> absint($_POST["{$str}followers_count"]),
-        "postsLM"=> absint($_POST["{$str}postsLM"]),
-        "follows_count"=> absint($_POST["{$str}follows_count"]),
-        "averageComments"=> floatval($_POST["{$str}averageComments"]),
-        "averageLikes"=> floatval($_POST["{$str}averageLikes"]),
-      );
 
-      $audit->update("instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
-    }
-  }
+  // FIXME: flikker weg wanner het via functions php gaat
+  // function check_manual_instagram_postfields($audit, $competitor) {
+  //   $str = $competitor == 1 ? "comp-" : "";
+  //   // || isset($_POST['comp-avgEngagement']) || isset($_POST['comp-postsLM']) || isset($_POST['comp-follows_count']) || isset($_POST['comp-averageLikes']) || isset($_POST['comp-averageComments'])
+  //   if (isset($_POST["{$str}followers_count"])) {
+  //     $instagram_data = array(
+  //       "avgEngagement"=> floatval($_POST["{$str}avgEngagement"]),
+  //       "followers_count"=> absint($_POST["{$str}followers_count"]),
+  //       "postsLM"=> absint($_POST["{$str}postsLM"]),
+  //       "follows_count"=> absint($_POST["{$str}follows_count"]),
+  //       "averageComments"=> floatval($_POST["{$str}averageComments"]),
+  //       "averageLikes"=> floatval($_POST["{$str}averageLikes"]),
+  //     );
 
-  // Handle post
-  if ($edit_mode) {
-    check_manual_instagram_postfields($audit, 0);
-    check_manual_instagram_postfields($audit, 1);
-  }
+  //     $audit->update("instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
+  //   }
+  // }
+
+  // FIXME: Handle post
+  // if ($edit_mode) {
+  //   check_manual_instagram_postfields($audit_control, $id, 0);
+  //   check_manual_instagram_postfields($audit_control, $id, 1);
+  // }
 
    // Overall scores
    $score = array(
@@ -186,7 +186,7 @@
   <title>Audit</title>
   <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/dashboard.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js"></script>
@@ -211,9 +211,12 @@
       <span></span>
     </div>
 
-    <button id="universal-update" class="advice-button floating-update">
-      Update All
-    </button>
+    <?php
+    if ($edit_mode) { ?>
+      <button id="universal-update" class="advice-button floating-update">
+        Update All
+      </button> <?php
+    } ?>
 
     <div class="mobile-hide"><?php
         if ($edit_mode) { ?>
@@ -240,6 +243,7 @@
   <div id="crawlModal" class="modal"></div>
 
   <section class="content white custom-content min-height">
+    <!-- TODO: hidden? -->
     <div class="call-to-action-container">
       <a href="callto:<?php echo $phone; ?>" class="call-to-call"><i class="fas fa-phone"></i></a>
       <a href="mailto:<?php echo $author->user_email; ?>" class="call-to-mail"><i class="fas fa-envelope"></i></a>
@@ -247,11 +251,11 @@
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link"
            value=<?php echo "https://".$env."/public/".$slug; ?> />
 
-    <?php if ($audit->video_iframe != NULL) { ?>
+    <?php 
+    if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
         echo "<iframe ". stripslashes(base64_decode($audit->video_iframe)) ."</iframe>"; ?>
       </div><?php
-      // TODO: ik snap deze check niet...
     } else if ($audit->video_iframe != "" || $edit_mode) { ?>
       <div class="intro-video"></div><?php
     }
@@ -267,7 +271,7 @@
             <input type="text" id="iframe-input" name="iframe" placeholder="Insert iframe(Loom/Youtube etc.)" pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))"
                    value='<?php if ($audit->video_iframe != NULL) { echo '<iframe '. stripslashes(base64_decode($audit->video_iframe)) .'</iframe>'; }?>'/>
           </div>
-          <input type="submit" onclick="function() { document.getElementById('video-iframe').value = ''; }" value="Update" class="advice-button">
+          <input type="submit" value="Update" class="advice-button">
         </form>
       </div><?php
     }
@@ -460,10 +464,10 @@
 
         if (($audit->manual == 1)) { ?>
           <div class="col-lg-12 instagram-right" style="float: right;">
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data"><?php
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
         } else { ?>
           <div class="col-lg-6 instagram-right" style="float: right;">
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data"><?php
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
         }
 
         function competitor_code($audit, $edit_mode, $item) {
@@ -746,10 +750,6 @@
       // inputField.value = NULL;
     });
 
-    function clear() {
-      document.getElementById('video-iframe').value = "";
-    }
-
     // Visibility function
     var toggle_visibility = function(field_name) {
       var field = $(`#${field_name}_icon`);
@@ -770,62 +770,91 @@
       }
     };
 
-    $(document).ready(function() {
-      // On change of an text area show update all
-      $("textarea").on('keyup paste change', function() {
-        $("#universal-update").show(600);
-        // Enable navigation prompt
-        window.onbeforeunload = function() {
-            return true; // TODO: add message?
-        };
-        var advice_type = ($(this).prop('id').includes('_advice')) ? $(this).prop('id').replace('_advice', '') : false;
-        if (advice_type) {
-          // disable slider text
-          handleSlider(advice_type);
-        }
-        if ($(this).val() == '' && $(this).prop('id').includes('_advice')) {
-          handleSlider(advice_type); // TODO: add parameters 
-        }
-      });
-
-      $("input[type=range]").on('mouseup', function() {
-        var data = {action: 'textareas', ...commonPost};
-        var translate = {
-          'facebook_range': 'facebook_score',
-          'instagram_range': 'instagram_score',
-          'website_range': 'website_score',
-        }
-        data[translate[$(this).prop('id')]] = $(this).val();
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: data,
-          success: logResponse,
-          error: logResponse,
+    $(function() { 
+      <?php
+      if ($edit_mode) { ?>
+        // On change of input instagram manual
+        $("#manual-ig-form").find('input[type=text]').on('keyup paste change', function() {
+          $("#universal-update").show(600);
         });
-      });
 
-      $('#universal-update').on('click', function() {
-        // TODO: set alleen de areas die zijn aangepast.
-        var areas = {
-          introduction: $('#introduction').val(),
-          facebook_advice: $('#facebook_advice').val(),
-          instagram_advice: $('#instagram_advice').val(),
-          website_advice: $('#website_advice').val(),
-          conclusion: $('#conclusion').val(),
-        };
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: {action: 'textareas', ...areas, ...commonPost},
-          success: function(response) {
-            // Remove navigation prompt
-            window.onbeforeunload = null;
-            $('#universal-update').hide(600);
-          },
-          error: logResponse,
+        // On change of an text area show update all
+        $("textarea").on('keyup paste change', function() {
+          $(this).data('changed', true);
+          $("#universal-update").show(600);
+          // Enable navigation prompt
+          window.onbeforeunload = function() {
+              return true; // TODO: add message?
+          };
+          var advice_type = ($(this).prop('id').includes('_advice')) ? $(this).prop('id').replace('_advice', '') : false;
+          if (advice_type) {
+            // disable slider text
+            handleSlider(advice_type);
+          }
+          if ($(this).val() == '' && $(this).prop('id').includes('_advice')) {
+            // activate TODO: add parameters. To activate slider
+            handleSlider(advice_type);
+          }
         });
-      });
+
+        $("input[type=range]").on('mouseup', function() {
+          var data = {action: 'textareas', ...commonPost};
+          var translate = {
+            'facebook_range': 'facebook_score',
+            'instagram_range': 'instagram_score',
+            'website_range': 'website_score',
+          }
+          data[translate[$(this).prop('id')]] = $(this).val();
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: data,
+            success: logResponse,
+            error: logResponse,
+          });
+        });
+
+        var manualData = getInstagramFields({});
+
+        $('#universal-update').on('click', function() {
+          updateTextAreas();
+        });
+        
+        function updateTextAreas() {
+          var areas = getChangedTextAreas();
+          var igFields = getInstagramFields();
+          if ($.isEmptyObject(areas) && $.isEmptyObject(igFields)) { return }
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: {action: 'textareas', ...areas, ...igFields, ...commonPost},
+            success: function(response) {
+              // Remove navigation prompt
+              window.onbeforeunload = null;
+              $('#universal-update').hide(600);
+            },
+            error: logResponse,
+          });
+        }
+
+        function getInstagramFields(manualData = null) {
+          var changed = {};
+          $("#manual-ig-form input[type=text]").each(function(index, element) {
+            changed[$(this).prop('name')] = $(this).prop('value');
+          });
+          return changed;
+        }
+
+        function getChangedTextAreas() {
+          var changedAreas = {};
+          $('textarea').each(function(index, element) {
+            if ($(element).data('changed')) {
+              changedAreas[$(this).prop('id')] = $(this).val();
+            }
+          });
+          return changedAreas;
+        }<?php
+      }?>
 
       // IFrame Submit
       $("#banner-form").submit(function(e){
@@ -976,12 +1005,10 @@
       }
     }
     
-    <?php
-
-      function replace_lbs($string) {
-        echo preg_replace("/\r|\n/", '\n', $string);
-      }
-    ?>
+    <?php 
+    function replace_lbs($string) {
+      echo preg_replace("/\r|\n/", '\n', $string);
+    } ?>
 
     var sliderData = {<?php 
       if ($audit->facebook_bit == "1") { ?>
