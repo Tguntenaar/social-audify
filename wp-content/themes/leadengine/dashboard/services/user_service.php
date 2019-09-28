@@ -12,7 +12,7 @@ class user_service extends connection {
     $this->dbwp->insert('User', array(
       'id' => $user_id,
       'name' => $name,
-      'email' => $email
+      'email' => $email,
     ));
 
     return $this->dbwp->insert_id;
@@ -20,7 +20,11 @@ class user_service extends connection {
 
 
   public function create_config($user_id) {
-    $this->dbwp->insert('Configtext', array('user_id' => $user_id));
+    $this->dbwp->insert('Configtext', array(
+      'user_id' => $user_id,
+      'color_audit' => '#6e9d9c',
+      'color_report' => '#6e9d9c',
+    ));
   }
 
 

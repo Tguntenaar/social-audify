@@ -23,6 +23,8 @@
       'conclusion-audit' => 'conclusion_audit',
       'introduction-report' => 'intro_report',
       'conclusion-report' => 'conclusion_report',
+      'audit-color' => 'color_audit',
+      'report-color' => 'color_report',
       'range_fb_1' => 'range_number_fb_1',
       'range_fb_2' => 'range_number_fb_2',
       'fb-audit_1' => 'text_fb_1',
@@ -57,6 +59,7 @@
       return trim($input) <= 999;
     }
 
+    // TODO: if sanitized color is null dan standaard color sanitize_hex_color()
     function fill_values_list($post_list, $user, $output) {
       foreach ($post_list as $post_name => $db_field) {
         if (isset($_POST[$post_name])) {

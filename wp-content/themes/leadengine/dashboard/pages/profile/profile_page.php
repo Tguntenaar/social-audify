@@ -79,6 +79,7 @@
               <li id="fb-audit-item">Facebook text</li>
               <li id="ig-audit-item">Instagram text</li>
               <li id="wb-audit-item">Website text</li>
+              <li id="color-audit-item">Audit Colors</li>
             </ul>
             <form action="/ppc?settings=audit" id="audit-form" method="post" enctype="multipart/form-data">
               <!-- intro -->
@@ -104,6 +105,14 @@
                 </div>
                 <div class="wb-audit-visibility-block" style='display:none'><?php
                   print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
+                </div>
+              </div>
+              <!-- audit colors -->
+              <div class="color-audit-block" style="display:none;">
+                <h4>Audit Colors</h4>
+                <div>
+                    <input type="color" name="audit-color" value="<?php echo $user->color_audit?>"> 
+                    <i class="fas fa-undo" onclick="$('input[name=audit-color]').val(`#6e9d9c`)" ></i>
                 </div>
               </div>
               <!-- conclusion -->
@@ -148,6 +157,8 @@
               <li id="intro-report-item" class="active-menu-item">Intro text</li>
               <li id="conclusion-report-item">Conclusion text</li>
               <li id="visibility-report-item">Visibility report</li>
+              <li id="color-report-item">Report colors</li>
+
             </ul>
             <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
               <!-- intro report -->
@@ -176,6 +187,14 @@
                 </div>
                 <div class="campaign-report-visibility-block" style='display:none'>
                   <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
+                </div>
+              </div>
+              <!-- Report colors -->
+              <div class="color-report-block" style="display:none;">
+                <h4>Report Colors</h4>
+                <div>
+                    <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">  
+                    <i class="fas fa-undo" onclick="$('input[name=report-color]').val(`#6e9d9c`)" ></i>
                 </div>
               </div>
               <div class="error-display-report"></div>
@@ -305,11 +324,14 @@
     $("#fb-audit-item").click(function() { togglePreferenceUI('fb', 'audit') });
     $("#ig-audit-item").click(function() { togglePreferenceUI('ig', 'audit') });
     $("#wb-audit-item").click(function() { togglePreferenceUI('wb', 'audit') });
+    $('#color-audit-item').click(function() { togglePreferenceUI('color', 'audit')});
 
     $("#conclusion-report-item").click(function() { togglePreferenceUI('conclusion', 'report') });
     $("#intro-report-item").click(function() { togglePreferenceUI('intro', 'report') });
     // new
     $("#visibility-report-item").click(function() { togglePreferenceUI('visibility', 'report') });
+    $('#color-report-item').click(function() { togglePreferenceUI('color', 'report')});
+
 
     $("#when-mail-item").click(function() { togglePreferenceUI('when', 'mail') });
     $("#what-mail-item").click(function() { togglePreferenceUI('what', 'mail') });
@@ -335,9 +357,9 @@
     function togglePreferenceUI(show, type) {
       var blocks, it, bl;
       if (type == 'report') {
-        blocks = ["intro", "conclusion", "visibility"];
+        blocks = ["intro", "conclusion", "visibility", "color"];
       } else if (type == 'audit') {
-        blocks = ["wb", "fb", "ig", "intro", "conclusion", "visibility"];
+        blocks = ["wb", "fb", "ig", "intro", "conclusion", "visibility", "color"];
       } else if (type == 'mail') {
         blocks = ['when', 'what'];
       } else if (type == 'audit-visibility') {

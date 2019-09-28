@@ -163,25 +163,27 @@
   }
 
 
-  add_action( 'wp_ajax_flip_mail', 'activate_mail');
-  add_action( 'wp_ajax_nopriv_flip_mail', 'not_logged_in');
+  add_action( 'wp_ajax_update_config', 'update_config');
+  add_action( 'wp_ajax_nopriv_update_config', 'not_logged_in');
 
   // Check if crawl has completed
-  function activate_mail() {
+  function update_config() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
-    require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
-    require_once(dirname(__FILE__)."/dashboard/models/audit.php");
-
     $connection = new connection;
-    $audit_control = new audit_controller($connection);
+    $type = $_POST['type'];
+    $page_id = $_POST[$type];
 
-    $audit_id = $_POST['audit'];
-    $value = $_POST['value'];
+    if ($type == 'audit') {
+      require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
+      require_once(dirname(__FILE__)."/dashboard/models/audit.php");
+      $control = new audit_controller($connection);
+    }
 
-    $audit = $audit_control->get($audit_id);
-    $audit->update('mail_bit', $value == 'true');
+    $page = $control->get($page_id);
+    $page->update('mail_bit', $_POST['value'] == 'true');
+    $page->update('color', sanitize_hex_color($_POST['color']), 'Audit_template');
 
-    wp_send_json(array('value' => $value));
+    wp_send_json(array('value' => $_POST['value'], 'color' => $_POST['color']));
     wp_die();
   }
 
@@ -357,9 +359,8 @@
 
     $client_id = $_POST['client'];
     $client = $client_control->get($client_id);
-    $user_id = get_current_user_id();
 
-    if ($user_id == $client->user_id) {
+    if (get_current_user_id() == $client->user_id) {
       $client->delete();
     }
 

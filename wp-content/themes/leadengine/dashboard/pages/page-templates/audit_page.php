@@ -36,6 +36,8 @@
   $id = $audit_control->get_id($post_id);
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
+  
+  // TODO: fix dat de audit er zo uitziet do: $audit->color anders $user->color_audit
 
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
@@ -197,7 +199,7 @@
         if ($edit_mode) { ?>
           <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
           <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
-          <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
+          <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
         } else { ?>
           <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
@@ -206,7 +208,7 @@
   </div>
 
   <div id="shareModal" class="modal"></div>
-  <div id="mailModal" class="modal"></div>
+  <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
   <div id="crawlModal" class="modal"></div>
@@ -819,41 +821,42 @@
 
       // Auto Mail Model
       var modalData = {
-        text:`Do you want to sent this client automatic reminders?`,
-        html:`<input type="checkbox" style="margin: 15px auto;" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': '';?>>`,
-        subtext:`Social Audify can send automatic reminders if your lead does
-                  not open the audit. You can configure the emails
-                  <a href='/profile-page'>here</a>.`,
-        confirm: 'mail_confirmed'
+        text:`Configuration audit`,
+        subtext:`Do you want to sent this client automatic reminders?
+          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': '';?>><br><br>
+          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
+          <a href='/profile-page'>here</a>.<br><br>
+          Do you want a custom color for this audit?<br>
+          Theme color: <input type="color" id="color" value="<?php echo $user->color_audit; ?>">
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
+        confirm: 'config_confirmed'
       }
 
-      var mailModal = initiateModal('mailModal', 'confirm', modalData);
-      $('#mail_link').click(function() {
-        showModal(mailModal);
+      var configModal = initiateModal('configModal', 'confirm', modalData);
+      $('#config_link').click(function() {
+        showModal(configModal);
       });
 
-      var mailValue = <?php echo $audit->mail_bit; ?>;
-      $("#mail_confirmed").click(function() {
-        if (mailValue != $("#mail_bit_check").is(':checked')) {
-          $.ajax({
-            type: "POST",
-            url: ajaxurl,
-            data: { 
-              action: 'flip_mail',
-              value: $("#mail_bit_check").is(':checked'),
-              ...commonPost
-            },
-            success: logResponse,
-            error: function (errorThrown) {
-              console.log(errorThrown);
-              var modalData = {
-                'text': "Can't update mail function",
-                'subtext': "Please try again later or notify an admin if the issue persists"
-              }
-              showModal(initiateModal('errorModal', 'error', modalData));
+      $("#config_confirmed").click(function() {
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: { 
+            action: 'update_config',
+            color: $('#color').val(),
+            value: $("#mail_bit_check").is(':checked'),
+            ...commonPost
+          },
+          success: logResponse,
+          error: function (errorThrown) {
+            console.log(errorThrown);
+            var modalData = {
+              'text': "Can't update mail function",
+              'subtext': "Please try again later or notify an admin if the issue persists"
             }
-          });
-        }
+            showModal(initiateModal('errorModal', 'error', modalData));
+          }
+        });
       });
 
       // Delete Audit Modal

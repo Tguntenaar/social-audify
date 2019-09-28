@@ -14,15 +14,15 @@ class audit_controller {
     $competitor_name = isset($competitor['name']) ? $competitor['name'] : NULL;
 
     $instance = new audit($this->service, (object) array(
-      'client_id'     => $client['id'],
-      'name'          => $page['name'],
-      'create_date'   => date('Y-m-d H:i:s'),
-      'post_id'       => 0,
-      'facebook_bit'  => $options['facebook_checkbox'],
-      'instagram_bit' => $options['instagram_checkbox'],
-      'website_bit'   => $options['website_checkbox'],
-      'mail_bit'     => 0,
-      'competitor_name' => $competitor_name
+      'client_id'       => $client['id'],
+      'name'            => $page['name'],
+      'create_date'     => date('Y-m-d H:i:s'),
+      'post_id'         => 0,
+      'facebook_bit'    => $options['facebook_checkbox'],
+      'instagram_bit'   => $options['instagram_checkbox'],
+      'website_bit'     => $options['website_checkbox'],
+      'mail_bit'        => 0,
+      'competitor_name' => $competitor_name,
     ));
 
     // create audit in database
