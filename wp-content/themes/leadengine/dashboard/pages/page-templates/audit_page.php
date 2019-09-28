@@ -38,9 +38,6 @@
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-  // Define authority hash
-  $auth_hash = hash('sha256', 'what'.$post_id.'who'.$audit->id.'how'.$user_id);
-
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
   }
@@ -347,6 +344,7 @@
                   <div class="info">
                     <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
                     <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
+                    <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
                   </div><?php
                 } ?>
               </div>
@@ -523,6 +521,7 @@
                   <div class="info">
                     <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
                     <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
+                    <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
                   </div><?php
                 } ?>
             </div>
@@ -586,6 +585,7 @@
             <div class="info">
               <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone;?></a>
               <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
+              <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
             </div><?php
           } ?>
         </div>
@@ -613,17 +613,15 @@
   <div class="footer">
     <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
+    <span class="mailadres"> Schedule an appointment: <a href=""> TODO: </a></span>      
   </div>
 </body>
 </html>
 
 <script charset='utf-8'>
   var commonPost = {
+    'type': 'audit',
     'audit': '<?php echo $audit->id; ?>',
-    'user': '<?php echo $user_id; ?>',
-    'post': '<?php echo $post_id; ?>',
-    'auth': '<?php echo $auth_hash; ?>',
-    'type': 'audit'
   }
 
   <?php
@@ -877,7 +875,7 @@
           type: "POST",
           url: ajaxurl,
           data: {'action': 'delete_page', ...commonPost},
-          success: function () {
+          success: function (response) {
             window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
           },
           error: function (errorThrown) {

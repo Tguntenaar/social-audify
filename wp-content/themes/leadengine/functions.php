@@ -41,7 +41,7 @@
     elseif ($type === 'report') {
       require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
       $report_service = new report_service($connection);
-      $report_id = $_POST['report_id'];
+      $report_id = $_POST['report'];
 
       $report_service->toggle_config_visibility($report_id, $field);
       wp_send_json(array('success'=>'toggled'));
@@ -310,9 +310,6 @@
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
 
-    $client_id = $_POST['user'];
-    $audit_report_id = $_POST['audit'];
-    $post_id = $_POST['post'];
     $type = $_POST['type'];
 
     if ($type == 'audit') {
@@ -328,16 +325,17 @@
       wp_send_json_error($error);
       wp_die();
     }
+    
+    require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
+    require_once(dirname(__FILE__)."/dashboard/models/client.php");
+    $client_control = new client_controller($connection);
 
-    $auth_send = $_POST['auth'];
-    $auth_known = hash('sha256', 'what'.$post_id.'who'.$audit_report_id.'how'.$client_id);
-
-    if ($auth_send != $auth_known) {
-      $error = new WP_Error( '401', 'Unauthorized', 'auth' );
-      wp_send_json_error($error);
-    } else {
-      $auditreport = $control->get($audit_report_id);
-      $auditreport->delete();
+    $page_id = $_POST[$type];
+    $page = $control->get($page_id);
+    $client = $client_control->get($page->client_id);
+      
+    if (get_current_user_id() == $client->user_id) {
+      $page->delete();
     }
 
     wp_send_json(array('deleted'=>"everyting"));
@@ -358,37 +356,14 @@
 
     $client_id = $_POST['client'];
     $client = $client_control->get($client_id);
+    $user_id = get_current_user_id();
 
-    // TODO: kan er niet bij met mijn hoofd
+    if ($user_id == $client->user_id) {
+      $client->delete();
+    }
 
-    // $auth_send = $_POST['auth'];
-    // $time =  $_POST['time'];
-    // $auth_known_list = get_auth_list(get_current_user_id());
-    // $auth = hash('sha256', 'auth'.get_current_user_id().'salted'.$time.'randomstuff');
-    // wp_send_json(array('id'=>$client->id, 'auth1'=>$auth_send, 'auth2'=>!in_array($auth_send, $auth_known_list), 'bool'=>($auth_send == $auth)));
-    // if ($auth_send == $auth || !in_array($auth_send, $auth_known_list)) {
-    //   $error = new WP_Error( '401', 'Unauthorized', 'auth' );
-    //   wp_send_json_error($error);
-    //   wp_die();
-    // }
-
-    $client->delete();
     wp_send_json(array('id'=>$client->id));
     wp_die();
-  }
-
-  /**
-   * Creates list of possible authenication strings for the last 15 minutes.
-   */
-  function get_auth_list($user_id) {
-    $list = array();
-    for ($i = 0; $i < 15; $i++) {
-      $time = date("Y-m-d H:i:s", strtotime(date('Y-m-d H:i')) + $i * 60);
-
-      $auth = hash('sha256', 'auth'.$user_id.'salted'.$time.'randomstuff');
-      array_push($list, $auth);
-    }
-    return $list;
   }
 
   require_once(get_template_directory() . '/core/init.php');
@@ -412,6 +387,12 @@
     <p>
       <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
+    </p>
+    <!-- <p>
+      TODO:
+      <label for="rcp_number"><?php //_e( 'Your scheduler', 'rcp' ); ?></label>
+      <input name="rcp_number" id="rcp_number" type="url" value="<?php // echo esc_attr( $number ); ?>"/>
+    </p> -->
     <p>
       <label for="rcp_btw_number"><?php _e( 'Your VAT number', 'rcp' ); ?></label>
       <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>

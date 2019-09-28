@@ -424,10 +424,10 @@
           var html = '<i class="far fa-eye' + (visible ? '"' : '-slash"') + '></i>'
 
           var data = {
-            action: 'toggle_visibility',
-            report_id: '<?php echo $report->id; ?>',
-            field: field_name,
-            type: 'report'
+            'action': 'toggle_visibility',
+            'report': '<?php echo $report->id; ?>',
+            'field': field_name,
+            'type': 'report'
           }
 
           $.ajax({
@@ -467,19 +467,14 @@
       });
 
       $('#delete_confirmed').click(function() {
-        var data = {
-          'action': 'delete_page',
-          'audit': '<?php echo $report->id; ?>',
-          'user': '<?php echo $user_id; ?>',
-          'post': '<?php echo $post_id; ?>',
-          'auth': '<?php echo hash('sha256', 'what'.$post_id.'who'.$report->id.'how'.$user_id); ?>',
-          'type': 'report',
-        };
-
         $.ajax({
           type: "POST",
           url: "https://<?php echo $env; ?>/wp-admin/admin-ajax.php",
-          data: data,
+          data: {
+            'action': 'delete_page',
+            'report': '<?php echo $report->id; ?>',
+            'type': 'report',
+          },
           success: function (response) {
             window.location.replace('https://<?php echo $env; ?>/report-dashboard')
           },
