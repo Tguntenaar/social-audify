@@ -64,7 +64,6 @@
     $data = $_POST['ads'];
     $competitor = ($_POST['competitor'] == 'false') ? 0 : 1;
 
-    // $audit_data = $main_control->get_audit_data($audit_id, $competitor)[0];
     $audit_data = $audit_service->get($audit_id);
     $audit_data_facebook = json_decode($audit_data[0]->facebook_data);
     $audit_data_facebook->runningAdds = ($data == 'yes') ? 1 : 0;
@@ -79,6 +78,9 @@
   add_action( 'wp_ajax_update_meta_audit', 'create_audit');
   add_action( 'wp_ajax_nopriv_update_meta_audit', 'not_logged_in');
 
+  /**
+   * FIXME: usercontroller client controller user and client?
+   */
   function create_audit() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
@@ -86,7 +88,7 @@
     require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
 
     require_once(dirname(__FILE__)."/dashboard/models/audit.php");
-    require_once(dirname(__FILE__)."/dashboard/models/client.php"); // nodig?
+    require_once(dirname(__FILE__)."/dashboard/models/client.php");
     require_once(dirname(__FILE__)."/dashboard/models/user.php");
 
     $safe_audit = sanitize_audit();
@@ -113,7 +115,6 @@
      * striptags()
      * mysqli_real_escape_string()
      */
-
 
     return array($client, $options, $page, $competitor);
   }

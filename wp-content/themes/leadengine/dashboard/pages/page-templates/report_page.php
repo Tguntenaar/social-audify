@@ -11,8 +11,7 @@
   $leadengine = get_template_directory_uri();
 
   // Get Author data
-  $phoneMeta =  get_user_meta($author_id, 'rcp_number');
-  $phone = isset($phoneMeta[0]) ? $phoneMeta[0] : "";
+  $phone =  get_user_meta($author_id, 'rcp_number', true);
   $author = get_userdata($author_id);
 
   // Mode check

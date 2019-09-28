@@ -10,8 +10,7 @@
   $leadengine = get_template_directory_uri();
 
   // Get Author data
-  $phoneMeta =  get_user_meta($author_id, 'rcp_number');
-  $phone = isset($phoneMeta[0]) ? $phoneMeta[0] : "";
+  $phone =  get_user_meta($author_id, 'rcp_number', true);
   $author = get_userdata($author_id);
 
   // Mode check
@@ -137,6 +136,14 @@
         <i class="far fa-eye<?php echo $slash; ?>"></i>
       </div><?php
     }
+  }
+
+  function call_to_contact($phone, $mail) { ?>
+    <div class="info">
+      <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
+      <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
+      <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
+    </div><?php
   }
 
   $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
@@ -341,11 +348,8 @@
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p>
-                  <div class="info">
-                    <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
-                    <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
-                    <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
-                  </div><?php
+                  <?php
+                  call_to_contact($phone, $author->user_email);
                 } ?>
               </div>
             </div>
@@ -518,11 +522,8 @@
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
-                  <div class="info">
-                    <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
-                    <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
-                    <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
-                  </div><?php
+                  <?php
+                  call_to_contact($phone, $author->user_email);
                 } ?>
             </div>
           </div>
@@ -582,11 +583,8 @@
             <span class="score-text"><?php echo $score['wb']; ?>%</span>
             <span class="advice-title margin-advice-title">Website advice</span>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['wb']; ?></p>
-            <div class="info">
-              <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone;?></a>
-              <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
-              <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
-            </div><?php
+            <?php
+            call_to_contact($phone, $author->user_email);
           } ?>
         </div>
       </div><?php
@@ -613,7 +611,7 @@
   <div class="footer">
     <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
-    <span class="mailadres"> Schedule an appointment: <a href=""> TODO: </a></span>      
+    <span class="mailadres"> Schedule an appointment: <a href="mailto:<?php echo $author->user_email; ?>"> TODO: moet een link worden </a></span>      
   </div>
 </body>
 </html>
