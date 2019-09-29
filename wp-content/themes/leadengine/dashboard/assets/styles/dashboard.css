@@ -1891,7 +1891,7 @@ h3 {
 /* update all button */
 .floating-update {
 	position: fixed;
-	z-index: 55555; 
+	z-index: 55555;
 	bottom: 6px;
 	right: 16px;
 	border-radius: 2px;
@@ -3458,6 +3458,38 @@ tr input {
 .footer .mailadres a {
 	font-weight: 100;
 }
+
+.calendar {
+	font-weight: 100;
+	margin-left: 15px;
+	padding: 0px 10px;
+	border-radius: 5px;
+	background: #2980b9;
+	color: #fff;
+	float: right;
+	height: 35px;
+	line-height: 35px;
+	margin-top: 8px;
+	margin-right: 8px;
+}
+
+.facebook-info .calendar {
+	float: left;
+	color: #fff;
+	position: absolute;
+	right: 10px;
+	bottom: -10px;
+}
+.calendar:hover {
+	text-decoration: none;
+	border: 1px solid #2980b9;
+	color: #2980b9;
+	background: #fff;
+}
+
+
+
+
 /* .audit-results .audit-row:nth-of-type(odd) {
 		background: #fff;
 } */

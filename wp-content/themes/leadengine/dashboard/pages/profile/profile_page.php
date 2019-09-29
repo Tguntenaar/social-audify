@@ -399,7 +399,7 @@
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: '<strong>Your phone number: </strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail: </strong>This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
+        description: '<strong>Your phone number: </strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail: </strong>This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address.',
       },
       avatar: {
         title: 'Avatar',

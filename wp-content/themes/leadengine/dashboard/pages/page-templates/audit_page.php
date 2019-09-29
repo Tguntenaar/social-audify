@@ -11,7 +11,9 @@
 
   // Get Author data
   $phoneMeta =  get_user_meta($author_id, 'rcp_number');
+  $calendarMeta =  get_user_meta($author_id, 'rcp_calendar');
   $phone = isset($phoneMeta[0]) ? $phoneMeta[0] : "";
+  $calendar = isset($calendarMeta[0]) ? $calendarMeta[0] : "";
   $author = get_userdata($author_id);
 
   // Mode check
@@ -197,8 +199,10 @@
           <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="mail_link" class="copy-link"> <i class="fas fa-cog"></i> Mail </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-        } else { ?>
-          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        } else {
+          if($user_id == $author_id) { ?>
+              <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a>
+          <?php }
         } ?>
     </div>
   </div>
@@ -252,7 +256,6 @@
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
-            <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
           <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
@@ -349,13 +352,13 @@
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="facebook_score" id="facebook_score" value='<?php echo $score['fb']; ?>'/>
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
-                    <input type="submit" value="Update" class="edite-button">
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p>
                   <div class="info">
                     <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
                     <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
+                    <?php if($calendar != "") { ?><a class="calendar"href="<?php echo $calendar; ?>">Make appointment</a><?php } ?>
                   </div><?php
                 } ?>
               </div>
@@ -531,13 +534,13 @@
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="instagram_score" id="instagram_score" value="<?php echo $score['ig']; ?>"/>
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
-                    <input type="submit" value="Update" class="edite-button" >
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
                   <div class="info">
                     <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
                     <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
+                    <?php if($calendar != "") { ?><a class="calendar"href="<?php echo $calendar; ?>">Make appointment</a><?php } ?>
                   </div><?php
                 } ?>
             </div>
@@ -602,6 +605,7 @@
             <div class="info">
               <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone;?></a>
               <a href="mailto:<?php echo $author->user_email; ?>"><i class="fas fa-envelope"></i><?php echo $author->user_email; ?></a>
+              <?php if($calendar != "") { ?><a class="calendar"href="<?php echo $calendar; ?>">Make appointment</a><?php } ?>
             </div><?php
           } ?>
         </div>
@@ -618,7 +622,6 @@
           <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php
             echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
           ?></textarea>
-          <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
         <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
@@ -630,6 +633,7 @@
   <div class="footer">
     <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
+    <?php if($calendar != "") { ?><a class="calendar"href="<?php echo $calendar; ?>">Make appointment</a><?php } ?>
   </div>
 </body>
 </html>
@@ -657,7 +661,7 @@
       $('#reload_page').click(function() {
         location.reload();
       });
-     
+
       $.ajax({
         type: "POST",
         url: ajaxurl,
@@ -826,7 +830,7 @@
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: { 
+            data: {
               action: 'flip_mail',
               value: $("#mail_bit_check").is(':checked'),
               ...commonPost
@@ -927,7 +931,7 @@
     function replace_lbs($string) {
         echo preg_replace("/\r|\n/", '\n', $string);
     }
-  
+
     if ($audit->facebook_bit == "1") { ?>
       var range_fb = {
         one: <?php echo $user->range_number_fb_1; ?>,

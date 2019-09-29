@@ -381,6 +381,8 @@
     $id = get_current_user_id();
     $number = get_user_meta($id, 'rcp_number', true );
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
+    $calendar = get_user_meta($id, 'rcp_calendar', true );
+
     $encrypt_method = "AES-256-CBC";
     $secret_key = 'ABk FA sjdanjk lallLL';
     $secret_iv = 'SAAnkks ksj sknalSAFF';
@@ -391,6 +393,10 @@
       <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
     <p>
+      <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
+          <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
+          <input name="rcp_calendar" id="rcp_calendar" type="text" value="<?php echo esc_attr( $calendar ); ?>"/>
+      <?php } ?>
       <label for="rcp_btw_number"><?php _e( 'Your VAT number', 'rcp' ); ?></label>
       <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
     </p>
@@ -422,6 +428,17 @@
         <p class="description"><?php _e( 'The member\'s phone number', 'rcp' ); ?></p>
       </td>
     </tr>
+
+    <tr valign="top">
+      <th scope="row" valign="top">
+        <label for="rcp_calendar"><?php _e( 'Calendar', 'rcp' ); ?></label>
+      </th>
+      <td>
+        <input name="rcp_calendar" id="rcp_calendar" type="text" value="<?php echo esc_attr( $number ); ?>"/>
+        <p class="description"><?php _e( 'The member\'s Calander link.', 'rcp' ); ?></p>
+      </td>
+    </tr>
+
     <tr valign="top">
       <th scope="row" valign="top">
         <label for="rcp_btw_number"><?php _e( 'VAT number', 'rcp' ); ?></label>
@@ -446,6 +463,11 @@
     if (empty( $posted['rcp_number'])) {
       rcp_errors()->add( 'invalid_profession', __( 'Please enter your phone number', 'rcp' ), 'register' );
     }
+
+    // if (empty( $posted['rcp_calendar'])) {
+    //   rcp_errors()->add( 'invalid_profession', __( 'Please enter your calendar link.', 'rcp' ), 'register' );
+    // }
+
     if (empty( $posted['rcp_btw_number'])) {
       rcp_errors()->add( 'invalid_location', __( 'Please enter your VAT number', 'rcp' ), 'register' );
     }
@@ -470,6 +492,11 @@
     if( ! empty( $posted['rcp_number'] ) ) {
       update_user_meta( $user_id, 'rcp_number', sanitize_text_field( $posted['rcp_number'] ) );
     }
+
+    if( ! empty( $posted['rcp_calendar'] ) ) {
+      update_user_meta( $user_id, 'rcp_calendar', sanitize_text_field( $posted['rcp_calendar'] ) );
+    }
+
     if( ! empty( $posted['rcp_btw_number'] ) ) {
       update_user_meta( $user_id, 'rcp_btw_number', $output);
     }
@@ -493,6 +520,11 @@
     	if( ! empty( $_POST['rcp_number'] ) ) {
     		update_user_meta( $user_id, 'rcp_number', sanitize_text_field( $_POST['rcp_number'] ) );
     	}
+
+        if( ! empty( $_POST['rcp_calendar'] ) ) {
+            update_user_meta( $user_id, 'rcp_calendar', sanitize_text_field( $_POST['rcp_calendar'] ) );
+        }
+
     	if( ! empty( $_POST['rcp_btw_number'] ) ) {
     		update_user_meta( $user_id, 'rcp_btw_number', $output);
     	}
