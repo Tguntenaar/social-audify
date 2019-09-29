@@ -183,8 +183,10 @@
           <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-        } else { ?>
-          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        } else { 
+          if ($user_id == $author_id) {?>
+            <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+          }
         } ?>
     </div>
   </div>
@@ -391,11 +393,13 @@
   </div>
 
   <script charset='utf-8'>
-    $(function() { <?php
+    $(function() { 
+      var data = <?php echo json_encode($graph_data_list); ?>;
+      var blockNames = <?php echo json_encode($campaign_blocks); ?>;
+      var labels = <?php echo json_encode($graph_labels); ?>;
+      
+      <?php
       if ($report->has_comp) { ?>
-        var data = <?php echo json_encode($graph_data_list); ?>;
-        var blockNames = <?php echo json_encode($campaign_blocks); ?>;
-        var labels = <?php echo json_encode($graph_labels); ?>;
         var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
         var compData = <?php echo json_encode($comp_graph_data_list); ?>;
         blockNames.forEach(function(block, index) {

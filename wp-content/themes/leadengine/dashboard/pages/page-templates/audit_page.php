@@ -201,8 +201,10 @@
           <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-        } else { ?>
-          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        } else { 
+          if ($user_id == $author_id) {?>
+            <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+          }
         } ?>
     </div>
   </div>
