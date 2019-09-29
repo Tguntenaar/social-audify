@@ -3579,7 +3579,8 @@ tr input {
 	border-bottom-right-radius: 3px;
 }
 
-.sub-menu-profile {
+.sub-menu-profile, 
+#affwp-affiliate-dashboard-tabs {
 	margin-left: -15px;
 	margin-top: 15px;
 	width: auto;
@@ -3593,14 +3594,16 @@ tr input {
 	border-bottom-right-radius: 3px;
 }
 
-.sub-menu-profile li {
+.sub-menu-profile li, 
+#affwp-affiliate-dashboard-tabs li {
 	display: inline-block;
 	margin-right: 20px;
 	font-size: 16px;
 	cursor: pointer;
 }
 
-.sub-menu-profile li:hover {
+.sub-menu-profile li:hover,
+#affwp-affiliate-dashboard-tabs li:hover {
 		opacity: 0.7;
 }
 
