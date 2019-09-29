@@ -177,13 +177,21 @@
       require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
       require_once(dirname(__FILE__)."/dashboard/models/audit.php");
       $control = new audit_controller($connection);
+    } else if ($type == 'report') {
+      require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
+      require_once(dirname(__FILE__)."/dashboard/models/report.php");
+      $control = new report_controller($connection);
     }
 
     $page = $control->get($page_id);
-    $page->update('mail_bit', $_POST['value'] == 'true');
-    $page->update('color', sanitize_hex_color($_POST['color']), 'Audit_template');
+    $table = ($type == 'audit') ? 'Audit_template' : 'Report_content';
+    $page->update('color', sanitize_hex_color($_POST['color']), $table);
+    
+    if ($type == 'audit') {
+      $page->update('mail_bit', $_POST['value'] == 'true');
+    }
 
-    wp_send_json(array('value' => $_POST['value'], 'color' => $_POST['color']));
+    wp_send_json(array('color' => $_POST['color']));
     wp_die();
   }
 

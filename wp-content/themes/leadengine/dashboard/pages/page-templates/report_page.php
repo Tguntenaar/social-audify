@@ -39,6 +39,8 @@
 
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
+  // TODO: fix dat de audit er zo uitziet do: $report->color anders $user->color_report
+
   // Graph data
   $graph_data = json_decode($report->chart_data);
 
@@ -143,6 +145,7 @@
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/utils.js"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js" charset="utf-8" defer></script>
+  <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
@@ -156,6 +159,7 @@
 </head>
 <body class="custom-body">
   <div id="shareModal" class="modal"></div>
+  <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
 
@@ -176,10 +180,8 @@
 
         if ($edit_mode) { ?>
           <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
-          <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button><?php
-        }
-
-        if ($edit_mode) { ?>
+          <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button>
+          <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
         } else { ?>
           <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
@@ -389,20 +391,17 @@
   </div>
 
   <script charset='utf-8'>
-    $(document).ready(function() {
-      var blockNames = <?php echo json_encode($campaign_blocks); ?>;
-      var labels = <?php echo json_encode($graph_labels); ?>;
-      var data = <?php echo json_encode($graph_data_list); ?>;
-
-
-      <?php
+    $(function() { <?php
       if ($report->has_comp) { ?>
+        var data = <?php echo json_encode($graph_data_list); ?>;
+        var blockNames = <?php echo json_encode($campaign_blocks); ?>;
+        var labels = <?php echo json_encode($graph_labels); ?>;
         var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
         var compData = <?php echo json_encode($comp_graph_data_list); ?>;
         blockNames.forEach(function(block, index) {
           generateBarChart('canvas' + (index + 1), [data[block['fb_name']], compData[block['fb_name']]],
                                                   [labels, compLabels], [true, true]);
-        });<?php
+        }); <?php
       } else { ?>
         blockNames.forEach(function(block, index) {
           console.log([data[block['fb_name']]]);
@@ -431,9 +430,10 @@
 
           $.ajax({
             type: "POST",
-            url: "https://<?php echo $env ?>/wp-admin/admin-ajax.php",
+            url: ajaxurl,
             data: data,
-            success: function () { field.html(html) }
+            success: function () { field.html(html) },
+            error: logResponse,
           });
         }
       };
@@ -453,6 +453,43 @@
         document.execCommand("copy");
       });
 
+        // Auto color Model
+        var modalData = {
+        text:`Configuration report`,
+        subtext:`
+          Do you want a custom color for this audit?<br>
+          Theme color: <input type="color" id="color" value="<?php echo $user->color_report; ?>">
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
+        confirm: 'config_confirmed'
+      }
+
+      var configModal = initiateModal('configModal', 'confirm', modalData);
+      $('#config_link').click(function() {
+        showModal(configModal);
+      });
+
+      $("#config_confirmed").click(function() {
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: { 
+            action: 'update_config',
+            color: $('#color').val(),
+            type: 'report',
+            report: '<?php echo $report->id; ?>',
+          },
+          success: logResponse,
+          error: function (errorThrown) {
+            console.log(errorThrown);
+            var modalData = {
+              'text': "Can't update color",
+              'subtext': "Please try again later or notify an admin if the issue persists"
+            }
+            showModal(initiateModal('errorModal', 'error', modalData));
+          }
+        });
+      });
+
       // Delete Audit Modal
       var modalData = {
         'text': 'Sure you want to delete this Report?',
@@ -468,7 +505,7 @@
       $('#delete_confirmed').click(function() {
         $.ajax({
           type: "POST",
-          url: "https://<?php echo $env; ?>/wp-admin/admin-ajax.php",
+          url: ajaxurl,
           data: {
             'action': 'delete_page',
             'report': '<?php echo $report->id; ?>',

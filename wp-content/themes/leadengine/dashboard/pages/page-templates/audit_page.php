@@ -717,8 +717,7 @@
       }
     };
 
-    $(function() { 
-      <?php
+    $(function() { <?php
       if ($edit_mode) { ?>
         // On change of an text area show update all
         $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
@@ -792,129 +791,129 @@
               error: logResponse,
             });
           }
-        }<?php
-      }?>
+        }
       
-      // IFrame Submit
-      $("#banner-form").submit(function(e) {
-        e.preventDefault();
-        var updated = $('form input[name="iframe"]').val();
-        $('form input[name="iframe"]').val(updated.replace('<iframe','').replace('</iframe>',''));
-        this.submit();
-      });
-     
-      // Share & Track Modal
-      var modalData = {
-        'text': "This link is copied to your clipboard:",
-        'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
-        'subtext': `You can send this link from your own email address to your lead. If your lead
-                    clicks on the link, you will see it in your dashboard, so make sure you don’t
-                    click on the link yourself in order to be able to track this.`,
-      }
+        // IFrame Submit
+        $("#banner-form").submit(function(e) {
+          e.preventDefault();
+          var updated = $('form input[name="iframe"]').val();
+          $('form input[name="iframe"]').val(updated.replace('<iframe','').replace('</iframe>',''));
+          this.submit();
+        });
+      
+        // Share & Track Modal
+        var modalData = {
+          'text': "This link is copied to your clipboard:",
+          'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
+          'subtext': `You can send this link from your own email address to your lead. If your lead
+                      clicks on the link, you will see it in your dashboard, so make sure you don’t
+                      click on the link yourself in order to be able to track this.`,
+        }
 
-      var shareModal = initiateModal('shareModal', 'notification', modalData);
-      $('#copy_link').click(function() {
-        showModal(shareModal);
-        document.getElementById("public_link").select();
-        document.execCommand("copy");
-      });
+        var shareModal = initiateModal('shareModal', 'notification', modalData);
+        $('#copy_link').click(function() {
+          showModal(shareModal);
+          document.getElementById("public_link").select();
+          document.execCommand("copy");
+        });
 
-      // Auto Mail Model
-      var modalData = {
-        text:`Configuration audit`,
-        subtext:`Do you want to sent this client automatic reminders?
-          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': '';?>><br><br>
-          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
-          <a href='/profile-page'>here</a>.<br><br>
-          Do you want a custom color for this audit?<br>
-          Theme color: <input type="color" id="color" value="<?php echo $user->color_audit; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
-        confirm: 'config_confirmed'
-      }
+        // Auto Mail + color Model
+        var modalData = {
+          text:`Configuration audit`,
+          subtext:`Do you want to sent this client automatic reminders?
+            <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': '';?>><br><br>
+            Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
+            <a href='/profile-page'>here</a>.<br><br>
+            Do you want a custom color for this audit?<br>
+            Theme color: <input type="color" id="color" value="<?php echo $user->color_audit; ?>">
+            <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
+          confirm: 'config_confirmed'
+        }
 
-      var configModal = initiateModal('configModal', 'confirm', modalData);
-      $('#config_link').click(function() {
-        showModal(configModal);
-      });
+        var configModal = initiateModal('configModal', 'confirm', modalData);
+        $('#config_link').click(function() {
+          showModal(configModal);
+        });
 
-      $("#config_confirmed").click(function() {
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: { 
-            action: 'update_config',
-            color: $('#color').val(),
-            value: $("#mail_bit_check").is(':checked'),
+        $("#config_confirmed").click(function() {
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: { 
+              action: 'update_config',
+              color: $('#color').val(),
+              value: $("#mail_bit_check").is(':checked'),
+              ...commonPost
+            },
+            success: logResponse,
+            error: function (errorThrown) {
+              console.log(errorThrown);
+              var modalData = {
+                'text': "Can't update mail function",
+                'subtext': "Please try again later or notify an admin if the issue persists"
+              }
+              showModal(initiateModal('errorModal', 'error', modalData));
+            }
+          });
+        });
+
+        // Delete Audit Modal
+        var modalData = {
+          'text': 'Sure you want to delete this Audit?',
+          'subtext': 'This action is irreversible',
+          'confirm': 'delete_confirmed'
+        }
+
+        var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
+        $('#delete-this-audit').click(function() {
+          showModal(deleteModal);
+        });
+
+        $('#delete_confirmed').click(function() {
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: {'action': 'delete_page', ...commonPost},
+            success: function (response) {
+              window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
+            },
+            error: function (errorThrown) {
+              console.log(errorThrown);
+              var modalData = {
+                'text': "Can't delete this audit",
+                'subtext': "Please try again later or notify an admin if the issue persists"
+              }
+              showModal(initiateModal('errorModal', 'error', modalData));
+            }
+          });
+        });
+
+        function update_ads(button, competitor) {
+          var data = {
+            action: 'update_ads_audit',
+            competitor: (competitor) ? 'true' : 'false',
+            ads: button,
             ...commonPost
-          },
-          success: logResponse,
-          error: function (errorThrown) {
-            console.log(errorThrown);
-            var modalData = {
-              'text': "Can't update mail function",
-              'subtext': "Please try again later or notify an admin if the issue persists"
-            }
-            showModal(initiateModal('errorModal', 'error', modalData));
-          }
+          };
+
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: data,
+            success: logResponse,
+            error: logResponse,
+          });
+        }
+
+        $('input:radio[name=ads]').change(function () {
+          update_ads(this.value, competitor = false);
         });
-      });
 
-      // Delete Audit Modal
-      var modalData = {
-        'text': 'Sure you want to delete this Audit?',
-        'subtext': 'This action is irreversible',
-        'confirm': 'delete_confirmed'
-      }
-
-      var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
-      $('#delete-this-audit').click(function() {
-        showModal(deleteModal);
-      });
-
-      $('#delete_confirmed').click(function() {
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: {'action': 'delete_page', ...commonPost},
-          success: function (response) {
-            window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
-          },
-          error: function (errorThrown) {
-            console.log(errorThrown);
-            var modalData = {
-              'text': "Can't delete this audit",
-              'subtext': "Please try again later or notify an admin if the issue persists"
-            }
-            showModal(initiateModal('errorModal', 'error', modalData));
-          }
+        $('input:radio[name=ads_c]').change(function () {
+          update_ads(this.value, competitor = true);
         });
-      });
-
-      function update_ads(button, competitor) {
-        var data = {
-          action: 'update_ads_audit',
-          competitor: (competitor) ? 'true' : 'false',
-          ads: button,
-          ...commonPost
-        };
-
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: data,
-          success: logResponse,
-          error: logResponse,
-        });
-      }
-
-      $('input:radio[name=ads]').change(function () {
-        update_ads(this.value, competitor = false);
-      });
-
-      $('input:radio[name=ads_c]').change(function () {
-        update_ads(this.value, competitor = true);
-      });
-    });
+      }); <?php // Can edit 
+    }?>
 
     // Dynamic slider functions
     function handleSlider(type, range = false, text = false) {
