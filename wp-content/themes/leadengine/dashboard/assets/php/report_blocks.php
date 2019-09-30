@@ -5,42 +5,48 @@
       "data" => "facebook_data",
       "fb_name" => "country_page_likes",
       "desc" => "The amount of likes the facebook page has",
-      "fb" => 1
+      "fb" => 1,
+      "decimals" => 0
     ],
     ["type" => "soc_aml",
       "name" => "FB average message length",
       "data" => "facebook_data",
       "fb_name" => "avgMessageLength",
       "desc" => "The average length of a message on the facebook page",
-      "fb" => 1
+      "fb" => 1,
+      "decimals" => 2
     ],
     ["type" => "soc_inf",
       "name" => "Insta number followers",
       "data" => "instagram_data",
       "fb_name" => "followers_count",
       "desc" => "The number of followers the instagram page has",
-      "fb" => 0
+      "fb" => 0,
+      "decimals" => 0
     ],
     ["type" => "soc_inaf",
       "name" => "Insta number accounts followed",
       "data" => "instagram_data",
       "fb_name" => "follows_count",
       "desc" => "The number of accounts the instagram page follows",
-      "fb" => 0
+      "fb" => 0,
+      "decimals" => 0
     ],
     ["type" => "soc_iae",
       "name" => "Insta average engagement",
       "data" => "instagram_data",
       "fb_name" => "avgEngagement",
       "desc" => "The average of activity on the instagram page",
-      "fb" => 0
+      "fb" => 0,
+      "decimals" => 2
     ],
     ["type" => "soc_plm",
       "name" => "Insta number of post last month",
       "data" => "instagram_data",
       "fb_name" => "postsLM",
       "desc" => "The number of posts the instagram page added last month",
-      "fb" => 0
+      "fb" => 0,
+      "decimals" => 0
     ],
   );
 

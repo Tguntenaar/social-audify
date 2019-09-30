@@ -251,7 +251,7 @@
                 if ($report->manual && !$item["fb"] && $edit_mode) { ?>
                   <input type="text" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /></span><?php
                 } else {
-                  echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, 2);
+                  echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, $item["decimals"], '.', '');
                 }
 
                 if ($report->has_comp) {

@@ -11,6 +11,7 @@
 
   // Get Author data
   $phone =  get_user_meta($author_id, 'rcp_number', true);
+  $calendar =  get_user_meta($author_id, 'rcp_calendar', true);
   $author = get_userdata($author_id);
 
   // Mode check
@@ -38,6 +39,8 @@
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
   
   // TODO: fix dat de audit er zo uitziet do: $audit->color anders $user->color_audit
+
+  $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
@@ -140,11 +143,14 @@
     }
   }
 
-  function call_to_contact($phone, $mail) { ?>
+  function call_to_contact($phone, $mail, $calendar) { ?>
     <div class="info">
       <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
       <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
-      <a href=""><i class="fas fa-calendar"></i>Schedule an appointment</a>
+      <?php 
+      if ($calendar != "") { ?>
+        <a class="calendar" href="<?php echo $calendar; ?>"><i class="fas fa-calendar">Make appointment</a><?php 
+      } ?>
     </div><?php
   }
 
@@ -172,9 +178,20 @@
       });
     });
   </script>
+  <style>
+  .score-text, .advice-title {
+		color: <?php echo $theme_color; ?> !important;
+  }
+  .under-line {
+    border: 1px solid <?php echo $theme_color; ?> !important;
+  }
+  .slider::-webkit-slider-thumb {
+    background:  <?php echo $theme_color; ?> !important;
+  }
+  </style>
 </head>
 <body class="custom-body">
-    <div class="sub-header col-lg-12" style="display: block !important;">
+    <div class="sub-header col-lg-12" style="display: block !important; background:<?php echo $theme_color; ?>;">
     <!-- Animated CSS stuff -->
     <div id="nav-icon2">
       <span></span>
@@ -353,7 +370,7 @@
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p>
                   <?php
-                  call_to_contact($phone, $author->user_email);
+                  call_to_contact($phone, $author->user_email, $calendar);
                 } ?>
               </div>
             </div>
@@ -527,7 +544,7 @@
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
                   <?php
-                  call_to_contact($phone, $author->user_email);
+                  call_to_contact($phone, $author->user_email, $calendar);
                 } ?>
             </div>
           </div>
@@ -588,7 +605,7 @@
             <span class="advice-title margin-advice-title">Website advice</span>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['wb']; ?></p>
             <?php
-            call_to_contact($phone, $author->user_email);
+            call_to_contact($phone, $author->user_email, $calendar);
           } ?>
         </div>
       </div><?php
@@ -614,8 +631,10 @@
   </section>
   <div class="footer">
     <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
-    <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
-    <span class="mailadres"> Schedule an appointment: <a href="mailto:<?php echo $author->user_email; ?>"> TODO: moet een link worden </a></span>      
+    <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php 
+    if ($calendar != "") { ?>
+      <a class="calendar" href="<?php echo $calender; ?>"><i class="fas fa-calendar">Make appointment</a><?php 
+    } ?> 
   </div>
 </body>
 </html>
@@ -640,7 +659,7 @@
       $('#reload_page').click(function() {
         location.reload();
       });
-     
+
       $.ajax({
         type: "POST",
         url: ajaxurl,
@@ -827,7 +846,7 @@
             Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
             <a href='/profile-page'>here</a>.<br><br>
             Do you want a custom color for this audit?<br>
-            Theme color: <input type="color" id="color" value="<?php echo $user->color_audit; ?>">
+            Theme color: <input type="color" id="color" value="<?php echo $audit->color; ?>">
             <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
           confirm: 'config_confirmed'
         }
@@ -847,7 +866,9 @@
               value: $("#mail_bit_check").is(':checked'),
               ...commonPost
             },
-            success: logResponse,
+            success: function() {
+              window.location.reload()
+            },
             error: function (errorThrown) {
               console.log(errorThrown);
               var modalData = {
