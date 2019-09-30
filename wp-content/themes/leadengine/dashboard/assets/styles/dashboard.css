@@ -161,6 +161,7 @@ header {
 .sub-header {
 	height: 60px;
 	float: left;
+	background: #6e9d9c;
 	line-height: 60px;
 	padding-left: 35px !important;
 	color: #fff;

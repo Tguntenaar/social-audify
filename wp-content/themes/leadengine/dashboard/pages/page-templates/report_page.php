@@ -39,8 +39,7 @@
 
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-  // TODO: fix dat de audit er zo uitziet do: $report->color anders $user->color_report
-
+  $theme_color = ($report->color == "") ? $user->color_report : $report->color;
   // Graph data
   $graph_data = json_decode($report->chart_data);
 
@@ -156,6 +155,17 @@
       });
     });
   </script>
+  <style>
+    .title-report-box, .audit-company-name {
+      color: <?php echo $theme_color; ?> !important;
+    }
+    .under-line {
+      border: 1px solid <?php echo $theme_color; ?> !important;
+    }
+    .sub-header {
+      background:  <?php echo $theme_color; ?> !important;
+    }
+  </style>
 </head>
 <body class="custom-body">
   <div id="shareModal" class="modal"></div>
@@ -174,7 +184,7 @@
         <?php
         if ($edit_mode) { ?>
           <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
-        } ?>
+        } ?> 
 
         Report: <?php echo $report->name;
 
@@ -462,7 +472,7 @@
         text:`Configuration report`,
         subtext:`
           Do you want a custom color for this audit?<br>
-          Theme color: <input type="color" id="color" value="<?php echo $user->color_report; ?>">
+          Theme color: <input type="color" id="color" value="<?php echo $report->color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
         confirm: 'config_confirmed'
       }
@@ -482,7 +492,10 @@
             type: 'report',
             report: '<?php echo $report->id; ?>',
           },
-          success: logResponse,
+          success: function(r) {
+            console.log(r);
+            window.location.reload();
+          },
           error: function (errorThrown) {
             console.log(errorThrown);
             var modalData = {

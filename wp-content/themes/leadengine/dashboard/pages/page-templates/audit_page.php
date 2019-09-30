@@ -179,19 +179,19 @@
     });
   </script>
   <style>
-  .score-text, .advice-title {
-		color: <?php echo $theme_color; ?> !important;
-  }
-  .under-line {
-    border: 1px solid <?php echo $theme_color; ?> !important;
-  }
-  .slider::-webkit-slider-thumb {
-    background:  <?php echo $theme_color; ?> !important;
-  }
+    .score-text, .advice-title {
+      color: <?php echo $theme_color; ?> !important;
+    }
+    .under-line {
+      border: 1px solid <?php echo $theme_color; ?> !important;
+    }
+    .slider::-webkit-slider-thumb, .sub-header {
+      background:  <?php echo $theme_color; ?> !important;
+    }
   </style>
 </head>
 <body class="custom-body">
-    <div class="sub-header col-lg-12" style="display: block !important; background:<?php echo $theme_color; ?>;">
+    <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
     <div id="nav-icon2">
       <span></span>
