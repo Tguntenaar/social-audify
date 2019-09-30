@@ -633,6 +633,10 @@
     'audit': '<?php echo $audit->id; ?>',
   }
 
+  function updateIframe(display) {
+    $(this).parent().children('iframe').css("display", display);
+  }
+
   <?php
   if ($audit->website_bit && !$audit->has_website) { ?>
     function crawlFinishedCheck() {
@@ -778,12 +782,12 @@
         function getIframe() {
           var selected = $('#iframe-input:visible');
           if (typeof selected[0] != 'undefined') {
-            $value = selected.val().replace('<iframe','').replace('</iframe>', '');
-            if ($value != '<?php echo $audit->video_iframe; ?>') {
-              return { "video_iframe" : $value };
+            var value = selected.val().replace('<iframe','').replace('</iframe>', '');
+            if (value != '<?php echo $audit->video_iframe; ?>') {
+              return { "video_iframe" : value };
             }
           }
-          return { "video_iframe" : null };
+          return { "video_iframe" : '' };
         }
 
         function updateAll() {
@@ -791,7 +795,7 @@
             ...getChanged('textarea'),
             ...getChanged("#manual-ig-form input[type=text]", true),
             ...getChanged("input[type=range]"),
-            ...getIframe('iframe')
+            ...getIframe()
           };
           console.log(data);
           if (!$.isEmptyObject(data)) {
@@ -801,8 +805,11 @@
               data: {action: 'universal_update', ...data, ...commonPost},
               success: function(response) {
                 toggleUpdate(false);
-                // TODO : sommige updates kosten een reload, mooiste is als de controller dat door geeft in de return denk ik..?
                 console.log(response);
+                // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL, 
+                //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
+                //  - daarbij zit er ook een php check op.
+                $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
               },
               error: logResponse,
             });
