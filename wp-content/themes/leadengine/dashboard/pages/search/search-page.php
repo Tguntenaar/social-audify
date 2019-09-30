@@ -28,7 +28,7 @@
 
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9">
     <div class="search-container">
-      <input type="text" name="search" id="search-input" placeholder="Type in your search query...">
+      <input type="text" name="search" id="search-input" placeholder="Type audit/report name here...">
     </div>
     <div class="result-container">
       <div class="audit-results">

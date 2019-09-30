@@ -52,7 +52,10 @@
             <li id="avatar-click">Avatar settings</li>
             <li id="audit-click">Intro / conlusion Audits</li>
             <li id="report-click">Intro / conlusion Reports</li>
-            <li id="mail-click">Mail config</li>
+            <li id="mail-click">Mail config</li> <?php 
+            if ( current_user_can( 'manage_affiliates' ) ) { ?>
+              <li><a href="/affiliate-area/">Affiliate Area</a></li> <?php
+            } ?>
           </ul>
 
           <div id="profile-member">
@@ -421,7 +424,7 @@
     var explanations = {
       profile: {
         title: 'Profile Fields',
-        description: '<strong>Your phone number: </strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail: </strong>This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address Add your VAT number for [Bob]',
+        description: '<strong>Your phone number: </strong> Adding a phone number will allow your leads you call with with the click on a button after looking at the audit! <br /><br /><strong>Your e-mail: </strong>This e-mail address will be shown to your clients (for reports) and leads (for audits) and they will reply to this e-mail address<br><br> <strong>VAT number: </strong>For Businesses within the European Union (except for Dutch businesses): By adding your VAT number we do not have to charge you VAT as we can use international treaties. For businesses outside of the European Union we will not need to have your VAT-number. <br> For Dutch Businesses: As our business is based in The Netherlands we will have to charge you VAT. You can simply file it with your \'OB-aangifte\' to get the VAT refunded.',
       },
       avatar: {
         title: 'Avatar',
