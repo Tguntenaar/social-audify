@@ -3710,7 +3710,8 @@ tr input {
 
 #audit-settings,
 #mail-settings,
-#account-settings {
+#account-settings,
+.profile-page-blocks {
 	width: 100%;
 	height: auto;
 	padding: 25px;

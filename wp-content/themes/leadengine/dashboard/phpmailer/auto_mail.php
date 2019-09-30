@@ -38,7 +38,7 @@ $client_control = new client_controller($connection);
 // HIER BEGINT DE CODE
 $users = get_users();
 
-foreach($users as $user_id) {
+foreach ($users as $user_id) {
     $audit_send_list = array();
 
     if($user_id->ID == 1) {

@@ -6,11 +6,12 @@ function initiateModal(id, type, data) {
   var subtext = typeof data.subtext == 'undefined' ? '' : data.subtext;
   var confirmName = typeof data.confirm == 'undefined' ? 'modalConfirm' : data.confirm;
   var cancelName = typeof data.cancel == 'undefined' ? 'modalCancel' : data.cancel;
+  var confirmText = typeof data.confirmtext == 'undefined' ? 'Confirm' : data.confirmtext;
 
   var zIndex = type == "error" ? '1250' : type == "confirm" ? '1150' : '1050';
 
   var buttons = type == "confirm" ?
-    "<button class='agree' id='" + confirmName + "'>Confirm</button>" +
+    "<button class='agree' id='" + confirmName + "'>"+confirmText+"</button>" +
     "<button class='deny' id='" + cancelName + "'>Cancel</button>" :
     "<button class='agree' id='" + confirmName + "'>Understood</button>";
 
