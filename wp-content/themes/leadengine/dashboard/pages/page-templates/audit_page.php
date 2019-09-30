@@ -46,12 +46,6 @@
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
   }
 
-  // Post handling
-  if (isset($_POST['iframe']) && $edit_mode) {
-    $value=  ($_POST['video-option'] == 'nothing') ? NULL : base64_encode($_POST['iframe']);
-    $audit->update('video_iframe', $value, 'Audit_template');
-  }
-
   function advice_equal_to_user($user, $audit, $type) {
     if (
       $type == 'fb' &&
@@ -118,10 +112,8 @@
       return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
     } elseif ($has_website && $value === '1') {
       return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
-    } else {
-      return $value;
-    }
-    return "";
+    } 
+    return $value;
   }
 
   function getWebIconFacebook($value, $is_icon) {
@@ -130,7 +122,6 @@
     } elseif ($is_icon && $value == 1) {
       return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
-
     return $value;
   }
 
@@ -153,11 +144,6 @@
       } ?>
     </div><?php
   }
-
-  $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
-  $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
-  $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
-  $display_iframe = ($audit->video_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
 ?>
 <head>
   <title>Audit</title>
@@ -185,7 +171,8 @@
     .under-line {
       border: 1px solid <?php echo $theme_color; ?> !important;
     }
-    .slider::-webkit-slider-thumb, .sub-header {
+    .slider::-webkit-slider-thumb, .sub-header,
+    .slider::-moz-range-thumb {
       background:  <?php echo $theme_color; ?> !important;
     }
   </style>
@@ -234,12 +221,12 @@
 
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link"
-           value=<?php echo "https://".$env."/public/".$slug; ?> />
+      value=<?php echo "https://".$env."/public/".$slug; ?> />
 
     <?php 
     if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
-        echo "<iframe ". stripslashes(base64_decode($audit->video_iframe)) ."</iframe>"; ?>
+        echo "<iframe ". stripslashes($audit->video_iframe) ."</iframe>"; ?>
       </div><?php
     } else if ($audit->video_iframe != "" || $edit_mode) { ?>
       <div class="intro-video"></div><?php
@@ -250,13 +237,14 @@
         <h3>Video banner:</h3>
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
-          <input type="radio" name="video-option" id="iframe-option" <?php echo $video_iframe; ?> value="iframe"/> <span class="radio-label">Video</span>
-          <input type="radio" name="video-option" id="nothing-option" <?php echo $video_nothing; ?> value="nothing"/> <span class="radio-label">Nothing</span>
-          <div id="iframe-input" <?php echo $display_iframe; ?> >
-            <input type="text" id="iframe-input" name="iframe" placeholder="Insert iframe(Loom/Youtube etc.)" pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))"
-                   value='<?php if ($audit->video_iframe != NULL) { echo '<iframe '. stripslashes(base64_decode($audit->video_iframe)) .'</iframe>'; }?>'/>
+
+          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL ? 'checked' : ''; ?>/> 
+            <span class="radio-label">Video</span>
+          <input type="radio" class="iframe-radio" data-display="none" <?php echo $audit->video_iframe == NULL ? 'checked' : ''; ?>/>
+            <span class="radio-label">Nothing</span>
+          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL) ? 'block' : 'none'; ?>"
+            pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $audit->video_iframe != NULL ? '<iframe '.stripslashes($audit->video_iframe).'</iframe>' : ''; ?>'/>
           </div>
-          <input type="submit" value="Update" class="advice-button">
         </form>
       </div><?php
     }
@@ -703,21 +691,6 @@
 
   <?php
   if ($edit_mode) { ?>
-    // IFrame functions
-    var iframe  = $("#iframe-input");
-    var inputField = $('#iframe-value');
-
-    $("#iframe-option").click(function() {
-      iframe.addClass("block");
-      iframe.removeClass("none");
-    });
-
-    $("#nothing-option").click(function() {
-      iframe.addClass("none");
-      iframe.removeClass("block");
-      // inputField.value = NULL;
-    });
-
     // Visibility function
     var toggle_visibility = function(field_name) {
       var field = $(`#${field_name}_icon`);
@@ -731,7 +704,7 @@
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: {action: 'toggle_visibility', field: field_name , ...commonPost},
+          data: { action: 'toggle_visibility', field: field_name , ...commonPost },
           success: function () { field.html(icon) },
           error: logResponse,
         });
@@ -760,6 +733,20 @@
             }
           }
         });
+
+        $("input[type=range]").on('mouseup', function() {
+          $(this).data('changed', true);
+          toggleUpdate(true);
+        });
+
+        $("input:radio[class=iframe-radio]").on('click', function() {
+          $(this).parent().children('input:radio:checked').prop("checked", false);
+          $(this).parent().children('#iframe-input').css("display", $(this).data('display'));
+          $(this).prop("checked", true);
+          toggleUpdate(true);
+        });
+
+        $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });
         
         /**
          * Enables prompt
@@ -774,11 +761,6 @@
           }
         }
 
-        $("input[type=range]").on('mouseup', function() {
-          $(this).data('changed', true);
-          toggleUpdate(true);
-        });
-
         $('#universal-update').on('click', function() {
           updateAll();
         });
@@ -792,12 +774,24 @@
           });
           return changed;
         }
-        
+
+        function getIframe() {
+          var selected = $('#iframe-input:visible');
+          if (typeof selected[0] != 'undefined') {
+            $value = selected.val().replace('<iframe','').replace('</iframe>', '');
+            if ($value != '<?php echo $audit->video_iframe; ?>') {
+              return { "video_iframe" : $value };
+            }
+          }
+          return { "video_iframe" : null };
+        }
+
         function updateAll() {
           var data = {
             ...getChanged('textarea'),
             ...getChanged("#manual-ig-form input[type=text]", true),
             ...getChanged("input[type=range]"),
+            ...getIframe('iframe')
           };
           console.log(data);
           if (!$.isEmptyObject(data)) {
@@ -807,6 +801,7 @@
               data: {action: 'universal_update', ...data, ...commonPost},
               success: function(response) {
                 toggleUpdate(false);
+                // TODO : sommige updates kosten een reload, mooiste is als de controller dat door geeft in de return denk ik..?
                 console.log(response);
               },
               error: logResponse,
@@ -814,21 +809,13 @@
           }
         }
       
-        // IFrame Submit
-        $("#banner-form").submit(function(e) {
-          e.preventDefault();
-          var updated = $('form input[name="iframe"]').val();
-          $('form input[name="iframe"]').val(updated.replace('<iframe','').replace('</iframe>',''));
-          this.submit();
-        });
-      
         // Share & Track Modal
         var modalData = {
           'text': "This link is copied to your clipboard:",
           'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
           'subtext': `You can send this link from your own email address to your lead. If your lead
-                      clicks on the link, you will see it in your dashboard, so make sure you don’t
-                      click on the link yourself in order to be able to track this.`,
+            clicks on the link, you will see it in your dashboard, so make sure you don’t
+            click on the link yourself in order to be able to track this.`,
         }
 
         var shareModal = initiateModal('shareModal', 'notification', modalData);
@@ -841,8 +828,8 @@
         // Auto Mail + color Model
         var modalData = {
           text:`Configuration audit`,
-          subtext:`Do you want to sent this client automatic reminders?
-            <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': '';?>><br><br>
+          html:`Do you want to sent this client automatic reminders?
+            <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
             Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
             <a href='/profile-page'>here</a>.<br><br>
             Do you want a custom color for this audit?<br>
@@ -861,10 +848,8 @@
             type: "POST",
             url: ajaxurl,
             data: { 
-              action: 'update_config',
-              color: $('#color').val(),
-              value: $("#mail_bit_check").is(':checked'),
-              ...commonPost
+              action: 'update_config', color: $('#color').val(),
+              value: $("#mail_bit_check").is(':checked'), ...commonPost
             },
             success: function() {
               window.location.reload()
@@ -1034,9 +1019,6 @@
     }
     if (!!sliderData.wb) {
       handleSlider('website', sliderData.wb.range, sliderData.wb.text);
-    }
-    <?php
+    }<?php
   } ?>
-  // TODO: algemene update functie, die itereert over alle mogelijke velden
-  //        - en ze update als ze verandert zijn...
 </script>
