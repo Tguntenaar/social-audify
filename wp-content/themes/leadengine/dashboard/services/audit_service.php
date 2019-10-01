@@ -89,7 +89,7 @@ class audit_service extends connection {
   }
 
 
-  public function website_check($id) {
+  public function check_website($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
       "SELECT COUNT(*) AS count FROM Audit_crawl WHERE audit_id = %d", $id))[0];
   }

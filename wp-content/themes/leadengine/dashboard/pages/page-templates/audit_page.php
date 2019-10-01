@@ -38,8 +38,6 @@
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
   
-  // TODO: fix dat de audit er zo uitziet do: $audit->color anders $user->color_audit
-
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
   if ($audit->manual == 0) {
@@ -118,6 +116,8 @@
       return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
     } elseif ($has_website && $value === '1') {
       return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
+    } else if (!$has_website) {
+      return 'reload';
     } else {
       return $value;
     }
@@ -231,7 +231,6 @@
   <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
-  <div id="crawlModal" class="modal"></div>
 
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link"
@@ -649,18 +648,6 @@
   <?php
   if ($audit->website_bit && !$audit->has_website) { ?>
     function crawlFinishedCheck() {
-      console.log("test");
-      var modalData = {
-        'text': 'The crawler has finished parsing the website',
-        'subtext': 'Do you wish to reload the page now?',
-        'confirm': 'reload_page'
-      }
-
-      var crawlModal = initiateModal('crawlModal', 'confirm', modalData);
-      $('#reload_page').click(function() {
-        location.reload();
-      });
-
       $.ajax({
         type: "POST",
         url: ajaxurl,
@@ -668,7 +655,11 @@
         success: function (response) {
           console.log('retrieved response : ' + response);
           if (response > <?php echo (int)$audit->has_comp ?>) {
-            showModal(crawlModal);
+            $('.wait-for-crawl').hide();
+            showModal(initiateModal('errorModal', 'error', {
+              'text': "Website data available",
+              'subtext': "You can give it a score now."
+            }));
           } else {
             setTimeout(function() { crawlFinishedCheck(); }, 8000);
           }
@@ -849,11 +840,10 @@
             },
             error: function (errorThrown) {
               console.log(errorThrown);
-              var modalData = {
+              showModal(initiateModal('errorModal', 'error', {
                 'text': "Can't update mail function",
                 'subtext': "Please try again later or notify an admin if the issue persists"
-              }
-              showModal(initiateModal('errorModal', 'error', modalData));
+              }));
             }
           });
         });

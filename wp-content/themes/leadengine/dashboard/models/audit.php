@@ -16,7 +16,7 @@ class audit {
     $this->service = $service;
     $this->sql_data = $sql_audit;
 
-	$this->competitor = (object) array();
+	  $this->competitor = (object) array();
     $this->has_comp = false;
 
     $this->has_website = isset($this->sql_data->website_size);
