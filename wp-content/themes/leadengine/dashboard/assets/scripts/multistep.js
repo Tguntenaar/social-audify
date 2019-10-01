@@ -61,6 +61,7 @@ function showTab(index) {
     $('#nextBtn').html(`Create ${name}`);
 
     // change on click functionality.
+    $('#nextBtn').off('click');
     $('#nextBtn').on('click', function() {
       if ((Instance.page.type == 'report' && validateSelectedAds()) ||
           (Instance.page.type == 'audit' && validateName())) {
@@ -68,9 +69,11 @@ function showTab(index) {
       }
     });
   } else {
+    console.log('hier');
     if ($('#nextBtn').html() !== 'Next') {
-      $('#nextBtn').off('click');
       $('#nextBtn').html('Next');
+      $('#nextBtn').off('click');
+      $('#nextBtn').on('click', function() {nextPrev(1)});
     }
   }
 
@@ -141,8 +144,6 @@ function validateClient() {
   // Instance.client = JSON.parse(selected.attr("data-client"));
   // TODO:
   Instance.client = selected.data('client');
-
-  console.log(Instance.client.ad_id);
 
   // Stop progress if client has no ad_id
   if (Instance.page.type == 'report' && !Instance.client.ad_id) {
