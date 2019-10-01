@@ -185,7 +185,7 @@
     $page = $control->get($page_id);
     $table = ($type == 'audit') ? 'Audit_template' : 'Report_content';
     $page->update('color', sanitize_hex_color($_POST['color']), $table);
-    
+
     if ($type == 'audit') {
       $page->update('mail_bit', $_POST['value'] == 'true');
     }
@@ -348,7 +348,7 @@
       wp_send_json_error($error);
       wp_die();
     }
-    
+
     require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
     require_once(dirname(__FILE__)."/dashboard/models/client.php");
     $client_control = new client_controller($connection);
@@ -356,7 +356,7 @@
     $page_id = $_POST[$type];
     $page = $control->get($page_id);
     $client = $client_control->get($page->client_id);
-      
+
     if (get_current_user_id() == $client->user_id) {
       $page->delete();
     }
@@ -423,7 +423,7 @@
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
-      <label for="rcp_btw_number"><?php _e( 'Your VAT number', 'rcp' ); ?></label>
+      <label for="rcp_btw_number"><?php _e( 'Your VAT number (optional)', 'rcp' ); ?></label>
       <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
     </p>
     <?php
@@ -489,9 +489,25 @@
     if (empty( $posted['rcp_number'])) {
       rcp_errors()->add( 'invalid_profession', __( 'Please enter your phone number', 'rcp' ), 'register' );
     }
-    
-    if (empty( $posted['rcp_btw_number'])) {
-      rcp_errors()->add( 'invalid_location', __( 'Please enter your VAT number', 'rcp' ), 'register' );
+
+    if (!empty( $posted['rcp_btw_number'])) {
+        $vat_number = isset($posted['rcp_btw_number']) ? $posted['rcp_btw_number'] : "";
+        $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
+
+        $contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
+
+        if($contents === false) {
+            throw new Exception('service unavailable');
+        }
+        else {
+            $res = json_decode($contents);
+
+            if(!($res->valid || (string)$vat_number == "")) {
+                rcp_errors()->add( 'invalid_location', __( 'Wrong FAT number.', 'rcp' ), 'register' );
+            } else {
+
+            }
+        }
     }
   }
 
@@ -536,8 +552,6 @@
         $key = hash('sha256', $secret_key);
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
 
-        $output = openssl_encrypt(sanitize_text_field( $_POST['rcp_btw_number'] ), $encrypt_method, $key, 0, $iv);
-        $output = base64_encode($output);
 
     	if( ! empty( $_POST['rcp_number'] ) ) {
     		update_user_meta( $user_id, 'rcp_number', sanitize_text_field( $_POST['rcp_number'] ) );
@@ -547,9 +561,30 @@
             update_user_meta( $user_id, 'rcp_calendar', sanitize_text_field( $_POST['rcp_calendar'] ) );
         }
 
-    	if( ! empty( $_POST['rcp_btw_number'] ) ) {
-    		update_user_meta( $user_id, 'rcp_btw_number', $output);
-    	}
+        if( ! empty( $_POST['rcp_btw_number'] ) ) {
+            $vat_number = isset($_POST['rcp_btw_number']) ? $_POST['rcp_btw_number'] : "";
+            $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
+
+            $contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
+
+            if($contents === false) {
+                throw new Exception('service unavailable');
+            }
+            else {
+                $res = json_decode($contents);
+
+                if($res->valid) {
+                    $output = openssl_encrypt(sanitize_text_field( $vat_number ), $encrypt_method, $key, 0, $iv);
+                    $output = base64_encode($output);
+                    update_user_meta( $user_id, 'rcp_btw_number', $output);
+                }
+            }
+        } else {
+            update_user_meta( $user_id, 'rcp_btw_number', "");
+        }
+
+
+
     }
     add_action( 'rcp_user_profile_updated', 'pw_rcp_save_user_fields_on_profile_save', 10 );
     add_action( 'rcp_edit_member', 'pw_rcp_save_user_fields_on_profile_save', 10 );

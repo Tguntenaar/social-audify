@@ -83,6 +83,10 @@ button {
 	cursor: pointer;
 }
 
+#wpua-upload-existing {
+	display: none;
+}
+
 .block {
 	display: block !important;
 }
@@ -877,10 +881,16 @@ nav ul a:hover {
 	display: none;
 }
 
-#wpua-file-existing {
+/* #wpua-file-existing {
 	background: #487dd7 !important;
 	border: 0;
 	color: #fff;
+} */
+
+#wpua-file-existing {
+	color: #487dd7 !important;
+	background: #fff !important;
+	padding-left: 10px;
 }
 
 .overlay-ad-account p:hover {
@@ -3611,7 +3621,7 @@ tr input {
 	border-bottom-right-radius: 3px;
 }
 
-.sub-menu-profile, 
+.sub-menu-profile,
 #affwp-affiliate-dashboard-tabs {
 	margin-left: -15px;
 	margin-top: 15px;
@@ -3626,7 +3636,7 @@ tr input {
 	border-bottom-right-radius: 3px;
 }
 
-.sub-menu-profile li, 
+.sub-menu-profile li,
 #affwp-affiliate-dashboard-tabs li {
 	display: inline-block;
 	margin-right: 20px;
@@ -3656,7 +3666,7 @@ tr input {
 
 .affwp-table td,
 .affwp-table th,
-.affwp-table-responsive td, 
+.affwp-table-responsive td,
 .affwp-table-responsive th {
   border: 1px solid #dddddd;
   text-align: left;
