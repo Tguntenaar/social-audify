@@ -180,6 +180,14 @@
         <span></span>
         <span></span>
       </div>
+
+      <?php
+      if ($edit_mode) { ?>
+        <button id="universal-update" class="advice-button floating-update">
+          Update All
+        </button> <?php
+      } ?>
+
       <div class="mobile-hide">
         <?php
         if ($edit_mode) { ?>
@@ -215,7 +223,6 @@
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
-            <input type="submit" value="Update" class="advice-button">
           </form><?php
         } else { ?>
           <p><?php
@@ -239,7 +246,7 @@
       }
       ?><div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="float:left; height: auto;"><?php
       if ($report->manual && $edit_mode) { ?>
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data"><?php
+          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
       }
       foreach ($social_blocks as $item) {
         if (show_block($edit_mode, $report->{$item["type"]}, isset($social_stats->{$item["data"]}->{$item["fb_name"]}))) { ?>
@@ -259,7 +266,7 @@
                 }
 
                 if ($report->manual && !$item["fb"] && $edit_mode) { ?>
-                  <input type="text" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /></span><?php
+                  <input type="text" id="<?php echo $item["fb_name"]; ?>" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /></span><?php
                 } else {
                   echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, $item["decimals"], '.', '');
                 }
@@ -306,7 +313,6 @@
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#social_advice" method="post" enctype="multipart/form-data">
               <textarea maxlength="999" style="height: 290px;" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
-              <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
             echo "<p>$report->social_advice</p>";
@@ -371,7 +377,6 @@
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#campaign_advice" method="post" enctype="multipart/form-data">
               <textarea maxlength="999" style="height: 330px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $report->campaign_advice; ?></textarea>
-              <input type="submit" value="Update" class="advice-button" >
             </form><?php
           } else {
             echo "<p>$report->campaign_advice</p>";
@@ -388,7 +393,6 @@
       if ($edit_mode) { ?>
         <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
           <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
-          <input type="submit" value="Update" class="advice-button">
         </form><?php
       } else { ?>
         <p><?php
@@ -418,14 +422,51 @@
         }); <?php
       } else { ?>
         blockNames.forEach(function(block, index) {
-          console.log([data[block['fb_name']]]);
           generateBarChart('canvas' + (index + 1), [data[block['fb_name']]], [labels], [true, true]);
         }); <?php
       } ?>
     });
 
+    var commonPost = {
+      'report': '<?php echo $report->id; ?>',
+      'type': 'report',
+    }
+
     <?php
     if ($edit_mode) { ?>
+      // TODO: , #manual-ig-form input[type=text]
+      $("textarea").on('keyup paste change', function() {
+          $(this).data('changed', true);
+          toggleUpdate(true);
+      });
+
+      $('#universal-update').on('click', function() {
+        updateAll();
+      });
+
+
+      function updateAll() {
+          var data = {
+            ...getChanged('textarea'),
+            // TODO: ...getChanged("#manual-ig-form input[type=text]", true),
+          };
+          console.log(data);
+          if (!$.isEmptyObject(data)) {
+  
+            $.ajax({
+              type: "POST",
+              url: ajaxurl,
+              data: {action: 'universal_update', ...data, ...commonPost},
+              success: function(response) {
+                toggleUpdate(false);
+                console.log(response);
+              },
+              error: logResponse,
+            });
+          
+          }
+        }
+
       var toggle_visibility = function(field_name) {
         var field = $(`#${field_name}_icon`);
         var icon = field.find('i');
@@ -435,17 +476,14 @@
           var visible = icon.attr('class').endsWith("-slash");
           var html = '<i class="far fa-eye' + (visible ? '"' : '-slash"') + '></i>'
 
-          var data = {
-            'action': 'toggle_visibility',
-            'report': '<?php echo $report->id; ?>',
-            'field': field_name,
-            'type': 'report'
-          }
-
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: data,
+            data: {
+              'action': 'toggle_visibility',
+              'field': field_name,
+              ...commonPost,
+            },
             success: function () { field.html(html) },
             error: logResponse,
           });
@@ -489,8 +527,7 @@
           data: { 
             action: 'update_config',
             color: $('#color').val(),
-            type: 'report',
-            report: '<?php echo $report->id; ?>',
+            ...commonPost,
           },
           success: function(r) {
             console.log(r);

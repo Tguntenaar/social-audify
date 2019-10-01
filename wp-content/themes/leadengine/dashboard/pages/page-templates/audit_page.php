@@ -185,7 +185,8 @@
     .under-line {
       border: 1px solid <?php echo $theme_color; ?> !important;
     }
-    .slider::-webkit-slider-thumb, .sub-header {
+    .slider::-webkit-slider-thumb, .sub-header,
+    .slider::-moz-range-thumb {
       background:  <?php echo $theme_color; ?> !important;
     }
   </style>
@@ -760,19 +761,6 @@
             }
           }
         });
-        
-        /**
-         * Enables prompt
-         */
-        function toggleUpdate(show) {
-          if (show) {
-            $("#universal-update").show(600);
-            window.onbeforeunload = () => true;
-          } else { 
-            $("#universal-update").hide(300);
-            window.onbeforeunload = undefined;
-          }
-        }
 
         $("input[type=range]").on('mouseup', function() {
           $(this).data('changed', true);
@@ -782,16 +770,6 @@
         $('#universal-update').on('click', function() {
           updateAll();
         });
-
-        function getChanged(selector, allowAll = false) {
-          var changed = {};
-          $(selector).each(function(index, element) {
-            if (allowAll || $(this).data('changed')) {
-              changed[$(this).prop('id')] = $(this).val();
-            }
-          });
-          return changed;
-        }
         
         function updateAll() {
           var data = {

@@ -69,6 +69,9 @@ class report_controller {
     return new report($this->service, $sql_report[0]);
   }
 
+  public function update($report_id, $field_name, $value, $table = 'Report') {
+    return $this->service->update($report_id, $table, $field_name, $value);
+  }
 
   function get_all($months = NULL, $user_id = NULL) {
     $user = $user_id == NULL ? get_current_user_id() : $user_id;
@@ -97,6 +100,10 @@ class report_controller {
 
   public function update_template($report_id, $field_name, $value) {
     return $this->service->update_template($report_id, $field_name, $value);
+  }
+
+  public function get_area_fields() {
+    return explode(", ", $this->service->get_content_fields());
   }
 }
 ?>

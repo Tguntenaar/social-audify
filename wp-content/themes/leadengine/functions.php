@@ -163,11 +163,10 @@
   }
 
 
-  add_action( 'wp_ajax_update_config', 'update_config');
+  add_action( 'wp_ajax_update_config', 'update_page_configuration');
   add_action( 'wp_ajax_nopriv_update_config', 'not_logged_in');
 
-  // Check if crawl has completed
-  function update_config() {
+  function update_page_configuration() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
     $type = $_POST['type'];
@@ -204,7 +203,7 @@
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
     require_once(dirname(__FILE__)."/dashboard/models/user.php");
-
+    
     $connection = new connection;
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
@@ -238,7 +237,7 @@
     wp_die();
   }
 
-  function check_manual_instagram_postfields($audit_control, $id, $competitor) {
+  function check_manual_instagram_postfields($control, $id, $competitor, $type = 'audit') {
     $str = $competitor == 1 ? "comp-" : "";
 
     if (isset($_POST["{$str}followers_count"])) {
@@ -251,7 +250,7 @@
         "averageLikes"=> floatval($_POST["{$str}averageLikes"]),
       );
 
-      $audit_control->update($id, "instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
+      $control->update($id, "instagram_data", json_encode($instagram_data), "Audit_data", $competitor);
     }
   }
 
@@ -261,21 +260,33 @@
   function update_all() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
+
+    $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+
     $type = $_POST['type'];
+    $id = $_POST[$type];
 
     if ($type == 'audit') {
       require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
-      $audit_control = new audit_controller($connection);
-      $id = $_POST[$_POST['type']];
-      $fields = $audit_control->get_area_fields();
+      $control = new audit_controller($connection);
+      $fields = $control->get_area_fields();
+      $table = 'Audit_template';
 
-      foreach($fields as $field) {
-        if (isset($_POST[$field])) {
-          $audit_control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), 'Audit_template');
-        }
-      }
       check_manual_instagram_postfields($audit_control, $id, 0);
       check_manual_instagram_postfields($audit_control, $id, 1);
+    } else if ( $type == 'report' ) {
+      require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
+      $control = new report_controller($connection);
+      $fields = $control->get_area_fields();
+      $table = 'Report_content';
+    }
+
+    if ($type == 'audit' || $type == 'report') {
+      foreach( $fields as $field ) {
+        if (isset($_POST[$field])) {
+          $control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), $table);
+        }
+      }
     }
 
     wp_send_json(array('succes'=>'1'));
@@ -314,12 +325,13 @@
   }
 
 
-  add_action( 'wp_ajax_delete_page', 'delete_page');
+  add_action( 'wp_ajax_delete_page', 'delete_page_');
   add_action( 'wp_ajax_nopriv_delete_page', 'not_logged_in');
 
   function delete_page() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
+    $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
     $type = $_POST['type'];
 
@@ -354,16 +366,17 @@
   }
 
 
-  add_action( 'wp_ajax_delete_client', 'delete_client');
+  add_action( 'wp_ajax_delete_client', 'remove_client');
   add_action( 'wp_ajax_nopriv_delete_client', 'not_logged_in');
 
-  function delete_client() {
+  function remove_client() {
     include(dirname(__FILE__)."/dashboard/services/connection.php");
     include(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
     include(dirname(__FILE__)."/dashboard/models/client.php");
 
     $connection = new connection;
     $client_control = new client_controller($connection);
+    $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
     $client_id = $_POST['client'];
     $client = $client_control->get($client_id);

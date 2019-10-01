@@ -127,6 +127,10 @@ class report_service extends connection {
   }
 
 
+  public function get_content_fields() {
+    return $this->content_fields;
+  }
+
   private $content_fields = "introduction, social_advice, campaign_advice, conclusion, social_stats, chart_data, social_stats_compare, chart_data_compare, manual, currency, instagram_name, color";
   private $visibility_fields = "soc_pl, soc_aml, soc_inf, soc_inaf, soc_iae, soc_plm, cam_imp, cam_cpc, cam_cpm, cam_cpp, cam_ctr, cam_frq, cam_spd, cam_rch, cam_lcl, cam_ras";
 }

@@ -27,6 +27,29 @@ function showBounceBall(display = true, text = "") {
   screen.css("display", display ? "block" : "none");
 }
 
+ /**
+ * Shows update button and enables prompt
+ */
+function toggleUpdate(show) {
+  if (show) {
+    $("#universal-update").show(600);
+    window.onbeforeunload = () => true;
+  } else { 
+    $("#universal-update").hide(300);
+    window.onbeforeunload = undefined;
+  }
+}
+
+function getChanged(selector, allowAll = false) {
+  var changed = {};
+  $(selector).each(function(index, element) {
+    if (allowAll || $(this).data('changed')) {
+      changed[$(this).prop('id')] = $(this).val();
+    }
+  });
+  return changed;
+}
+
 function filterSearch(value, links, counterSpan = null) {
   var occ = 0;
   $.each(links, function() {
