@@ -75,7 +75,7 @@ if ( is_user_logged_in() ):
 				<input type="hidden" name="rcp_profile_editor_nonce" value="<?php echo wp_create_nonce( 'rcp-profile-editor-nonce' ); ?>"/>
 				<input type="hidden" name="rcp_action" value="edit_user_profile" />
 				<input type="hidden" name="rcp_redirect" value="<?php echo esc_url( rcp_get_current_url() ); ?>" />
-				<input name="rcp_profile_editor_submit" id="rcp_profile_editor_submit" type="submit" class="rcp_submit rcp-button" value="<?php esc_attr_e( 'Save Changes', 'rcp' ); ?>"/>
+				<input name="rcp_profile_editor_submit" id="rcp_profile_editor_submit" type="submit" class="rcp_submit rcp-button" value="<?php esc_attr_e( 'Update Profile', 'rcp' ); ?>"/>
 			</p>
 		</fieldset>
 	</form><!-- #rcp_profile_editor_form -->

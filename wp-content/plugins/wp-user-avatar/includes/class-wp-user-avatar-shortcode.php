@@ -237,7 +237,7 @@ class WP_User_Avatar_Shortcode {
       <input type="hidden" name="wpua_action" value="update" />
       <input type="hidden" name="user_id" id="user_id" value="<?php echo esc_attr($user->ID); ?>" />
       <?php wp_nonce_field('update-user_'.$user->ID); ?>
-      <?php submit_button(__('Update Profile','wp-user-avatar')); ?>
+      <?php submit_button(__('Update Avatar','wp-user-avatar')); ?>
     </form>
   <?php
     return ob_get_clean();
