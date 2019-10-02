@@ -160,7 +160,7 @@
   $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
   $display_iframe = ($audit->video_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
 
-  $post_url = htmlentities(base64_encode("https://www.socialaudify.com/audit-testt-1050/"));
+  $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() ));
   $url = "https://crawl.socialaudify.com/apii/" . $post_url;
   // $ch = curl_init("http://crawl.socialaudify.com/apii/$post_url");
   //
