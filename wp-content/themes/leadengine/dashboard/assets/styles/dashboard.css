@@ -29,6 +29,15 @@ footer, header, hgroup, menu, section {
     -webkit-overflow-scrolling: touch;
 }
 
+*::-webkit-scrollbar { width: 0 !important }
+* { -ms-overflow-style: none!important; }
+* { overflow: -moz-scrollbars-none !important; }
+
+td div, th div, .stat-block, .right, .custom-left, .facebook-inf-title,
+.insta-score, .facebook-score, .website-score {
+    page-break-inside: avoid !important;
+}
+
 html {
 	overflow: hidden;
 }
