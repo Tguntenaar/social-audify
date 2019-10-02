@@ -88,10 +88,10 @@ class audit_service extends connection {
       AS Client ON Audit.client_id = Client.id AND Audit.create_date >= %s", $user_id, $date));
   }
 
-
+  
   public function check_website($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "SELECT COUNT(*) AS count FROM Audit_crawl WHERE audit_id = %d", $id))[0];
+      "SELECT $this->crawl_fields FROM Audit_crawl WHERE audit_id = %d", $id));
   }
 
 
