@@ -2,6 +2,7 @@
 <html lang="en" style="overflow-y: scroll;">
 
 <?php
+
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
@@ -37,7 +38,7 @@
   $id = $audit_control->get_id($post_id);
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
-  
+
   // TODO: fix dat de audit er zo uitziet do: $audit->color anders $user->color_audit
 
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
@@ -147,9 +148,9 @@
     <div class="info">
       <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
       <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
-      <?php 
+      <?php
       if ($calendar != "") { ?>
-        <a class="calendar" href="<?php echo $calendar; ?>"><i class="fas fa-calendar">Make appointment</a><?php 
+        <a class="calendar" href="<?php echo $calendar; ?>"><i class="fas fa-calendar">Make appointment</a><?php
       } ?>
     </div><?php
   }
@@ -158,6 +159,34 @@
   $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
   $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
   $display_iframe = ($audit->video_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
+
+  $post_url = htmlentities(base64_encode("https://www.socialaudify.com/audit-testt-1050/"));
+  $url = "https://crawl.socialaudify.com/apii/" . $post_url;
+  // $ch = curl_init("http://crawl.socialaudify.com/apii/$post_url");
+  //
+  // curl_setopt($ch, CURLOPT_POST, 0);
+  // curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  //
+  // curl_setopt($ch, CURLOPT_NOSIGNAL, 1);
+  //
+  // $response = curl_exec($ch);
+  //
+  // curl_close($ch);
+  //
+  // $test = base64_decode($response);
+  // header('Content-Type: application/pdf');
+  // header('Content-Description: File Transfer');
+  // header("Content-type:application/pdf");
+  // header('Content-Disposition: attachment; filename=example.pdf');
+  // header('Content-Transfer-Encoding: binary');
+  // header('Expires: 0');
+  // header('Cache-Control: must-revalidate');
+  // header('Pragma: public');
+  // header('Content-Length: ' . strlen($test));
+  // ob_clean();
+  // flush();
+  //
+  // echo $test;
 ?>
 <head>
   <title>Audit</title>
@@ -171,6 +200,36 @@
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
+
+    var tempiee;
+
+    function generatePDF() {
+        $.ajax({
+              method: 'GET',
+              url: '<?php echo $url; ?>',
+              crossDomain: true,
+              success: function(data){
+                  var temp = $.parseJSON(data);
+                  tempiee = temp;
+                  //window.open("data:application/pdf;base64," + temp);
+                  //process the JSON data etc
+
+                const linkSource = `data:application/pdf;base64,${temp}`;
+                const downloadLink = document.getElementById("testje");
+                const fileName = "vct_illustration.pdf";
+
+                downloadLink.href = linkSource;
+                downloadLink.download = fileName;
+                downloadLink.click();
+
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                console.log(xhr);
+                console.log(textStatus);
+             }
+        });
+    }
+
     $(document).ready(function() {
       $('#nav-icon2').click(function() {
         $(this).toggleClass('open');
@@ -217,8 +276,11 @@
           <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
           <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-        } else { 
+          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
+          <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i> Generate PDF</a>
+          <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
+          <?php
+        } else {
           if ($user_id == $author_id) {?>
             <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
           }
@@ -236,7 +298,7 @@
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link"
            value=<?php echo "https://".$env."/public/".$slug; ?> />
 
-    <?php 
+    <?php
     if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
         echo "<iframe ". stripslashes(base64_decode($audit->video_iframe)) ."</iframe>"; ?>
@@ -597,7 +659,7 @@
             </div>
             <span class="advice-title margin-advice-title">Website advice</span>
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
-              
+
               <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
             </form><?php
           } else { ?>
@@ -631,10 +693,10 @@
   </section>
   <div class="footer">
     <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
-    <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php 
+    <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar != "") { ?>
-      <a class="calendar" href="<?php echo $calender; ?>"><i class="fas fa-calendar">Make appointment</a><?php 
-    } ?> 
+      <a class="calendar" href="<?php echo $calender; ?>"><i class="fas fa-calendar">Make appointment</a><?php
+    } ?>
   </div>
 </body>
 </html>
@@ -750,7 +812,7 @@
           if ($(this).is('textarea') && propId.includes('_advice')) {
             var adviceType = propId.replace('_advice', '');
             handleSlider(adviceType);
-          
+
             // Enable slider if value is empty
             if ($(this).val() == '') {
               type = (propId.includes('facebook')) ? 'fb' : (propId.includes('instagram')) ? 'ig' : 'wb';
@@ -760,7 +822,7 @@
             }
           }
         });
-        
+
         /**
          * Enables prompt
          */
@@ -768,7 +830,7 @@
           if (show) {
             $("#universal-update").show(600);
             window.onbeforeunload = () => true;
-          } else { 
+          } else {
             $("#universal-update").hide(300);
             window.onbeforeunload = undefined;
           }
@@ -792,7 +854,7 @@
           });
           return changed;
         }
-        
+
         function updateAll() {
           var data = {
             ...getChanged('textarea'),
@@ -813,7 +875,7 @@
             });
           }
         }
-      
+
         // IFrame Submit
         $("#banner-form").submit(function(e) {
           e.preventDefault();
@@ -821,7 +883,7 @@
           $('form input[name="iframe"]').val(updated.replace('<iframe','').replace('</iframe>',''));
           this.submit();
         });
-      
+
         // Share & Track Modal
         var modalData = {
           'text': "This link is copied to your clipboard:",
@@ -860,7 +922,7 @@
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: { 
+            data: {
               action: 'update_config',
               color: $('#color').val(),
               value: $("#mail_bit_check").is(':checked'),
@@ -935,7 +997,7 @@
         $('input:radio[name=ads_c]').change(function () {
           update_ads(this.value, competitor = true);
         });
-      }); <?php // Can edit 
+      }); <?php // Can edit
     }?>
 
     // Dynamic slider functions
@@ -946,7 +1008,7 @@
       // set
       value.html(slider.val());
 
-      slider.off('input'); 
+      slider.off('input');
       slider.on('input', function(e) {
         value.html($(e.target).val());
         if (text) {
@@ -964,18 +1026,18 @@
         adviceArea.val(text.three);
       }
     }
-    
-    <?php 
+
+    <?php
     function replace_lbs($string) {
       echo preg_replace("/\r|\n/", '\n', $string);
     } ?>
 
-    var sliderData = {<?php 
+    var sliderData = {<?php
       if ($audit->facebook_bit == "1") { ?>
-        fb: { <?php 
+        fb: { <?php
           if ($audit->facebook_advice != "" && !advice_equal_to_user($user, $audit, 'fb')) { ?>
             range: false,
-            text: false,<?php 
+            text: false,<?php
           } else { ?>
             range: {
               one: <?php echo $user->range_number_fb_1; ?>,
@@ -985,15 +1047,15 @@
               one: '<?php replace_lbs($user->text_fb_1); ?>',
               two: '<?php replace_lbs($user->text_fb_2); ?>',
               three: '<?php replace_lbs($user->text_fb_3); ?>',
-            },<?php 
+            },<?php
           } ?>
-        },<?php 
+        },<?php
       }
       if ($audit->instagram_bit == "1") { ?>
-        ig: {<?php 
+        ig: {<?php
           if ($audit->instagram_advice != "" && !advice_equal_to_user($user, $audit, 'ig')) { ?>
             range: false,
-            text: false,<?php 
+            text: false,<?php
           } else { ?>
             range: {
               one: <?php echo $user->range_number_insta_1; ?>,
@@ -1003,15 +1065,15 @@
               one: '<?php replace_lbs($user->text_insta_1); ?>',
               two: '<?php replace_lbs($user->text_insta_2); ?>',
               three: '<?php replace_lbs($user->text_insta_3); ?>',
-            },<?php 
+            },<?php
           } ?>
-        }, <?php 
+        }, <?php
       }
       if ($audit->website_bit == "1") { ?>
-        wb: {<?php 
+        wb: {<?php
           if ($audit->website_advice != "" && !advice_equal_to_user($user, $audit, 'wb')) { ?>
             range: false, // disabled slider text
-            text: false,<?php 
+            text: false,<?php
           } else { ?>
             range: {
               one: <?php echo $user->range_number_website_1; ?>,
@@ -1021,14 +1083,14 @@
               one: '<?php replace_lbs($user->text_website_1); ?>',
               two: '<?php replace_lbs($user->text_website_2); ?>',
               three: '<?php replace_lbs($user->text_website_3); ?>',
-            },<?php 
+            },<?php
           } ?>
         },<?php
       } ?>
     }
     if (!!sliderData.fb) {
       handleSlider('facebook', sliderData.fb.range, sliderData.fb.text);
-    } 
+    }
     if (!!sliderData.ig) {
       handleSlider('instagram', sliderData.ig.range, sliderData.ig.text);
     }

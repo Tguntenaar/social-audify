@@ -91,14 +91,14 @@ if(!defined('ABSPATH')) {
       $('#wp_user_avatar_size').change(function() {
         $('#wp_user_avatar_size_number_section').toggle($('#wp_user_avatar_size').val() == 'custom');
       });
-	  
+
 	  $("#wpua-tabs li a").click(function(){
 		 tab_id = $(this).attr('href');
 		 if( tab_id == '#wpua')
 		 $("#wpua-upload").hide();
-		 else 
+		 else
 		 $('#wpua').hide();
-		 $(tab_id).show();  
+		 $(tab_id).show();
 	  })
       // Tabs
     });
