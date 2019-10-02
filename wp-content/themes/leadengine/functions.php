@@ -272,8 +272,8 @@
       $fields = $control->get_area_fields();
       $table = 'Audit_template';
 
-      check_manual_instagram_postfields($audit_control, $id, 0);
-      check_manual_instagram_postfields($audit_control, $id, 1);
+      check_manual_instagram_postfields($control, $id, 0);
+      check_manual_instagram_postfields($control, $id, 1);
     } else if ( $type == 'report' ) {
       require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
       $control = new report_controller($connection);
