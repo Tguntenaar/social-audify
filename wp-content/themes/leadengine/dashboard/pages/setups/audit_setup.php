@@ -189,7 +189,7 @@
 
     $('.audit-row.client').on('click', function() {
       nextPrev(1);
-      $('#show-client').text(`Selected client = ${$(this).prop('name')}`);
+      $('#show-client').html(`<span class="selected-client">Selected client = <strong>${$(this).prop('name')}</strong></span>`);
     });
 
     $(function() {
