@@ -120,7 +120,7 @@
                 </a><?php
                 foreach($clients as $client) {
                   $data = ["id"=> $client->id, "name"=> $client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website];?>
-                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row"
+                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row"
                     data-compare='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
                   </a><?php
                 } ?>
@@ -188,8 +188,10 @@
     });
 
     $('.audit-row.client').on('click', function() {
+      if ( currentTab ==  1) {
+        $('#show-client').html(`<span class="selected-client">Selected client = <strong>${$(this).prop('name')}</strong></span>`);
+      }
       nextPrev(1);
-      $('#show-client').html(`<span class="selected-client">Selected client = <strong>${$(this).prop('name')}</strong></span>`);
     });
 
     $(function() {
