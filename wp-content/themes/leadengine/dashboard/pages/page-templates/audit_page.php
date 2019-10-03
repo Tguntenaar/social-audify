@@ -146,7 +146,6 @@
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
-
 ?>
 <head>
   <title>Audit</title>
@@ -264,15 +263,13 @@
   <div id="confirmModal" class="modal"></div>
   <div id="reloadModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
-
   <section class="content white custom-content min-height">
-    <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link"
-      value=<?php echo "https://".$env."/public/".$slug; ?> />
+    <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
 
     <?php
     if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
-        echo "<iframe ". stripslashes($audit->video_iframe) ."</iframe>"; ?>
+        echo "<iframe ". str_replace("&#34;", '"', stripslashes($audit->video_iframe)) ."</iframe>"; ?>
       </div><?php
     } else if ($audit->video_iframe != "" || $edit_mode) { ?>
       <div class="intro-video"></div><?php
@@ -721,9 +718,13 @@
     <?php } ?>
 
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
+    <?php if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
+    generateChart('lpd-chart', data_array, allLines, [true, true]); <?php } ?>
 
-    generateChart('lpd-chart', data_array, allLines, [true, true]);
-    generateAreaChart('hashtag-chart', bar_data, bar_labels);<?php
+    <?php if (show_block($edit_mode, $audit->insta_hashtag)
+             && (!$audit->manual)
+             && isset($audit->instagram_data->hashtags[0][0])) { ?>
+    generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php }
   } ?>
 
   <?php

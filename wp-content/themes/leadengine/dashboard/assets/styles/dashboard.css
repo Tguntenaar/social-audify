@@ -1639,6 +1639,10 @@ nav ul a:hover {
 	background-color: #227093;
 }
 
+#website-info .calendar {
+	bottom: 15px !important;
+}
+
 .flip-card-back {
 	-webkit-transform: rotateY(180deg);
 	-ms-transform: rotateY(180deg);
