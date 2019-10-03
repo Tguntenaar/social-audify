@@ -12,7 +12,7 @@
 
   // Get Author data
   $phone =  get_user_meta($author_id, 'rcp_number', true);
-  $calendar =  get_user_meta($author_id, 'rcp_calendar', true);
+  $calendar_link =  get_user_meta($author_id, 'rcp_calendar', true);
   $author = get_userdata($author_id);
 
   // Mode check
@@ -38,7 +38,7 @@
   $id = $audit_control->get_id($post_id);
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
-  
+
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
   if ($audit->manual == 0) {
@@ -113,7 +113,7 @@
       return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     } else if (!$has_website) {
       return 'reload';
-    } 
+    }
 
     return $value;
   }
@@ -136,13 +136,13 @@
     }
   }
 
-  function call_to_contact($phone, $mail, $calendar) { ?>
+  function call_to_contact($phone, $mail, $calendar_link) { ?>
     <div class="info">
       <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
       <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
       <?php
-      if ($calendar != "") { ?>
-        <a class="calendar" href="<?php echo $calendar; ?>"><i class="fas fa-calendar">Make appointment</a><?php
+      if ($calendar_link != "") { ?>
+        <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
       } ?>
     </div><?php
   }
@@ -176,6 +176,8 @@
     var tempiee;
 
     function generatePDF() {
+        $(".load-screen").toggle();
+
         $.ajax({
               method: 'GET',
               url: '<?php echo $url; ?>',
@@ -194,8 +196,11 @@
                 downloadLink.download = fileName;
                 downloadLink.click();
 
+                $(".load-screen").toggle();
               },
               error: function (xhr, textStatus, errorThrown) {
+                $(".load-screen").toggle();
+                alert("Error generating PDF.")
                 console.log(xhr);
                 console.log(textStatus);
              }
@@ -210,19 +215,25 @@
     });
   </script>
   <style>
-    .score-text, .advice-title {
+    .score-text, .advice-title, .audit-company-name, .footer .phone-number a,
+    .footer .mailadres a {
       color: <?php echo $theme_color; ?> !important;
     }
+
     .under-line {
       border: 1px solid <?php echo $theme_color; ?> !important;
     }
-    .slider::-webkit-slider-thumb, .sub-header,
-    .slider::-moz-range-thumb {
+
+    .sub-header {
       background:  <?php echo $theme_color; ?> !important;
+    }
+    .slider::-webkit-slider-thumb {
+        background:  <?php echo $theme_color; ?> !important;
     }
   </style>
 </head>
 <body class="custom-body">
+    <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
     <div id="nav-icon2">
@@ -285,7 +296,7 @@
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
 
-          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL ? 'checked' : ''; ?>/> 
+          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
           <input type="radio" class="iframe-radio" data-display="none" <?php echo $audit->video_iframe == NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
@@ -405,7 +416,7 @@
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p>
                   <?php
-                  call_to_contact($phone, $author->user_email, $calendar);
+                  call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
               </div>
             </div>
@@ -579,7 +590,7 @@
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
                   <?php
-                  call_to_contact($phone, $author->user_email, $calendar);
+                  call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
             </div>
           </div>
@@ -640,7 +651,7 @@
             <span class="advice-title margin-advice-title">Website advice</span>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['wb']; ?></p>
             <?php
-            call_to_contact($phone, $author->user_email, $calendar);
+            call_to_contact($phone, $author->user_email, $calendar_link);
           } ?>
         </div>
       </div><?php
@@ -667,8 +678,8 @@
   <div class="footer">
     <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
-    if ($calendar != "") { ?>
-      <a class="calendar" href="<?php echo $calender; ?>"><i class="fas fa-calendar">Make appointment</a><?php
+    if ($calendar_link != "") { ?>
+      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
     } ?>
   </div>
 </body>
@@ -822,7 +833,7 @@
               success: function(response) {
                 toggleUpdate(false);
                 console.log(response);
-                // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL, 
+                // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL,
                 //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
                 //  - daarbij zit er ook een php check op.
                 $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
@@ -831,7 +842,7 @@
             });
           }
         }
-      
+
         // Share & Track Modal
         var modalData = {
           'text': "This link is copied to your clipboard:",
@@ -870,7 +881,7 @@
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: { 
+            data: {
               action: 'update_config', color: $('#color').val(),
               value: $("#mail_bit_check").is(':checked'), ...commonPost
             },

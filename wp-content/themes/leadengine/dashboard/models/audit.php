@@ -66,7 +66,7 @@ class audit {
     $key = md5("t harum quidem rerum facilis" . $this->id . "est et expedita distinctio.");
     $post_url = htmlentities(base64_encode($website_url));
 
-    if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
+    if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com" || $_SERVER['SERVER_NAME'] == "dev.localhost") {
       $ch = curl_init("http://crawl.socialaudify.com/api/$this->id/$competitor/$post_url/$key/$user_id");
     } else {
       $ch = curl_init("http://livecrawl.socialaudify.com/api/$this->id/$competitor/$post_url/$key/$user_id");

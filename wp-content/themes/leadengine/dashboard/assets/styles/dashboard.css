@@ -88,6 +88,18 @@ label.myLabel input[type="file"] {
     top: -1000px;
 }
 
+.fa-calendar {
+	margin-right: 5px;
+}
+
+.calendar .fa-calendar {
+	color: #fff;
+}
+
+.calendar:hover .fa-calendar {
+	color: #2980b9;
+}
+
 button {
 	cursor: pointer;
 }
@@ -608,12 +620,38 @@ nav ul a:hover {
 	overflow: hidden;
 }
 
+.load-screen {
+	display: none;
+	position: fixed;
+	width: 100%;
+	height: 100vh;
+	top: 0; left: 0;
+	background: rgba(0, 0, 0, 0.7);
+	text-align: center;
+	z-index: 55555555;
+	line-height: 100vh;
+}
+
+.load-screen .lds-dual-ring:after {
+	border: 5px solid #fff;
+	border-color: #fff transparent #fff transparent;
+}
+
+.load-screen h3 {
+	color: #fff;
+	margin-left: 40px;
+	font-weight: 100;
+	font-size: 18px;
+	margin-top: -60px;
+}
+
 .eplenation-banner {
 	font-size: 13px !important;
 	font-weight: 100;
 	margin-bottom: 20px;
 	margin-left: 15px;
 	display: block;
+	line-height: 20px;
 }
 
 .video-options h3 {
@@ -2547,6 +2585,7 @@ h4 {
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
 }
 
 /* Modal Content */
@@ -2565,6 +2604,19 @@ h4 {
 	transform: translate(-50%,-50%);
 	padding-top: 60px !important;
 	z-index: 5555;
+	padding-right: 10px;
+	padding-left: 10px;
+}
+
+.modal input[type="checkbox"] {
+	margin: 0 auto;
+	margin-right: auto;
+	margin-top: 20px;
+}
+
+#color {
+	margin: 0 auto;
+	margin-top: 10px;
 }
 
 #confirmAddAdAccountModal {z-index:5555555555555 !important;}
@@ -3235,6 +3287,13 @@ tr input {
 	float: left;
 }
 
+.selected-client {
+	color: #000;
+	font-weight: 100;
+	display: block;
+	margin-top: -10px;
+}
+
 .deleteALL {
 	width: 340px;
 	height: 40px;
@@ -3266,7 +3325,8 @@ tr input {
   opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
   -webkit-transition: .2s; /* 0.2 seconds transition on hover */
   transition: opacity .2s;
-	margin-bottom: 97px;
+	margin-bottom: 87px;
+  margin-top: 10px;
 }
 
 /* Mouse-over effects */
@@ -3427,8 +3487,8 @@ tr input {
 	transform: translateX(-50%);
 	-webkit-transform: translateX(-50%);
 	-ms-transform: translateX(-50%);
-  width: 64px;
-  height: 64px;
+	  width: 64px;
+	  height: 64px;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
@@ -3880,6 +3940,10 @@ h4 {
 	padding-left: 25px;
 }
 
+#universal-update {
+	width: 200px;
+	text-align: center;
+}
 
 .conclusion-report-block {
 	display: none;
@@ -4116,6 +4180,10 @@ h4 {
 		cursor: pointer;
 	}
 
+	#nav-icon2 {
+		display: none;
+	}
+
 	#nav-icon1 span,
 	#nav-icon2 span{
 		display: block;
@@ -4327,6 +4395,7 @@ h4 {
 
 @media only screen and (max-width: 768px) {
 	.mobile-hide {
+		margin-top: 20px;
 		display: none;
 	}
 
@@ -4387,7 +4456,7 @@ h4 {
 	}
 
 	#nav-icon2 {
-		display: block;
+		display: block !important;
 		left: 30px;
 		top: 20px;
 		position: absolute;
@@ -4399,7 +4468,7 @@ h4 {
 	}
 
 	.home-link {
-		margin-top: 50px;
+		margin-top: 30px;
 	}
 
 	#delete-this-audit {

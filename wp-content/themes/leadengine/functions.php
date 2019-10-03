@@ -203,7 +203,7 @@
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
     require_once(dirname(__FILE__)."/dashboard/models/user.php");
-    
+
     $connection = new connection;
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
@@ -508,6 +508,8 @@
 
             }
         }
+    } else if(empty($posted['rcp_btw_number']) && $posted['rcp_level'] == 1) {
+        rcp_errors()->add( 'Wrong FAT number.', __( 'Wrong FAT number.', 'rcp' ), 'register' );
     }
   }
 
