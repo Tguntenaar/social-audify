@@ -114,7 +114,7 @@
           <!-- Compare report tab -->
           <div class="tab">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Compare reports</div>
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Compare Reports</div>
             </div>
             <input type="text" name="search" id="search-input-compare" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="compare-list">
@@ -122,7 +122,7 @@
 
               foreach($reports as $report) {
                 $data = ["id"=> $report->id ]; ?>
-                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row campaign-row" name="<?php echo $report->name; ?>"
+                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row report-compare campaign-row" name="<?php echo $report->name; ?>"
                   data-compare='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $report->name; ?>
                 </a><?php
               } ?>
@@ -131,6 +131,9 @@
 
           <!-- Report name and options -->
           <div class="tab">
+            <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding"> -->
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green" id="show-compare"></div>
+            <!-- </div> -->
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
               <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." placeholder="Report name.." maxlength="25" required>
@@ -201,6 +204,11 @@
     $('#client-list .audit-row, #compare-list .audit-row, .row-ad-accounts').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
       $(this).addClass('selected');
+    });
+
+    $('.report-compare').on('click', function() {
+      nextPrev(1);
+      $('#show-compare').text(`Selected report to compare = ${$(this).prop('name')}`);
     });
 
     function toggleSelectedAds(that) {
