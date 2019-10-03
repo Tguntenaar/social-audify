@@ -1605,6 +1605,7 @@ nav ul a:hover {
 	-webkit-transform: rotateY(180deg);
 	-ms-transform: rotateY(180deg);
 	transform: rotateY(180deg);
+	backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
 	text-align: center;
 	padding-left: 15px;
@@ -1619,6 +1620,7 @@ nav ul a:hover {
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
+	backface-visibility: hidden;
 	-webkit-backface-visibility: hidden;
 }
 
@@ -1836,13 +1838,6 @@ textarea {
 	margin-left: 0px !important;
 }
 
-input[type="file" i] {
-	background: transparent !important;
-	border: 0 !important;
-	padding-left: 0 !important;
-	margin-top: 20px !important;
-}
-
 .top-box {
 		margin-bottom: 20px;
 }
@@ -1852,14 +1847,6 @@ input[type="file" i] {
 	padding-top: 80px;
 	border: 1px solid #eff0f2;
 }
-
-/* .inner-chart p {
-	font-weight: 300;
-	font-size: 12px;
-	font-size: 18px;
-	text-align: center;
-	padding-top: 120px;
-} */
 
 .inner-chart p,
 .left-conlusion p {
@@ -2091,10 +2078,6 @@ h3 {
 		float:left;
 		margin-top: 50px;
 		margin-left: 50px;
-}
-
-.audit-intro-text textarea{
-	/* background: #f5f6fa; */
 }
 
 .audit-company-name {
@@ -2726,7 +2709,6 @@ h4 {
 	width: 50%;
 	float: left;
 	line-height: 28px;
-	/* margin-top: 80px; */
 	position: absolute;
 	bottom: 50px;
 	left: 0;
@@ -2885,9 +2867,7 @@ label {
 	text-align: center;
 	color: #fff;
 	border: 0;
-	float: left;
 	margin-left: 0 !important;
-
 }
 
 .tab .submitBttn {
@@ -3105,7 +3085,6 @@ input[type="submit"] {
 
 .custom-height-report {
 	height: 280px !important;
-	/* max-height: 400px !important; */
 }
 
 #compare-results {
@@ -3165,7 +3144,6 @@ input[type="submit"] {
 	width: auto;
 	padding: 7px 14px;
 	background: #c0392b;
-	/* out */
 }
 
 #nextBtn:hover,
@@ -3222,19 +3200,6 @@ tr input {
 	margin-right: 10px;
 }
 
-#ws-plugin--optimizemember-profile-submit {
-	width: 120px;
-	height: 40px;
-	background: #6e9d9c;
-	margin-top: 10px;
-	display: inline-block;
-	line-height: 40px;
-	text-align: center;
-	color: #fff;
-	border: 0;
-	float: left;
-}
-
 .deleteALL {
 	width: 340px;
 	height: 40px;
@@ -3245,7 +3210,6 @@ tr input {
 	text-align: center;
 	color: #fff;
 	border: 0;
-	float: left;
 	margin-left: 28px;
 }
 
