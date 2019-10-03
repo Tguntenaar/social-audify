@@ -108,7 +108,7 @@
 
   function printValue($value, $is_icon = false, $requires_reload = false) {
     if ($is_icon) {
-      return $value == 0 ? 
+      return $value == 0 ?
         '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>' :
         '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
@@ -415,11 +415,11 @@
           <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
             There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
           </span><?php
-        } 
+        }
         if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
           <span class="manual-text" style="margin-top: 15px;"><span style=" color: #e74c3c;">
             Attention: </span>There is no competitor instagram or instagram business account found, so <a href="https://www.instagram.com/<?php echo $audit->competitor_name; ?>">click here</a> to gather your data!
-          </span><?php 
+          </span><?php
         } ?>
 
         <div style="clear:both"></div>
@@ -759,7 +759,7 @@
         if ($(this).is('textarea') && propId.includes('_advice')) {
           var adviceType = propId.replace('_advice', '');
           handleSlider(adviceType);
-        
+
           // Enable slider if value is empty
           if ($(this).val() == '') {
             type = (propId.includes('facebook')) ? 'fb' : (propId.includes('instagram')) ? 'ig' : 'wb';
@@ -815,7 +815,7 @@
             success: function(response) {
               toggleUpdate(false);
               console.log(response);
-              // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL, 
+              // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL,
               //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
               //  - daarbij zit er ook een php check op.
               $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
@@ -824,7 +824,7 @@
           });
         }
       }
-    
+
       // Share & Track Modal
       var modalData = {
         'text': "This link is copied to your clipboard:",
@@ -863,7 +863,7 @@
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: { 
+          data: {
             action: 'update_config', color: $('#color').val(),
             value: $("#mail_bit_check").is(':checked'), ...commonPost
           },
@@ -935,6 +935,7 @@
       $('input:radio[name=ads_c]').change(function () {
         update_ads(this.value, competitor = true);
       });
+
     });
 
     // Dynamic slider functions

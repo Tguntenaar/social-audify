@@ -68,7 +68,7 @@
     $audit_data_facebook = json_decode($audit_data[0]->facebook_data);
     $audit_data_facebook->runningAdds = ($data == 'yes') ? 1 : 0;
 
-    $audit_service->update_ad_field($audit_id, "facebook_data", $audit_data_facebook, $competitor);
+    $audit_service->update($audit_id, "Audit_data", "facebook_data", json_encode($audit_data_facebook), $competitor);
 
     wp_send_json(array('audit_data'=>$audit_data_facebook, 'competitor'=>$competitor, 'data'=>$data));
     wp_die();
