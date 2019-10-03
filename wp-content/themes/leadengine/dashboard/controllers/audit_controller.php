@@ -109,7 +109,7 @@ class audit_controller {
   }
 
   function check_website($id) {
-    return $this->service->check_website($id)->count;
+    return $this->service->check_website($id);
   }
 
   public function get_id($post_id) {

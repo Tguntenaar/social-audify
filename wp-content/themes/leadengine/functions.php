@@ -156,9 +156,9 @@
     $audit_control = new audit_controller($connection);
 
     $audit_id = $_POST['audit'];
-    $count = $audit_control->check_website($audit_id);
+    $array = $audit_control->check_website($audit_id);
 
-    wp_send_json($count);
+    wp_send_json($array);
     wp_die();
   }
 

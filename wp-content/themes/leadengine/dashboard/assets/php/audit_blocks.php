@@ -97,37 +97,43 @@
      "name" => "Facebook Pixel",
      "db_name" => "facebook_pixel",
 		 "comp_name" => "fp_c",
-     "desc" => "Does the website implement Facebook Pixel."
+     "desc" => "Does the website implement Facebook Pixel.",
+     "is_icon" => 1
     ],
     ["type" => "website_ga",
      "name" => "Google Analytics",
      "db_name" => "google_analytics",
 		 "comp_name" => "ga_c",
-     "desc" => "Does the website utilize Google Analytics."
+     "desc" => "Does the website utilize Google Analytics.",
+     "is_icon" => 1
     ],
     ["type" => "website_googletag",
      "name" => "Google Tagmanager",
      "db_name" => "google_tagmanager",
 		 "comp_name" => "gt_c",
-     "desc" => "Does the website implement Google Tagmanager."
+     "desc" => "Does the website implement Google Tagmanager.",
+     "is_icon" => 1
     ],
     ["type" => "website_mf",
      "name" => "Mobile Friendly",
      "db_name" => "mobile_friendly",
 		 "comp_name" => "mf_c",
-     "desc" => "Passes the Google Mobile Friendly check."
+     "desc" => "Passes the Google Mobile Friendly check.",
+     "is_icon" => 1
     ],
     ["type" => "website_lt", // DEZE
      "name" => "Desktop Load Time",
      "db_name" => "load_time",
 		 "comp_name" => "lt_c",
-     "desc" => "The time to interactive of the desktop website in ms."
+     "desc" => "The time to interactive of the desktop website in ms.",
+     "is_icon" => 0
     ],
     ["type" => "website_ws", // EN DEZE, NAMEN MOETEN NOG ANDERS
      "name" => "Mobile Load Time",
      "db_name" => "website_size",
 		 "comp_name" => "ws_c",
-     "desc" => "The time to interactive of the mobile website in ms."
+     "desc" => "The time to interactive of the mobile website in ms.",
+     "is_icon" => 0
     ],
   );
 ?>

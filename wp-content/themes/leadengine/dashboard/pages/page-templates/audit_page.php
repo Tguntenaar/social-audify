@@ -106,25 +106,13 @@
     return ($edit_mode || $visible);
   }
 
-  function getWebIcon($value, $has_website) {
-    if ($has_website && $value === '0') {
-      return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
-    } elseif ($has_website && $value === '1') {
-      return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
-    } else if (!$has_website) {
-      return 'reload';
-    } 
-
-    return $value;
-  }
-
-  function getWebIconFacebook($value, $is_icon) {
-    if ($is_icon && $value == 0) {
-      return '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>';
-    } elseif ($is_icon && $value == 1) {
-      return '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
+  function printValue($value, $is_icon = false, $requires_reload = false) {
+    if ($is_icon) {
+      return $value == 0 ? 
+        '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>' :
+        '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
-    return $value;
+    return $requires_reload ? '-' : $value;
   }
 
   function visibility_short_code($edit_mode, $visible, $item_type) {
@@ -139,8 +127,7 @@
   function call_to_contact($phone, $mail, $calendar) { ?>
     <div class="info">
       <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
-      <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
-      <?php
+      <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a><?php 
       if ($calendar != "") { ?>
         <a class="calendar" href="<?php echo $calendar; ?>"><i class="fas fa-calendar">Make appointment</a><?php
       } ?>
@@ -170,6 +157,7 @@
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js"></script>
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
 
@@ -223,7 +211,7 @@
   </style>
 </head>
 <body class="custom-body">
-    <div class="sub-header col-lg-12" style="display: block !important;">
+  <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
     <div id="nav-icon2">
       <span></span>
@@ -233,9 +221,7 @@
 
     <?php
     if ($edit_mode) { ?>
-      <button id="universal-update" class="advice-button floating-update">
-        Update All
-      </button> <?php
+      <button id="universal-update" class="advice-button floating-update"> Update All </button><?php
     } ?>
 
     <div class="mobile-hide"><?php
@@ -264,6 +250,7 @@
   <div id="shareModal" class="modal"></div>
   <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
+  <div id="reloadModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
 
   <section class="content white custom-content min-height">
@@ -294,10 +281,9 @@
           </div>
         </form>
       </div><?php
-    }
+    } ?>
 
-    $classType = ($audit->video_iframe != NULL && $audit->video_iframe != "") ? " with-video" : ""; ?>
-    <div class="audit-intro<?php echo $classType; ?> col-lg-10 col-lg-offset-2">
+    <div class="audit-intro<?php echo ($audit->video_iframe != NULL && $audit->video_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
       <div class="client-profile-picture">
         <?php echo get_avatar($author_id, 32); ?>
       </div>
@@ -326,19 +312,17 @@
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
-                      </span><?php echo getWebIconFacebook(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span>
+                      </span><?php echo printValue(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span>
                       <!--  -->
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                        <?php echo getWebIconFacebook(round($audit->competitor->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span><?php
+                        <?php echo printValue(round($audit->competitor->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']); ?></span><?php
                     } else {
-                      echo getWebIconFacebook(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']);
+                      echo printValue(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']);
                     } ?>
                     </span>
-                    <span class="explenation"><?php echo $item["desc"]; ?></span>
-                    <?php
-                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
-                    ?>
+                    <span class="explenation"><?php echo $item["desc"]; ?></span><?php
+                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                   </div>
                 </div><?php
               }
@@ -358,7 +342,7 @@
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
-                      // edit mode
+                    // edit mode
                     } else { ?>
                       <form class="ads-radio" action=""><?php
                         $checked = $path->facebook_data->runningAdds;
@@ -367,10 +351,8 @@
                           <span class="label_ads">Yes</span>
                         <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo !$checked ? "checked" : ""; ?>/>
                           <span class="label_ads">No</span>
-                      </form>
-                      <?php
-                        visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
-                      ?>
+                      </form><?php
+                        visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                       <span class="explenation-ads">
                         <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
@@ -416,16 +398,23 @@
     if ($audit->instagram_bit == "1") { ?>
       <div class="col-lg-12 facebook-info">
         <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; Instagram stats:</span>
-        <span class="sub-title">Statistics of your Instagram page.</span>
-        <?php if ($audit->manual && $edit_mode) { ?><span class="manual-text"><span style="color: #e74c3c;">Attention: </span>There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!</span><?php } ?>
-        <?php if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?><span class="manual-text" style="margin-top: 15px;"><span style=" color: #e74c3c;">Attention: </span>There is no competitor instagram or instagram business account found, so <a href="https://www.instagram.com/<?php echo $audit->competitor_name; ?>">click here</a> to gather your data!</span><?php } ?>
+        <span class="sub-title">Statistics of your Instagram page.</span><?php
+        if ($audit->manual && $edit_mode) { ?>
+          <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
+            There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
+          </span><?php
+        } 
+        if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
+          <span class="manual-text" style="margin-top: 15px;"><span style=" color: #e74c3c;">
+            Attention: </span>There is no competitor instagram or instagram business account found, so <a href="https://www.instagram.com/<?php echo $audit->competitor_name; ?>">click here</a> to gather your data!
+          </span><?php 
+        } ?>
+
         <div style="clear:both"></div>
         <div class="col-lg-6 instagram-left" style="float:left;"><?php
           if (show_block($edit_mode, $audit->insta_hashtag) && (!$audit->manual) && isset($audit->instagram_data->hashtags[0][0])) { ?>
-            <div class="col-lg-12 left custom-left" style="padding: 0;">
-              <?php
-                visibility_short_code($edit_mode, $audit->insta_hashtag, 'insta_hashtag');
-              ?>
+            <div class="col-lg-12 left custom-left" style="padding: 0;"><?php
+              visibility_short_code($edit_mode, $audit->insta_hashtag, 'insta_hashtag'); ?>
 
               <div class="chart-info">
                 <span class="stat-box-title">Hashtags used</span>
@@ -442,13 +431,10 @@
             </div><?php
           }
           if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
-            <div class="col-lg-12 left custom-left" style="padding: 0;">
-              <?php
-                visibility_short_code($edit_mode, $audit->insta_lpd, 'insta_lpd');
-              ?>
+            <div class="col-lg-12 left custom-left" style="padding: 0;"><?php
+              visibility_short_code($edit_mode, $audit->insta_lpd, 'insta_lpd'); ?>
 
               <div class="chart-info">
-
                 <span class="stat-box-title">Likes on your posts Instagram</span>
                 <span class="graph-procent" style="margin-top: 2px;">Average <?php
                   echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span>
@@ -515,9 +501,7 @@
           // Preview mode hide description animation
           if (!$audit->manual) { ?>
             </span>
-            <span class="explenation"><?php
-              echo $item["desc"]; ?>
-            </span><?php
+            <span class="explenation"><?php echo $item["desc"]; ?></span><?php
           }
         }
 
@@ -605,17 +589,15 @@
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
-                        </span><?php echo getWebIcon($audit->{$item["db_name"]}, $audit->has_website); ?></span>
+                        </span><?php echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website); ?></span>
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                        <?php echo getWebIcon($audit->competitor->{$item["db_name"]}, $audit->has_website) ?></span><?php
+                        <?php echo printValue($audit->competitor->{$item["db_name"]}, $item['is_icon'], !$audit->has_website) ?></span><?php
                     } else {
-                      echo getWebIcon($audit->{$item["db_name"]}, $audit->has_website);
+                      echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website);
                     } ?>
-                    </span>
-                    <?php
-                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
-                    ?>
+                    </span><?php
+                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
                   </div>
                 </div><?php
@@ -680,25 +662,27 @@
     'audit': '<?php echo $audit->id; ?>',
   }
 
-  function updateIframe(display) {
-    $(this).parent().children('iframe').css("display", display);
-  }
-
-  <?php
+  <?php // Website Crawl
   if ($audit->website_bit && !$audit->has_website) { ?>
+    var modalData = {
+      'text': 'Website data available',
+      'subtext': 'Confirm to reload the page and view the crawled website data',
+      'confirm': 'reload_confirmed'
+    }
+
+    var reloadModal = initiateModal('reloadModal', 'confirm', modalData);
+    $('#reload_confirmed').click(function() {
+      window.location.reload();
+    });
+
     function crawlFinishedCheck() {
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: {action: 'crawl_data_check', ...commonPost},
+        data: { action: 'crawl_data_check', ...commonPost },
         success: function (response) {
-          console.log('retrieved response : ' + response);
-          if (response > <?php echo (int)$audit->has_comp ?>) {
-            $('.wait-for-crawl').hide();
-            showModal(initiateModal('errorModal', 'error', {
-              'text': "Website data available",
-              'subtext': "You can give it a score now."
-            }));
+          if (response.length !== 0) {
+            showModal(reloadModal);
           } else {
             setTimeout(function() { crawlFinishedCheck(); }, 8000);
           }
@@ -709,8 +693,7 @@
     crawlFinishedCheck();<?php
   } ?>
 
-  <?php
-  // Graph Generate
+  <?php // Graph Generate
   if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>
 
     // Line Chart values
@@ -718,7 +701,6 @@
     // Bar Chart values
     var bar_labels = [<?php echo json_encode($audit->instagram_data->hashtags[0]); ?>];
     var bar_data = [<?php echo json_encode($audit->instagram_data->hashtags[1]); ?>];
-
 
     <?php if ($audit->has_comp && (isset($audit->competitor) & !$audit->competitor->manual)) { ?>
       data_array.push(<?php echo json_encode($audit->competitor->instagram_data->likesPerPost); ?>);
@@ -754,196 +736,194 @@
       }
     };
 
-    $(function() { <?php
-      if ($edit_mode) { ?>
-        // On change of an text area show update all
-        $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
-          $(this).data('changed', true);
-          toggleUpdate(true);
+    $(function() {
+      // On change of an text area show update all
+      $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
+        $(this).data('changed', true);
+        toggleUpdate(true);
 
-          var propId = $(this).prop('id');
-          // Disable slider
-          if ($(this).is('textarea') && propId.includes('_advice')) {
-            var adviceType = propId.replace('_advice', '');
-            handleSlider(adviceType);
-
-            // Enable slider if value is empty
-            if ($(this).val() == '') {
-              type = (propId.includes('facebook')) ? 'fb' : (propId.includes('instagram')) ? 'ig' : 'wb';
-              if (!!sliderData[type]) {
-                handleSlider(adviceType, sliderData[type].range, sliderData[type].text);
-              }
+        var propId = $(this).prop('id');
+        // Disable slider
+        if ($(this).is('textarea') && propId.includes('_advice')) {
+          var adviceType = propId.replace('_advice', '');
+          handleSlider(adviceType);
+        
+          // Enable slider if value is empty
+          if ($(this).val() == '') {
+            type = (propId.includes('facebook')) ? 'fb' : (propId.includes('instagram')) ? 'ig' : 'wb';
+            if (!!sliderData[type]) {
+              handleSlider(adviceType, sliderData[type].range, sliderData[type].text);
             }
           }
-        });
-
-        $("input[type=range]").on('mouseup', function() {
-          $(this).data('changed', true);
-          toggleUpdate(true);
-        });
-
-        $("input:radio[class=iframe-radio]").on('click', function() {
-          $(this).parent().children('input:radio:checked').prop("checked", false);
-          $(this).parent().children('#iframe-input').css("display", $(this).data('display'));
-          $(this).prop("checked", true);
-          toggleUpdate(true);
-        });
-
-        $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });
-
-        $('#universal-update').on('click', function() {
-          updateAll();
-        });
-
-        function getIframe() {
-          var selected = $('#iframe-input:visible');
-          if (typeof selected[0] != 'undefined') {
-            var value = selected.val().replace('<iframe','').replace('</iframe>', '');
-            if (value != '<?php echo $audit->video_iframe; ?>') {
-              return { "video_iframe" : value };
-            }
-          }
-          return { "video_iframe" : '' };
         }
+      });
 
-        function updateAll() {
-          var data = {
-            ...getChanged('textarea'),
-            ...getChanged("#manual-ig-form input[type=text]", true),
-            ...getChanged("input[type=range]"),
-            ...getIframe(),
-          };
-          console.log(data);
-          if (!$.isEmptyObject(data)) {
-            $.ajax({
-              type: "POST",
-              url: ajaxurl,
-              data: {action: 'universal_update', ...data, ...commonPost},
-              success: function(response) {
-                toggleUpdate(false);
-                console.log(response);
-                // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL, 
-                //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
-                //  - daarbij zit er ook een php check op.
-                $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
-              },
-              error: logResponse,
-            });
+      $("input[type=range]").on('mouseup', function() {
+        $(this).data('changed', true);
+        toggleUpdate(true);
+      });
+
+      $("input:radio[class=iframe-radio]").on('click', function() {
+        $(this).parent().children('input:radio:checked').prop("checked", false);
+        $(this).parent().children('#iframe-input').css("display", $(this).data('display'));
+        $(this).prop("checked", true);
+        toggleUpdate(true);
+      });
+
+      $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });
+
+      $('#universal-update').on('click', function() {
+        updateAll();
+      });
+
+      function getIframe() {
+        var selected = $('#iframe-input:visible');
+        if (typeof selected[0] != 'undefined') {
+          var value = selected.val().replace('<iframe','').replace('</iframe>', '');
+          if (value != '<?php echo $audit->video_iframe; ?>') {
+            return { "video_iframe" : value };
           }
         }
-      
-        // Share & Track Modal
-        var modalData = {
-          'text': "This link is copied to your clipboard:",
-          'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
-          'subtext': `You can send this link from your own email address to your lead. If your lead
-            clicks on the link, you will see it in your dashboard, so make sure you don’t
-            click on the link yourself in order to be able to track this.`,
-        }
+        return { "video_iframe" : '' };
+      }
 
-        var shareModal = initiateModal('shareModal', 'notification', modalData);
-        $('#copy_link').click(function() {
-          showModal(shareModal);
-          document.getElementById("public_link").select();
-          document.execCommand("copy");
-        });
-
-        // Auto Mail + color Model
-        var modalData = {
-          text:`Configuration audit`,
-          html:`Do you want to sent this client automatic reminders?
-            <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
-            Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
-            <a href='/profile-page'>here</a>.<br><br>
-            Do you want a custom color for this audit?<br>
-            Theme color: <input type="color" id="color" value="<?php echo $audit->color; ?>">
-            <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
-          confirm: 'config_confirmed'
-        }
-
-        var configModal = initiateModal('configModal', 'confirm', modalData);
-        $('#config_link').click(function() {
-          showModal(configModal);
-        });
-
-        $("#config_confirmed").click(function() {
+      function updateAll() {
+        var data = {
+          ...getChanged('textarea'),
+          ...getChanged("#manual-ig-form input[type=text]", true),
+          ...getChanged("input[type=range]"),
+          ...getIframe(),
+        };
+        console.log(data);
+        if (!$.isEmptyObject(data)) {
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: { 
-              action: 'update_config', color: $('#color').val(),
-              value: $("#mail_bit_check").is(':checked'), ...commonPost
+            data: {action: 'universal_update', ...data, ...commonPost},
+            success: function(response) {
+              toggleUpdate(false);
+              console.log(response);
+              // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL, 
+              //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
+              //  - daarbij zit er ook een php check op.
+              $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
             },
-            success: function() {
-              window.location.reload()
-            },
-            error: function (errorThrown) {
-              console.log(errorThrown);
-              showModal(initiateModal('errorModal', 'error', {
-                'text': "Can't update mail function",
-                'subtext': "Please try again later or notify an admin if the issue persists"
-              }));
-            }
-          });
-        });
-
-        // Delete Audit Modal
-        var modalData = {
-          'text': 'Sure you want to delete this Audit?',
-          'subtext': 'This action is irreversible',
-          'confirm': 'delete_confirmed'
-        }
-
-        var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
-        $('#delete-this-audit').click(function() {
-          showModal(deleteModal);
-        });
-
-        $('#delete_confirmed').click(function() {
-          $.ajax({
-            type: "POST",
-            url: ajaxurl,
-            data: {'action': 'delete_page', ...commonPost},
-            success: function (response) {
-              window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
-            },
-            error: function (errorThrown) {
-              console.log(errorThrown);
-              var modalData = {
-                'text': "Can't delete this audit",
-                'subtext': "Please try again later or notify an admin if the issue persists"
-              }
-              showModal(initiateModal('errorModal', 'error', modalData));
-            }
-          });
-        });
-
-        function update_ads(button, competitor) {
-          var data = {
-            action: 'update_ads_audit',
-            competitor: (competitor) ? 'true' : 'false',
-            ads: button,
-            ...commonPost
-          };
-
-          $.ajax({
-            type: "POST",
-            url: ajaxurl,
-            data: data,
-            success: logResponse,
             error: logResponse,
           });
         }
+      }
+    
+      // Share & Track Modal
+      var modalData = {
+        'text': "This link is copied to your clipboard:",
+        'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
+        'subtext': `You can send this link from your own email address to your lead. If your lead
+          clicks on the link, you will see it in your dashboard, so make sure you don’t
+          click on the link yourself in order to be able to track this.`,
+      }
 
-        $('input:radio[name=ads]').change(function () {
-          update_ads(this.value, competitor = false);
-        });
+      var shareModal = initiateModal('shareModal', 'notification', modalData);
+      $('#copy_link').click(function() {
+        showModal(shareModal);
+        document.getElementById("public_link").select();
+        document.execCommand("copy");
+      });
 
-        $('input:radio[name=ads_c]').change(function () {
-          update_ads(this.value, competitor = true);
+      // Auto Mail + color Model
+      var modalData = {
+        text:`Configuration audit`,
+        html:`Do you want to sent this client automatic reminders?
+          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
+          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
+          <a href='/profile-page'>here</a>.<br><br>
+          Do you want a custom color for this audit?<br>
+          Theme color: <input type="color" id="color" value="<?php echo $audit->color; ?>">
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
+        confirm: 'config_confirmed'
+      }
+
+      var configModal = initiateModal('configModal', 'confirm', modalData);
+      $('#config_link').click(function() {
+        showModal(configModal);
+      });
+
+      $("#config_confirmed").click(function() {
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: { 
+            action: 'update_config', color: $('#color').val(),
+            value: $("#mail_bit_check").is(':checked'), ...commonPost
+          },
+          success: function() {
+            window.location.reload()
+          },
+          error: function (errorThrown) {
+            console.log(errorThrown);
+            showModal(initiateModal('errorModal', 'error', {
+              'text': "Can't update mail function",
+              'subtext': "Please try again later or notify an admin if the issue persists"
+            }));
+          }
         });
-      }); <?php // Can edit
-    }?>
+      });
+
+      // Delete Audit Modal
+      var modalData = {
+        'text': 'Sure you want to delete this Audit?',
+        'subtext': 'This action is irreversible',
+        'confirm': 'delete_confirmed'
+      }
+
+      var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
+      $('#delete-this-audit').click(function() {
+        showModal(deleteModal);
+      });
+
+      $('#delete_confirmed').click(function() {
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: {'action': 'delete_page', ...commonPost},
+          success: function (response) {
+            window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
+          },
+          error: function (errorThrown) {
+            console.log(errorThrown);
+            var modalData = {
+              'text': "Can't delete this audit",
+              'subtext': "Please try again later or notify an admin if the issue persists"
+            }
+            showModal(initiateModal('errorModal', 'error', modalData));
+          }
+        });
+      });
+
+      function update_ads(button, competitor) {
+        var data = {
+          action: 'update_ads_audit',
+          competitor: (competitor) ? 'true' : 'false',
+          ads: button,
+          ...commonPost
+        };
+
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: data,
+          success: logResponse,
+          error: logResponse,
+        });
+      }
+
+      $('input:radio[name=ads]').change(function () {
+        update_ads(this.value, competitor = false);
+      });
+
+      $('input:radio[name=ads_c]').change(function () {
+        update_ads(this.value, competitor = true);
+      });
+    });
 
     // Dynamic slider functions
     function handleSlider(type, range = false, text = false) {
