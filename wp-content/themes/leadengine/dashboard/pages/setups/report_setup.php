@@ -252,14 +252,14 @@
       campaignPromise.then(function(response) {
         Instance.currency = response.currency;
 
-        // Set data-edge attribute of radio buttons.
-        radioBtn.data('response', response);
         console.log({response});
-
+        
         if (!response.hasOwnProperty(edge) || response[edge].data.length == 0) {
           $('#campaign-list').html('No data found.');
           return;
         } else {
+          // Set data-edge attribute of radio buttons.
+          radioBtn.data('response', response);
           $('#campaign-list').empty();
           placeAdsInList($('#campaign-list'), edge, filterActiveAds(response, edge));
         }
