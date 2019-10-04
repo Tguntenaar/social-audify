@@ -337,7 +337,6 @@
                 <?php
                   if ($report->has_comp) {
                     $percent = procent_calc($avg_campaign->{$item["fb_name"]}, $comp_campaign->{$item["fb_name"]});
-                    // $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
                     $color = "#2980b9";
                     $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
 
@@ -350,7 +349,7 @@
                   } ?>
               <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
                 <?php visibility_icon($edit_mode, $report->{$item["type"]}); ?></div>
-              <span class="title-box facebook"><?php echo $item["name"]; ?></span>
+              <span class="title-box facebook"><?php echo $item["name"]; ?><i id="block-info-<?php echo $item['type']; ?>" class="information fas fa-info"></i></span>
               <div class="chart-info">
 
                 <span class="stat-box-title"><?php echo $item["desc"]; ?></span>
@@ -412,6 +411,14 @@
       var blockNames = <?php echo json_encode($campaign_blocks); ?>;
       var labels = <?php echo json_encode($graph_labels); ?>;
       
+      blockNames.forEach(function(block, index) {
+        $(`#block-info-${block.type}`).on('click', function() {
+          showModal(initiateModal('errorModal', 'error', {
+              'text': `${block.name}`,
+              'subtext': `${block.desc}`
+            }));
+        });
+      });
       <?php
       if ($report->has_comp) { ?>
         var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
