@@ -92,6 +92,19 @@
     ]
   );
 
+  $instagram_graph_blocks = array(
+    ["type" => "insta_hashtag",
+      "name" => "Top five hashtags",
+      "ig_name" => "hashtags",
+      "desc" => "Most used hashtags on specified instagram."
+    ],
+    ["type" => "insta_lpd",
+      "name" => "Likes per day",
+      "ig_name" => "likesPerPost",
+      "desc" => "Likes per day."
+    ],
+  );
+
   $website_blocks = array(
     ["type" => "website_pixel",
      "name" => "Facebook Pixel",

@@ -104,7 +104,7 @@
                   print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
                 </div>
                 <div class="ig-audit-visibility-block" style='display:none'><?php
-                  print_list_checkboxes($instagram_blocks, 'instagram', $audit_visibility); ?>
+                  print_list_checkboxes(array_merge($instagram_blocks, $instagram_graph_blocks), 'instagram', $audit_visibility); ?>
                 </div>
                 <div class="wb-audit-visibility-block" style='display:none'><?php
                   print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
