@@ -265,15 +265,6 @@
             <h3 class="h3-fix">Your data</h3>
             <?php echo do_shortcode("[subscription_details]"); ?>
           </div>
-
-          <div class="profile-page-blocks">
-            <h5 class="h3-fix">Delete my data</h5>
-            <button type="confirm" onclick="return showModal(initiateModal('confirmModal', 'confirm', {
-                'text': `Are your sure you want us to delete all your personal information?`,
-                'subtext': `There is also an option to delete all your audits, reports or contacts..`,
-                'confirmtext' : 'Delete',
-              }));">send request</button>
-          </div>
         </div>
       </div>
     </div>
