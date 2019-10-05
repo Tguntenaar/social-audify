@@ -245,8 +245,8 @@
       if ($report->manual && $edit_mode) { ?>
         <span class="manual-text" style="width: 100%;">
           <span style="color: #e74c3c;">Attention: </span>
-          There is no instagram or instagram business account found, so 
-          <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> 
+          There is no instagram or instagram business account found, so
+          <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a>
           to gather your data!
         </span><?php
       } ?>
@@ -418,9 +418,9 @@
       'type': 'report',
     } <?php
 
-    if ($report->graph_vis_bit == 1) { ?>
-    
-      $(function() { 
+    if ($report->graph_vis_bit == 1 || $edit_mode) { ?>
+
+      $(function() {
         var data = <?php echo json_encode($graph_data_list); ?>;
         var blockNames = <?php echo json_encode($campaign_blocks); ?>;
         var labels = <?php echo json_encode($graph_labels); ?>;
@@ -445,10 +445,10 @@
             generateBarChart(`canvas${index + 1}`, [data[block['fb_name']]], [labels], [true, true]);
           }); <?php
         } ?>
-      });<?php 
+      });<?php
     } ?>
 
-   
+
     <?php
     if ($edit_mode) { ?>
       // TODO: , #manual-ig-form input[type=text]
