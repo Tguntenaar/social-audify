@@ -2,7 +2,6 @@
 <html lang="en" style="overflow-y: scroll;">
 
 <?php
-
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
@@ -717,14 +716,9 @@
       bar_data.push(<?php echo json_encode($audit->competitor->instagram_data->hashtags[1]); ?>);
     <?php } ?>
 
-    var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);<?php 
-    if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
-      generateChart('lpd-chart', data_array, allLines, [true, true]); <?php 
-    } 
-    if (show_block($edit_mode, $audit->insta_hashtag) && (!$audit->manual)
-          && isset($audit->instagram_data->hashtags[0][0])) { ?>
-      generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php 
-    }
+    var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
+    generateChart('lpd-chart', data_array, allLines, [true, true]);
+    generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php 
   } ?>
 
   <?php
