@@ -117,7 +117,7 @@
                 <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Compare Reports</div>
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Compare Reports<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
             </div>
             <input type="text" name="search" id="search-input-compare" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="compare-list">
@@ -258,7 +258,7 @@
         Instance.currency = response.currency;
 
         console.log({response});
-        
+
         if (!response.hasOwnProperty(edge) || response[edge].data.length == 0) {
           $('#campaign-list').html('No data found.');
           return;
@@ -358,7 +358,7 @@
       });
 
       var avg = calculateAverageObject(data);
-      
+
       data = [...data, {name:'average', insights: avg}];
       return data;
     }
