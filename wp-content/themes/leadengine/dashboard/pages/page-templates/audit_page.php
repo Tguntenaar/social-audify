@@ -265,7 +265,6 @@
   <div id="errorModal" class="modal"></div>
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
-
     <?php
     if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
@@ -307,10 +306,20 @@
         } ?>
       </div>
     </div><?php
-    if ($audit->facebook_bit == "1") { ?>
+    if ($audit->facebook_bit == "1" && ($audit->facebook_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp; Facebook stats:</span>
         <span class="sub-title">Statistics of your Facebook page.</span>
+
+        <?php if($edit_mode) { ?>
+        <div onclick="toggle_visibility('facebook_vis_bit')" id="facebook_vis_bit_icon" class="visibility-first-level">
+          <?php if($audit->facebook_vis_bit == 1) { ?>
+              <i class="far fa-eye"></i>
+          <?php } else { ?>
+              <i class="far fa-eye-slash"></i>
+          <?php } ?>
+        </div> <?php } ?>
+
         <div class="col-lg-6 left bottom-40">
           <div class="inner"><?php
             foreach ($facebook_blocks as $item) {
@@ -404,10 +413,20 @@
         </div>
       </div><?php
     }
-    if ($audit->instagram_bit == "1") { ?>
+    if ($audit->instagram_bit == "1" && ($audit->instagram_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info">
         <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; Instagram stats:</span>
-        <span class="sub-title">Statistics of your Instagram page.</span><?php
+        <span class="sub-title">Statistics of your Instagram page.</span>
+
+        <?php if($edit_mode) { ?>
+        <div onclick="toggle_visibility('instagram_vis_bit')" id="instagram_vis_bit_icon" class="visibility-first-level">
+          <?php if($audit->instagram_vis_bit == 1) { ?>
+              <i class="far fa-eye"></i>
+          <?php } else { ?>
+              <i class="far fa-eye-slash"></i>
+          <?php } ?>
+        </div> <?php }
+
         if ($audit->manual && $edit_mode) { ?>
           <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
             There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
@@ -473,10 +492,10 @@
         </div><?php
 
         if (($audit->manual == 1)) { ?>
-          <div class="col-lg-12 instagram-right" style="float: right;">
+          <div class="col-lg-12 instagram-right" style="padding: 0;float: right;">
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
         } else { ?>
-          <div class="col-lg-6 instagram-right" style="float: right;">
+          <div class="col-lg-6 instagram-right" style="padding: 0;float: right;">
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
         }
 
@@ -580,13 +599,23 @@
         </div>
       </div><?php
     }
-    if ($audit->website_bit == "1") { ?>
+    if ($audit->website_bit == "1" && ($audit->website_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info website-info" id="website-info"><?php
         if (!$audit->has_website) { ?>
           <div class="wait-for-crawl"><p>Please wait a moment, the website data is being prepared.</p></div><?php
         } ?>
         <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; Website stats:</span>
         <span class="sub-title">Statistics of your webpage.</span>
+
+        <?php if($edit_mode) { ?>
+        <div onclick="toggle_visibility('website_vis_bit')" id="website_vis_bit_icon" class="visibility-first-level">
+          <?php if($audit->website_vis_bit == 1) { ?>
+              <i class="far fa-eye"></i>
+          <?php } else { ?>
+              <i class="far fa-eye-slash"></i>
+          <?php } ?>
+        </div> <?php } ?>
+
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
           <div class="inner custom-inner"><?php
 
@@ -666,6 +695,37 @@
 </html>
 
 <script charset='utf-8'>
+    // function toggleSection(field) {
+    //   if(field == "facebook_vis_bit") {
+    //       $("#facebook_vis_icon").html("<div class='lds-dual-ring'></div>");
+    //   }
+    //
+    //   var data = {
+    //     action: 'toggle_template_field',
+    //     field: field,
+    //     audit: <?php echo $audit->id; ?>
+    //   };
+    //
+    //   $.ajax({
+    //     type: "POST",
+    //     url: ajaxurl,
+    //     data: data,
+    //     success: function(response) {
+    //         console.log(response);
+    //         if(field == "facebook_vis_bit") {
+    //             if(response == 0) {
+    //                 $("#facebook_vis_icon").html("<i class='far fa-eye-slash'></i>");
+    //             } else {
+    //                 $("#facebook_vis_icon").html("<i class='far fa-eye'></i>");
+    //             }
+    //         }
+    //     },
+    //     error: logResponse,
+    //   });
+    //
+    //
+    //
+    // }
   var commonPost = {
     'type': 'audit',
     'audit': '<?php echo $audit->id; ?>',
@@ -717,13 +777,13 @@
       bar_data.push(<?php echo json_encode($audit->competitor->instagram_data->hashtags[1]); ?>);
     <?php } ?>
 
-    var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);<?php 
+    var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);<?php
     if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
-      generateChart('lpd-chart', data_array, allLines, [true, true]); <?php 
-    } 
+      generateChart('lpd-chart', data_array, allLines, [true, true]); <?php
+    }
     if (show_block($edit_mode, $audit->insta_hashtag) && (!$audit->manual)
           && isset($audit->instagram_data->hashtags[0][0])) { ?>
-      generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php 
+      generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php
     }
   } ?>
 

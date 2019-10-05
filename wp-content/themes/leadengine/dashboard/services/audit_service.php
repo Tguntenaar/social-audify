@@ -35,6 +35,11 @@ class audit_service extends connection {
         WHERE id = %d", $id));
   }
 
+  public function get_field_template($id, $field_name) {
+    return $this->dbwp->get_results($this->dbwp->prepare(
+      "SELECT %s FROM Audit_template WHERE audit_id = %d", $field_name, $id));
+  }
+
   // TODO: get moet de competitor erbij ophalen in 1 keer
   public function get_competitor($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
@@ -88,7 +93,7 @@ class audit_service extends connection {
       AS Client ON Audit.client_id = Client.id AND Audit.create_date >= %s", $user_id, $date));
   }
 
-  
+
   public function check_website($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
       "SELECT $this->crawl_fields FROM Audit_crawl WHERE audit_id = %d", $id));
@@ -101,7 +106,7 @@ class audit_service extends connection {
     $where = $table == 'Audit_data' ? array($priref => $id, 'competitor' => $comp) : array($priref => $id);
     return $this->dbwp->update($table, array($field_name => $field_value), $where);
   }
-  
+
 
   public function toggle_config_visibility($id, $field_name) {
     // TODO : dit is nog niet attack-veilig, is wss een betere wp functie voor...
@@ -146,7 +151,7 @@ class audit_service extends connection {
 
 
   private $template_fields = "introduction, conclusion, facebook_advice, instagram_advice, website_advice, facebook_score, instagram_score, website_score, video_iframe, color";
-  private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp";
+  private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp, facebook_vis_bit, instagram_vis_bit, website_vis_bit";
   private $crawl_fields = "facebook_pixel, google_analytics, google_tagmanager, mobile_friendly, load_time, website_size";
   private $data_fields = "facebook_name, facebook_data, instagram_name, instagram_data";
 }

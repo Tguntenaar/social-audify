@@ -192,7 +192,7 @@
         <?php
         if ($edit_mode) { ?>
           <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
-        } ?> 
+        } ?>
 
         Report: <?php echo $report->name;
 
@@ -201,7 +201,7 @@
           <button id="copy_link" class="copy-link"><i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-        } else { 
+        } else {
           if ($user_id == $author_id) {?>
             <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
           }
@@ -232,13 +232,23 @@
       </div>
     </div> <?php
 
-    if($social_stats->instagram_data != NULL
-        && $social_stats->facebook_data != NULL) { ?>
+    if(($social_stats->instagram_data != NULL
+        && $social_stats->facebook_data != NULL) && ($report->campaign_vis_bit || $edit_mode)) { ?>
 
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
       <!-- Social Statistics -->
       <span class="facebook-inf-title" style="text-align:center; margin: 0;">Social Stats:</span>
       <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics of your Facebook and Instagram page.</span><?php
+
+      if($edit_mode) { ?>
+      <div onclick="toggle_visibility('campaign_vis_bit')" id="campaign_vis_bit_icon" style="top: 20px;" class="visibility-first-level">
+        <?php if($report->campaign_vis_bit == 1) { ?>
+            <i class="far fa-eye"></i>
+        <?php } else { ?>
+            <i class="far fa-eye-slash"></i>
+        <?php } ?>
+      </div> <?php }
+
       if ($report->manual && $edit_mode) { ?>
         <span class="manual-text" style="width: 100%;">
           <span style="color: #e74c3c;">Attention: </span>
@@ -323,9 +333,21 @@
       } ?>
 
       <!-- Campaign Statistics -->
+      <?php if($report->graph_vis_bit || $edit_mode) { ?>
+      <div class="graph-report">
       <div style="clear:both; margin-top: 90px;"></div>
       <span class="facebook-inf-title" style="text-align:center; margin: 0; margin-top: 50px;">Campaign Stats:</span>
       <span class="sub-title" style="text-align:center; padding:0; margin-top: 5px;">Statistics on the Ads or Campaigns you are running.</span><?php
+
+      if($edit_mode) { ?>
+      <div onclick="toggle_visibility('graph_vis_bit')" id="graph_vis_bit_icon" style="top: 150px;" class="visibility-first-level">
+        <?php if($report->graph_vis_bit == 1) { ?>
+            <i class="far fa-eye"></i>
+        <?php } else { ?>
+            <i class="far fa-eye-slash"></i>
+        <?php } ?>
+      </div> <?php }
+
       $counter = 1;
 
       foreach ($campaign_blocks as $item) {
@@ -366,10 +388,11 @@
                 <canvas id="<?php echo "canvas$counter"; ?>" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
             </div>
-          </div><?php
+            </div></div><?php
           $counter++;
         }
-      } ?>
+      }
+      }?>
       <div class="col-lg-6 float outer-chart" style="padding-left: 15px; margin-top: 38px;">
         <div class="col-lg-12 inner-chart" style="height: 499px;">
           <span class="title-report-box">Campaign Notes</span><?php
@@ -406,11 +429,12 @@
   </div>
 
   <script charset='utf-8'>
-    $(function() { 
+    <?php if($report->graph_vis_bit == 1) { ?>
+    $(function() {
       var data = <?php echo json_encode($graph_data_list); ?>;
       var blockNames = <?php echo json_encode($campaign_blocks); ?>;
       var labels = <?php echo json_encode($graph_labels); ?>;
-      
+
       blockNames.forEach(function(block, index) {
         $(`#block-info-${block.type}`).on('click', function() {
           showModal(initiateModal('errorModal', 'error', {
@@ -433,6 +457,7 @@
         }); <?php
       } ?>
     });
+    <?php } ?>
 
     var commonPost = {
       'report': '<?php echo $report->id; ?>',
@@ -459,7 +484,7 @@
           };
           console.log(data);
           if (!$.isEmptyObject(data)) {
-  
+
             $.ajax({
               type: "POST",
               url: ajaxurl,
@@ -470,7 +495,7 @@
               },
               error: logResponse,
             });
-          
+
           }
         }
 
@@ -531,7 +556,7 @@
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: { 
+          data: {
             action: 'update_config',
             color: $('#color').val(),
             ...commonPost,

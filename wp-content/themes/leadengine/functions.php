@@ -49,6 +49,30 @@
     wp_die();
   }
 
+  // add_action( 'wp_ajax_toggle_template_field', 'toggle_template_field');
+  // add_action( 'wp_ajax_nopriv_toggle_template_field', 'not_logged_in');
+  //
+  // function toggle_template_field() {
+  //   require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+  //   require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+  //
+  //   $connection = new connection;
+  //   $audit_service = new audit_service($connection);
+  //
+  //   $audit_id = $_POST['audit'];
+  //   $field = $_POST['field'];
+  //
+  //   $bit = $audit_service->get_field_template($audit_id, $field);
+  //
+  //   if($field == "facebook_vis_bit") {
+  //       $bit = ($bit == 1) ? 0 : 1;
+  //   }
+  //
+  //   $test = $audit_service->update($audit_id, 'Audit_template', $field, $bit, 0);
+  //
+  //   wp_send_json($test);
+  //   wp_die();
+  // }
 
   add_action( 'wp_ajax_update_ads_audit', 'edit_ads_audit');
   add_action( 'wp_ajax_nopriv_update_ads_audit', 'not_logged_in');
