@@ -68,7 +68,7 @@
         <span class="title title-audit-page">Create a report</span>
 
         <!-- One "tab" for each step in the form: -->
-        <form id='regForm' style="margin-bottom: 20px;" action="" method="post" enctype="multipart/form-data">
+        <form id='regForm' style="margin-bottom: 20px;">
 
           <!-- Facebook login tab -->
           <div class="tab">
@@ -96,7 +96,7 @@
             <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
 
               foreach($clients as $client) {
-                $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website, "ad_id"=>$client->ad_id];?>
+                $data = ["id"=> $client->id, "name"=>$client->name,"facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website, "ad_id"=>$client->ad_id];?>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 height-repsonsive-auto audit-row campaign-row campaign-<?php echo $client->id; ?>" name="<?php echo $client->name; ?>"
                    data-client='<?php echo htmlentities(json_encode($data)); ?>' id="client-<?php echo $client->id; ?>">
 
@@ -113,6 +113,9 @@
 
           <!-- Compare report tab -->
           <div class="tab">
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Compare Reports</div>
             </div>
@@ -121,7 +124,7 @@
               <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row no-compare selected" name="-">No comparable report...</a><?php
 
               foreach($reports as $report) {
-                $data = ["id"=> $report->id ]; ?>
+                $data = ["id"=> $report->id, "name"=> $report->name]; ?>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row report-compare campaign-row" name="<?php echo $report->name; ?>"
                   data-compare='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $report->name; ?>
                 </a><?php
@@ -131,9 +134,12 @@
 
           <!-- Report name and options -->
           <div class="tab">
-            <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding"> -->
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green" id="show-compare"></div>
-            <!-- </div> -->
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+            </div>
+            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+            <span class="selected-client">Selected report to compare = <strong class="show-compare"></strong></span>
+            </div>
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
               <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." placeholder="Report name.." maxlength="25" required>
@@ -208,7 +214,6 @@
 
     $('.report-compare').on('click', function() {
       nextPrev(1);
-      $('#show-compare').text(`Selected report to compare = ${$(this).prop('name')}`);
     });
 
     function toggleSelectedAds(that) {

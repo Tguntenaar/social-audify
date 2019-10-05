@@ -71,7 +71,7 @@
           <span class="title title-audit-page">Create an Audit</span>
 
           <!-- One "tab" for each step in the form: -->
-          <form id="regForm" class="submit-audit" action="">
+          <form id="regForm" style="margin-bottom: 20px;" class="submit-audit">
 
             <!-- Facebook tab -->
             <div class="tab">
@@ -98,7 +98,7 @@
               <input type="text" name="search" id="search-input" placeholder="Search..." valid/>
               <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
                 foreach($clients as $client) {
-                  $data = ["id"=> $client->id, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
+                  $data = ["id"=> $client->id, "name"=>$client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
                   <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
                     data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
                   </a><?php
@@ -108,7 +108,9 @@
 
             <!-- Chosing an competitor -->
             <div class="tab" >
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding" id="show-client"></div>
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+              </div>
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
                 <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Competitor</div>
               </div>
@@ -116,7 +118,7 @@
               <div class="inner-scroll" style="height: 335px;" id="compare-list">
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row no-compare selected" name="-" data-compare=''>No competitor...</a>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row new-compare" name="+"
-                  data-compare='<?php echo htmlentities(json_encode(['facebook' => '', 'instagram' => '', 'website' => ''])); ?>'>New competitor
+                  data-compare='<?php echo htmlentities(json_encode([ 'facebook' => '', 'instagram' => '', 'website' => ''])); ?>'>New competitor
                 </a><?php
                 foreach($clients as $client) {
                   $data = ["id"=> $client->id, "name"=> $client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website];?>
@@ -129,6 +131,12 @@
 
             <!-- Audit name and options -->
             <div class="tab">
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+              </div>
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                <span class="selected-client">Selected competitor = <strong class="show-compare"></strong></span>
+              </div>
               <div class="custom-label">
                 <span class="name-label">Audit Name</span>
                 <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
@@ -188,9 +196,6 @@
     });
 
     $('.audit-row.client').on('click', function() {
-      if ( currentTab ==  1) {
-        $('#show-client').html(`<span class="selected-client">Selected client = <strong>${$(this).prop('name')}</strong></span>`);
-      }
       nextPrev(1);
     });
 
