@@ -108,11 +108,11 @@
 
             <!-- Chosing an competitor -->
             <div class="tab" >
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
                 <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
               </div>
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Competitor</div>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Competitor<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
               </div>
               <input type="text" name="search" id="search-input-compare" placeholder="Search..." valid/>
               <div class="inner-scroll" style="height: 335px;" id="compare-list">
@@ -131,18 +131,13 @@
 
             <!-- Audit name and options -->
             <div class="tab">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
-                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
-              </div>
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
-                <span class="selected-client">Selected competitor = <strong class="show-compare"></strong></span>
-              </div>
+
               <div class="custom-label">
                 <span class="name-label">Audit Name</span>
                 <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
               </div>
               <div class="custom-label">
-                <span class="name-label">Audit options:</span>
+                <span class="name-label" style="margin-top: -15px;">Audit options:</span>
                 <span class="notice"><p>All the options are selected to include the data of the following platforms, you can deselect it by clicking on the icons.</p></span>
                 <label class="c_container">
                   <input type="checkbox" name="facebook_checkbox" id="facebook_checkbox" value="facebook_checkbox" checked><br />
@@ -156,6 +151,16 @@
                   <input type="checkbox" name="website_checkbox"  id="website_checkbox" value="website_checkbox" checked><br />
                   <span class="checkmark"><i class="fas fa-globe"></i></span>
                 </label>
+              </div>
+              <div class="custom-label" >
+                  <div style="clear: both;"></div>
+                  <span class="name-label" style="margin-top: -20px; float: left;">Selected:</span>
+                  <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
+                    <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+                  </div>
+                  <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
+                    <span class="selected-client">Selected competitor = <strong class="show-compare"></strong></span>
+                  </div>
               </div>
             </div>
             <div>
