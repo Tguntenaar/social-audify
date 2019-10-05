@@ -53,10 +53,11 @@
   // Compare Blocks data
   $comp_social = json_decode($report->social_stats_compare);
   $comp_data = json_decode($report->chart_data_compare);
-  if ($report->has_comp = isset($comp_data)) {
-    $comp_campaign = array_pop($comp_data)->insights;
+  $report->has_comp = isset($comp_data);
 
-    // Graph chart data
+  if ($report->has_comp) {
+    // Campaign info and graph chart data
+    $comp_campaign = array_pop($comp_data)->insights;
     list($comp_graph_data_list, $comp_graph_labels) = create_graph_data($comp_data, $campaign_blocks);
   }
 
@@ -83,8 +84,8 @@
   }
 
   function create_graph_data($graph_data, $campaign_blocks) {
-    $graph_data_list = array();
     $graph_labels = array();
+    $graph_data_list = array();
     $temp_name_array = array();
 
     foreach($graph_data as $campaign) {
@@ -92,7 +93,6 @@
         $campaign->name = explode(':', $campaign->name, 2)[1];
 
       preg_match_all('/.{0,22}(\s+|$)/', $campaign->name, $temp_name_array);
-      // preg_match_all('/.{0,22}(\s+|$)/', explode(':', $campaign->name, 2)[1], $temp_name_array);
       array_push($graph_labels, $temp_name_array[0]);
 
       foreach($campaign_blocks as $block) {
@@ -109,7 +109,6 @@
         array_push($graph_data_list[$block['fb_name']], $push_object);
       }
     }
-
     return array($graph_data_list, $graph_labels);
   }
 
@@ -129,9 +128,6 @@
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
   }
-
-  $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
-
 ?>
 
 <head>
@@ -229,7 +225,7 @@
       </div>
     </div> <?php
 
-    if(($social_stats->instagram_data != NULL
+    if (($social_stats->instagram_data != NULL
         && $social_stats->facebook_data != NULL) && ($report->campaign_vis_bit || $edit_mode)) { ?>
 
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
@@ -249,40 +245,35 @@
       if ($report->manual && $edit_mode) { ?>
         <span class="manual-text" style="width: 100%;">
           <span style="color: #e74c3c;">Attention: </span>
-          There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> to gather your data!</span><?php
-      }
-      ?><div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="float:left; height: auto;"><?php
+          There is no instagram or instagram business account found, so 
+          <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a> 
+          to gather your data!
+        </span><?php
+      } ?>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="float:left; height: auto;"><?php
       if ($report->manual && $edit_mode) { ?>
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
+        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
       }
       foreach ($social_blocks as $item) {
         if (show_block($edit_mode, $report->{$item["type"]}, isset($social_stats->{$item["data"]}->{$item["fb_name"]}))) { ?>
           <div class="col-lg-6 report-social-style" style="float: left; padding:5px;">
             <div class="stat-block col-lg-12">
-              <div class="inner"><?php
+              <div class="inner">
+                <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
                 if (!$report->manual) { ?>
-                  <span class="explenation"><?php
-                    echo $item["desc"]; ?>
-                  </span><?php
-                } ?>
-                <span class="title-box facebook"><?php
-                  echo $item["name"]; ?>
-                </span><?php
-                if (!$report->manual) { ?>
+                  <span class="explenation"><?php echo $item["desc"]; ?></span>
                   <span class="data_animation"><?php
+                    echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, $item["decimals"], '.', ''); ?>
+                  </span><?php
                 }
-
                 if ($report->manual && !$item["fb"] && $edit_mode) { ?>
-                  <input type="text" id="<?php echo $item["fb_name"]; ?>" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /></span><?php
-                } else {
-                  echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, $item["decimals"], '.', '');
+                  <input type="text" id="<?php echo $item["fb_name"]; ?>" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /><?php
                 }
 
                 if ($report->has_comp) {
                   $percent = !isset($comp_social->{$item["data"]}->{$item["fb_name"]}) ? 0 :
-                              procent_calc($social_stats->{$item["data"]}->{$item["fb_name"]}, $comp_social->{$item["data"]}->{$item["fb_name"]});
+                    procent_calc($social_stats->{$item["data"]}->{$item["fb_name"]}, $comp_social->{$item["data"]}->{$item["fb_name"]});
 
-                  // $color = $percent < 0 ? "#c0392b" : ($percent == 0 ? "#2980b9" : "#27ae60");
                   $color = "#2980b9";
                   $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
 
@@ -290,9 +281,7 @@
                   if ($icon != "window-minimize") { ?>
                     <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; margin-top: -3px; color: <?php echo $color; ?>"></i><?php
                   } ?>
-                    <span class="percentage"><?php
-                      echo $percent !== 0 ? "$percent%" : ""; ?>
-                      </span>
+                    <span class="percentage"><?php echo $percent !== 0 ? "$percent%" : ""; ?></span>
                   </span><?php
                 }
                 if (!$report->manual) { ?>
@@ -303,16 +292,14 @@
               </div>
             </div>
           </div>
-        </div> <?php
-      }
-    }
-    ?></div><?php
-    if ($report->manual && $edit_mode) { ?>
-      <input type="submit" class="edite-button" value="Update data" style="width: 150px !important; margin-left: 17px;"/>
-      </form><?php
-    } ?>
-
-      <!-- <div style="clear: both;"></div> -->
+          </div> <?php
+        }
+      } ?>
+      </div><?php
+      if ($report->manual && $edit_mode) { ?>
+        <input type="submit" class="edite-button" value="Update data" style="width: 150px !important; margin-left: 17px;"/>
+        </form><?php
+      } ?>
 
       <div class="col-lg-6 float outer-chart" style="padding-left: 15px; margin-top: 25px;">
         <div class="col-lg-12 inner-chart" style="height: 460px;">
@@ -326,8 +313,8 @@
           } ?>
         </div>
       </div>
-      </div> <?php
-      } ?>
+      </div><?php
+    } ?>
 
       <!-- Campaign Statistics -->
       <?php if($report->graph_vis_bit || $edit_mode) { ?>
@@ -426,41 +413,42 @@
   </div>
 
   <script charset='utf-8'>
-    <?php if($report->graph_vis_bit == 1) { ?>
-    $(function() {
-      var data = <?php echo json_encode($graph_data_list); ?>;
-      var blockNames = <?php echo json_encode($campaign_blocks); ?>;
-      var labels = <?php echo json_encode($graph_labels); ?>;
-
-      blockNames.forEach(function(block, index) {
-        $(`#block-info-${block.type}`).on('click', function() {
-          showModal(initiateModal('errorModal', 'error', {
-              'text': `${block.name}`,
-              'subtext': `${block.desc}`
-            }));
-        });
-      });
-      <?php
-      if ($report->has_comp) { ?>
-        var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
-        var compData = <?php echo json_encode($comp_graph_data_list); ?>;
-        blockNames.forEach(function(block, index) {
-          generateBarChart('canvas' + (index + 1), [data[block['fb_name']], compData[block['fb_name']]],
-                                                  [labels, compLabels], [true, true]);
-        }); <?php
-      } else { ?>
-        blockNames.forEach(function(block, index) {
-          generateBarChart('canvas' + (index + 1), [data[block['fb_name']]], [labels], [true, true]);
-        }); <?php
-      } ?>
-    });
-    <?php } ?>
-
     var commonPost = {
       'report': '<?php echo $report->id; ?>',
       'type': 'report',
-    }
+    } <?php
 
+    if ($report->graph_vis_bit == 1) { ?>
+    
+      $(function() { 
+        var data = <?php echo json_encode($graph_data_list); ?>;
+        var blockNames = <?php echo json_encode($campaign_blocks); ?>;
+        var labels = <?php echo json_encode($graph_labels); ?>;
+
+        blockNames.forEach(function(block, index) {
+          $(`#block-info-${block.type}`).on('click', function() {
+            showModal(initiateModal('errorModal', 'error', { 'text': block.name, 'subtext': block.desc }));
+          });
+        }); <?php
+
+        if ($report->has_comp) { ?>
+          var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
+          var compData = <?php echo json_encode($comp_graph_data_list); ?>;
+
+          blockNames.forEach(function(block, index) {
+            generateBarChart(`canvas${index + 1}`,
+              [data[block['fb_name']], compData[block['fb_name']]], [labels, compLabels], [true, true]);
+          }); <?php
+
+        } else { ?>
+          blockNames.forEach(function(block, index) {
+            generateBarChart(`canvas${index + 1}`, [data[block['fb_name']]], [labels], [true, true]);
+          }); <?php
+        } ?>
+      });<?php 
+    } ?>
+
+   
     <?php
     if ($edit_mode) { ?>
       // TODO: , #manual-ig-form input[type=text]

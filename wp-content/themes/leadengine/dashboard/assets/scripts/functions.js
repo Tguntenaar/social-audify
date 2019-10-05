@@ -72,7 +72,9 @@ function filterSearch(value, links, counterSpan = null) {
 
 
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
-  // More can be added..?
+  if (!$(`#${canvas}`).is('canvas'))
+    return;
+
   const backgroundColors = ["rgba(72, 125, 215, 0.1)", "rgba(238, 82, 83, 0.1)"];
   const borderColors = ["#487dd7", "#ee5253"];
 
@@ -105,6 +107,9 @@ function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
 }
 
 function generateAreaChart(canvas, data, labels) {
+  if (!$(`#${canvas}`).is('canvas'))
+    return;
+
   backgroundColors = [];
   for (var i = 0; i < data[0].length; i++) {
     backgroundColors.push(`rgba(72, 125, 215, ${0.2 + (i * 0.15)})`)
@@ -132,6 +137,9 @@ function generateAreaChart(canvas, data, labels) {
 
 // TODO: maak dit error bestendig.
 function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
+  if (!$(`#${canvas}`).is('canvas'))
+    return;
+
   // Not dynamic, only works with comparing 2 values...
   var barData = new Array(), barLabels = new Array(),
       backgroundColors = new Array(), borderColors = new Array();
