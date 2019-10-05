@@ -69,7 +69,6 @@ function showTab(index) {
       }
     });
   } else {
-    console.log('hier');
     if ($('#nextBtn').html() !== 'Next') {
       $('#nextBtn').html('Next');
       $('#nextBtn').off('click');
