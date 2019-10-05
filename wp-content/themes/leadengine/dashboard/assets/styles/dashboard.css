@@ -3779,7 +3779,11 @@ tr input {
 }
 
 .information {
-	margin-left: 10px;
+	position: absolute;
+	right: -20px;
+	top: 10px;
+	color: #007bff;
+	cursor: pointer;
 }
 
 #mail-exp-text,
