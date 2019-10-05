@@ -128,25 +128,22 @@ function makeApiCalls(instance) {
 
     console.log(allResponses);
 
-    // FIXME:
-    // instagram_data = handleResponseInsta(allResponses[0]);
-    instagram_data = handleResponseInsta(allResponses[0], (page.type === 'audit'));
+    instagram_data = handleResponseInsta(allResponses[0]);
     coverPhotoSize = handleResponseCoverphoto(allResponses[1]);
-    fbPageData = handleResponsePageInfo(allResponses[1], !(page.type === 'audit'));
+    fbPageData = handleResponsePageInfo(allResponses[1]);
     facebook_data = {...{coverPhotoSize}, ...fbPageData};
 
     client.data = {instagram_data, facebook_data};
 
     if (competitor && page.type === 'audit') {
-      // instagram_data = handleResponseInsta(allResponses[2]);
-      instagram_data = handleResponseInsta(allResponses[2], (page.type === 'audit'));
+      instagram_data = handleResponseInsta(allResponses[2]);
       coverPhotoSize = handleResponseCoverphoto(allResponses[3]);
-      fbPageData = handleResponsePageInfo(allResponses[3], !(page.type === 'audit'));
+      fbPageData = handleResponsePageInfo(allResponses[3]);
       facebook_data = {...{coverPhotoSize}, ...fbPageData};
       competitor.data = {instagram_data, facebook_data};
     }
 
-    // FIXME:
+    // FIXME: dit is om te kijken of een manual bit aan moet voor client en competitor apart
     if ((allResponses[0] != undefined && !!allResponses[0].error) || (competitor && (allResponses[2] != undefined && !!allResponses[2].error))) {
       var i = 0;
 
@@ -176,14 +173,14 @@ function makeApiCalls(instance) {
     console.log({reason});
 
     var msg = (typeof reason == 'string') ? reason : reason.error.message;
-    // TODO: reject with reason.title & message
+
     showModal(initiateModal('errorModal', 'error', {
       'text': `${msg}`,
       'subtext': `Choose another candidate.`,
     }));
 
     if (Instance.page.type == 'audit') {
-      nextPrev( (reason.includes('competitor')) ? -2 : -3);
+      nextPrev( (reason.includes('competitor')) ? -1 : -2);
     } else if (Instance.page.type == 'report') {
       nextPrev(-4);
     }
@@ -284,8 +281,7 @@ function getIGBusinessID(response) {
   }
 }
 
-// function handleResponseInsta(response) {
-function handleResponseInsta(response, hashtags = true) {
+function handleResponseInsta(response) {
   if (!response || response.error) {
     // manual
     return {
@@ -301,8 +297,7 @@ function handleResponseInsta(response, hashtags = true) {
     return {};
   } else {
     var bd = response.business_discovery;
-    // var info = unpackMediaInfo(bd.media);
-    var info = unpackMediaInfo(bd.media, hashtags);
+    var info = unpackMediaInfo(bd.media);
 
     info.followers_count = bd.followers_count;
     info.follows_count = bd.follows_count;
@@ -310,8 +305,7 @@ function handleResponseInsta(response, hashtags = true) {
   }
 }
 
-function unpackMediaInfo(media, addHashtags) {
-// function unpackMediaInfo(media) {
+function unpackMediaInfo(media) {
   var tLikes, tComments, tPosts, likesLM, commentsLM, postsLM, averageComments,
       averageLikes;
   tLikes = tComments = tPosts = likesLM = commentsLM = postsLM = 0;
@@ -349,9 +343,8 @@ function unpackMediaInfo(media, addHashtags) {
     averageLikes
   };
 
-  if (addHashtags) {
   returnMedia.hashtags = getHashtags(captions);
-  }
+
   return returnMedia;
 }
 
@@ -417,7 +410,7 @@ function getCoverPhotosDetails(response) {
   return '0 X 0';
 }
 
-function unpackPageInfo(response, report) {
+function unpackPageInfo(response) {
   var loc, vid, pst;
 
   if(response.location != null) { loc = 1; } else { loc = 0; }
@@ -459,23 +452,16 @@ function unpackPageInfo(response, report) {
     }
   }
 
-
   avgMessageLength = ( totalMessageLength / Math.max(1, tPosts) ).toFixed(2);
-  console.log({
-    totalPostLastMonth, country_page_likes, pf_picture_size, nLink,
-    nStatus, nPhoto, nVideo, nOffer, avgMessageLength
-  });
 
   var runningAdds = 0;
 
-  if (report) {
-    return {country_page_likes, avgMessageLength};
-  } else {
-    return {
-      totalPostLastMonth, country_page_likes, pf_picture_size, nLink,
-      nStatus, nPhoto, nVideo, nOffer, avgMessageLength, runningAdds, can_post,
-      talking_about_count, native_videos, location };
-  }
+  return {
+      totalPostLastMonth, country_page_likes, 
+      pf_picture_size, location,
+      nLink, nStatus, nPhoto, nVideo, nOffer, 
+      avgMessageLength, runningAdds, can_post,
+      talking_about_count, native_videos, };
 }
 
 function getAdAccountsQuery() {
@@ -512,7 +498,7 @@ function handleResponseCoverphoto(response) {
   }
 }
 
-function handleResponsePageInfo(response, report = false) {
+function handleResponsePageInfo(response) {
   if (!response || response.error) {
     // alert
     showModal(initiateModal('errorModal', 'error', {
@@ -522,7 +508,7 @@ function handleResponsePageInfo(response, report = false) {
   } else if (response === 'This option is disabled') {
     return {};
   } else {
-    return unpackPageInfo(response, report);
+    return unpackPageInfo(response);
   }
 }
 

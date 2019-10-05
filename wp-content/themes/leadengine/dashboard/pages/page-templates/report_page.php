@@ -132,7 +132,6 @@
 
   $report->has_comp = ($report->chart_data_compare != NULL) ? 1 : 0;
 
-
 ?>
 
 <head>
@@ -183,9 +182,7 @@
 
       <?php
       if ($edit_mode) { ?>
-        <button id="universal-update" class="advice-button floating-update">
-          Update All
-        </button> <?php
+        <button id="universal-update" class="advice-button floating-update"> Update </button> <?php
       } ?>
 
       <div class="mobile-hide">

@@ -145,6 +145,9 @@ function validateClient() {
   // TODO:
   Instance.client = selected.data('client');
 
+  $('.show-client').html(`${Instance.client.name}`);
+  $('.show-client').show();
+
   // Stop progress if client has no ad_id
   if (Instance.page.type == 'report' && !Instance.client.ad_id) {
     $('#client-list').fadeOut(50).fadeIn(400);
@@ -172,6 +175,13 @@ function validateCompetitorTab() {
     return false;
 
   Instance.competitor = selected.data('compare');
+  
+  if (Instance.competitor == undefined || Instance.competitor == '') {
+    $('.show-compare').parent().parent().hide();
+  } else {
+    $('.show-compare').html(`${Instance.competitor.name}`);
+    $('.show-compare').parent().parent().show();
+  }
 
   if (Instance.page.type == 'audit' && Instance.competitor) {
     // Disable options die een client & competitor niet hebben.
