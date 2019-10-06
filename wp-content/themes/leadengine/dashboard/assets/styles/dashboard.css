@@ -479,6 +479,17 @@ nav ul a:hover {
     display: block;
 }
 
+.beta {
+	position: absolute;
+	right: -10px;
+	bottom: -20px;
+	font-size: 12px !important;
+}
+
+nav ul a li {
+	position: relative;
+}
+
 .title-background {
 	width: 120px;
 	height: 40px;
@@ -4018,6 +4029,7 @@ h4 {
 .tab {
 	width: 100%;
 	height: auto;
+	overflow-x: hidden;
 }
 
 .responsive-label-ad {
@@ -4086,6 +4098,11 @@ h4 {
 }
 
 @media only screen and (max-width: 992px) {
+	.beta {
+		position: relative;
+		margin-left: -15px;
+		margin-bottom: -10px;
+	}
 	.sidebar {
 		overflow:visible;
 	}

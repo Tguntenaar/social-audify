@@ -177,7 +177,7 @@
 
                 const linkSource = `data:application/pdf;base64,${temp}`;
                 const downloadLink = document.getElementById("testje");
-                const fileName = "vct_illustration.pdf";
+                const fileName = "<?php echo $audit->name; ?>";
 
                 downloadLink.href = linkSource;
                 downloadLink.download = fileName;
@@ -214,7 +214,8 @@
     .sub-header {
       background:  <?php echo $theme_color; ?> !important;
     }
-    .slider::-webkit-slider-thumb {
+    .slider::-webkit-slider-thumb,
+    .slider::-moz-range-thumb {
         background:  <?php echo $theme_color; ?> !important;
     }
   </style>
@@ -778,7 +779,7 @@
 
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
     generateChart('lpd-chart', data_array, allLines, [true, true]);
-    generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php 
+    generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php
   } ?>
 
   <?php
