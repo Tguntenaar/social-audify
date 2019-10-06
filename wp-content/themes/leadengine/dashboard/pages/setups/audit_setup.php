@@ -273,7 +273,7 @@
      * Dan wordt de code lokaler
      */
     function submitForm() {
-      showBounceBall(true, "Preparing audit, please hold a few seconds");
+      showBounceBall(true, "Give us a few seconds as we create your awesome audit");
       var loggedInPromise = new Promise((resolve, reject) => {
         FB.getLoginStatus(function(response) {
           if (response.status === 'connected') {

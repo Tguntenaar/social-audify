@@ -472,7 +472,7 @@
     }
 
     function submitForm() {
-      showBounceBall(true, 'Preparing report, please hold a few seconds');
+      showBounceBall(true, 'Give us a few seconds as we create your awesome report');
 
       // validate number of ads selected
       if ($('#campaign-list .selected').length < 1 || $('#campaign-list .selected').length > 5) {
