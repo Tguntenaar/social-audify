@@ -527,7 +527,7 @@
         text:`Configuration report`,
         subtext:`
           Do you want a custom color for this audit?<br>
-          Theme color: <input type="color" id="color" value="<?php echo isset($report->color) ? $report->color: $user->color_report; ?>">
+          Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
         confirm: 'config_confirmed'
       }

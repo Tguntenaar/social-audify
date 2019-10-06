@@ -116,11 +116,6 @@
       </a>
         <div class="person-info">
           <span class="person-name block"><?php echo $wp_current_user->display_name; ?></span>
-            <?php
-              $user_meta = get_userdata($user_id);
-              $user_roles = $user_meta->roles;
-            ?>
-          <span class="person-title block"> <?php echo $user_roles[0]; ?></span>
         </div>
       </div>
       <div class="stats">

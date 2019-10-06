@@ -50,9 +50,9 @@
           <ul class="sub-menu-profile">
             <li id="profile-click">Profile settings</li>
             <li id="avatar-click">Avatar settings</li>
-            <li id="audit-click">Intro / conlusion Audits</li>
-            <li id="report-click">Intro / conlusion Reports</li>
-            <li id="mail-click">Mail config</li> <?php 
+            <li id="audit-click">Audit settings</li>
+            <li id="report-click">Reports settings</li>
+            <li id="mail-click">Mail configuration</li> <?php 
             if ( current_user_can( 'manage_affiliates' ) ) { ?>
               <li><a href="/affiliate-area/">Affiliate Area</a></li> <?php
             } ?>
@@ -74,7 +74,7 @@
           </div>
 
           <div id="audit-settings">
-            <h3 class="h3-fix">Audit text</h3>
+            <h3 class="h3-fix">Audit Settings</h3>
             <ul>
               <li id="intro-audit-item" class="active-menu-item">Intro text</li>
               <li id="visibility-audit-item">Visibility preference</li>
@@ -155,7 +155,7 @@
           </div>
 
           <div id="report-settings">
-            <h3 class="h3-fix">Report text</h3>
+            <h3 class="h3-fix">Report Settings</h3>
             <ul>
               <li id="intro-report-item" class="active-menu-item">Intro text</li>
               <li id="conclusion-report-item">Conclusion text</li>
@@ -209,7 +209,7 @@
           </div>
 
           <div id="mail-settings">
-            <h3 class="h3-fix">Mail config</h3>
+            <h3 class="h3-fix">Mail configuration</h3>
             <ul>
               <li id="when-mail-item" class="active-menu-item">When</li>
               <li id="what-mail-item">What</li>
