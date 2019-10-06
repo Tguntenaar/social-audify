@@ -87,7 +87,7 @@
     </div>
   </div>
 
-  
+
   <!-- Global popup modals -->
   <div id="errorModal" class="modal"></div>
 
@@ -99,6 +99,11 @@
     <a href="../dashboard/">
       <i class="fas fa-th-large"></i> &nbsp; Dashboard
     </a>
+
+    <a href="../feedback/"  style="float:right;margin-right:50px;">
+     <i style="margin-right: 5px;" class="far fa-comment"></i> Feedback
+    </a>
+
     <a href="../search-page/" class="search-icon">
       <i class="fas fa-search"></i>
     </a>
@@ -141,7 +146,7 @@
         <ul>
           <a href="../dashboard/" class="responsive-item" ><li>Dashboard</li></a>
           <a href="../audit-dashboard/"><li><i class="fas fa-file-alt"></i></i>Audits</li></a>
-          <a href="../report-dashboard/"><li><i class="fas fa-chart-line"></i>Reports</li></a>
+          <a href="../report-dashboard/"><li><i class="fas fa-chart-line"></i>Reports<span class="beta">Beta</span></li></a>
           <a href="../client-dashboard/"><li><i class="far fa-building"></i>Contacts</li></a>
           <a href="../profile-page/"><li><i class="fas fa-cog"></i>Config</i></li></a>
           <a href="../search-page/" class="responsive-item search-icon" ><li>Search page</li></a>
