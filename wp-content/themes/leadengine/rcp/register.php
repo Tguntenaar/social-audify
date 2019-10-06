@@ -215,3 +215,16 @@ rcp_show_error_messages( 'register' ); ?>
 		<input type="submit" style="width: 170px;" name="rcp_submit_registration" id="rcp_submit" class="rcp-button" value="<?php esc_attr_e( apply_filters ( 'rcp_registration_register_button', __( 'Register', 'rcp' ) ) ); ?>"/>
 	</p>
 </form>
+
+<!-- Check if VAT number is filled in. -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+$('#rcp_subscription_level_1').click(function() {
+
+	if($("#rcp_btw_number").val() == "") {
+		alert("Please fill in a valid VAT number to get the discount.");
+		$("#rcp_subscription_level_2").click();
+	}
+
+});
+</script>
