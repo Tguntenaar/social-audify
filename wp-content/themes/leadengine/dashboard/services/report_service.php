@@ -92,7 +92,7 @@ class report_service extends connection {
 
   public function insert_visibility($report_id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "INSERT INTO `Report_stat_visibility` (report_id, $this->visibility_fields)
+      "INSERT INTO `Report_stat_visibility` (report_id, $this->user_visibility_fields)
        SELECT %d, $this->user_visibility_fields
        FROM `User_report_visibility` WHERE user_id = %d", $report_id, get_current_user_id()));
   }
