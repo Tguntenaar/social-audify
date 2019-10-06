@@ -29,6 +29,9 @@
   // Import block titles
   include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
 
+  // Cache busting
+  include(dirname(__FILE__)."/../../assets/php/cache_version.php");
+
   $connection = new connection;
   $user_control   = new user_controller($connection);
   $report_control = new report_controller($connection);
@@ -136,10 +139,13 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/dashboard.css" type="text/css">
-  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/utils.js"></script>
-  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js"></script>
-  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js" charset="utf-8" defer></script>
+
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/utils.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>

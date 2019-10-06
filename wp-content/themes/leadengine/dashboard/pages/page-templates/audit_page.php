@@ -29,6 +29,9 @@
   // Import block titles
   include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
 
+   // Cache busting
+   include(dirname(__FILE__)."/../../assets/php/cache_version.php");
+
   $connection = new connection;
   $user_control   = new user_controller($connection);
   $audit_control  = new audit_controller($connection);
@@ -145,16 +148,19 @@
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
+
 ?>
 <head>
   <title>Audit</title>
   <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-  <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/dashboard.css" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js"></script>
-  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js"></script>
+
+  <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/dashboard.css<?php echo $cache_version; ?>" type="text/css">
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>"></script>
+
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
