@@ -3,10 +3,6 @@
 class client_controller {
 
   public function __construct($connection) {
-    // Error messages
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-
     include(dirname(__FILE__)."/../services/client_service.php");
     $this->service = new client_service($connection);
   }

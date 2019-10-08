@@ -234,7 +234,7 @@ function getAdAccounts(ad_id) {
 
         Instance.adAccounts = response.data;
       } else if (response.data.length == 0) {
-          $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
+        $('#ad-account-list').html('<option class="row-ad-accounts">No ad accounts found.</option>');
       } else {
         logResponse(response);
       }
@@ -280,4 +280,18 @@ function getSelectedAdAccount(optionList) {
 
 function logResponse(response) {
   console.log({response});
+}
+
+function logError(message, file = '', func = '') {
+  $.ajax({
+    type: "POST",
+    url: ajaxurl,
+    data: {
+      'action': 'log_error',
+      'message': message,
+      'stacktrace': (func == '') ? file : `${file} in ${func}()`
+    },
+    success: logResponse,
+    error: logResponse,
+  });
 }

@@ -2,9 +2,6 @@
 class user_controller {
 
   public function __construct($connection = NULL) {
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-
     include(dirname(__FILE__)."/../services/user_service.php");
     $this->service = new user_service($connection);
   }

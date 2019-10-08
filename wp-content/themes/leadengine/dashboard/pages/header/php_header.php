@@ -1,12 +1,6 @@
 <?php
 session_start();
 
-// Error messages
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-
 // new includes
 include(dirname(__FILE__)."/../../controllers/audit_controller.php");
 include(dirname(__FILE__)."/../../controllers/report_controller.php");
