@@ -500,7 +500,7 @@
     }
   </script>
 </body>
-<script> 
+<script>
     function connect() {
         if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
 
@@ -523,6 +523,7 @@
 
           // Connect the account
           connectAccount(selectedOption.val(), clientId);
+          $('#adAccountModal').css({'display': 'none'});
         }
     }
 </script>
