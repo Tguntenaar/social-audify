@@ -120,7 +120,7 @@
                <?php
                   wp_nav_menu( array( 'theme_location' => 'header-menu', 'depth' => 3, 'container' => false, 'menu_class' => 'nav navbar-nav', 'fallback_cb' => 'wp_bootstrap_navwalker::fallback', 'walker' => new wp_bootstrap_navwalker()) );
                ?>
-               <?php if (isset($redux_ThemeTek['tek-header-button'])){
+               <?php if (isset($redux_ThemeTek['tek-header-button']) && !is_user_logged_in()){
                    get_template_part( 'core/templates/header/content', 'header-button' );
                } ?>
             </div>

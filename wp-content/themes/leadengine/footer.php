@@ -26,6 +26,18 @@
          <i class="fa fa-angle-up"></i>
       </div>
 <?php endif; ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script>
+    $('#rcp_subscription_level_1').click(function() {
+
+      if($("#rcp_btw_number").val() == "") {
+          alert("Please fill in a valid VAT number to get the discount.");
+          $("#rcp_subscription_level_2").click();
+      }
+
+    });
+
+</script>
 <?php wp_footer(); ?>
 </body>
 </html>

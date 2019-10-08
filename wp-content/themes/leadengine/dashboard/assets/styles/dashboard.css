@@ -1029,6 +1029,8 @@ nav ul a li {
 	margin-top: -56px;
 	margin-left: -60px;
 	background: #c0392b !important;
+	color: #fff;
+	cursor: pointer;
 	/* background: #6e9d9c !important; */
 }
 

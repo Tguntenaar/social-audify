@@ -208,13 +208,7 @@
       });
 
       $('#adAccountConfirm').click(function() {
-
-        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
-          // Change the button
-          $('#connect-ad-account').text('Change');
-          $('#ad_id').val(selectedOption.val());
-          connectAccount(selectedOption.val(), $("#client_id").val());
-        }
+          connect();
       });
 
       // Create for every client an on click event listener
@@ -249,4 +243,15 @@
     });
 	</script>
 </body>
+<script>
+    function connect() {
+        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
+          // Change the button
+          $('#connect-ad-account').text('Change');
+          $('#ad_id').val(selectedOption.val());
+          connectAccount(selectedOption.val(), $("#client_id").val());
+          $('#adAccountModal').css({'display': 'none'});
+        }
+    }
+</script>
 </html>

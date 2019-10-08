@@ -431,28 +431,7 @@
 
       // 3. Update Ad id
       $('#adAccountConfirm').click(function() {
-        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
-
-          var clientId = $('#client_id').val();
-          var adId = selectedOption.val();
-          var clickedClient = $(`.campaign-${clientId}`);
-
-          // Change the data-client attribute
-          var clientDataAttribute = clickedClient.data('client');
-
-          clientDataAttribute.ad_id = adId;
-          clickedClient.data("client", clientDataAttribute);
-
-          // Change the class of the overlay
-          var overlay = clickedClient.find('div');
-          overlay.addClass('change-ad-account').removeClass('connect-ad-account');
-          // Change the link
-          var link = overlay.find('p');
-          link.text('Change ad account');
-
-          // Connect the account
-          connectAccount(selectedOption.val(), clientId);
-        }
+        connect();
       });
 
       // Searchable lists
@@ -521,4 +500,30 @@
     }
   </script>
 </body>
+<script> 
+    function connect() {
+        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
+
+          var clientId = $('#client_id').val();
+          var adId = selectedOption.val();
+          var clickedClient = $(`.campaign-${clientId}`);
+
+          // Change the data-client attribute
+          var clientDataAttribute = clickedClient.data('client');
+
+          clientDataAttribute.ad_id = adId;
+          clickedClient.data("client", clientDataAttribute);
+
+          // Change the class of the overlay
+          var overlay = clickedClient.find('div');
+          overlay.addClass('change-ad-account').removeClass('connect-ad-account');
+          // Change the link
+          var link = overlay.find('p');
+          link.text('Change ad account');
+
+          // Connect the account
+          connectAccount(selectedOption.val(), clientId);
+        }
+    }
+</script>
 </html>

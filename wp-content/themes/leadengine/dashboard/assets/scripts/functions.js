@@ -34,7 +34,7 @@ function toggleUpdate(show) {
   if (show) {
     $("#universal-update").show(600);
     window.onbeforeunload = () => true;
-  } else { 
+  } else {
     $("#universal-update").hide(300);
     window.onbeforeunload = undefined;
   }
@@ -227,7 +227,7 @@ function getAdAccounts(ad_id) {
           const {name, id} = ad_account;
 
           var selected = (ad_id == id) ? 'selected' : '';
-          var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
+          var str = `<option onclick="connect()" class="row-ad-accounts click-option" value="${id}" ${selected}>${name} ${id}</option>`;
 
           $('#ad-account-list').append(str);
         });
@@ -244,7 +244,7 @@ function getAdAccounts(ad_id) {
     Instance.adAccounts.forEach(function(account) {
       const {name, id} = account;
       var selected = (ad_id == id) ? 'selected' : '';
-      var str = `<option class="row-ad-accounts" value="${id}" ${selected}>${name} ${id}</option>`;
+      var str = `<option class="row-ad-accounts" onclick="connect()" value="${id}" ${selected}>${name} ${id}</option>`;
       $('#ad-account-list').append(str);
     });
   }
