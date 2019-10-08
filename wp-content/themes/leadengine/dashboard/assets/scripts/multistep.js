@@ -218,7 +218,7 @@ function validateName() {
   });
 
   Instance.options = options;
-  Instance.page.name = nameInput.val().trim().replace(/\s+/g, '-');
+  Instance.page.name = nameInput.val().trim();
 
   return true;
 }
