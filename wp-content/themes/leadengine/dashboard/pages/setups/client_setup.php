@@ -54,15 +54,15 @@
 
           Facebook Page:<br>
           <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" required>
-          <button type="button" class="toggleClient" id="toggle_facebook" onclick="toggle_client_options('facebook')"><i class="fas fa-minus-circle"></i></button>
+          <div class="toggleClient" id="toggle_facebook" onclick="toggle_client_options('facebook')"><i class="fas fa-minus-circle"></i></div>
 
           Instagram:<br>
           <input type="text" id="instagram_url" name="instagram_url" placeholder="Instagram username or url"  maxlength="50" required>
-          <button type="button" class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></button>
+          <div class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></div>
 
           Website:<br>
           <input type="text" id="website_url" name="website_url" placeholder="http://www.example.com" pattern="<?php echo $website_regex;?>" required>
-          <button type="button" class="toggleClient" id="toggle_website" onclick="toggle_client_options('website')"><i class="fas fa-minus-circle"></i></button>
+          <div class="toggleClient" id="toggle_website" onclick="toggle_client_options('website')"><i class="fas fa-minus-circle"></i></div>
 
           E-mail:<br>
           <input type="email" id="client_mail" name="client_mail" title="" placeholder="mail@example.com" required>

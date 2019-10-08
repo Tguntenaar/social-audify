@@ -372,11 +372,10 @@
                 <canvas id="<?php echo "canvas$counter"; ?>" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
             </div>
-            </div></div><?php
+            </div><?php
           $counter++;
         }
-      }
-      }?>
+       } ?>
       <div class="col-lg-6 float outer-chart" style="padding-left: 15px; margin-top: 38px;">
         <div class="col-lg-12 inner-chart" style="height: 499px;">
           <span class="title-report-box">Campaign Notes</span><?php
@@ -390,6 +389,7 @@
         </div>
       </div>
     </div>
+    <?php } ?>
   </section>
   <section class="audit-conclusion audit-conclusion-variant col-lg-12">
     <div class="left-conlusion col-lg-7">

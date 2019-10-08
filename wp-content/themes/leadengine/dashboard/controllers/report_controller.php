@@ -19,7 +19,7 @@ class report_controller {
     // new instance
     $instance = new report($this->service, (object) array(
       'client_id'     => $client_id,
-      'name'          => $name,
+      'name'          => urldecode($name),
       'create_date'   => date('Y-m-d H:i:s'),
       'post_id'       => 0,
       'facebook_bit'  => $options['facebook_checkbox'],

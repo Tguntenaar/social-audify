@@ -2037,7 +2037,7 @@ margin: 0 30px;
 }
 
 /* #rcp_registration_form #single-page p {margin-bottom: 20px; height: 50px !important;}  */
-#rcp_registration_form .rcp_user_fieldset p {height: 55px;}
+#rcp_registration_form .rcp_user_fieldset p {height: auto; margin-bottom: 10px;}
 #rcp_registration_form .rcp_login_link p {margin-bottom: 20px}
 #single-page .wpcf7 p {margin-bottom: 0;}
 #single-page .wpcf7 .label {margin-bottom: 10px;}

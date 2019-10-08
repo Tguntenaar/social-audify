@@ -15,7 +15,7 @@ class audit_controller {
 
     $instance = new audit($this->service, (object) array(
       'client_id'       => $client['id'],
-      'name'            => $page['name'],
+      'name'            => urldecode($page['name']),
       'create_date'     => date('Y-m-d H:i:s'),
       'post_id'         => 0,
       'facebook_bit'    => $options['facebook_checkbox'],
