@@ -74,6 +74,7 @@ class audit {
       $ch = curl_init("https://crawl.localhost/api/$this->id/$competitor/$post_url/$key/$user_id");
     }
 
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_POST, 0);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 0);
     curl_setopt($ch, CURLOPT_TIMEOUT, 1);

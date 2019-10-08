@@ -66,6 +66,9 @@ License URI: license.txt
   height: 20px !important;
 } */
 
+.kd-rwc-5d99eb63b2df8 .page img, .single-post img {
+    margin-top: 53px !important;
+}
 .rcp_form label {
     position: relative;
     z-index: 55555555;
@@ -112,7 +115,7 @@ License URI: license.txt
 .rcp_login_data label {
     display: inline-block;
     float: left;
-    margin-top: -20px; 
+    margin-top: -20px;
 }
 
 #rcp_user_remember + label {

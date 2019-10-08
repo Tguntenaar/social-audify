@@ -349,7 +349,7 @@
   }
 
 
-  add_action( 'wp_ajax_delete_page', 'delete_page_');
+  add_action( 'wp_ajax_delete_page', 'delete_page');
   add_action( 'wp_ajax_nopriv_delete_page', 'not_logged_in');
 
   function delete_page() {
