@@ -71,7 +71,7 @@
         <form id='regForm' style="margin-bottom: 20px;">
 
           <!-- Facebook login tab -->
-          <div class="tab">
+          <div class="tab tab-setup">
             <span class="login-title">Login to retrieve the data of Facebook that is needed to create a Report.</span>
             <div class="fb-login-button login-center"
                 data-scope="manage_pages,instagram_basic,instagram_manage_insights,ads_read"
@@ -88,7 +88,7 @@
           </div>
 
           <!-- Choose a client -->
-          <div class="tab">
+          <div class="tab tab-setup">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Contact</div>
             </div>
@@ -112,7 +112,7 @@
           </div>
 
           <!-- Compare report tab -->
-          <div class="tab">
+          <div class="tab tab-setup">
             <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
                 <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
             </div>
@@ -133,7 +133,7 @@
           </div>
 
           <!-- Report name and options -->
-          <div class="tab">
+          <div class="tab tab-setup">
             <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
                 <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
             </div>
@@ -159,7 +159,7 @@
           </div>
 
           <!-- Choose campaign/ad level tab -->
-          <div class="tab custom-radio">
+          <div class="tab tab-setup custom-radio">
             <div style="overflow-y:scroll;">
               <span class="name-label">On which level do you want a report?</span>
               <input type="radio" name="level" value="ads" data-response="" checked/>Ads<br />
@@ -169,7 +169,7 @@
           </div>
 
           <!-- Select campaign tab -->
-          <div class="tab">
+          <div class="tab tab-setup">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style name-label" style="margin-left: -27px;">Select Ads or Campaigns</div>
             </div>
