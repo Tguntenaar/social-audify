@@ -1,12 +1,7 @@
 var currentTab = 0; // Current tab is set to be the first tab (0)
+var type = window.location.pathname.includes('audit-setup') ? 'an audit' : 'a report';
+
 showTab(currentTab);
-
-if ($('#nextBtn').length) {
-  $('#nextBtn').on('click', function() {
-    firstLogin();
-  });
-}
-
 
 function showIntro(display) {
   types = display ? ['block', 'none'] : ['none', 'block'];
@@ -15,33 +10,28 @@ function showIntro(display) {
   $('.overview-audit-report .left').css({'display': types[1]});
 }
 
-function firstLogin() {
-  showModal(initiateModal('errorModal', 'error', {
-    'text': "You are not logged in",
-    'subtext': "In order to create an audit you have to log in to facebook."
-  }));
-}
-
 /**
  *  Getloginstatus maakt gebruik van de cache de tweede parameter true forceert
  *  een roundtrip naar de facebook servers.
  *  Gets called when the user is finished with the facebook login button.
  * */
 function checkLoginState() {
+  if (typeof FB == 'undefined') 
+    return false;
+
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
-      nextPrev(1);
-      $('#nextBtn').off('click');
-      $('#nextBtn').on('click', function() {
-        nextPrev(1);
-      });
+      $('.step').eq(currentTab).addClass('finish');
+      nextPrev(1, false);
     } else {
-      $('#nextBtn').off('click');
-      $('#nextBtn').on('click', function() {
-        firstLogin();
-      });
+      showModal(initiateModal('errorModal', 'error', {
+        'text': "You are not logged in",
+        'subtext': `In order to create ${type} you have to log in to facebook.`
+      }));
     }
   }, true);
+
+  return false;
 }
 
 
@@ -72,7 +62,7 @@ function showTab(index) {
     if ($('#nextBtn').html() !== 'Next') {
       $('#nextBtn').html('Next');
       $('#nextBtn').off('click');
-      $('#nextBtn').on('click', function() {nextPrev(1)});
+      $('#nextBtn').on('click', function() { nextPrev(1) });
     }
   }
 
@@ -81,13 +71,13 @@ function showTab(index) {
   steps.eq(index).addClass('active');
 }
 
-function nextPrev(n) {
+function nextPrev(n, validate = true) {
   // This function will figure out which tab to display
   var tab = $('.tab');
 
   // validate this step
-  if (n == 1 && !validateStep())
-    return false;
+  if (validate && n == 1 && !validateStep())
+    return;
 
   // request campaigns or ads from facebook servers.
   if (Instance.page.type == 'report' && n === 1 && currentTab === 4) showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
@@ -106,7 +96,7 @@ function nextPrev(n) {
 function validateStep() {
   switch (currentTab) {
     case 0:
-      return validateFacebookLogin();
+      return checkLoginState();
     case 1:
       return validateClient();
     case 2:
@@ -123,17 +113,6 @@ function validateStep() {
 // TODO:
 function validateSelectedAds() {
   return true
-}
-
-// TODO:
-function validateFacebookLogin() {
-  valid = true;
-
-  if (valid) {
-    $('.step').eq(currentTab).addClass('finish');
-  }
-
-  return valid;
 }
 
 function validateClient() {

@@ -10,6 +10,7 @@
 
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
@@ -27,37 +28,20 @@
 
       // TODO: voor facebook analytics zorgt voor ad content blockers (kijk maar in de console)
       FB.AppEvents.logPageView();
+      // checkLoginState();
 
       var path = window.location.pathname;
 
-      if (path.includes('audit-setup') || path.includes('report-setup') || path.includes('client-dashboard')) {
+      if (path.includes('setup')) {
+        checkLoginState();
+      }
+      else if (path.includes('client-dashboard')) {
         FB.getLoginStatus(function(response) {
-          console.log('statusChangeCallback');
-
           if (response.status === 'connected') {
-            $('.submitBttn').css('display', 'block');
-            if (path.includes('client-dashboard')) {
-              showConnectAdAccount()
-            } else {
-              if ($('#nextBtn').length) {
-                $('#nextBtn').off('click');
-                $('#nextBtn').on('click', function() {
-                  nextPrev(1);
-                });
-              }
-              // skip facebook step if already logged in
-              nextPrev(1);
-              // try to skip client step
-              if (path.includes('audit-setup')) {
-                nextPrev(1);
-              }
-            }
-          } else {
-            $('.submitBttn').css('display', 'none');
+            showConnectAdAccount();
           }
         });
       }
-
     };
 
     (function(d, s, id) {
@@ -66,9 +50,9 @@
       js = d.createElement(s); js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
+    }(document, 'script', 'facebook-jssdk')
+    );
   </script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
     $(document).ready(function() {
       $('#nav-icon1').click(function() {
