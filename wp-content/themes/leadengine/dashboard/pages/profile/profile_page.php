@@ -77,11 +77,11 @@
             <h3 class="h3-fix">Audit Settings</h3>
             <ul>
               <li id="intro-audit-item" class="active-menu-item">Intro text</li>
-              <li id="visibility-audit-item">Visibility preference</li>
               <li id="conclusion-audit-item">Conclusion text</li>
               <li id="fb-audit-item">Facebook text</li>
               <li id="ig-audit-item">Instagram text</li>
               <li id="wb-audit-item">Website text</li>
+              <li id="visibility-audit-item">Visibility preference</li>
               <li id="color-audit-item">Audit Colors</li>
             </ul>
             <form action="/ppc?settings=audit" id="audit-form" method="post" enctype="multipart/form-data">
@@ -212,7 +212,7 @@
             <h3 class="h3-fix">Mail configuration</h3>
             <ul>
               <li id="when-mail-item" class="active-menu-item">When</li>
-              <li id="what-mail-item">What</li>
+              <li id="what-mail-item">Content</li>
             </ul>
             <div class="error-display-mail"></div>
             <form action="/ppc?settings=mail" id="mail_config" method="post" enctype="multipart/form-data">
@@ -311,9 +311,18 @@
       this.submit();
     });
 
+    /**
+    * FORM   
+    */
     $("#mail_config").submit(function(e) {
       e.preventDefault();
       $('.error-display-mail').empty();
+
+      // ['day_1', 'day_2', 'day_3'].forEach(function(day) {
+      //   if (!$.isNumeric($(`#${day}`).val())) {
+        // TODO:
+      //   }
+      // });
 
       if (!$.isNumeric($("#day_1").val()) || !$.isNumeric($("#day_2").val()) || !$.isNumeric($("#day_3").val())) {
         $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
@@ -330,7 +339,6 @@
 
     $("#intro-audit-item").click(function() { togglePreferenceUI('intro', 'audit') });
     $("#conclusion-audit-item").click(function() { togglePreferenceUI('conclusion', 'audit') });
-    // old
     $("#visibility-audit-item").click(function() { togglePreferenceUI('visibility', 'audit') });
 
     $("#fb-audit-item").click(function() { togglePreferenceUI('fb', 'audit') });
@@ -340,7 +348,6 @@
 
     $("#conclusion-report-item").click(function() { togglePreferenceUI('conclusion', 'report') });
     $("#intro-report-item").click(function() { togglePreferenceUI('intro', 'report') });
-    // new
     $("#visibility-report-item").click(function() { togglePreferenceUI('visibility', 'report') });
     $('#color-report-item').click(function() { togglePreferenceUI('color', 'report')});
 
@@ -355,10 +362,9 @@
     $("#fb-audit-visibility-item").click(function() { togglePreferenceUI('fb', 'audit-visibility'); });
     $("#ig-audit-visibility-item").click(function() { togglePreferenceUI('ig', 'audit-visibility'); });
     $("#wb-audit-visibility-item").click(function() { togglePreferenceUI('wb', 'audit-visibility'); });
-    // new
+
     $("#social-report-visibility-item").click(function() { togglePreferenceUI('social', 'report-visibility'); });
     $("#campaign-report-visibility-item").click(function() { togglePreferenceUI('campaign', 'report-visibility'); });
-
 
     /**
      * it = item zit in de lijst waarop je klikt
@@ -368,6 +374,7 @@
      */
     function togglePreferenceUI(show, type) {
       var blocks, it, bl;
+
       if (type == 'report') {
         blocks = ["intro", "conclusion", "visibility", "color"];
       } else if (type == 'audit') {
