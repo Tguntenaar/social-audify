@@ -86,64 +86,65 @@
             </ul>
             <form action="/ppc?settings=audit" id="audit-form" method="post" enctype="multipart/form-data">
               <!-- intro -->
-              <div class="intro-audit-block">
+              <div class="intro-audit-block tab">
                 <h4>Introduction Audit</h4>
                 <textarea maxlength="999" input="text"  name="introduction-audit" id="introduction-audit"><?php
                   echo trim($user->intro_audit);
                 ?></textarea>
               </div>
+              <!-- conclusion -->
+              <div class="conclusion-audit-block tab">
+                <h4>Conclusion Audit</h4>
+                <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
+                  echo trim($user->conclusion_audit);
+                  ?></textarea>
+              </div>
+              <?php
+              // facebook instagram website blocks
+              foreach ($ranges as $range) {
+                $item = (object) $range; ?>
+                <div class="<?php echo $item->code; ?>-audit-block tab">
+                    <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
+                  for ($i = 1; $i <= 3; $i++) {
+                    if ($i < 3) { ?>
+                      <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                      <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i";?>" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                      value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
+                    } else { ?>
+                      <h6>The last range is less than or equal to 100 percent</h6><?php
+                    } ?>
+                    <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
+                      echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
+                    } ?>
+                </div><?php
+              } ?>
               <!-- visibility block -->
-              <div class="visibility-audit-block" style="display:none">
+              <div class="visibility-audit-block tab" style="display:none">
                 <h4>Audit visibility</h4>
                 <ul>
                   <li id="fb-audit-visibility-item" class="active-menu-item">Facebook</li>
                   <li id="ig-audit-visibility-item">Instagram</li>
                   <li id="wb-audit-visibility-item">Website</li>
                 </ul>
-                <div class="fb-audit-visibility-block"><?php
+                <div class="fb-audit-visibility-block tab"><?php
                   print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
                 </div>
-                <div class="ig-audit-visibility-block" style='display:none'><?php
+                <div class="ig-audit-visibility-block tab" style='display:none'><?php
                   print_list_checkboxes(array_merge($instagram_blocks, $instagram_graph_blocks), 'instagram', $audit_visibility); ?>
                 </div>
-                <div class="wb-audit-visibility-block" style='display:none'><?php
+                <div class="wb-audit-visibility-block tab" style='display:none'><?php
                   print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
                 </div>
               </div>
-              <!-- audit colors -->
-              <div class="color-audit-block" style="display:none;">
+              <!-- audit colors block -->
+              <div class="color-audit-block tab" style="display:none;">
                 <h4>Audit Colors</h4>
                 <div>
                     <input type="color" name="audit-color" value="<?php echo $user->color_audit?>">
                     <i class="fas fa-undo" onclick="$('input[name=audit-color]').val(`#6e9d9c`)" ></i>
                 </div>
               </div>
-              <!-- conclusion -->
-              <div class="conclusion-audit-block">
-                <h4>Conclusion Audit</h4>
-                <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
-                  echo trim($user->conclusion_audit);
-                ?></textarea>
-              </div><?php
 
-              // ranges
-              foreach ($ranges as $range) {
-                $item = (object) $range; ?>
-                <div class="<?php echo $item->code; ?>-audit-block">
-                  <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
-                  for ($i = 1; $i <= 3; $i++) {
-                    if ($i < 3) { ?>
-                      <h6>Show this text up to the selected range, making it faster to create an audit</h6>
-                      <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i";?>" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
-                          value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
-                    } else { ?>
-                      <h6>The last range is less than or equal to 100 percent</h6><?php
-                    } ?>
-                    <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
-                      echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
-                  } ?>
-                </div><?php
-              } ?>
               <!-- error notify -->
               <div class="error-display-audit"></div>
               <input type="submit" value="Update" class="update-button" >
@@ -161,39 +162,38 @@
               <li id="conclusion-report-item">Conclusion text</li>
               <li id="visibility-report-item">Visibility report</li>
               <li id="color-report-item">Report colors</li>
-
             </ul>
             <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
               <!-- intro report -->
-              <div class="intro-report-block">
+              <div class="intro-report-block tab">
                 <h4>Introduction Report</h4>
                 <textarea maxlength="999" input="text"  name="introduction-report"><?php
                   echo trim($user->intro_report);
                 ?></textarea>
               </div>
               <!-- conclusion report -->
-              <div class="conclusion-report-block">
+              <div class="conclusion-report-block tab">
                 <h4>Conclusion Report</h4>
                 <textarea maxlength="999" input="text"  name="conclusion-report"><?php
                   echo trim($user->conclusion_report);
                 ?></textarea>
               </div>
               <!-- Visibility Report -->
-              <div class="visibility-report-block" style="display:none">
+              <div class="visibility-report-block tab" style="display:none">
                 <h4>Report visibility</h4>
                 <ul>
                   <li id="social-report-visibility-item" class="active-menu-item">Social</li>
                   <li id="campaign-report-visibility-item">Campaign</li>
                 </ul>
-                <div class="social-report-visibility-block">
+                <div class="social-report-visibility-block tab">
                   <?php print_list_checkboxes($social_blocks, 'social', $report_visibility); ?>
                 </div>
-                <div class="campaign-report-visibility-block" style='display:none'>
+                <div class="campaign-report-visibility-block tab" style='display:none'>
                   <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
                 </div>
               </div>
               <!-- Report colors -->
-              <div class="color-report-block" style="display:none;">
+              <div class="color-report-block tab" style="display:none;">
                 <h4>Report Colors</h4>
                 <div>
                     <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">
@@ -212,12 +212,12 @@
             <h3 class="h3-fix">Mail configuration</h3>
             <ul>
               <li id="when-mail-item" class="active-menu-item">When</li>
-              <li id="what-mail-item">Content</li>
+              <li id="content-mail-item">Content</li>
             </ul>
             <div class="error-display-mail"></div>
             <form action="/ppc?settings=mail" id="mail_config" method="post" enctype="multipart/form-data">
               <!-- mail when -->
-              <div class="when-mail-block">
+              <div class="when-mail-block tab">
                 <h6>Send first reply after <span id="first-day-value"><?php echo $user->day_1; ?></span> days:</h6>
                 <input type="text" id="day_1" name="day_1" placeholder="x" value="<?php echo $user->day_1; ?>" />
 
@@ -227,29 +227,29 @@
                 <h6>Send third reply after <span id="third-day-value"><?php echo $user->day_3; ?></span> days:</h6>
                 <input type="text" id="day_3" name="day_3" placeholder="x" value="<?php echo $user->day_3; ?>" />
               </div>
-              <!-- mail what -->
-              <div class="what-mail-block" style="display:none">
+              <!-- mail content -->
+              <div class="content-mail-block tab" style="display:none">
                 <ul>
-                  <li id="first-what-mail-item" class="active-menu-item">Mail 1</li>
-                  <li id="second-what-mail-item">Mail 2</li>
-                  <li id="third-what-mail-item">Mail 3</li>
+                  <li id="first-content-mail-item" class="active-menu-item">Mail 1</li>
+                  <li id="second-content-mail-item">Mail 2</li>
+                  <li id="third-content-mail-item">Mail 3</li>
                 </ul>
                 <!-- mail 1 block -->
                 <p>Use #{name} to type the name of receiver in the mail.</p>
-                <div class="first-what-mail-block">
+                <div class="first-content-mail-block tab">
                   <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
                     echo trim($user->mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
-                <div maxlength="1999" class="second-what-mail-block" style="display:none">
-                  <textarea  input="text" name="second_mail_text" id="mail_text2"><?php
+                <div class="second-content-mail-block tab" style="display:none">
+                  <textarea maxlength="1999" input="text" name="second_mail_text" id="mail_text2"><?php
                     echo trim($user->second_mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
-                <div maxlength="1999" class="third-what-mail-block" style="display:none">
-                  <textarea  input="text" name="third_mail_text" id="mail_text3"><?php
+                <div class="third-content-mail-block tab" style="display:none">
+                  <textarea maxlength="1999" input="text" name="third_mail_text" id="mail_text3"><?php
                     echo trim($user->third_mail_text);
                   ?></textarea>
                 </div>
@@ -284,19 +284,19 @@
 
       var location = $('#audit-form');
 
-      if(location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val()) {
+      if (location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val()) {
           $("#fb-audit-item").click();
           $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
           return;
       }
 
-      if(location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val()) {
+      if (location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val()) {
           $("#fb-audit-item").click();
           $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
           return;
       }
 
-      if(location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
+      if (location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
           $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.");
           return;
       }
@@ -337,6 +337,7 @@
       this.submit();
     });
 
+
     $("#intro-audit-item").click(function() { togglePreferenceUI('intro', 'audit') });
     $("#conclusion-audit-item").click(function() { togglePreferenceUI('conclusion', 'audit') });
     $("#visibility-audit-item").click(function() { togglePreferenceUI('visibility', 'audit') });
@@ -353,11 +354,11 @@
 
 
     $("#when-mail-item").click(function() { togglePreferenceUI('when', 'mail') });
-    $("#what-mail-item").click(function() { togglePreferenceUI('what', 'mail') });
+    $("#content-mail-item").click(function() { togglePreferenceUI('content', 'mail') });
 
-    $("#first-what-mail-item").click(function() { togglePreferenceUI('first', 'what-mail')});
-    $("#second-what-mail-item").click(function() { togglePreferenceUI('second', 'what-mail')});
-    $("#third-what-mail-item").click(function() { togglePreferenceUI('third', 'what-mail')});
+    $("#first-content-mail-item").click(function() { togglePreferenceUI('first', 'content-mail')});
+    $("#second-content-mail-item").click(function() { togglePreferenceUI('second', 'content-mail')});
+    $("#third-content-mail-item").click(function() { togglePreferenceUI('third', 'content-mail')});
 
     $("#fb-audit-visibility-item").click(function() { togglePreferenceUI('fb', 'audit-visibility'); });
     $("#ig-audit-visibility-item").click(function() { togglePreferenceUI('ig', 'audit-visibility'); });
@@ -380,30 +381,28 @@
       } else if (type == 'audit') {
         blocks = ["wb", "fb", "ig", "intro", "conclusion", "visibility", "color"];
       } else if (type == 'mail') {
-        blocks = ['when', 'what'];
+        blocks = ['when', 'content'];
       } else if (type == 'audit-visibility') {
         blocks = ['fb', 'ig', 'wb'];
       } else if (type == 'report-visibility') {
         blocks = ['social', 'campaign'];
-      } else if (type == 'what-mail') {
+      } else if (type == 'content-mail') {
         blocks = ['first', 'second', 'third'];
       } else {
         console.log('menu type needs to be added');
         return;
       }
-      it = `-${type}-item`;
-      bl = `-${type}-block`;
-      toggle(blocks, it, bl, show);
+      toggle(blocks, type, show);
     }
 
-    function toggle(blocks, it, bl, show) {
+    function toggle(blocks, type, show) {
       blocks.forEach(function (el) {
         if (el == show) {
-          $("#" + el + it).addClass("active-menu-item");
-          $("." + el + bl).css("display", "block");
+          $(`#${el}-${type}-item`).addClass("active-menu-item");
+          $(`.${el}-${type}-block`).css("display", "block");
         } else {
-          $("#" + el + it).removeClass("active-menu-item");
-          $("." + el + bl).css("display", "none");
+          $(`#${el}-${type}-item`).removeClass("active-menu-item");
+          $(`.${el}-${type}-block`).css("display", "none");
         }
       });
     }

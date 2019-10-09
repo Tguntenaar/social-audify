@@ -1,7 +1,0 @@
-function displayTab() {
-
-}
-
-function hideTabs() {
-  
-}
