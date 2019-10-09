@@ -68,7 +68,7 @@
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
   </script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script>
     $(document).ready(function() {
       $('#nav-icon1').click(function() {
@@ -105,7 +105,7 @@
     </a>
 
     <a href="../search-page/" class="search-icon">
-      <i class="fas fa-search"></i>
+      <i class="fas fa-search"></i>Search
     </a>
   </div>
 
