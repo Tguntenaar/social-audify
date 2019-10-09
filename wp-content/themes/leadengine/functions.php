@@ -20,6 +20,22 @@
   }
 
 
+  add_action( 'wp_ajax_log_error', 'log_js_error');
+  add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
+
+  function log_js_error() {
+    require_once(dirname(__FILE__)."/dashboard/controllers/log_controller.php");
+    $errorLogger = new Logger;
+
+    $message = isset($_POST['message']) ? $_POST['message'] : "";
+    $stacktrace = isset($_POST['stacktrace']) ? $_POST['stacktrace'] : "";
+    $stacktrace .= isset($_POST['function']) ? "in {$_POST['function']}" : "";
+
+    $errorLogger->printJs(get_current_user_id(), $message, $stacktrace);
+    wp_die();
+  }
+
+
   add_action( 'wp_ajax_toggle_visibility', 'toggle_visibility');
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
 
@@ -36,7 +52,6 @@
       $audit_id = $_POST['audit'];
 
       $audit_service->toggle_config_visibility($audit_id, $field);
-      wp_send_json(array('success'=>'toggled'));
     }
     elseif ($type === 'report') {
       require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
@@ -44,35 +59,11 @@
       $report_id = $_POST['report'];
 
       $report_service->toggle_config_visibility($report_id, $field);
-      wp_send_json(array('success'=>'toggled'));
     }
+    wp_send_json(['success' => 'toggled']);
     wp_die();
   }
 
-  // add_action( 'wp_ajax_toggle_template_field', 'toggle_template_field');
-  // add_action( 'wp_ajax_nopriv_toggle_template_field', 'not_logged_in');
-  //
-  // function toggle_template_field() {
-  //   require_once(dirname(__FILE__)."/dashboard/services/connection.php");
-  //   require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
-  //
-  //   $connection = new connection;
-  //   $audit_service = new audit_service($connection);
-  //
-  //   $audit_id = $_POST['audit'];
-  //   $field = $_POST['field'];
-  //
-  //   $bit = $audit_service->get_field_template($audit_id, $field);
-  //
-  //   if($field == "facebook_vis_bit") {
-  //       $bit = ($bit == 1) ? 0 : 1;
-  //   }
-  //
-  //   $test = $audit_service->update($audit_id, 'Audit_template', $field, $bit, 0);
-  //
-  //   wp_send_json($test);
-  //   wp_die();
-  // }
 
   add_action( 'wp_ajax_update_ads_audit', 'edit_ads_audit');
   add_action( 'wp_ajax_nopriv_update_ads_audit', 'not_logged_in');
@@ -232,9 +223,7 @@
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
 
-    $iba_id = $_POST['iba_id'];
-
-    $value = $user->update('User', 'instagram_business_account_id', $iba_id);
+    $value = $user->update('User', 'instagram_business_account_id', $_POST['iba_id']);
 
     wp_send_json(array('instagram_business_account updated succes if 0'=>$value));
     wp_die();
@@ -628,6 +617,18 @@
     if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
       wp_redirect( $referrer . '?login=failed' );  // let's append some information (login=failed) to the URL for the theme to use
       exit;
+    }
+  }
+
+  function fb_filter_query( $query, $error = true ) {
+    if ( is_search() ) {
+      $query->is_search = false;
+      $query->query_vars[s] = false;
+      $query->query[s] = false;
+
+      // to error
+      if ( $error == true )
+        $query->is_404 = true;
     }
   }
 ?>

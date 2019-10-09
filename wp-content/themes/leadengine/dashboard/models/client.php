@@ -6,9 +6,6 @@ class client {
 
 
   public function __construct($service, $sql_client) {
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-
     $this->service = $service;
     $this->sql_data = $sql_client;
   }

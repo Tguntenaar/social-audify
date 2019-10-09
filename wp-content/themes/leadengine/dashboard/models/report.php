@@ -6,10 +6,6 @@ class report {
   public $has_comp;
 
   public function __construct($service, $sql_report) {
-    // Error messages
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-
     $this->service = $service;
     $this->sql_data = $sql_report;
 

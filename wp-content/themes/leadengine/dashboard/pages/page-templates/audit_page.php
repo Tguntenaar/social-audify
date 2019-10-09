@@ -29,8 +29,12 @@
   // Import block titles
   include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
 
-   // Cache busting
-   include(dirname(__FILE__)."/../../assets/php/cache_version.php");
+  // Cache busting
+  include(dirname(__FILE__)."/../../assets/php/cache_version.php");
+
+  // Error Logging
+  include(dirname(__FILE__)."/../../controllers/log_controller.php");
+  $ErrorLogger = new Logger;
 
   $connection = new connection;
   $user_control   = new user_controller($connection);
@@ -40,6 +44,7 @@
   $id = $audit_control->get_id($post_id);
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
+
 
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
@@ -165,39 +170,30 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-
-    var tempiee;
-
     function generatePDF() {
-        $(".load-screen").toggle();
+      $(".load-screen").toggle();
 
-        $.ajax({
-              method: 'GET',
-              url: '<?php echo $url; ?>',
-              crossDomain: true,
-              success: function(data){
-                  var temp = $.parseJSON(data);
-                  tempiee = temp;
-                  //window.open("data:application/pdf;base64," + temp);
-                  //process the JSON data etc
+      $.ajax({
+        method: 'GET',
+        url: '<?php echo $url; ?>',
+        crossDomain: true,
+        success: function(data) {
+          const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
+          const downloadLink = document.getElementById("testje");
+          const fileName = "<?php echo $audit->name; ?>";
 
-                const linkSource = `data:application/pdf;base64,${temp}`;
-                const downloadLink = document.getElementById("testje");
-                const fileName = "<?php echo $audit->name; ?>";
+          downloadLink.href = linkSource;
+          downloadLink.download = fileName;
+          downloadLink.click();
 
-                downloadLink.href = linkSource;
-                downloadLink.download = fileName;
-                downloadLink.click();
-
-                $(".load-screen").toggle();
-              },
-              error: function (xhr, textStatus, errorThrown) {
-                $(".load-screen").toggle();
-                alert("Error generating PDF.")
-                console.log(xhr);
-                console.log(textStatus);
-             }
-        });
+          $(".load-screen").toggle();
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          $(".load-screen").toggle();
+          alert("Error generating PDF.");
+          console.log(xhr);
+        }
+      });
     }
 
     $(document).ready(function() {
@@ -701,37 +697,6 @@
 </html>
 
 <script charset='utf-8'>
-    // function toggleSection(field) {
-    //   if(field == "facebook_vis_bit") {
-    //       $("#facebook_vis_icon").html("<div class='lds-dual-ring'></div>");
-    //   }
-    //
-    //   var data = {
-    //     action: 'toggle_template_field',
-    //     field: field,
-    //     audit: <?php echo $audit->id; ?>
-    //   };
-    //
-    //   $.ajax({
-    //     type: "POST",
-    //     url: ajaxurl,
-    //     data: data,
-    //     success: function(response) {
-    //         console.log(response);
-    //         if(field == "facebook_vis_bit") {
-    //             if(response == 0) {
-    //                 $("#facebook_vis_icon").html("<i class='far fa-eye-slash'></i>");
-    //             } else {
-    //                 $("#facebook_vis_icon").html("<i class='far fa-eye'></i>");
-    //             }
-    //         }
-    //     },
-    //     error: logResponse,
-    //   });
-    //
-    //
-    //
-    // }
   var commonPost = {
     'type': 'audit',
     'audit': '<?php echo $audit->id; ?>',
@@ -805,7 +770,8 @@
           url: ajaxurl,
           data: { action: 'toggle_visibility', field: field_name , ...commonPost },
           success: function () { field.html(icon) },
-          error: logResponse,
+          error: function (response) { 
+            logError(JSON.stringify(response), 'page-templates/audit_page.php', 'toggle_visibility') }
         });
       }
     };

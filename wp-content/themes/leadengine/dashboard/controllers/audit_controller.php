@@ -2,10 +2,6 @@
 class audit_controller {
 
   public function __construct($connection = NULL) {
-    // Error messages
-    error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-
     include(dirname(__FILE__)."/../services/audit_service.php");
     $this->service = new audit_service($connection);
   }
