@@ -45,7 +45,6 @@
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
   if ($audit->manual == 0) {
@@ -116,16 +115,16 @@
   function printValue($value, $is_icon = false, $requires_reload = false) {
     if ($is_icon) {
       return $value == 0 ?
-        '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>' :
-        '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
+      '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>' :
+      '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
     return $requires_reload ? '-' : $value;
   }
 
-  function visibility_short_code($edit_mode, $visible, $item_type) {
+  function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
     if ($edit_mode) {
       $slash = $visible == 1 ? '' : '-slash';?>
-      <div onclick="toggle_visibility('<?php echo $item_type; ?>')" id="<?php echo $item_type; ?>_icon" class="visibility">
+      <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
         <i class="far fa-eye<?php echo $slash; ?>"></i>
       </div><?php
     }
@@ -223,7 +222,7 @@
   </style>
 </head>
 <body class="custom-body">
-    <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
+  <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
     <div id="nav-icon2">
@@ -238,25 +237,25 @@
     } ?>
 
     <div class="mobile-hide"><?php
-        if ($edit_mode) { ?>
-          <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
-        } ?>
+      if ($edit_mode) { ?>
+        <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
+      } ?>
 
-        Audit: <?php echo $audit->name;
+      Audit: <?php echo $audit->name;
 
-        if ($edit_mode) { ?>
-          <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
-          <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
-          <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
-          <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i> Generate PDF</a>
-          <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
-          <?php
-        } else {
-          if ($user_id == $author_id) {?>
-            <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-          }
-        } ?>
+      if ($edit_mode) { ?>
+        <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
+        <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
+        <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
+        <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
+        <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i> Generate PDF</a>
+        <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
+        <?php
+      } else {
+        if ($user_id == $author_id) {?>
+          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        }
+      } ?>
     </div>
   </div>
 
@@ -311,16 +310,8 @@
     if ($audit->facebook_bit == "1" && ($audit->facebook_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp; Facebook stats:</span>
-        <span class="sub-title">Statistics of your Facebook page.</span>
-
-        <?php if($edit_mode) { ?>
-        <div onclick="toggle_visibility('facebook_vis_bit')" id="facebook_vis_bit_icon" class="visibility-first-level">
-          <?php if($audit->facebook_vis_bit == 1) { ?>
-              <i class="far fa-eye"></i>
-          <?php } else { ?>
-              <i class="far fa-eye-slash"></i>
-          <?php } ?>
-        </div> <?php } ?>
+        <span class="sub-title">Statistics of your Facebook page.</span><?php
+        visibility_short_code($edit_mode, $audit->facebook_vis_bit, 'facebook_vis_bit', 'visibility-first-level'); ?>
 
         <div class="col-lg-6 left bottom-40">
           <div class="inner"><?php
@@ -405,8 +396,7 @@
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p>
-                  <?php
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p><?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
               </div>
@@ -418,16 +408,8 @@
     if ($audit->instagram_bit == "1" && ($audit->instagram_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info">
         <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; Instagram stats:</span>
-        <span class="sub-title">Statistics of your Instagram page.</span>
-
-        <?php if($edit_mode) { ?>
-        <div onclick="toggle_visibility('instagram_vis_bit')" id="instagram_vis_bit_icon" class="visibility-first-level">
-          <?php if($audit->instagram_vis_bit == 1) { ?>
-              <i class="far fa-eye"></i>
-          <?php } else { ?>
-              <i class="far fa-eye-slash"></i>
-          <?php } ?>
-        </div> <?php }
+        <span class="sub-title">Statistics of your Instagram page.</span><?php
+        visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level');
 
         if ($audit->manual && $edit_mode) { ?>
           <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
@@ -607,16 +589,8 @@
           <div class="wait-for-crawl"><p>Please wait a moment, the website data is being prepared.</p></div><?php
         } ?>
         <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; Website stats:</span>
-        <span class="sub-title">Statistics of your webpage.</span>
-
-        <?php if($edit_mode) { ?>
-        <div onclick="toggle_visibility('website_vis_bit')" id="website_vis_bit_icon" class="visibility-first-level">
-          <?php if($audit->website_vis_bit == 1) { ?>
-              <i class="far fa-eye"></i>
-          <?php } else { ?>
-              <i class="far fa-eye-slash"></i>
-          <?php } ?>
-        </div> <?php } ?>
+        <span class="sub-title">Statistics of your webpage.</span><?php
+        visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?>
 
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
           <div class="inner custom-inner"><?php
@@ -755,7 +729,7 @@
 
   <?php
   if ($edit_mode) { ?>
-    // Visibility function
+    // Visibility function : TODO : hier ook mooier als functions.php de geupdate visibility bool terug geeft...
     var toggle_visibility = function(field_name) {
       var field = $(`#${field_name}_icon`);
       var icon = field.find('i');
@@ -899,7 +873,7 @@
             window.location.reload()
           },
           error: function (errorThrown) {
-            console.log(errorThrown);
+            logError(JSON.stringify(errorThrown), 'page-templates/audit_page.php', 'mail_config_confirm');
             showModal(initiateModal('errorModal', 'error', {
               'text': "Can't update mail function",
               'subtext': "Please try again later or notify an admin if the issue persists"
@@ -929,12 +903,11 @@
             window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
           },
           error: function (errorThrown) {
-            console.log(errorThrown);
-            var modalData = {
+            logError(JSON.stringify(errorThrown), 'page-templates/audit_page.php', 'delete_audit_confirm');
+            showModal(initiateModal('errorModal', 'error', {
               'text': "Can't delete this audit",
               'subtext': "Please try again later or notify an admin if the issue persists"
-            }
-            showModal(initiateModal('errorModal', 'error', modalData));
+            }));
           }
         });
       });
@@ -963,7 +936,6 @@
       $('input:radio[name=ads_c]').change(function () {
         update_ads(this.value, competitor = true);
       });
-
     });
 
     // Dynamic slider functions
