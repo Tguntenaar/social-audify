@@ -2215,7 +2215,7 @@ h4 {
 }
 
 .recent-send {
-	width: 100%;
+	width: 150%;
 	height: 75px;
 	float:left;
 	overflow: hidden;
@@ -3821,12 +3821,15 @@ tr input {
 	padding: 10px;
 }
 
-.information {
+.info-i {
 	position: absolute;
-	right: -20px;
 	top: 10px;
 	color: #007bff;
 	cursor: pointer;
+}
+
+.info-i-report {
+	right: -20px;
 }
 
 #mail-exp-text,
