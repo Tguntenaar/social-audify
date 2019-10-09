@@ -104,10 +104,6 @@ button {
 	cursor: pointer;
 }
 
-#wpua-upload-existing {
-	display: none;
-}
-
 .block {
 	display: block !important;
 }
@@ -718,10 +714,6 @@ nav ul a li {
 	height: 40px;
 }
 
-#youtube-input {
-	display: none;
-}
-
 .radio-label {
 	margin-right: 12px;
 }
@@ -965,15 +957,6 @@ nav ul a li {
 	line-height: 50px;
 }
 
-#wpua-edit-attachment-existing {
-	display: none;
-}
-
-/* #wpua-file-existing {
-	background: #487dd7 !important;
-	border: 0;
-	color: #fff;
-} */
 
 #wpua-file-existing {
 	color: #487dd7 !important;
@@ -2955,7 +2938,7 @@ label {
 	margin-bottom: 10px;
 }
 
-.submitBttn,
+
 #create-report {
 	width: 120px;
 	height: 40px;
@@ -2967,10 +2950,6 @@ label {
 	color: #fff;
 	border: 0;
 	margin-left: 0 !important;
-}
-
-.tab .submitBttn {
-	float: right;
 }
 
 #create-report {
@@ -3113,10 +3092,6 @@ label {
 	background-color:#f7f7f7;
 }
 
-#nav-icon2 {
-	display: none;
-}
-
 /* On mouse-over, add a grey background color */
 .c_container:hover input ~ .checkmark {
   opacity: 0.7;
@@ -3192,10 +3167,6 @@ input[type="submit"] {
 
 .client-form {
 	display: block !important;
-}
-
-.client-form .c_container {
-	display: none;
 }
 
 .custom-height {
@@ -3678,11 +3649,6 @@ tr input {
 	padding: 8px 15px;
 }
 
-#wpua-remove-existing,
-#wpua-undo-button-existing {
-	display: none;
-}
-
 #profile-member label {
 	font-weight: 100;
 }
@@ -3943,7 +3909,21 @@ h4 {
 .fb-audit-block,
 .ig-audit-block,
 .wb-audit-block,
-.conclusion-audit-block {
+.conclusion-audit-block,
+.conclusion-report-block,
+.responsive-item,
+.responsive-label-ad,
+.client-form .c_container {
+	display: none;
+}
+
+#nav-icon1,
+#nav-icon2,
+#wpua-upload-existing,
+#youtube-input,
+#wpua-edit-attachment-existing,
+#wpua-remove-existing,
+#wpua-undo-button-existing {
 	display: none;
 }
 
@@ -3958,10 +3938,6 @@ h4 {
 #universal-update {
 	width: 200px;
 	text-align: center;
-}
-
-.conclusion-report-block {
-	display: none;
 }
 
 .conclusion-report-block,
@@ -4019,23 +3995,11 @@ h4 {
    text-align: center;
 }
 
-#nav-icon1,
-#nav-icon2 {
-	display: none;
-}
-
-.responsive-item {
-	display: none;
-}
-
-.tab {
+.tab-setup {
+	float: right;	
 	width: 100%;
 	height: auto;
 	overflow-x: hidden;
-}
-
-.responsive-label-ad {
-	display: none;
 }
 
 /* Analytics dashboard */
