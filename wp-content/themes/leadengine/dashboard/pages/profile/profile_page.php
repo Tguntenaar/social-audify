@@ -52,7 +52,7 @@
             <li id="avatar-click">Avatar settings</li>
             <li id="audit-click">Audit settings</li>
             <li id="report-click">Reports settings</li>
-            <li id="mail-click">Mail configuration</li> <?php 
+            <li id="mail-click">Mail configuration</li> <?php
             if ( current_user_can( 'manage_affiliates' ) ) { ?>
               <li><a href="/affiliate-area/">Affiliate Area</a></li> <?php
             } ?>
@@ -114,7 +114,7 @@
               <div class="color-audit-block" style="display:none;">
                 <h4>Audit Colors</h4>
                 <div>
-                    <input type="color" name="audit-color" value="<?php echo $user->color_audit?>"> 
+                    <input type="color" name="audit-color" value="<?php echo $user->color_audit?>">
                     <i class="fas fa-undo" onclick="$('input[name=audit-color]').val(`#6e9d9c`)" ></i>
                 </div>
               </div>
@@ -134,7 +134,7 @@
                   for ($i = 1; $i <= 3; $i++) {
                     if ($i < 3) { ?>
                       <h6>Show this text up to the selected range, making it faster to create an audit</h6>
-                      <input maxlength="2" type="text" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                      <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i";?>" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
                           value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
                     } else { ?>
                       <h6>The last range is less than or equal to 100 percent</h6><?php
@@ -196,7 +196,7 @@
               <div class="color-report-block" style="display:none;">
                 <h4>Report Colors</h4>
                 <div>
-                    <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">  
+                    <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">
                     <i class="fas fa-undo" onclick="$('input[name=report-color]').val(`#6e9d9c`)" ></i>
                 </div>
               </div>
@@ -284,12 +284,21 @@
 
       var location = $('#audit-form');
 
-      if (location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val() ||
-          location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val() ||
-          location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
+      if(location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val()) {
+          $("#fb-audit-item").click();
+          $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
+          return;
+      }
 
-        $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
-        return;
+      if(location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val()) {
+          $("#fb-audit-item").click();
+          $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
+          return;
+      }
+
+      if(location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
+          $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.");
+          return;
       }
 
       this.submit();
@@ -391,7 +400,6 @@
         }
       });
     }
-
 
     $("#phone-exp").on('click', function(event){
       $("#phone-exp-text").toggle();
