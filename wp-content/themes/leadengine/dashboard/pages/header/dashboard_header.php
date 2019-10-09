@@ -35,7 +35,6 @@
           console.log('statusChangeCallback');
 
           if (response.status === 'connected') {
-            $('.submitBttn').css('display', 'block');
             if (path.includes('client-dashboard')) {
               showConnectAdAccount()
             } else {
@@ -52,8 +51,6 @@
                 nextPrev(1);
               }
             }
-          } else {
-            $('.submitBttn').css('display', 'none');
           }
         });
       }

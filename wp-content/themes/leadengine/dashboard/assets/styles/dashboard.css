@@ -594,7 +594,7 @@ nav ul a li {
 	margin-top: 5px;
 	color: grey;
 	font-weight: 100 !important;
-	display:block;
+	display: block;
 	margin-bottom: 15px;
 }
 
@@ -3256,7 +3256,7 @@ input[type="submit"] {
 }
 
 tr label {
-	display:block;
+	display: block;
 	margin-bottom: 5px !important;
 	width: auto;
 }
@@ -3266,7 +3266,7 @@ tr input {
 	width: 350px;
 	padding-left: 5px;
 	margin-left: -15px;
-	display:block;
+	display: block;
 	margin-right: 10px;
 }
 
