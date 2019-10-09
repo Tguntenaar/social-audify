@@ -374,7 +374,7 @@
                       </form><?php
                         visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                       <span class="explenation-ads">
-                        <a target="_blank" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
+                        <a target="_blank" rel="noreferrer" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
                         </a>
                       </span><?php
@@ -431,7 +431,7 @@
 
         if ($audit->manual && $edit_mode) { ?>
           <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
-            There is no instagram or instagram business account found, so <a target="_blank" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
+            There is no instagram or instagram business account found, so <a target="_blank" rel="noreferrer" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
           </span><?php
         }
         if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>

@@ -252,7 +252,7 @@
         <span class="manual-text" style="width: 100%;">
           <span style="color: #e74c3c;">Attention: </span>
           There is no instagram or instagram business account found, so
-          <a target="_blank" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a>
+          <a target="_blank" rel="noreferrer" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a>
           to gather your data!
         </span><?php
       } ?>
@@ -361,7 +361,7 @@
                   } ?>
               <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
                 <?php visibility_icon($edit_mode, $report->{$item["type"]}); ?></div>
-              <span class="title-box facebook"><?php echo $item["name"]; ?><i id="block-info-<?php echo $item['type']; ?>" class="information fas fa-info"></i></span>
+              <span class="title-box facebook"><?php echo $item["name"]; ?><i id="block-info-<?php echo $item['type']; ?>" class="info-i info-i-report fas fa-info"></i></span>
               <div class="chart-info">
 
                 <span class="stat-box-title"><?php echo $item["desc"]; ?></span>

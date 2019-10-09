@@ -62,14 +62,14 @@
             <h3 class="h3-fix">Profile settings</h3>
             <?php echo do_shortcode('[rcp_profile_editor]'); ?>
             <div class="profile-exp">
-              <i id="profile-exp" class="information fas fa-info"></i>
+              <i id="profile-exp" class="info-i fas fa-info"></i>
             </div>
           </div>
 
           <div id="profile-avatar" class="profile-avatar">
             <?php echo do_shortcode('[avatar_upload]'); ?>
             <div class="profile-exp">
-              <i id="avatar-exp" class="information fas fa-info"></i>
+              <i id="avatar-exp" class="info-i fas fa-info"></i>
             </div>
           </div>
 
@@ -150,7 +150,7 @@
             </form>
 
             <div class="profile-exp">
-              <i id="audit-exp" class="information fas fa-info"></i>
+              <i id="audit-exp" class="info-i fas fa-info"></i>
             </div>
           </div>
 
@@ -204,7 +204,7 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-              <i id="report-exp" class="information fas fa-info"></i>
+              <i id="report-exp" class="info-i fas fa-info"></i>
             </div>
           </div>
 
@@ -257,7 +257,7 @@
               <input type="submit" value="Update" class="update-button" >
             </form>
             <div class="profile-exp">
-              <i id="mail-exp" class="information fas fa-info"></i>
+              <i id="mail-exp" class="info-i fas fa-info"></i>
             </div>
           </div>
 
