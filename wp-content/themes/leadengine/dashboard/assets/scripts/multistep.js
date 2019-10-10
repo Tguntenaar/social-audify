@@ -4,11 +4,13 @@ var type = window.location.pathname.includes('audit-setup') ? 'an audit' : 'a re
 showTab(currentTab);
 
 function showIntro(display) {
+  if (currentTab == 0)
+    checkLoginState(false);
+
   types = display ? ['block', 'none'] : ['none', 'block'];
   $('.create-block-box').css({'display': types[0]});
   $('.back').css({'display': types[1]});
   $('.overview-audit-report .left').css({'display': types[1]});
-  checkLoginState(false);
 }
 
 /**
