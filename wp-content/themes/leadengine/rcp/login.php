@@ -15,12 +15,6 @@
 
 global $rcp_login_form_args; ?>
 
-<?php if ( isset( $_GET['password-reset'] ) && 'true' == $_GET['password-reset'] ) { ?>
-	<p class="rcp_success">
-		<span><?php _e( 'Your password has been successfully reset.', 'rcp' ); if ( ! is_user_logged_in() ) _e( ' You may now log in.', 'rcp' ); ?></span>
-	</p>
-<?php } ?>
-
 <?php if ( ! is_user_logged_in() ) : ?>
 	<?php rcp_show_error_messages( 'login' ); ?>
 
@@ -29,18 +23,18 @@ global $rcp_login_form_args; ?>
 		<?php do_action( 'rcp_before_login_form_fields' ); ?>
 
 		<fieldset class="rcp_login_data">
-			<p style="margin-top: 70px;">
+			<p style="">
 				<label for="rcp_user_login"><?php _e( 'Username', 'rcp' ); ?></label>
 				<input name="rcp_user_login" id="rcp_user_login" class="required" type="text"/>
 			</p>
-			<p style="margin-top:-20px">
+			<p style="">
 				<label for="rcp_user_pass"><?php _e( 'Password', 'rcp' ); ?></label>
 				<input name="rcp_user_pass" id="rcp_user_pass" class="required" type="password"/>
 			</p>
 			<?php do_action( 'rcp_login_form_fields_before_submit' ); ?>
-			<p style="margin-top: -50px;">
+			<p style="margin-top: -20px;">
 				<input type="checkbox" name="rcp_user_remember" id="rcp_user_remember" value="1"/>
-				<label for="rcp_user_remember"><?php _e( 'Remember me', 'rcp' ); ?></label>
+				<label id="rcp_user_remember_label" for="rcp_user_remember"><?php _e( 'Remember me', 'rcp' ); ?></label>
 			</p>
 			<p class="rcp_lost_password"><a href="<?php echo esc_url( add_query_arg( 'rcp_action', 'lostpassword') ); ?>"><?php _e( 'Lost your password?', 'rcp' ); ?></a></p>
 			<p>
@@ -50,6 +44,10 @@ global $rcp_login_form_args; ?>
 				<input id="rcp_login_submit" class="rcp-button" type="submit" value="<?php esc_attr_e( 'Login', 'rcp' ); ?>"/>
 			</p>
 			<?php do_action( 'rcp_login_form_fields_after_submit' ); ?>
+
+			<?php if ( isset( $_GET['password-reset'] ) && 'true' == $_GET['password-reset'] ) { ?>
+				<span style="color: green; display: block; margin-top: -100px;">Password succesfully resetted!</span>
+			<?php } ?>
 		</fieldset>
 
 		<?php do_action( 'rcp_after_login_form_fields' ); ?>

@@ -174,7 +174,7 @@ function validateCompetitorTab() {
     return false;
 
   Instance.competitor = selected.data('compare');
-  
+
   if (Instance.competitor == undefined || Instance.competitor == '') {
     $('.show-compare').parent().parent().hide();
   } else {
