@@ -26,9 +26,7 @@
         version    : 'v4.0'
       });
 
-      // TODO: voor facebook analytics zorgt voor ad content blockers (kijk maar in de console)
       FB.AppEvents.logPageView();
-      // checkLoginState();
 
       var path = window.location.pathname;
 
@@ -49,8 +47,7 @@
       js = d.createElement(s); js.id = id;
       js.src = "https://connect.facebook.net/en_US/sdk.js";
       fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk')
-    );
+    }(document, 'script', 'facebook-jssdk'));
   </script>
   <script>
     $(document).ready(function() {

@@ -87,7 +87,7 @@
   ?>
 
 
-    <?php if($intro_bit) { ?>
+    <?php if ($intro_bit) { ?>
 
       <div class="intro-overlay">
         <div class="vertical-align" style="width: 50%; margin: 0 auto; height: auto;">
@@ -100,7 +100,9 @@
           <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 25px;">Configure profile</a>
         </div>
       </div>
-
+      <script>
+        FB.AppEvents.logEvent(FB.AppEvents.EventNames.COMPLETED_REGISTRATION);
+      </script>
     <?php } ?>
 
     <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
