@@ -665,6 +665,40 @@
 
         return $countries;
     }
+    function get_eu_countries() {
+        $eu_countries = array(
+      	"AT" => "Austria",
+    	"BE" => "Belgium",
+    	"BG" => "Bulgaria",
+    	"CY" => "Cyprus",
+    	"CZ" => "Czech Republic",
+    	"DK" => "Denmark",
+    	"EE" => "Estonia",
+    	"FI" => "Finland",
+    	"FR" => "France",
+    	"DE" => "Germany",
+    	"GR" => "Greece",
+    	"HU" => "Hungary",
+    	"IE" => "Ireland",
+    	"IT" => "Italy",
+    	"LV" => "Latvia",
+    	"LT" => "Lithuania",
+    	"LU" => "Luxembourg",
+    	"MT" => "Malta",
+    	"NL" => "Netherlands",
+    	"PL" => "Poland",
+    	"PT" => "Portugal",
+    	"RO" => "Romania",
+    	"SK" => "Slovakia (Slovak Republic)",
+    	"SI" => "Slovenia",
+    	"ES" => "Spain",
+    	"SE" => "Sweden",
+    	"GB" => "United Kingdom",
+    	"RD" => "Local IP" // added for testing purposes
+        );
+
+        return $eu_countries;
+    }
 
   add_action( 'rcp_after_password_registration_field', 'pw_rcp_add_user_fields' );
   add_action( 'rcp_profile_editor_after', 'pw_rcp_add_user_fields' );
@@ -672,11 +706,12 @@
    * Adds the custom fields to the registration form and profile editor
    */
   function pw_rcp_add_user_fields() {
-    $selected_country = isset( $_POST['rcp_country'] ) ? $_POST['rcp_country'] : '';
     $id = get_current_user_id();
     $number = get_user_meta($id, 'rcp_number', true );
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
     $calendar = get_user_meta($id, 'rcp_calendar', true );
+    $country_val = get_user_meta($id, 'rcp_country', true );
+    $selected_country = isset($country_val) ? $country_val : '';
 
     $encrypt_method = "AES-256-CBC";
     $secret_key = 'ABk FA sjdanjk lallLL';
@@ -693,28 +728,33 @@
       <label for="rcp_number"><?php //_e( 'Your scheduler', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="url" value="<?php // echo esc_attr( $number ); ?>"/>
     </p> -->
-    <p style="margin-top: -90px;">
+    <p class="calander_p" style="margin-top: -90px;">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
 
       <p id="rcp_country" style="width: 47%; margin-top: 50px; float:left;">
-          <label  for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
-          <select style="width: 100%; margin-top: -33px; height:55px; display:block;float:left;"name="rcp_country" id="rcp_country">
+          <label class="country_p" for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
+          <select style="width: 100%; margin-top: -33px; height:55px; display:block;float:left;" name="rcp_country" id="rcp_country">
               <?php foreach ( get_country() as $key => $value ) : ?>
-                  <?php var_dump($value); ?>
-                  <option value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_country, $key ); ?>><?php echo $value['country']; ?></option>
+                  <option value="<?php echo esc_attr( $key ); ?>" <?php checked_country( $selected_country, $key ); ?>><?php echo $value['country']; ?></option>
               <?php endforeach; ?>
           </select>
 
       </p>
-      <p style="margin-top: 50px; width: 47%; margin-left: 6%; float:left;">
+      <p class="vat_p" style="margin-top: 50px; width: 47%; margin-left: 6%; float:left;">
           <label  for="rcp_btw_number"><?php _e( 'Your VAT number (optional)', 'rcp' ); ?></label>
           <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
       </p>
     </p>
     <?php
+  }
+
+  function checked_country($string1, $string2) {
+    if($string1 == $string2) {
+        echo "selected";
+    }
   }
 
 
@@ -726,6 +766,7 @@
   function pw_rcp_add_member_edit_fields($user_id = 0) {
     $number = get_user_meta( $user_id, 'rcp_number', true );
     $btw_number = get_user_meta( $user_id, 'rcp_btw_number', true );
+    $country = get_user_meta( $user_id, 'rcp_country', true );
     $encrypt_method = "AES-256-CBC";
     $secret_key = 'ABk FA sjdanjk lallLL';
     $secret_iv = 'TSAAnkks ksj sknalSAFF';
@@ -762,6 +803,16 @@
         <p class="description"><?php _e( 'The member\'s VAT number', 'rcp' ); ?></p>
       </td>
     </tr>
+
+    <tr valign="top">
+      <th scope="row" valign="top">
+        <label for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
+      </th>
+      <td>
+        <input name="rcp_country" id="rcp_country" type="text" value="<?php echo $country; ?>"/>
+        <p class="description"><?php _e( 'The member\'s country', 'rcp' ); ?></p>
+      </td>
+    </tr>
     <?php
   }
 
@@ -778,11 +829,13 @@
       rcp_errors()->add( 'invalid_profession', __( 'Please enter your phone number', 'rcp' ), 'register' );
     }
 
-    if ( empty( $data['rcp_country'] ) || $data['rcp_country'] == '*' ) {
+    if ( empty( $posted['rcp_country'] ) || $posted['rcp_country'] == '*' ) {
         rcp_errors()->add( 'empty_country', __( 'Please select your country', 'rcp' ), 'register' );
     }
 
-    if (!empty( $posted['rcp_btw_number'])) {
+    if ((!empty( $posted['rcp_btw_number']) && $posted['rcp_country'] == "NL")
+        || (empty( $posted['rcp_btw_number']) && $posted['rcp_country'] == "NL")
+        || (!empty( $posted['rcp_btw_number']) && array_key_exists($posted['rcp_country'], get_eu_countries()))) {
         $vat_number = isset($posted['rcp_btw_number']) ? $posted['rcp_btw_number'] : "";
         $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
 
@@ -857,6 +910,10 @@
 
         if( ! empty( $_POST['rcp_calendar'] ) ) {
             update_user_meta( $user_id, 'rcp_calendar', sanitize_text_field( $_POST['rcp_calendar'] ) );
+        }
+
+        if( ! empty( $_POST['rcp_country'] ) ) {
+            update_user_meta( $user_id, 'rcp_country', sanitize_text_field( $_POST['rcp_country'] ) );
         }
 
         if( ! empty( $_POST['rcp_btw_number'] ) ) {
