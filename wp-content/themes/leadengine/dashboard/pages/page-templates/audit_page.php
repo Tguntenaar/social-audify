@@ -2,6 +2,10 @@
 <html lang="en" style="overflow-y: scroll;">
 
 <?php
+  // Error Logging
+  include(dirname(__FILE__)."/../../controllers/log_controller.php");
+  $ErrorLogger = new Logger;
+
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
@@ -31,10 +35,6 @@
 
   // Cache busting
   include(dirname(__FILE__)."/../../assets/php/cache_version.php");
-
-  // Error Logging
-  include(dirname(__FILE__)."/../../controllers/log_controller.php");
-  $ErrorLogger = new Logger;
 
   $connection = new connection;
   $user_control   = new user_controller($connection);

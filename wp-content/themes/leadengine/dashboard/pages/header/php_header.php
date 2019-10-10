@@ -1,5 +1,8 @@
 <?php
 session_start();
+// Error Logging
+include(dirname(__FILE__)."/../../controllers/log_controller.php");
+$ErrorLogger = new Logger;
 
 // new includes
 include(dirname(__FILE__)."/../../controllers/audit_controller.php");

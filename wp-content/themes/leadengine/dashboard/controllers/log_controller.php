@@ -2,12 +2,12 @@
 class logger {
 
   public function __construct($phpLocation = "runtime_error.log", $jsLocation = "js_error.log") {
-    $this->stdOutput = dirname(__FILE__) . "/..";
+    $this->stdOutput = dirname(__FILE__).'/../error_logs';
 
     // Set php.ini settings if default settings are found.
     if (ini_get('display_errors') === '1') {
       ini_set('display_startup_errors', '0');
-      ini_set('display_errors', '0');
+      ini_set('display_errors', WP_DEBUG == true ? '1' : '0');
 
       ini_set('log_errors', '1');
       ini_set('track_errors', '1');
