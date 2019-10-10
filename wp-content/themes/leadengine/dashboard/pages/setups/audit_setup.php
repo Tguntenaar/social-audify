@@ -76,7 +76,8 @@
             <!-- Facebook tab -->
             <div class="tab">
               <span class="login-title">Login to retrieve the data of Facebook that is needed to create an Audit.</span>
-              <div class="fb-login-button login-center"
+              <span style="color: #c0392b; font-size: 12px; display: block;text-align: center; width: 100%;">Trouble logging in to Facebook? Try another browser.</span>
+              <div style="margin-top: 30px" class="fb-login-button login-center"
                   data-scope="manage_pages,instagram_basic,instagram_manage_insights,ads_read"
                   auth_type="rerequest"
                   data-width="100"
