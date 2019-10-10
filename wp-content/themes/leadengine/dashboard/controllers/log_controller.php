@@ -2,7 +2,7 @@
 class logger {
 
   public function __construct($phpLocation = "runtime_error.log", $jsLocation = "js_error.log") {
-    $this->stdOutput = 'C:/xampp/htdocs/error_logs';
+    $this->stdOutput = dirname(__FILE__) . "/..";
 
     // Set php.ini settings if default settings are found.
     if (ini_get('display_errors') === '1') {

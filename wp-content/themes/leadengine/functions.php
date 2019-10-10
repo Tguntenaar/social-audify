@@ -75,6 +75,7 @@
     $connection = new connection;
     $audit_service = new audit_service($connection);
 
+
     $audit_id = $_POST['audit'];
     $data = $_POST['ads'];
     $competitor = ($_POST['competitor'] == 'false') ? 0 : 1;
@@ -82,7 +83,6 @@
     $audit_data = $audit_service->get($audit_id);
     $audit_data_facebook = json_decode($audit_data[0]->facebook_data);
     $audit_data_facebook->runningAdds = ($data == 'yes') ? 1 : 0;
-
     $audit_service->update($audit_id, "Audit_data", "facebook_data", json_encode($audit_data_facebook), $competitor);
 
     wp_send_json(array('audit_data'=>$audit_data_facebook, 'competitor'=>$competitor, 'data'=>$data));

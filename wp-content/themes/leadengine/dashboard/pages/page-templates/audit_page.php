@@ -701,7 +701,10 @@
             setTimeout(function() { crawlFinishedCheck(); }, 8000);
           }
         },
-        error: logResponse,
+        error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'toggle_visibility');
+        },
       });
     }
     crawlFinishedCheck();<?php
@@ -744,8 +747,10 @@
           url: ajaxurl,
           data: { action: 'toggle_visibility', field: field_name , ...commonPost },
           success: function () { field.html(icon) },
-          error: function (response) { 
-            logError(JSON.stringify(response), 'page-templates/audit_page.php', 'toggle_visibility') }
+          error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, data);
+              logError(send_error, 'page-templates/audit_page.php', 'toggle_visibility');
+          },
         });
       }
     };
@@ -822,7 +827,10 @@
               //  - daarbij zit er ook een php check op.
               $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
             },
-            error: logResponse,
+            error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, data);
+              logError(send_error, 'page-templates/audit_page.php', 'updateAll');
+            }
           });
         }
       }
@@ -872,8 +880,9 @@
           success: function() {
             window.location.reload()
           },
-          error: function (errorThrown) {
-            logError(JSON.stringify(errorThrown), 'page-templates/audit_page.php', 'mail_config_confirm');
+          error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'mail_config_confirm');
             showModal(initiateModal('errorModal', 'error', {
               'text': "Can't update mail function",
               'subtext': "Please try again later or notify an admin if the issue persists"
@@ -902,8 +911,9 @@
           success: function (response) {
             window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
           },
-          error: function (errorThrown) {
-            logError(JSON.stringify(errorThrown), 'page-templates/audit_page.php', 'delete_audit_confirm');
+          error: function (xhr, textStatus, errorThrownr) {
+             var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'delete_audit_confirm');
             showModal(initiateModal('errorModal', 'error', {
               'text': "Can't delete this audit",
               'subtext': "Please try again later or notify an admin if the issue persists"
@@ -925,7 +935,10 @@
           url: ajaxurl,
           data: data,
           success: logResponse,
-          error: logResponse,
+          error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, data);
+              logError(send_error, 'page-templates/audit_page.php', 'update_ads');
+          },
         });
       }
 

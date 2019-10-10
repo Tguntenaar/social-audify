@@ -6,6 +6,13 @@ jQuery.fn.scrollTo = function(elem) {
   return this;
 };
 
+function error_func(xhr, textStatus, errorThrown, data) {
+    return "ERRORTHROWN: " + JSON.stringify(errorThrown)
+           + " XHR: " + JSON.stringify(xhr)
+           + " TEXTSTATUS: " + JSON.stringify(textStatus)
+           + " DATA: " + JSON.stringify(data);
+}
+
 /**
  * array.remove(anything)
  */
