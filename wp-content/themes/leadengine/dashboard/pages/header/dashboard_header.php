@@ -28,13 +28,9 @@
 
       // TODO: voor facebook analytics zorgt voor ad content blockers (kijk maar in de console)
       FB.AppEvents.logPageView();
-      // checkLoginState();
 
       var path = window.location.pathname;
-
-      if (path.includes('setup')) {
-        checkLoginState();
-      } else if (path.includes('client-dashboard')) {
+      if (path.includes('client-dashboard')) {
         FB.getLoginStatus(function(response) {
           if (response.status === 'connected') {
             showConnectAdAccount();

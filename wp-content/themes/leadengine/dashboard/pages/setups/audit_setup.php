@@ -100,7 +100,7 @@
                 foreach($clients as $client) {
                   $data = ["id"=> $client->id, "name"=>$client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
                   <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
-                    data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
+                    data-client='<?php echo htmlentities(json_encode($data)); ?>' onclick="nextPrev(1)"><?php echo $client->name; ?>
                   </a><?php
                 } ?>
               </div>
@@ -198,10 +198,6 @@
     $('.audit-row').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
       $(this).addClass('selected');
-    });
-
-    $('.audit-row.client').on('click', function() {
-      nextPrev(1);
     });
 
     $(function() {

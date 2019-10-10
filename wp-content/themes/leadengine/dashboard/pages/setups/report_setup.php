@@ -126,7 +126,7 @@
               foreach($reports as $report) {
                 $data = ["id"=> $report->id, "name"=> $report->name]; ?>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row report-compare campaign-row" name="<?php echo $report->name; ?>"
-                  data-compare='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $report->name; ?>
+                  data-compare='<?php echo htmlentities(json_encode($data)); ?>' onclick="nextPrev(1)"><?php echo $report->name; ?>
                 </a><?php
               } ?>
             </div>
@@ -210,10 +210,6 @@
     $('#client-list .audit-row, #compare-list .audit-row, .row-ad-accounts').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
       $(this).addClass('selected');
-    });
-
-    $('.report-compare').on('click', function() {
-      nextPrev(1);
     });
 
     function toggleSelectedAds(that) {

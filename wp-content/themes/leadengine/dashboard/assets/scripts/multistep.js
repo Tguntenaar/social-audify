@@ -8,6 +8,7 @@ function showIntro(display) {
   $('.create-block-box').css({'display': types[0]});
   $('.back').css({'display': types[1]});
   $('.overview-audit-report .left').css({'display': types[1]});
+  checkLoginState(false);
 }
 
 /**
@@ -15,7 +16,7 @@ function showIntro(display) {
  *  een roundtrip naar de facebook servers.
  *  Gets called when the user is finished with the facebook login button.
  * */
-function checkLoginState() {
+function checkLoginState(showError = true) {
   if (typeof FB == 'undefined') 
     return false;
 
@@ -23,7 +24,7 @@ function checkLoginState() {
     if (response.status === 'connected') {
       $('.step').eq(currentTab).addClass('finish');
       nextPrev(1, false);
-    } else {
+    } else if (showError) {
       showModal(initiateModal('errorModal', 'error', {
         'text': "You are not logged in",
         'subtext': `In order to create ${type} you have to log in to facebook.`
