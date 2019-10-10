@@ -2,6 +2,10 @@
 <html lang="en" style="overflow-y: scroll;">
 
 <?php
+  // Error Logging
+  include(dirname(__FILE__)."/../../controllers/log_controller.php");
+  $ErrorLogger = new Logger;
+  
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
@@ -484,7 +488,11 @@
                 toggleUpdate(false);
                 console.log(response);
               },
-              error: logResponse,
+              error: function(xhr, textStatus, errorThrown) {
+                var error = error_func(xhr, textStatus, errorThrown, data);
+                logError(JSON.stringify(error), 'page-templates/report_page.php', 'updateAll');
+                logResponse(response);
+              },
             });
 
           }
@@ -508,7 +516,11 @@
               ...commonPost,
             },
             success: function () { field.html(html) },
-            error: logResponse,
+            error: function(xhr, textStatus, errorThrown) {
+                var error = error_func(xhr, textStatus, errorThrown, data);
+                logError(JSON.stringify(error), 'page-templates/report_page.php', 'toggle_visiblity');
+                logResponse(response);
+              },
           });
         }
       };
@@ -556,8 +568,11 @@
             console.log(r);
             window.location.reload();
           },
-          error: function (errorThrown) {
-            console.log(errorThrown);
+          error: function(xhr, textStatus, errorThrown) {
+            var error = error_func(xhr, textStatus, errorThrown, data);
+            logError(JSON.stringify(error), 'page-templates/report_page.php', '$(\"#config_confirmed\").click(');
+            logResponse(response);
+
             var modalData = {
               'text': "Can't update color",
               'subtext': "Please try again later or notify an admin if the issue persists"
@@ -591,7 +606,11 @@
           success: function (response) {
             window.location.replace('https://<?php echo $env; ?>/report-dashboard')
           },
-          error: function (errorThrown) {
+          error: function(xhr, textStatus, errorThrown) {
+            var error = error_func(xhr, textStatus, errorThrown, data);
+            logError(JSON.stringify(error), 'page-templates/report_page.php', '$(\'#delete_confirmed\').click');
+            logResponse(response);
+
             var modalData = {
               'text': "Can't delete this audit",
               'subtext': "Please try again later or notify an admin if the issue persists"
