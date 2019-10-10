@@ -291,13 +291,13 @@
       }
 
       if (location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val()) {
-          $("#fb-audit-item").click();
+          $("#ig-audit-item").click();
           $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
           return;
       }
 
       if (location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
-          $("#fb-audit-item").click();
+          $("#wb-audit-item").click();
           $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.");
           return;
       }
