@@ -21,6 +21,7 @@
 <!DOCTYPE html>
 <html <?php language_attributes( 'html' ); ?>>
    <head>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
       <meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,11 +49,11 @@
       fbq('init', '693894334380047');
       fbq('track', 'PageView');
     </script>
+
     <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=693894334380047&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Facebook Pixel Code -->
-
    </head>
     <body <?php body_class();?>>
       <?php if( !empty($redux_ThemeTek['tek-preloader']) && $redux_ThemeTek['tek-preloader'] == 1 ) : ?>

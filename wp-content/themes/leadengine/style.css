@@ -66,7 +66,158 @@ License URI: license.txt
   height: 20px !important;
 } */
 
-.kd-rwc-5d99eb63b2df8 .page img, .single-post img {
+.register #rcp_user_login_wrap,
+.register #rcp_user_email_wrap,
+.register #rcp_user_last_wrap,
+.register #rcp_user_first_wrap,
+.register #rcp_password_wrap,
+.register #rcp_password_again_wrap {
+    width: 47%;
+    float:left;
+}
+
+#rcp_subscription_level {
+    position:relative;
+    overflow:hidden;
+    width:auto;
+    height:auto;
+}
+
+.rcp_subscription_level input[type="radio"] {
+    margin: 0 auto;
+    float: none;
+}
+
+.rcp_subscription_level ul {
+    position: relative;
+    width: 100%;
+    height: auto;
+    margin-top: 30px !important;
+}
+.rcp_subscription_level li {
+    position: relative;
+    text-align: center;;
+    padding-left: 30px;
+    font-size: 18px;
+    font-weight: 300;
+    margin-bottom: 0px;
+    height: 30px;
+}
+
+.rcp_subscription_fieldset .rcp_subscription_level_name {
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.rcp_subscription_fieldset .rcp_price {
+    color: #2980b9;
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.rcp_subscription_fieldset .rcp_separator {
+    display: none;
+}
+.page-id-8646 .rcp_header {
+    display: none !important;
+}
+
+.page-id-8646 .rcp_login_link {
+    margin-top: -40px;
+}
+
+.page-id-8646 #rcp_card_wrap {
+    margin-top: 65px;
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.page-id-8646 #rcp-card-element {
+    margin-top: -90px;
+}
+.page-id-8646 #rcp_submit_wrap input[type='submit'] {
+    width: 180px;
+    position: absolute;
+    left: 125px;
+    margin-top: 5px;
+}
+
+.page-id-8646 #rcp_card_name_wrap input[type="text"] {
+    height: 40px !important;
+}
+
+.page-id-8646 .nav-button {
+    margin-top: -22px;
+}
+.rcp_subscription_level ul>li:before {
+    content: "\f058";
+    padding-right: 20px;
+    font-weight: bold;
+    font-family: FontAwesome;
+    font-size: 18px;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    position: absolute;
+    left: 2px;
+}
+
+.rcp_subscription_level {
+    width: 50%;
+    float: left;
+}
+.prevRegister {
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    background: #2980b9;
+    border: 0;
+    margin-top: -50px;
+}
+
+.nextRegister {
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    font-size: 16px;
+    color: #fff;
+    background: #c0392b;
+    border: 0;
+    margin-top: -25px;
+    float:left;
+    margin-right: 15px;
+}
+
+.register #rcp_user_email_wrap {
+    margin-top: 40px;
+    margin-left: 6%;
+}
+
+.register #rcp_user_last_wrap {
+    margin-left: 6%;
+}
+
+.register #rcp_password_again_wrap {
+    margin-left: 6%;
+}
+
+
+
+.tt_button {
+    border: 0px !important;
+}
+
+.pricing-table a {
+    color: #fff !important;
+}
+.kd-rwc-5d99eb63b2df8 .page img {
     margin-top: 53px !important;
 }
 .rcp_form label {
@@ -149,6 +300,10 @@ License URI: license.txt
 #rcp_user_login {
     position: relative;
     z-index: 5;
+}
+
+.rcp_subscription_level label {
+    margin-top: -30px;
 }
 
 #rcp_registration_form .rcp_user_fieldset input[type="text"],
@@ -368,9 +523,45 @@ img::-moz-selection {
 }
 
 #wrapper.hide-title-section {
-    padding-top: 115px;
+    padding-top: 70px;
 }
 
+.page-id-4233 .rcp_login_data p {
+    width: 100%;
+    height: auto;
+    float: left;
+    height: 85px;
+}
+
+.page-id-4233 #rcp_login_submit {
+    margin-top: -115px !important;
+}
+
+#rcp_user_remember_label {
+    margin-top: 3px !important;
+}
+
+.page-id-4233 .rcp_form label {
+    margin-bottom: 37px;
+}
+
+.pricing-options-container.DetailedStyle {
+    margin-top: -30px;
+}
+
+.upper-footer {
+    display: none !important;
+}
+.pricing-options-container.DetailedStyle .pricing-row .fa {
+    margin-top: 15px;
+    left: 17px;
+    position: absolute;
+}
+
+.pricing-options-container.DetailedStyle {
+    padding-left: 10px;
+    padding-right: 30px
+}
 .transparent-navigation #wrapper.hide-title-section {
     padding-top: 0;
 }
@@ -2043,7 +2234,7 @@ margin: 0 30px;
 #single-page .wpcf7 .label {margin-bottom: 10px;}
 
 .rcp_form fieldset {
-    margin-top: 45px !important;
+    margin-top: 54px !important;
 }
 
 .light-font {
