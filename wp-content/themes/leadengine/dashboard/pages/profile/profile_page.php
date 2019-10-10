@@ -297,6 +297,7 @@
       }
 
       if (location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
+          $("#fb-audit-item").click();
           $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.");
           return;
       }
@@ -312,24 +313,23 @@
     });
 
     /**
-    * FORM   
+    * MAIL FORM   
     */
     $("#mail_config").submit(function(e) {
       e.preventDefault();
       $('.error-display-mail').empty();
 
-      // ['day_1', 'day_2', 'day_3'].forEach(function(day) {
-      //   if (!$.isNumeric($(`#${day}`).val())) {
-        // TODO:
-      //   }
-      // });
+      ['day_1', 'day_2', 'day_3'].forEach(function(day) {
+        if (!$.isNumeric($(`#${day}`).val())) {
+          $("#when-mail-item").click();
+          $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
+          return;
+        }
+      });
 
-      if (!$.isNumeric($("#day_1").val()) || !$.isNumeric($("#day_2").val()) || !$.isNumeric($("#day_3").val())) {
-        $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Input is not a number.</span>");
-        return;
-      }
 
       if (parseInt($("#day_1").val()) >= parseInt($("#day_2").val()) || parseInt($("#day_2").val()) >= parseInt($("#day_3").val())) {
+        $("#when-mail-item").click();
         $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller than Day 2 and Day 2 smaller than Day 3.</span>");
         return;
       }
