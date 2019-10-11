@@ -24,7 +24,6 @@
 
   function get_insta_name($url) {
     preg_match("'(?:^|[^\w])(?:@)?([A-Za-z0-9_](?:(?:[A-Za-z0-9_]|(?:\.(?!\.))){0,28}(?:[A-Za-z0-9_]))?)'", $url, $matches);
-
-    return $matches[1];
+    return count($matches) > 1 ? $matches[1] : "";
   }
 ?>

@@ -24,8 +24,8 @@
     
     $name = sanitize_text_field($_POST['client_name']);
     $mail = sanitize_email($_POST['client_mail']);
-    $ad_id = sanitize_text_field($_POST['ad_id']);
-
+    $ad_id = isset($_POST['ad_id']) ? sanitize_text_field($_POST['ad_id']) : "";
+    
     if (isset($_GET['redirect']) && isset($_POST)) {
       if ($id = $client_control->create($name, $fb, $ig, $wb, $mail)) {
         header("Location: https://".getenv('HTTP_HOST')."/".$_GET['redirect']."?cid=".$id, true, 303);
