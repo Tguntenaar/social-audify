@@ -88,6 +88,10 @@ label.myLabel input[type="file"] {
     top: -1000px;
 }
 
+.content-right .rcp_calander_custom {
+	margin-top: 0px !important;
+}
+
 .fa-calendar {
 	margin-right: 5px;
 }
@@ -112,6 +116,25 @@ label.myLabel input[type="file"] {
 .content-right .country_p {
 	margin-top: -20px !important;
 	margin-bottom: 40px !important;
+	margin-top: 0px !important;
+}
+
+.content-right .btw_title_1 {
+	margin-top: 0px !important;
+}
+
+.content-right .btw_title_2 {
+	margin-bottom: 5px !important;
+}
+
+.content-right .rcp_country_text {
+	margin-top: 0px !important;
+}
+
+.content-right .rcp_btw_number_custom {
+	margin-left: 0px !important;
+	width: 100% !important;
+	margin-top: 0px !important;
 }
 
 .content-right #rcp_country_text select {
@@ -2588,11 +2611,6 @@ h4 {
 	display: inline-block;
 }
 
-.copy-link:hover {
-	text-decoration: none;
-	opacity: 0.7;
-}
-
 #delete-this-audit {
 	height: 60px;
 	width: 60px;
@@ -3627,10 +3645,9 @@ tr input {
 }
 
 .profile-exp {
-	width: 40%;
 	position: absolute;
-	right: 0px;
-	top: 50%;
+	right: 40px;
+    top: 30px;
 	transform: translateY(-50%);
 	font-weight: 100;
 }
@@ -4034,7 +4051,7 @@ h4 {
 }
 
 .tab-setup {
-	float: right;	
+	float: right;
 	width: 100%;
 	height: auto;
 	overflow-x: hidden;

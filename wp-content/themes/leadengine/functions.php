@@ -20,22 +20,6 @@
   }
 
 
-  add_action( 'wp_ajax_log_error', 'log_js_error');
-  add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
-
-  function log_js_error() {
-    require_once(dirname(__FILE__)."/dashboard/controllers/log_controller.php");
-    $errorLogger = new Logger;
-
-    $message = isset($_POST['message']) ? $_POST['message'] : "";
-    $stacktrace = isset($_POST['stacktrace']) ? $_POST['stacktrace'] : "";
-    $stacktrace .= isset($_POST['function']) ? "in {$_POST['function']}" : "";
-
-    $errorLogger->printJs(get_current_user_id(), $message, $stacktrace);
-    wp_die();
-  }
-
-
   add_action( 'wp_ajax_toggle_visibility', 'toggle_visibility');
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
 
@@ -52,6 +36,7 @@
       $audit_id = $_POST['audit'];
 
       $audit_service->toggle_config_visibility($audit_id, $field);
+      wp_send_json(array('success'=>'toggled'));
     }
     elseif ($type === 'report') {
       require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
@@ -59,11 +44,35 @@
       $report_id = $_POST['report'];
 
       $report_service->toggle_config_visibility($report_id, $field);
+      wp_send_json(array('success'=>'toggled'));
     }
-    wp_send_json(['success' => 'toggled']);
     wp_die();
   }
 
+  // add_action( 'wp_ajax_toggle_template_field', 'toggle_template_field');
+  // add_action( 'wp_ajax_nopriv_toggle_template_field', 'not_logged_in');
+  //
+  // function toggle_template_field() {
+  //   require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+  //   require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+  //
+  //   $connection = new connection;
+  //   $audit_service = new audit_service($connection);
+  //
+  //   $audit_id = $_POST['audit'];
+  //   $field = $_POST['field'];
+  //
+  //   $bit = $audit_service->get_field_template($audit_id, $field);
+  //
+  //   if($field == "facebook_vis_bit") {
+  //       $bit = ($bit == 1) ? 0 : 1;
+  //   }
+  //
+  //   $test = $audit_service->update($audit_id, 'Audit_template', $field, $bit, 0);
+  //
+  //   wp_send_json($test);
+  //   wp_die();
+  // }
 
   add_action( 'wp_ajax_update_ads_audit', 'edit_ads_audit');
   add_action( 'wp_ajax_nopriv_update_ads_audit', 'not_logged_in');
@@ -75,7 +84,6 @@
     $connection = new connection;
     $audit_service = new audit_service($connection);
 
-
     $audit_id = $_POST['audit'];
     $data = $_POST['ads'];
     $competitor = ($_POST['competitor'] == 'false') ? 0 : 1;
@@ -83,6 +91,7 @@
     $audit_data = $audit_service->get($audit_id);
     $audit_data_facebook = json_decode($audit_data[0]->facebook_data);
     $audit_data_facebook->runningAdds = ($data == 'yes') ? 1 : 0;
+
     $audit_service->update($audit_id, "Audit_data", "facebook_data", json_encode($audit_data_facebook), $competitor);
 
     wp_send_json(array('audit_data'=>$audit_data_facebook, 'competitor'=>$competitor, 'data'=>$data));
@@ -223,7 +232,9 @@
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
 
-    $value = $user->update('User', 'instagram_business_account_id', $_POST['iba_id']);
+    $iba_id = $_POST['iba_id'];
+
+    $value = $user->update('User', 'instagram_business_account_id', $iba_id);
 
     wp_send_json(array('instagram_business_account updated succes if 0'=>$value));
     wp_die();
@@ -695,17 +706,18 @@
    * Adds the custom fields to the registration form and profile editor
    */
   function pw_rcp_add_user_fields() {
+    $selected_country = isset( $_POST['rcp_country'] ) ? $_POST['rcp_country'] : '';
     $id = get_current_user_id();
     $number = get_user_meta($id, 'rcp_number', true );
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
     $calendar = get_user_meta($id, 'rcp_calendar', true );
-    $country_val = get_user_meta($id, 'rcp_country', true );
-    $selected_country = isset($country_val) ? $country_val : '';
 
     $encrypt_method = "AES-256-CBC";
-    $secret_key = 'ABk FA sjdanjk lallLL';
-    $secret_iv = 'SAAnkks ksj sknalSAFF';
+    $secret_key = 'WS-SERVICE-KEY';
+    $secret_iv = 'WS-SERVICE-VALUE';
+    // hash
     $key = hash('sha256', $secret_key);
+    // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
     $iv = substr(hash('sha256', $secret_iv), 0, 16);
     ?>
     <p>
@@ -717,33 +729,34 @@
       <label for="rcp_number"><?php //_e( 'Your scheduler', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="url" value="<?php // echo esc_attr( $number ); ?>"/>
     </p> -->
-    <p class="calander_p" style="margin-top: -90px;">
+    <p class="rcp_calander_custom" style="margin-top: -90px;">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
 
-      <p id="rcp_country" style="width: 47%; margin-top: 50px; float:left;">
-          <label class="country_p" for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
+      <p id="rcp_country_text" style="width: 47%; margin-top: 50px; float:left;">
+          <label  for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
           <select style="width: 100%; margin-top: -33px; height:55px; display:block;float:left;" name="rcp_country" id="rcp_country">
               <?php foreach ( get_country() as $key => $value ) : ?>
-                  <option value="<?php echo esc_attr( $key ); ?>" <?php checked_country( $selected_country, $key ); ?>><?php echo $value['country']; ?></option>
+                  <option value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_country, $key ); ?>><?php echo $value['country']; ?></option>
               <?php endforeach; ?>
           </select>
 
       </p>
-      <p class="vat_p" style="margin-top: 50px; width: 47%; margin-left: 6%; float:left;">
-          <label  for="rcp_btw_number"><?php _e( 'Your VAT number (optional)', 'rcp' ); ?></label>
-          <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
+
+      <p class="rcp_btw_number_custom" style="margin-top: 50px; width: 47%; margin-left: 6%; float:left;">
+          <label for="rcp_btw_number"><?php _e( 'Your VAT number (optional)', 'rcp' ); ?></label>
+          <span class="btw_title_1" style="margin-top: -35px;color: grey; font-size: 12px; display: block;">By adding your VAT-number we will not have to charge VAT, resulting in a lower price.</span>
+          <span class="btw_title_2" style="margin-bottom: 45px; color: grey; font-size: 12px; display: block;">*For Dutch citizens: You can request the VAT back when you do your btw-aangifte</span>
+          <input  name="rcp_btw_number" placeholder="Example: NL0000.00.000.B.00" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(esc_attr( $btw_number ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()"); ?>"/>
+
+
+           <!-- var_dump(openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv));
+           echo openssl_decrypt(base64_decode($btw_number), $encrypt_method, $key, 0, $iv); -->
       </p>
     </p>
     <?php
-  }
-
-  function checked_country($string1, $string2) {
-    if($string1 == $string2) {
-        echo "selected";
-    }
   }
 
 
@@ -755,12 +768,12 @@
   function pw_rcp_add_member_edit_fields($user_id = 0) {
     $number = get_user_meta( $user_id, 'rcp_number', true );
     $btw_number = get_user_meta( $user_id, 'rcp_btw_number', true );
-    $country = get_user_meta( $user_id, 'rcp_country', true );
     $encrypt_method = "AES-256-CBC";
-    $secret_key = 'ABk FA sjdanjk lallLL';
-    $secret_iv = 'TSAAnkks ksj sknalSAFF';
+    $secret_key = 'WS-SERVICE-KEY';
+    $secret_iv = 'WS-SERVICE-VALUE';
     // hash
     $key = hash('sha256', $secret_key);
+    // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
     $iv = substr(hash('sha256', $secret_iv), 0, 16);
     ?>
     <tr valign="top">
@@ -788,18 +801,8 @@
         <label for="rcp_btw_number"><?php _e( 'VAT number', 'rcp' ); ?></label>
       </th>
       <td>
-        <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv); ?>"/>
+        <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(esc_attr( $btw_number ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()"); ?>"/>
         <p class="description"><?php _e( 'The member\'s VAT number', 'rcp' ); ?></p>
-      </td>
-    </tr>
-
-    <tr valign="top">
-      <th scope="row" valign="top">
-        <label for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
-      </th>
-      <td>
-        <input name="rcp_country" id="rcp_country" type="text" value="<?php echo $country; ?>"/>
-        <p class="description"><?php _e( 'The member\'s country', 'rcp' ); ?></p>
       </td>
     </tr>
     <?php
@@ -837,13 +840,13 @@
             $res = json_decode($contents);
 
             if(!($res->valid || (string)$vat_number == "")) {
-                rcp_errors()->add( 'invalid_location', __( 'Wrong FAT number.', 'rcp' ), 'register' );
+                rcp_errors()->add( 'invalid_location', __( 'Wrong VAT number.', 'rcp' ), 'register' );
             } else {
 
             }
         }
     } else if(empty($posted['rcp_btw_number']) && $posted['rcp_level'] == 1) {
-        rcp_errors()->add( 'Wrong FAT number.', __( 'Wrong FAT number.', 'rcp' ), 'register' );
+        rcp_errors()->add( 'Wrong FAT number.', __( 'Wrong VAT number.', 'rcp' ), 'register' );
     }
   }
 
@@ -854,14 +857,8 @@
    */
   function pw_rcp_save_user_fields_on_register( $posted, $user_id ) {
     $output = false;
-    $encrypt_method = "AES-256-CBC";
-    $secret_key = 'ABk FA sjdanjk lallLL';
-    $secret_iv = 'SAAnkks ksj sknalSAFF';
-    // hash
-    $key = hash('sha256', $secret_key);
-    $iv = substr(hash('sha256', $secret_iv), 0, 16);
-    $output = openssl_encrypt(sanitize_text_field( $posted['rcp_btw_number'] ), $encrypt_method, $key, 0, $iv);
-    $output = base64_encode($output);
+    $output = openssl_encrypt($posted['rcp_btw_number'],"AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
+
 
     if( ! empty( $posted['rcp_number'] ) ) {
       update_user_meta( $user_id, 'rcp_number', sanitize_text_field( $posted['rcp_number'] ) );
@@ -886,10 +883,11 @@
      */
     function pw_rcp_save_user_fields_on_profile_save( $user_id ) {
         $encrypt_method = "AES-256-CBC";
-        $secret_key = 'ABk FA sjdanjk lallLL';
-        $secret_iv = 'SAAnkks ksj sknalSAFF';
+        $secret_key = 'WS-SERVICE-KEY';
+        $secret_iv = 'WS-SERVICE-VALUE';
         // hash
         $key = hash('sha256', $secret_key);
+        // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
         $iv = substr(hash('sha256', $secret_iv), 0, 16);
 
 
@@ -899,10 +897,6 @@
 
         if( ! empty( $_POST['rcp_calendar'] ) ) {
             update_user_meta( $user_id, 'rcp_calendar', sanitize_text_field( $_POST['rcp_calendar'] ) );
-        }
-
-        if( ! empty( $_POST['rcp_country'] ) ) {
-            update_user_meta( $user_id, 'rcp_country', sanitize_text_field( $_POST['rcp_country'] ) );
         }
 
         if( ! empty( $_POST['rcp_btw_number'] ) ) {
@@ -918,8 +912,7 @@
                 $res = json_decode($contents);
 
                 if($res->valid) {
-                    $output = openssl_encrypt(sanitize_text_field( $vat_number ), $encrypt_method, $key, 0, $iv);
-                    $output = base64_encode($output);
+                    $output = openssl_encrypt($vat_number,"AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
                     update_user_meta( $user_id, 'rcp_btw_number', $output);
                 }
             }
@@ -944,18 +937,6 @@
     if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
       wp_redirect( $referrer . '?login=failed' );  // let's append some information (login=failed) to the URL for the theme to use
       exit;
-    }
-  }
-
-  function fb_filter_query( $query, $error = true ) {
-    if ( is_search() ) {
-      $query->is_search = false;
-      $query->query_vars[s] = false;
-      $query->query[s] = false;
-
-      // to error
-      if ( $error == true )
-        $query->is_404 = true;
     }
   }
 ?>
