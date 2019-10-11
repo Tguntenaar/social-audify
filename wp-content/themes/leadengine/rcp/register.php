@@ -30,7 +30,7 @@ $discount = ! empty( $_REQUEST['discount'] ) ? sanitize_text_field( $_REQUEST['d
 // show any error messages after form submission
 rcp_show_error_messages( 'register' ); ?>
 
-<form id="rcp_registration_form" class="rcp_form" method="POST" action="<?php echo esc_url( rcp_get_current_url() ); ?>">
+<form id="rcp_registration_form" autocomplete="off" class="rcp_form" method="POST" action="<?php echo esc_url( rcp_get_current_url() ); ?>">
 
 	<?php if( ! is_user_logged_in() ) { ?>
 
@@ -75,6 +75,26 @@ rcp_show_error_messages( 'register' ); ?>
 
 	<fieldset class="rcp_subscription_fieldset tab" style="text-align: center;display:none; margin-top: 0px !important;">
 	<?php
+
+	function valid_btw($input) {
+		$vat_number = isset($input) ? $input : "";
+		$vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
+
+		$contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
+
+		if($contents === false) {
+			throw new Exception('service unavailable');
+		}
+		else {
+			$res = json_decode($contents);
+
+			if($res->valid) {
+				$output = sanitize_text_field( $vat_number );
+				update_user_meta( $user_id, 'rcp_btw_number', $output);
+			}
+		}
+	}
+
 	$levels = rcp_get_subscription_levels( 'active' );
 	$i      = 0;
 	if( $levels ) : ?>
@@ -82,10 +102,26 @@ rcp_show_error_messages( 'register' ); ?>
 			<p class="rcp_subscription_message"><?php echo apply_filters ( 'rcp_registration_choose_subscription', __( 'Choose your membership level', 'rcp' ) ); ?></p>
 		<?php endif; ?>
 		<ul id="rcp_subscription_levels">
-			<?php foreach( $levels as $key => $level ) : ?>
+			<?php
+			$printLevels = array();
+
+			if(is_user_logged_in()) {
+				if (valid_btw(get_user_meta( get_current_user_id() , 'rcp_btw_number', true ))) {
+					array_push($printLevels, $levels[4], $levels[3]);
+				} else {
+					array_push($printLevels, $levels[1], $levels[2]);
+				}
+
+			} else {
+				$printLevels = $levels;
+			}
+
+		 	?>
+			<?php foreach( $printLevels as $key => $level ) : ?>
 				<?php if( rcp_show_subscription_level( $level->id ) ) :
 					$has_trial = $rcp_levels_db->has_trial( $level->id );
 				?>
+
 				<li class="rcp_subscription_level rcp_subscription_level_<?php echo $level->id; ?>" style="padding-left: 10px;">
 					<input type="radio" id="rcp_subscription_level_<?php echo $level->id; ?>" class="required rcp_level" <?php if ( $i == 0 || ( isset( $_GET['level'] ) && $_GET['level'] == $level->id ) ) { echo 'checked="checked"'; } ?> name="rcp_level" rel="<?php echo esc_attr( $level->price ); ?>" value="<?php echo esc_attr( absint( $level->id ) ); ?>" <?php if( $level->duration == 0 ) { echo 'data-duration="forever"'; } if ( ! empty( $has_trial ) ) { echo 'data-has-trial="true"'; } ?>/>
 					<label for="rcp_subscription_level_<?php echo $level->id; ?>">
@@ -135,7 +171,7 @@ rcp_show_error_messages( 'register' ); ?>
 	</fieldset>
 	<?php endif; ?>
 
-	<div class="tab" style="display:none">
+	<div class="tab" style="display:none;">
 
 		<?php do_action( 'rcp_after_register_form_fields', $levels ); ?>
 
