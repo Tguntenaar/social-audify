@@ -7,6 +7,7 @@ function initiateModal(id, type, data) {
   var confirmName = typeof data.confirm == 'undefined' ? 'modalConfirm' : data.confirm;
   var cancelName = typeof data.cancel == 'undefined' ? 'modalCancel' : data.cancel;
   var confirmText = typeof data.confirmtext == 'undefined' ? 'Confirm' : data.confirmtext;
+  var link = typeof data.link == 'undefined' ? '' : data.link;
 
   var zIndex = type == "error" ? '1250' : type == "confirm" ? '1150' : '1050';
 
@@ -14,6 +15,8 @@ function initiateModal(id, type, data) {
     "<button class='agree' id='" + confirmName + "'>"+confirmText+"</button>" +
     "<button class='deny' id='" + cancelName + "'>Cancel</button>" :
     "<button class='agree' id='" + confirmName + "'>Understood</button>";
+  var buttons =  type == "link" ? 
+    `<a href="${link}"><button class='agree' id="${confirmName}">${confirmText}</button></a>`: buttons;
 
   element.setAttribute('style', 'z-index: ' + zIndex);
   element.innerHTML =
@@ -29,8 +32,6 @@ function initiateModal(id, type, data) {
      </div>`;
 
   var close = element.getElementsByClassName('close')[0];
-  // console.log("testtt");
-  // console.log(close);
   close.onclick = function() { removeModal(element) };
 
   var confirm = element.getElementsByClassName('agree')[0];

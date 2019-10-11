@@ -278,7 +278,7 @@
     if ($edit_mode) { ?>
       <div class="video-options">
         <h3>Video banner:</h3>
-        <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="https://www.google.nl">[here]</a> to learn how to find this link.</span>
+        <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="tutorial/#1570543881921-3fd7746a-9da5">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
 
           <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL ? 'checked' : ''; ?>/>

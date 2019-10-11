@@ -458,11 +458,25 @@
       },
     };
 
-    ['profile', 'avatar', 'audit', 'report', 'mail'].forEach(function(elem) {
-      $(`#${elem}-exp`).on('click', function() {
+    ['profile', 'avatar'].forEach(function(el) {
+      $(`#${el}-exp`).on('click', function() {
         showModal(initiateModal('errorModal', 'error', {
-          'text': `${explanations[elem].title}`,
-          'subtext': `${explanations[elem].description}`,
+          'text': `${explanations[el].title}`,
+          'subtext': `${explanations[el].description}`,
+        }));
+      });
+    });
+
+    [{type:'audit', url:'tutorial/#1488725417825-2758920e-e7ef'}, 
+     {type:'report', url:'tutorial/#1489503964921-3acbdde1-0dcf'}, 
+     {type:'mail', url:'tutorial/#1489503963784-5b2be039-5cee'},].forEach(function(el) {
+      $(`#${el.type}-exp`).on('click', function() {
+
+        showModal(initiateModal('errorModal', 'link', {
+          'text': `${explanations[el.type].title}`,
+          'subtext': `${explanations[el.type].description}`,
+          'link': el.url,
+          'confirmtext': 'Watch video',
         }));
       });
     });
