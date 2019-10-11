@@ -4,9 +4,7 @@ var type = window.location.pathname.includes('audit-setup') ? 'an audit' : 'a re
 showTab(currentTab);
 
 function showIntro(display) {
-  if (currentTab == 0)
-    checkLoginState(false);
-
+  checkLoginState();
   types = display ? ['block', 'none'] : ['none', 'block'];
   $('.create-block-box').css({'display': types[0]});
   $('.back').css({'display': types[1]});
@@ -25,7 +23,7 @@ function checkLoginState(showError = true) {
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
       $('.step').eq(currentTab).addClass('finish');
-      nextPrev(1, false);
+      nextPrev(1, true);
     } else if (showError) {
       showModal(initiateModal('errorModal', 'error', {
         'text': "You are not logged in",
@@ -74,12 +72,12 @@ function showTab(index) {
   steps.eq(index).addClass('active');
 }
 
-function nextPrev(n, validate = true) {
+function nextPrev(n, loggedIn = false) {
   // This function will figure out which tab to display
   var tab = $('.tab');
 
   // validate this step
-  if (validate && n == 1 && !validateStep())
+  if (n == 1 && !validateStep(loggedIn))
     return;
 
   // request campaigns or ads from facebook servers.
@@ -96,10 +94,10 @@ function nextPrev(n, validate = true) {
     showTab(currentTab);
 }
 
-function validateStep() {
+function validateStep(loggedIn) {
   switch (currentTab) {
     case 0:
-      return checkLoginState();
+      return loggedIn || checkLoginState();
     case 1:
       return validateClient();
     case 2:
