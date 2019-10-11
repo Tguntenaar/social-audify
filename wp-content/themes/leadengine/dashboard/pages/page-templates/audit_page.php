@@ -269,7 +269,11 @@
     <?php
     if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
-        echo "<iframe ". str_replace("&#34;", '"', stripslashes($audit->video_iframe)) ."</iframe>"; ?>
+        $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
+
+        if(strpos($video, 'height') !== false) {
+            echo "<iframe ". $video ."</iframe>";
+        } ?>
       </div><?php
     } else if ($audit->video_iframe != "" || $edit_mode) { ?>
       <div class="intro-video"></div><?php

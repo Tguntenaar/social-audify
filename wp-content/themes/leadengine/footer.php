@@ -27,68 +27,79 @@
       </div>
 <?php endif; ?>
 <script>
+    console.log(window.location.pathname);
+    if(window.location.pathname == "/register/"
+       || window.location.pathname == "/register"
+       || window.location.pathname == "register"
+       || window.location.pathname == "register/") {
+        var listAllCountries = [
+        'AT',
+        'BE',
+        'BG',
+        'HR',
+        'CY',
+        'CZ',
+        'DK',
+        'EE',
+        'FI',
+        'FR',
+        'DE',
+        'GR',
+        'HU',
+        'IE',
+        'IT',
+        'LV',
+        'LT',
+        'LU',
+        'MT',
+        'NL',
+        'PL',
+        'PT',
+        'RO',
+        'SK',
+        'SI',
+        'ES',
+        'SE',
+        'GB'
+        ];
 
-    var listAllCountries = [
-    'AT',
-    'BE',
-    'BG',
-    'HR',
-    'CY',
-    'CZ',
-    'DK',
-    'EE',
-    'FI',
-    'FR',
-    'DE',
-    'GR',
-    'HU',
-    'IE',
-    'IT',
-    'LV',
-    'LT',
-    'LU',
-    'MT',
-    'NL',
-    'PL',
-    'PT',
-    'RO',
-    'SK',
-    'SI',
-    'ES',
-    'SE',
-    'GB'
-    ];
+        var currentTab = 0;
+        showTab(currentTab);
 
-    var currentTab = 0;
-    showTab(currentTab);
+        var tabs = document.getElementsByClassName('tab');
+        console.log(tabs);
 
-    var tabs = document.getElementsByClassName('tab');
-    console.log(tabs);
+        function nextPrev(n) {
+          // This function will figure out which tab to display
+          var tab = document.getElementsByClassName('tab');
 
-    function nextPrev(n) {
-      // This function will figure out which tab to display
-      var tab = document.getElementsByClassName('tab');
+          if (currentTab == 0) {
 
-      if (currentTab == 0) {
+              var e = document.getElementById("rcp_country");
+              var selectedCountry = e.options[e.selectedIndex].value;
 
-          var e = document.getElementById("rcp_country");
-          var selectedCountry = e.options[e.selectedIndex].value;
+              if (selectedCountry == "NL") {
+                    document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
+                    document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
+                    document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
+                    document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
+                    document.getElementById("rcp_subscription_level_2").click();
+              } else if(listAllCountries.includes(selectedCountry)) {
+                  var btw_number = document.getElementById("rcp_btw_number").value;
 
-          if (selectedCountry == "NL") {
-                document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
-                document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
-                document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
-                document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
-                document.getElementById("rcp_subscription_level_2").click();
-          } else if(listAllCountries.includes(selectedCountry)) {
-              var btw_number = document.getElementById("rcp_btw_number").value;
-
-              if (btw_number == "") {
-                  document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
-                  document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
-                  document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
-                  document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
-                  document.getElementById("rcp_subscription_level_2").click();
+                  if (btw_number == "") {
+                      document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
+                      document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
+                      document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
+                      document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
+                      document.getElementById("rcp_subscription_level_2").click();
+                  } else {
+                      document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
+                      document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
+                      document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'none';
+                      document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
+                      document.getElementById("rcp_subscription_level_1").click();
+                  }
               } else {
                   document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
                   document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
@@ -96,162 +107,53 @@
                   document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
                   document.getElementById("rcp_subscription_level_1").click();
               }
-          } else {
-              document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
-              document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
-              document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'none';
-              document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
-              document.getElementById("rcp_subscription_level_1").click();
           }
-      }
 
 
-      if(document.getElementById('rcp_user_login').value == ''
-         || document.getElementById('rcp_user_email').value == ''
-         || document.getElementById('rcp_user_first').value == ''
-         || document.getElementById('rcp_user_last').value == ''
-         || document.getElementById('rcp_password').value == ''
-         || document.getElementById('rcp_password_again').value == '') {
-             alert("Fill in all the required fields.");
-      } else {
-          // Hide the current tab:
-          document.getElementsByClassName('tab')[currentTab].style.display = 'none';
+          if(document.getElementById('rcp_user_login').value == ''
+             || document.getElementById('rcp_user_email').value == ''
+             || document.getElementById('rcp_user_first').value == ''
+             || document.getElementById('rcp_user_last').value == ''
+             || document.getElementById('rcp_password').value == ''
+             || document.getElementById('rcp_password_again').value == '') {
+                 alert("Fill in all the required fields.");
+          } else {
+              // Hide the current tab:
+              document.getElementsByClassName('tab')[currentTab].style.display = 'none';
 
-          // Increase or decrease the current tab by 1:
-          currentTab += n;
+              // Increase or decrease the current tab by 1:
+              currentTab += n;
 
-          // Display correct tab if length not exceeded
-          if (currentTab < tab.length)
-            showTab(currentTab);
+              // Display correct tab if length not exceeded
+              if (currentTab < tab.length)
+                showTab(currentTab);
+            }
+        }
+
+        function showTab(index) {
+          // This function will display the specified tab of the form ...
+          var tab = document.getElementsByClassName('tab');
+          document.getElementsByClassName('tab')[index].style.display = 'block';
+
+          if(index == 0) {
+              document.getElementById("prevBtn").style.display = 'none';
+          } else {
+              document.getElementById("prevBtn").style.display = 'inline';
+          }
+
+          // Fix the next button
+          if(index == (tab.length - 1)) {
+              var display = "none";
+          } else {
+              var display = "block";
+          }
+
+          document.getElementById("nextBtn").style.display = "block";
+          // $('#nextBtn').css({display:display});
         }
     }
-
-    function showTab(index) {
-      // This function will display the specified tab of the form ...
-      var tab = document.getElementsByClassName('tab');
-      document.getElementsByClassName('tab')[index].style.display = 'block';
-
-      if(index == 0) {
-          document.getElementById("prevBtn").style.display = 'none';
-      } else {
-          document.getElementById("prevBtn").style.display = 'inline';
-      }
-      // ... and fix the previous button:
-      // tab.eq(index).find('input[type=text]').focus();
-
-      // Fix the next button
-      if(index == (tab.length - 1)) {
-          var display = "none";
-      } else {
-          var display = "block";
-      }
-
-      document.getElementById("nextBtn").style.display = "block";
-      // $('#nextBtn').css({display:display});
-    }
-
 </script>
-<!-- <script>
 
-    var listAllCountries = [
-    'AT',
-    'BE',
-    'BG',
-    'HR',
-    'CY',
-    'CZ',
-    'DK',
-    'EE',
-    'FI',
-    'FR',
-    'DE',
-    'GR',
-    'HU',
-    'IE',
-    'IT',
-    'LV',
-    'LT',
-    'LU',
-    'MT',
-    'NL',
-    'PL',
-    'PT',
-    'RO',
-    'SK',
-    'SI',
-    'ES',
-    'SE',
-    'GB'
-    ];
-
-    var $ = jQuery.noConflict();
-    var currentTab = 0;
-    showTab(currentTab);
-
-    var tabs = $('.tab');
-    console.log(tabs);
-
-    function nextPrev(n) {
-      // This function will figure out which tab to display
-      var tab = $('.tab');
-
-      if (currentTab == 0) {
-          if ($( "select#rcp_country option:checked" ).val() == "NL") {
-              $(".rcp_subscription_level_1").css({'display':'none'});
-              $(".rcp_subscription_level_2").css({'display':'block'});
-              $(".rcp_subscription_level_3").css({'display':'block'});
-              $(".rcp_subscription_level_4").css({'display':'none'});
-
-              $("#rcp_subscription_level_2").click();
-          } else if(listAllCountries.includes($( "select#rcp_country option:checked" ).val())) {
-              if ($( "#rcp_btw_number" ).val() == "") {
-                  $(".rcp_subscription_level_1").css({'display':'none'});
-                  $(".rcp_subscription_level_2").css({'display':'block'});
-                  $(".rcp_subscription_level_3").css({'display':'block'});
-                  $(".rcp_subscription_level_4").css({'display':'none'});
-                  $("#rcp_subscription_level_2").click();
-              } else {
-                  $(".rcp_subscription_level_1").css({'display':'block'});
-                  $(".rcp_subscription_level_2").css({'display':'none'});
-                  $(".rcp_subscription_level_3").css({'display':'none'});
-                  $(".rcp_subscription_level_4").css({'display':'block'});
-                  $("#rcp_subscription_level_1").click();
-              }
-          } else {
-              $(".rcp_subscription_level_1").css({'display':'block'});
-              $(".rcp_subscription_level_2").css("display", "none");
-              $(".rcp_subscription_level_3").css({'display':'none'});
-              $(".rcp_subscription_level_4").css({'display':'block'});
-              $("#rcp_subscription_level_1").click();
-          }
-      }
-
-      // Hide the current tab:
-      tab.eq(currentTab).css({'display':'none'});
-
-      // Increase or decrease the current tab by 1:
-      currentTab += n;
-
-      // Display correct tab if length not exceeded
-      if (currentTab < tab.length)
-        showTab(currentTab);
-    }
-
-    function showTab(index) {
-      // This function will display the specified tab of the form ...
-      var tab = $('.tab');
-      tab.eq(index).css({'display': 'block'});
-
-      // ... and fix the previous button:
-      $('#prevBtn').css({'display': index == 0 ? 'none' : 'inline'});
-      tab.eq(index).find('input[type=text]').focus();
-
-      // Fix the next button
-      var display = (index == (tab.length - 1)) ? "none": "block";
-      $('#nextBtn').css({display:display});
-    }
-
-</script> -->
 <?php wp_footer(); ?>
 
 </body>

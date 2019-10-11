@@ -134,11 +134,14 @@ rcp_show_error_messages( 'register' ); ?>
 						<div class="rcp_level_description"> <?php echo rcp_get_subscription_description( $level->id ); ?></div>
 						<ul>
 							<li>14 days free trial!</li>
-							<?php if(rcp_get_subscription_name( $level->id ) == "Entrepreneur pro subscription"
-									 || rcp_get_subscription_name( $level->id ) == "Pro subscription") { ?>
-										 <li>From 570$ to 470$</li>
-						    <?php } else { ?>
+							<?php if( $level->id == 2) { ?>
+										 <li>From 77$ to 57$</li>
+						    <?php } else if( $level->id == 3) { ?>
+										<li>From 770$ to 570$</li>
+							<?php } else if( $level->id == 1) { ?>
 										<li>From 67$ to 47$</li>
+							<?php } else if( $level->id == 4) { ?>
+										<li>From 670$ to 470$</li>
 							<?php } ?>
 							<li>Create audits</li>
 							<li>Create reports</li>
