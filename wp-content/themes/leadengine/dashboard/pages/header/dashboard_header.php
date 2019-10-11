@@ -73,8 +73,8 @@
   <div id="adAccountModal" class="modal"></div>
 
   <div class="sub-header col-lg-12">
-    <a href="../dashboard/">
-      <i class="fas fa-th-large"></i> &nbsp; Dashboard
+    <a href="../dashboard/" class="home-link">
+      <i class="fas fa-th-large"></i> Dashboard
     </a>
 
     <a href="../feedback/"  style="float:right;margin-right:50px;">
