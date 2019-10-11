@@ -117,7 +117,7 @@
               </div>
               <input type="text" name="search" id="search-input-compare" placeholder="Search..." valid/>
               <div class="inner-scroll" style="height: 335px;" id="compare-list">
-                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row no-compare selected" name="-" data-compare=''>No competitor...</a>
+                <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client selected" name="-" data-compare=''>No competitor...</a>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row new-compare" name="+"
                   data-compare='<?php echo htmlentities(json_encode([ 'facebook' => '', 'instagram' => '', 'website' => ''])); ?>'>New competitor
                 </a><?php
@@ -196,7 +196,7 @@
     }
 
     // Selectable list - TODO : kan wss naar dashboard-header
-    $('.audit-row').on('click', function() {
+    $('.audit-row.client').on('click', function() {
       $(this).parent().find('.audit-row').removeClass('selected');
       $(this).addClass('selected');
       nextPrev(1);
@@ -219,8 +219,8 @@
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
             <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex; ?>" title="Only letters are allowed">
-            <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username">
-            <input type="text" id="instagram_url" placeholder="Instagram username or url">
+            <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username" pattern="<?php echo $fb_regex ?>">
+            <input type="text" id="instagram_url" placeholder="Instagram username or url" pattern="<?php echo $ig_regex ?>">
             <input type="text" id="website_url" placeholder="https://www.example.com" pattern="<?php echo $website_regex; ?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
@@ -252,6 +252,9 @@
         });
         var name = (newCompare.data('compare').name !== "") ? newCompare.data('compare').name: 'empty';
         newCompare.html(`New Competitor <span style="color:grey;">(${name})</span>`);
+
+        newCompare.parent().find('.audit-row').removeClass('selected');
+        newCompare.addClass('selected');
         nextPrev(1);
       });
 

@@ -181,7 +181,6 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 
 // Parse Client Info for client setup, audit setup and report setup.
 function parseClientInputFields(field) {
-
   var unparsed = $(field).val();
 
   if (!unparsed) {
@@ -204,7 +203,7 @@ function parseClientInputFields(field) {
 
 function grabPageId(field, found) {
   if (field.id.includes('facebook')) {
-    var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{16})$';
+    var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{14,17})$';
     var pageID = found.match(fbPageID);
 
     if (pageID) {

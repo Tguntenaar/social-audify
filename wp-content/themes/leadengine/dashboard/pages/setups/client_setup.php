@@ -53,15 +53,15 @@
           <input maxlength="25" type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed" required>
 
           Facebook Page:<br>
-          <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" required>
+          <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" pattern="<?php echo $fb_regex ?>" required>
           <div class="toggleClient" id="toggle_facebook" onclick="toggle_client_options('facebook')"><i class="fas fa-minus-circle"></i></div>
 
           Instagram:<br>
-          <input type="text" id="instagram_url" name="instagram_url" placeholder="Instagram username or url"  maxlength="50" required>
+          <input type="text" id="instagram_url" name="instagram_url" placeholder="Instagram username or url" pattern="<?php echo $ig_regex ?>" maxlength="50" required>
           <div class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></div>
 
           Website:<br>
-          <input type="text" id="website_url" name="website_url" placeholder="http://www.example.com" pattern="<?php echo $website_regex;?>" required>
+          <input type="text" id="website_url" name="website_url" placeholder="http://www.example.com" pattern="<?php echo $website_regex ?>" required>
           <div class="toggleClient" id="toggle_website" onclick="toggle_client_options('website')"><i class="fas fa-minus-circle"></i></div>
 
           E-mail:<br>

@@ -8,7 +8,7 @@
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
 
-  include(dirname(__FILE__)."/../../assets/php/parse_functions.php");
+  include(dirname(__FILE__)."/../../assets/php/global_regex.php");
   include(dirname(__FILE__)."/../../services/connection.php");
   include(dirname(__FILE__)."/../../controllers/client_controller.php");
   include(dirname(__FILE__)."/../../models/client.php");
@@ -21,6 +21,7 @@
     $fb = get_fb_name(sanitize_text_field($_POST['facebook_url']));
     $ig = get_insta_name(sanitize_text_field($_POST['instagram_url']));
     $wb = str_replace("http://", "", str_replace("https://","",sanitize_text_field($_POST['website_url'])));
+    
     $name = sanitize_text_field($_POST['client_name']);
     $mail = sanitize_email($_POST['client_mail']);
     $ad_id = sanitize_text_field($_POST['ad_id']);

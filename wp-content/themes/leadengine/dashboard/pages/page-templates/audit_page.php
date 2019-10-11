@@ -857,7 +857,7 @@
         html:`Do you want to sent this client automatic reminders?
           <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
           Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
-          <a href='/profile-page'>here</a>.<br><br>
+          <a href='/profile-page/#mail-settings`'>here</a>.<br><br>
           Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
