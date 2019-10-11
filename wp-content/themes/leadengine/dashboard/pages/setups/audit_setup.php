@@ -27,7 +27,7 @@
       <span class="back" onclick="showIntro(true)">
       <i class="fas fa-chevron-left"></i> Back</span>
     <div class="audit_count"><?php
-      $max_audits = 1000;
+      $max_audits = 20;
       $audits_made = $audit_control->get_amount($date = date('Y-m-d'));
       echo $audits_made.'/'.$max_audits.' audits today'; ?>
     </div>
@@ -36,7 +36,7 @@
   <!-- Initial block -->
   <div class="create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <?php
-    if ($audits_made > $max_audits) { ?>
+    if ($audits_made >= $max_audits) { ?>
       <div class="max-audits"> Max of <?php echo $max_audits; ?> audits reached.
         <span class="description">You can upgrade your account to increase your daily audit count.</span>
         <a href="../dashboard/"><i class="fas fa-th-large"></i>&nbsp; Dashboard</a>

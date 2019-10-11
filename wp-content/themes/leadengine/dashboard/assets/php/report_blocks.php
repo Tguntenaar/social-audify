@@ -75,12 +75,12 @@
       "desc" => "The average cost for 1,000 impressions",
       "currency" => 1
     ],
-    ["type" => "cam_cpp",
-      "name" => "Cost per pixel",
-      "fb_name" => "cpp",
-      "desc" => "The average cost to reach 1,000 people. This metric is estimated.",
-      "currency" => 1
-    ],
+    // ["type" => "cam_cpp",
+    //   "name" => "Cost per pixel",
+    //   "fb_name" => "cpp",
+    //   "desc" => "The average cost to reach 1,000 people. This metric is estimated.",
+    //   "currency" => 1
+    // ],
     ["type" => "cam_ctr",
       "name" => "Click through ratio",
       "fb_name" => "ctr",

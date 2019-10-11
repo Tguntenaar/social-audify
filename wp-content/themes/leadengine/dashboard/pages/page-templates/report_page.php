@@ -197,7 +197,7 @@
           <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
         } ?>
 
-        Report: <?php echo $report->name;
+        Report: <?php echo $report->name; ?> | <?php echo date('Y-m-d', strtotime($report->create_date));
 
         if ($edit_mode) { ?>
           <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
