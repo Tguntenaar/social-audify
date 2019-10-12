@@ -19,6 +19,21 @@
     wp_die();
   }
 
+  add_action( 'wp_ajax_log_error', 'log_js_error');
+  add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
+
+  function log_js_error() {
+    require_once(dirname(_FILE_)."/dashboard/controllers/log_controller.php");
+    $errorLogger = new Logger;
+
+    $message = isset($_POST['message']) ? $_POST['message'] : "";
+    $stacktrace = isset($_POST['stacktrace']) ? $_POST['stacktrace'] : "";
+    $stacktrace .= isset($_POST['function']) ? "in {$_POST['function']}" : "";
+
+    $errorLogger->printJs(get_current_user_id(), $message, $stacktrace);
+    wp_die();
+  }
+
 
   add_action( 'wp_ajax_toggle_visibility', 'toggle_visibility');
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
@@ -792,7 +807,7 @@
       </th>
       <td>
         <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $number ); ?>"/>
-        <p class="description"><?php _e( 'The member\'s Calander link.', 'rcp' ); ?></p>
+        <p class="description"><?php _e( 'The member\'s Calendar link.', 'rcp' ); ?></p>
       </td>
     </tr>
 
@@ -937,6 +952,18 @@
     if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
       wp_redirect( $referrer . '?login=failed' );  // let's append some information (login=failed) to the URL for the theme to use
       exit;
+    }
+  }
+
+  function fb_filter_query( $query, $error = true ) {
+    if ( is_search() ) {
+      $query->is_search = false;
+      $query->query_vars[s] = false;
+      $query->query[s] = false;
+
+      // to error
+      if ( $error == true )
+        $query->is_404 = true;
     }
   }
 ?>
