@@ -26,7 +26,8 @@
     <h2>Audit overview</h2>
     <div class="stat-container-a col-lg-12">
         <?php
-            $audits = $audit_control->get_all_audits();
+            //$audits = $audit_control->get_all_audits();
+            $audits = null;
             $audit_count = sizeof($audits);
             $view_count = 0;
             $audit_today_count = 0;

@@ -12,95 +12,153 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link href="https://fonts.googleapis.com/css?family=Raleway:800" rel="stylesheet">
 
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/functions.js" charset="utf-8" defer></script>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/modal.js" charset="utf-8" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
-  <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
-  <script>var testing_git = 'thomas git test';</script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
 
-<div class="a-container col-lg-12">
-  <h2>User overview</h2>
-  <div class="stat-container-a col-lg-12"> <?php
-    $audits = $audit_control->get_all_audits();
-    $count = sizeof($audits);
-    $view_count = 0;
-    $today_count = 0;
+<div class="content-right y-scroll" style="height:100vh;">
+  <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
+      $users = $user_control->get_all(); ?>
+      <div class="inner no-scroll client-dashboard">
+        <span class="title"><span class="title-background" style="width:200px">User Overview</span>
+          <span class="count" id="counterSpanUser"><?php echo sizeof($users); ?></span>
+        </span>
+        <input type="text" id="search-input-user" placeholder="Search..."/>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title" >
+          <div class="col-12 col-sm-3 col-md-3 col-lg-2 row-title-style" style="padding:0;">Id | Name</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Email</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Instagram Business Account</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0; text-align:center;">Clients / Audits / Reports</div>
+        </div>
+        <div class="inner-scroll client-dashboard" id="user-results"><?php
+          foreach ($users as $user) {
+            $clients = $client_control->get_all(NULL, $user->id); 
+            $audits = $audit_control->get_all(NULL, $user->id); 
+            $reports = $report_control->get_all(NULL, $user->id); ?>
 
-    foreach($audits as $audit) {
-      $user = $user_control->get((int)$client_control->get($report->client_id)->user_id)->name;
-      if (date('Ymd') == date('Ymd', strtotime($audit->create_date))) {
-        $audit_today_count++;
-      }
+            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $user->id." ".$user->name; ?>">
+              <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">
+                <?php echo "$user->id | $user->name"; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $user->email; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $user->instagram_business_account_id; ?></div>
+              <div style="overflow:hidden; text-align:center;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo count($clients)." / ".count($audits)." / ".count($reports); ?></div>
+            </a><?php
+          } ?>
+        </div>
+      </div>
+    </div>
 
-      if ($audit->view_time == NULL) {
-        $viewed = "not viewed";
-      } else {
-        $viewed = "viewed";
-        $view_count++;
-      }
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
+      $audits = $audit_control->get_all(); ?>
+      <div class="inner no-scroll client-dashboard" style="height:430px">
+        <span class="title"><span class="title-background" style="width:200px">Audit Overview</span>
+          <span class="count" id="counterSpanAudit"><?php echo sizeof($audits); ?></span>
+        </span>
+        <input type="text" id="search-input-audit" placeholder="Search..."/>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title" >
+          <div class="col-12 col-sm-3 col-md-3 col-lg-2 row-title-style" style="padding:0;">User</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Audit Name</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">View Date</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Create Date</div>
+        </div>
+        <div class="inner-scroll client-dashboard" id="audit-results"><?php
+          foreach ($audits as $audit) {
+            $user = $user_control->get((int)$client_control->get($audit->client_id)->user_id);
+            $today_count += (date('Ymd') == date('Ymd', strtotime($audit->create_date)));
 
-      $slug = strtolower('audit-'.$audit->name.'-'.$audit->id.'/'); ?>
-      <a href="<?php echo $slug; ?>" class="a-row col-xs-12 col-ms-12 col-md-12 col-lg-12">
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $user; ?></div>
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $audit->name; ?></div>
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $viewed; ?></div>
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-3'><?php echo $audit->create_date; ?></div>
-      </a><?php
-    } ?>
+            $viewed = "not viewed";
+            if ($audit->view_time != NULL) {
+              $viewed = $audit->view_time;
+              $view_count++;
+            } ?>
+
+            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $audit->name; ?>">
+              <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">
+                <?php echo "$user->id | $user->name"; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $audit->name; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $viewed; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $audit->create_date; ?></div>
+            </a><?php
+          } ?>
+        </div>
+        <span class="analytics-stats">Viewed audits : <strong><?php echo $view_count." / ".sizeof($audits); ?></strong></span>
+        <span class="analytics-stats">Audits created today : <strong><?php echo $today_count; ?></strong></span>
+      </div>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
+      $reports = $report_control->get_all(); ?>
+      <div class="inner no-scroll client-dashboard" style="height:430px">
+        <span class="title"><span class="title-background" style="width:200px">Report Overview</span>
+          <span class="count" id="counterSpanReport"><?php echo sizeof($reports); ?></span>
+        </span>
+        <input type="text" id="search-input-report" placeholder="Search..."/>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title" >
+          <div class="col-12 col-sm-3 col-md-3 col-lg-2 row-title-style" style="padding:0;">User</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Report Name</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">View Date</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Create Date</div>
+        </div>
+        <div class="inner-scroll client-dashboard" id="report-results"><?php
+          foreach ($reports as $report) {
+            $user = $user_control->get((int)$client_control->get($report->client_id)->user_id);
+            $today_count += (date('Ymd') == date('Ymd', strtotime($report->create_date)));
+
+            $viewed = "not viewed";
+            if ($report->view_time != NULL) {
+              $viewed = $report->view_time;
+              $view_count++;
+            } ?>
+
+            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
+              <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">
+                <?php echo "$user->id | $user->name"; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $report->name; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $viewed; ?></div>
+              <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
+                <?php echo $report->create_date; ?></div>
+            </a><?php
+          } ?>
+        </div>
+        <span class="analytics-stats">Viewed reports : <strong><?php echo $view_count." / ".sizeof($reports); ?></strong></span>
+        <span class="analytics-stats">Reports created today : <strong><?php echo $today_count; ?></strong></span>
+      </div>
+    </div>
   </div>
-
-  <span class="analytics-stats">
-    Viewed audits: <strong><?php echo $view_count; ?></strong> / <?php echo $audit_count; ?>
-  </span>
-
-  <span class="analytics-stats">
-    Audits created today: <strong><?php echo $today_count; ?></strong>
-  </span>
 </div>
 
-<div class="a-container col-lg-12">
-  <h2>Report overview</h2>
-  <div class="stat-container-a col-lg-12"> <?php
-    $reports = $report_control->get_all_reports();
-    $count = sizeof($reports);
-    $view_count = 0;
-    $today_count = 0;
+<script charset="utf-8">
+  // Search lists
+  var counterSpanUser = $("#counterSpanUser");
+  var elems_users = $("#user-results .audit-row");
+  $(document).on('keyup', 'input#search-input-user', function() {
+    filterSearch($(this).val(), elems_users, counterSpanUser);
+  });
 
-    foreach($reports as $report) {
-      $user = $user_control->get((int)$client_control->get($report->client_id)->user_id)->name;
-      if (date('Ymd') == date('Ymd', strtotime($report->create_date))) {
-        $today_count++;
-      }
+  var counterSpanAudit = $("#counterSpanAudit");
+  var elems_audits = $("#audit-results .audit-row");
+  $(document).on('keyup', 'input#search-input-audit', function() {
+    filterSearch($(this).val(), elems_audits, counterSpanAudit);
+  });
 
-      if($report->view_time == NULL) {
-        $viewed = "not viewed";
-      } else {
-        $viewed = "viewed";
-        $view_count++;
-      }
-
-      $slug = strtolower('report-'.$report->name.'-'.$report->id.'/'); ?>
-      <a href="<?php echo $slug; ?>" class="a-row col-xs-12 col-ms-12 col-md-12 col-lg-12">
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $user; ?></div>
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $report->name; ?></div>
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-2'><?php echo $viewed; ?></div>
-        <div class='a-col col-xs-2 col-ms-2 col-md-2 col-lg-3'><?php echo $report->create_date; ?></div>
-      </a><?php
-    } ?>
-  </div>
-
-  <span class="analytics-stats">
-    Viewed reports: <strong><?php echo $view_count; ?></strong> / <?php echo $count; ?>
-  </span>
-
-  <span class="analytics-stats">
-    Reports created today: <strong><?php echo $today_count; ?></strong>
-  </span>
-</div>
+  var counterSpanReport = $("#counterSpanReport");
+  var elems_reports = $("#report-results .audit-row");
+  $(document).on('keyup', 'input#search-input-report', function() {
+    filterSearch($(this).val(), elems_reports, counterSpanReport);
+  });
+</script>
 
 </body>
 </html>
