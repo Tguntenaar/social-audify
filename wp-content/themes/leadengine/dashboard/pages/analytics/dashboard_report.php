@@ -57,7 +57,7 @@
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
       $audits = $audit_control->get_all(); ?>
-      <div class="inner no-scroll client-dashboard" style="height:430px">
+      <div class="inner no-scroll client-dashboard" style="height:440px">
         <span class="title"><span class="title-background" style="width:200px">Audit Overview</span>
           <span class="count" id="counterSpanAudit"><?php echo sizeof($audits); ?></span>
         </span>
@@ -91,14 +91,16 @@
             </a><?php
           } ?>
         </div>
-        <span class="analytics-stats">Viewed audits : <strong><?php echo $view_count." / ".sizeof($audits); ?></strong></span>
-        <span class="analytics-stats">Audits created today : <strong><?php echo $today_count; ?></strong></span>
+        <span class="analytics-stats" style="margin-top:10px">
+          Viewed audits : <strong><?php echo $view_count." / ".sizeof($audits); ?></strong></span>
+        <span class="analytics-stats" style="margin-top:10px">
+          Audits created today : <strong><?php echo $today_count; ?></strong></span>
       </div>
     </div>
 
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
       $reports = $report_control->get_all(); ?>
-      <div class="inner no-scroll client-dashboard" style="height:430px">
+      <div class="inner no-scroll client-dashboard" style="height:440px">
         <span class="title"><span class="title-background" style="width:200px">Report Overview</span>
           <span class="count" id="counterSpanReport"><?php echo sizeof($reports); ?></span>
         </span>
@@ -132,8 +134,10 @@
             </a><?php
           } ?>
         </div>
-        <span class="analytics-stats">Viewed reports : <strong><?php echo $view_count." / ".sizeof($reports); ?></strong></span>
-        <span class="analytics-stats">Reports created today : <strong><?php echo $today_count; ?></strong></span>
+        <span class="analytics-stats" style="margin-top:10px">
+          Viewed reports : <strong><?php echo $view_count." / ".sizeof($reports); ?></strong></span>
+        <span class="analytics-stats" style="margin-top:10px">
+          Reports created today : <strong><?php echo $today_count; ?></strong></span>
       </div>
     </div>
   </div>
