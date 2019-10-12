@@ -72,6 +72,7 @@
           foreach ($audits as $audit) {
             $user = $user_control->get((int)$client_control->get($audit->client_id)->user_id);
             $today_count += (date('Ymd') == date('Ymd', strtotime($audit->create_date)));
+            $slug = strtolower('audit-'.$audit->name.'-'.$audit->id.'/');
 
             $viewed = "not viewed";
             if ($audit->view_time != NULL) {
@@ -79,7 +80,7 @@
               $view_count++;
             } ?>
 
-            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $audit->name; ?>">
+            <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $audit->name; ?>">
               <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">
                 <?php echo "$user->id | $user->name"; ?></div>
               <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
@@ -115,6 +116,7 @@
           foreach ($reports as $report) {
             $user = $user_control->get((int)$client_control->get($report->client_id)->user_id);
             $today_count += (date('Ymd') == date('Ymd', strtotime($report->create_date)));
+            $slug = strtolower('report-'.$report->name.'-'.$report->id.'/');
 
             $viewed = "not viewed";
             if ($report->view_time != NULL) {
@@ -122,7 +124,7 @@
               $view_count++;
             } ?>
 
-            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
+            <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
               <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">
                 <?php echo "$user->id | $user->name"; ?></div>
               <div style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">
