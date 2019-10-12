@@ -35,7 +35,22 @@
       <link rel="pingback" href="<?php esc_url(bloginfo( 'pingback_url' )); ?>" />
       <?php wp_head(); ?>
 	  <meta name="google-site-verification" content="y0l2vQS9j-JuIM5dmnkggqcWfIRS7wWLaT2HSp1mKX8" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149815594-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
+      gtag('config', 'UA-149815594-1');
+    </script>
+    <!-- Google Tag Manager -->
+      <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-KC4JDF9');</script>
+    <!-- End Google Tag Manager -->
     <!-- Facebook Pixel Code -->
     <script>
       !function(f,b,e,v,n,t,s)
@@ -56,6 +71,10 @@
     <!-- End Facebook Pixel Code -->
    </head>
     <body <?php body_class();?>>
+    <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KC4JDF9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
       <?php if( !empty($redux_ThemeTek['tek-preloader']) && $redux_ThemeTek['tek-preloader'] == 1 ) : ?>
         <div id="preloader">
            <div class="spinner"></div>
