@@ -807,7 +807,7 @@
       </th>
       <td>
         <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $number ); ?>"/>
-        <p class="description"><?php _e( 'The member\'s Calander link.', 'rcp' ); ?></p>
+        <p class="description"><?php _e( 'The member\'s Calendar link.', 'rcp' ); ?></p>
       </td>
     </tr>
 
