@@ -222,7 +222,7 @@
   </style>
 </head>
 <body class="custom-body">
-  <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
+  <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.</h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
     <div id="nav-icon2">
@@ -247,7 +247,7 @@
         <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
         <button id="copy_link" class="copy-link"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-        <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
+        <a href="?preview_mode=True" class="preview"><i class="far fa-eye"></i> Preview </a>
         <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i> Generate PDF</a>
         <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
         <?php
@@ -291,7 +291,6 @@
             <span class="radio-label">Nothing</span>
           <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $audit->video_iframe != NULL ? '<iframe '.stripslashes($audit->video_iframe).'</iframe>' : ''; ?>'/>
-          </div>
         </form>
       </div><?php
     } ?>

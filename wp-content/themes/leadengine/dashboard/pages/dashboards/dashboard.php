@@ -111,27 +111,22 @@
       <hr style="margin-left: 15px;" class="under-line" />
         <div class="overflow-x">
         <div class="acitivities">
-          <div class="recent-send">
-            <?php
-              // Recently send Audits and Reports
-              $recent_items = $connection->get_all_recent($user_id, 15);
-              foreach ($recent_items as $item) {
-                if (strlen($item->name) > 15) { $name = substr($item->name,0,15).'...'; } else { $name = $item->name; }
+          <div class="recent-send"><?php
+            // Recently send Audits and Reports
+            $recent_items = $connection->get_all_recent($user_id, 15);
+            foreach ($recent_items as $item) {
+              $slug = make_slug($item->type, $item->name, $item->id);
+              $name = strlen($item->name) <= 15 ? $item->name : substr($item->name, 0, 15).'...'; ?>
 
-                $slug = strtolower($item->type ."-". str_replace(" ", "-", $item->name)."-". $item->id);
-                echo '<a href="/'. $slug .'/" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row">
-                  <div class="recent-send-box">
-                    '. ($item->view_time === NULL ? "<i class='fas fa-envelope' style='color: #487dd7;'></i>"
-                                                  : "<i class='far fa-envelope-open' style='color: #6e9d9c;'></i>").
-                    //  ($item->type === 'audit' ? "<i class='fas fa-file-alt' style='color: #487dd7;'></i>"
-                    //                               : "<i class='fas fa-chart-line' style='color: #487dd7;'></i>") .
-                   '<span class="report-audit-name">'. $name .'</span>
-                    <br />
-                    <span class="report-audit-name-client">'. $item->client_name .'</span>
-                  </div>
-                </a>';
-              }
-            ?>
+              <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row">
+                <div class="recent-send-box"><?php
+                  echo ($item->view_time === NULL ? "<i class='fas fa-envelope' style='color: #487dd7;'></i>"
+                                                  : "<i class='far fa-envelope-open' style='color: #6e9d9c;'></i>") ?>
+                  <span class="report-audit-name"><?php echo $name; ?></span><br/>
+                  <span class="report-audit-name-client"><?php echo $item->client_name; ?></span>
+                </div>
+              </a><?php
+            } ?>
           </div>
         </div>
       </div>

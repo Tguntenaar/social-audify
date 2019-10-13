@@ -65,23 +65,7 @@ function percent_diff($primary, $rest, $direct_print = false) {
   return $direct_print ? percent_print($result) : $result;
 }
 
-function castToJSObject() {
-  $jsObj = new StdClass;
-  $args = func_get_args();
-  $phpObj = array_pop($args);
-  // rename the database property names to smaller versions
-  $newName = array(
-    'id' => 'id',
-    'name' => 'name',
-    'facebook' => 'fb',
-    'instagram' => 'ig',
-    'website' => 'wb',
-    'mail' => 'ml',
-    'ad_id' => 'ad_id'
-  );
-  foreach($args as $arg) {
-    $jsObj->{$newName[$arg]} = $phpObj->{$arg};
-  }
-  return $jsObj;
+function make_slug($type, $name, $id) {
+  return strtolower('/'.$type.'-'.str_replace(" ", "-", $name).'-'.$id.'/');
 }
 ?>
