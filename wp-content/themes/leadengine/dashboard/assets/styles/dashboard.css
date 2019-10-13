@@ -698,6 +698,18 @@ nav ul a li {
     display: block;
 }
 
+.video-options {
+	width: 400px;
+	height: 300px;
+	position: absolute;
+	margin-top: 100px;
+	top: 15px; left: 10px;
+	background: #fff;
+	padding-right: 20px;
+	padding-left: 5px;
+	overflow: hidden;
+}
+
 .load-screen {
 	display: none;
 	position: fixed;
@@ -732,22 +744,10 @@ nav ul a li {
 	line-height: 20px;
 }
 
-.video-options {
-	width: 300px;
-	height: 300px;
-	position: absolute;
-	margin-top: 100px;
-	top: 15px; left: 10px;
-	background: #fff;
-	padding-right: 20px;
-	padding-left: 5px;
-	overflow: hidden;
-}
-
 .video-options h3 {
 	font-size: 21px;
 	margin-left: 15px;
-	margin-top: 25px;
+	margin-top: 45px;
 	margin-bottom: 5px;
 }
 

@@ -26,12 +26,9 @@
          <i class="fa fa-angle-up"></i>
       </div>
 <?php endif; ?>
+<?php if(get_post_field( 'post_name', get_post() ) == "register" && empty($_GET)) { ?>
 <script>
-    console.log(window.location.pathname);
-    if(window.location.pathname == "/register/"
-       || window.location.pathname == "/register"
-       || window.location.pathname == "register"
-       || window.location.pathname == "register/") {
+
         var listAllCountries = [
         'AT',
         'BE',
@@ -67,32 +64,40 @@
         showTab(currentTab);
 
         var tabs = document.getElementsByClassName('tab');
-        console.log(tabs);
+        <?php $bool = (is_user_logged_in() != True) ? "1" : "0"; ?>
 
         function nextPrev(n) {
           // This function will figure out which tab to display
           var tab = document.getElementsByClassName('tab');
 
-          if (currentTab == 0) {
+          if(<?php echo $bool; ?>) {
 
-              var e = document.getElementById("rcp_country");
-              var selectedCountry = e.options[e.selectedIndex].value;
+              if (currentTab == 0) {
+                  var e = document.getElementById("rcp_country");
+                  var selectedCountry = e.options[e.selectedIndex].value;
 
-              if (selectedCountry == "NL") {
-                    document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
-                    document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
-                    document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
-                    document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
-                    document.getElementById("rcp_subscription_level_2").click();
-              } else if(listAllCountries.includes(selectedCountry)) {
-                  var btw_number = document.getElementById("rcp_btw_number").value;
+                  if (selectedCountry == "NL") {
+                        document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
+                        document.getElementById("rcp_subscription_level_2").click();
+                  } else if(listAllCountries.includes(selectedCountry)) {
+                      var btw_number = document.getElementById("rcp_btw_number").value;
 
-                  if (btw_number == "") {
-                      document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
-                      document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
-                      document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
-                      document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
-                      document.getElementById("rcp_subscription_level_2").click();
+                      if (btw_number == "") {
+                          document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
+                          document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
+                          document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
+                          document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
+                          document.getElementById("rcp_subscription_level_2").click();
+                      } else {
+                          document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
+                          document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
+                          document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'none';
+                          document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
+                          document.getElementById("rcp_subscription_level_1").click();
+                      }
                   } else {
                       document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
                       document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
@@ -100,34 +105,38 @@
                       document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
                       document.getElementById("rcp_subscription_level_1").click();
                   }
-              } else {
-                  document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
-                  document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
-                  document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'none';
-                  document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
-                  document.getElementById("rcp_subscription_level_1").click();
               }
+
+
+              if(document.getElementById('rcp_user_login').value == ''
+                 || document.getElementById('rcp_user_email').value == ''
+                 || document.getElementById('rcp_user_first').value == ''
+                 || document.getElementById('rcp_user_last').value == ''
+                 || document.getElementById('rcp_password').value == ''
+                 || document.getElementById('rcp_password_again').value == '') {
+                     alert("Fill in all the required fields.");
+              } else {
+                  // Hide the current tab:
+                  document.getElementsByClassName('tab')[currentTab].style.display = 'none';
+
+                  // Increase or decrease the current tab by 1:
+                  currentTab += n;
+
+                  // Display correct tab if length not exceeded
+                  if (currentTab < tab.length)
+                    showTab(currentTab);
+                }
+            } else {
+            // Hide the current tab:
+            document.getElementsByClassName('tab')[currentTab].style.display = 'none';
+
+            // Increase or decrease the current tab by 1:
+            currentTab += n;
+
+            // Display correct tab if length not exceeded
+            if (currentTab < tab.length)
+              showTab(currentTab);
           }
-
-
-          if(document.getElementById('rcp_user_login').value == ''
-             || document.getElementById('rcp_user_email').value == ''
-             || document.getElementById('rcp_user_first').value == ''
-             || document.getElementById('rcp_user_last').value == ''
-             || document.getElementById('rcp_password').value == ''
-             || document.getElementById('rcp_password_again').value == '') {
-                 alert("Fill in all the required fields.");
-          } else {
-              // Hide the current tab:
-              document.getElementsByClassName('tab')[currentTab].style.display = 'none';
-
-              // Increase or decrease the current tab by 1:
-              currentTab += n;
-
-              // Display correct tab if length not exceeded
-              if (currentTab < tab.length)
-                showTab(currentTab);
-            }
         }
 
         function showTab(index) {
@@ -148,12 +157,25 @@
               var display = "block";
           }
 
-          document.getElementById("nextBtn").style.display = "block";
+          if(<?php echo $bool; ?>) {
+              if (index == 2) {
+                  document.getElementById("nextBtn").style.display = "none";
+              } else {
+                  document.getElementById("nextBtn").style.display = "block";
+              }
+          } else {
+
+              if (index == 1) {
+                  document.getElementById("nextBtn").style.display = "none";
+              } else {
+                  document.getElementById("nextBtn").style.display = "block";
+              }
+          }
           // $('#nextBtn').css({display:display});
         }
-    }
-</script>
 
+</script>
+<?php } ?>
 <?php wp_footer(); ?>
 
 </body>

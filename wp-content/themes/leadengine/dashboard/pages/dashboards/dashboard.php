@@ -92,11 +92,12 @@
       <div class="intro-overlay">
         <div class="vertical-align" style="width: 50%; margin: 0 auto; height: auto;">
           <h1>Welcome to Social Audify!</h1>
-          <p>
+          <!-- <p>
           The tool for generating more sales and automating your reporting process!
           In order to make your audits and reports as efficient as possible, we advise you to take a few minutes to configure your account to make sure you get the most out of this software.
           Within the settings you can configure your automatic emails / follow ups you want us to send, you can add your phone number so your leads can call you after watching your audit, and you can add a little avatar to add to every audit and other features.
-          </p>
+          </p> -->
+          <iframe style="display: block; margin: 0 auto; margin-bottom: 20px;" width="560" height="315" src="https://www.youtube.com/embed/O_JeCXnd3k0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
           <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 25px;">Configure profile</a>
         </div>
       </div>
@@ -115,9 +116,9 @@
               // Recently send Audits and Reports
               $recent_items = $connection->get_all_recent($user_id, 15);
               foreach ($recent_items as $item) {
-                if(strlen($item->name) > 15) { $name = substr($item->name,0,15).'...'; } else { $name = $item->name; }
+                if (strlen($item->name) > 15) { $name = substr($item->name,0,15).'...'; } else { $name = $item->name; }
 
-                $slug = strtolower($item->type ."-". str_replace(' ', '-', $item->name)."-". $item->id);
+                $slug = strtolower($item->type ."-". str_replace(" ", "-", $item->name)."-". $item->id);
                 echo '<a href="/'. $slug .'/" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row">
                   <div class="recent-send-box">
                     '. ($item->view_time === NULL ? "<i class='fas fa-envelope' style='color: #487dd7;'></i>"

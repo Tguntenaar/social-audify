@@ -22,7 +22,9 @@
 <div class="content-right y-scroll" style="height:100vh;">
   <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
-      $users = $user_control->get_all(); ?>
+      $users = $user_control->get_all(); 
+      $all_audits = array();
+      $all_reports = array(); ?>
       <div class="inner no-scroll client-dashboard">
         <span class="title"><span class="title-background" style="width:200px">User Overview</span>
           <span class="count" id="counterSpanUser"><?php echo sizeof($users); ?></span>
@@ -38,7 +40,10 @@
           foreach ($users as $user) {
             $clients = $client_control->get_all(NULL, $user->id); 
             $audits = $audit_control->get_all(NULL, $user->id); 
-            $reports = $report_control->get_all(NULL, $user->id); ?>
+            $reports = $report_control->get_all(NULL, $user->id); 
+            
+            $all_audits = array_merge($all_audits, $audits);
+            $all_reports = array_merge($all_reports, $reports); ?>
 
             <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $user->id." ".$user->name; ?>">
               <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">
@@ -55,11 +60,10 @@
       </div>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
-      $audits = $audit_control->get_all(); ?>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;">
       <div class="inner no-scroll client-dashboard" style="height:440px">
         <span class="title"><span class="title-background" style="width:200px">Audit Overview</span>
-          <span class="count" id="counterSpanAudit"><?php echo sizeof($audits); ?></span>
+          <span class="count" id="counterSpanAudit"><?php echo sizeof($all_audits); ?></span>
         </span>
         <input type="text" id="search-input-audit" placeholder="Search..."/>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title" >
@@ -69,15 +73,15 @@
           <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Create Date</div>
         </div>
         <div class="inner-scroll client-dashboard" id="audit-results"><?php
-          foreach ($audits as $audit) {
+          foreach ($all_audits as $audit) {
             $user = $user_control->get((int)$client_control->get($audit->client_id)->user_id);
-            $today_count += (date('Ymd') == date('Ymd', strtotime($audit->create_date)));
-            $slug = strtolower('audit-'.str_replace(' ', '-', $audit->name).'-'.$audit->id.'/');
+            $today_count_audit += (date('Ymd') == date('Ymd', strtotime($audit->create_date)));
+            $slug = strtolower('audit-'.str_replace(" ", "-", $audit->name).'-'.$audit->id.'/');
 
             $viewed = "not viewed";
             if ($audit->view_time != NULL) {
               $viewed = $audit->view_time;
-              $view_count++;
+              $view_count_audit++;
             } ?>
 
             <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $audit->name; ?>">
@@ -93,17 +97,16 @@
           } ?>
         </div>
         <span class="analytics-stats" style="margin-top:10px">
-          Viewed audits : <strong><?php echo $view_count." / ".sizeof($audits); ?></strong></span>
+          Viewed audits : <strong><?php echo $view_count_audit." / ".sizeof($all_audits); ?></strong></span>
         <span class="analytics-stats" style="margin-top:10px">
-          Audits created today : <strong><?php echo $today_count; ?></strong></span>
+          Audits created today : <strong><?php echo $today_count_audit; ?></strong></span>
       </div>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;"><?php
-      $reports = $report_control->get_all(); ?>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 right" style="margin-top:0px; margin-bottom:40px;">
       <div class="inner no-scroll client-dashboard" style="height:440px">
         <span class="title"><span class="title-background" style="width:200px">Report Overview</span>
-          <span class="count" id="counterSpanReport"><?php echo sizeof($reports); ?></span>
+          <span class="count" id="counterSpanReport"><?php echo sizeof($all_reports); ?></span>
         </span>
         <input type="text" id="search-input-report" placeholder="Search..."/>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title" >
@@ -113,15 +116,15 @@
           <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Create Date</div>
         </div>
         <div class="inner-scroll client-dashboard" id="report-results"><?php
-          foreach ($reports as $report) {
+          foreach ($all_reports as $report) {
             $user = $user_control->get((int)$client_control->get($report->client_id)->user_id);
-            $today_count += (date('Ymd') == date('Ymd', strtotime($report->create_date)));
-            $slug = strtolower('report-'.str_replace(' ', '-', $report->name).'-'.$report->id.'/');
+            $today_count_report += (date('Ymd') == date('Ymd', strtotime($report->create_date)));
+            $slug = strtolower('report-'.$report->name.'-'.$report->id.'/');
 
             $viewed = "not viewed";
             if ($report->view_time != NULL) {
               $viewed = $report->view_time;
-              $view_count++;
+              $view_count_report++;
             } ?>
 
             <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
@@ -137,9 +140,9 @@
           } ?>
         </div>
         <span class="analytics-stats" style="margin-top:10px">
-          Viewed reports : <strong><?php echo $view_count." / ".sizeof($reports); ?></strong></span>
+          Viewed reports : <strong><?php echo $view_count_report." / ".sizeof($all_reports); ?></strong></span>
         <span class="analytics-stats" style="margin-top:10px">
-          Reports created today : <strong><?php echo $today_count; ?></strong></span>
+          Reports created today : <strong><?php echo $today_count_report; ?></strong></span>
       </div>
     </div>
   </div>

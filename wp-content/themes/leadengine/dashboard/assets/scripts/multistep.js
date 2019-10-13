@@ -4,7 +4,7 @@ var type = window.location.pathname.includes('audit-setup') ? 'an audit' : 'a re
 showTab(currentTab);
 
 function showIntro(display) {
-  checkLoginState();
+  checkLoginState(false);
   types = display ? ['block', 'none'] : ['none', 'block'];
   $('.create-block-box').css({'display': types[0]});
   $('.back').css({'display': types[1]});

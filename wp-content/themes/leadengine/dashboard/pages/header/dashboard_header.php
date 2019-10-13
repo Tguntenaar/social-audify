@@ -32,11 +32,11 @@
   <!-- End Google Tag Manager -->
 </head>
 <body>
-    <!-- Google Tag Manager (noscript) -->
-      <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KC4JDF9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-   <!-- Facebook Pixel Code -->
-   <script>
+  <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KC4JDF9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <!-- Facebook Pixel Code -->
+     <script>
       !function(f,b,e,v,n,t,s)
       {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
@@ -52,8 +52,8 @@
     <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=693894334380047&ev=PageView&noscript=1"
     /></noscript>
-    <!-- End Facebook Pixel Code -->
-    
+  <!-- End Facebook Pixel Code -->
+
   <!-- Facebook JS SDK moet direct na de opening body tag -->
   <script>
     window.fbAsyncInit = function() {
@@ -115,12 +115,17 @@
       <i class="fas fa-th-large"></i> Dashboard
     </a>
 
-    <a href="../feedback/"  style="float:right;margin-right:50px;">
-     <i style="margin-right: 5px;" class="far fa-comment"></i> Feedback
+
+
+    <a href="https://www.facebook.com/socialaudify/" target="_blank" rel="norefferer" style="float:right;margin-right:50px;">
+     <i style="margin-right: 5px;" class="far fa-comment"></i>Questions
     </a>
 
+    <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
+        <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
+    </a>
     <a href="../search-page/" class="search-icon">
-      <i class="fas fa-search"></i>Search
+      <i style="margin-right: 5px;" class="fas fa-search"></i>Search
     </a>
   </div>
 

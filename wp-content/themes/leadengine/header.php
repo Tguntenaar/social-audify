@@ -21,7 +21,6 @@
 <!DOCTYPE html>
 <html <?php language_attributes( 'html' ); ?>>
    <head>
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
       <meta charset="<?php echo esc_attr( get_bloginfo( 'charset' ) ); ?>">
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,6 +43,16 @@
 
       gtag('config', 'UA-149815594-1');
     </script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149815594-1"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-149815594-1');
+      </script>
+
     <!-- Google Tag Manager -->
       <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -52,29 +61,30 @@
       })(window,document,'script','dataLayer','GTM-KC4JDF9');</script>
     <!-- End Google Tag Manager -->
     <!-- Facebook Pixel Code -->
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '693894334380047');
-      fbq('track', 'PageView');
-    </script>
+      <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '693894334380047');
+        fbq('track', 'PageView');
+      </script>
 
-    <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=693894334380047&ev=PageView&noscript=1"
-    /></noscript>
+      <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id=693894334380047&ev=PageView&noscript=1"
+      /></noscript>
     <!-- End Facebook Pixel Code -->
    </head>
+
     <body <?php body_class();?>>
     <!-- Google Tag Manager (noscript) -->
       <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KC4JDF9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
-    
+
       <?php if( !empty($redux_ThemeTek['tek-preloader']) && $redux_ThemeTek['tek-preloader'] == 1 ) : ?>
         <div id="preloader">
            <div class="spinner"></div>

@@ -125,6 +125,40 @@ License URI: license.txt
     display: none !important;
 }
 
+@media only screen and (max-width: 700px) {
+    .page-id-8646 #rcp_country_text,
+    .page-id-8646 .rcp_btw_number_custom {
+        width: 100% !important;
+    }
+
+    .page-id-8646 .rcp_btw_number_custom {
+        text-align:left !important;
+        margin-left: 0px !important;
+    }
+
+    .page-id-8646 .rcp_subscription_level {
+        width: 100% !important;
+    }
+
+    .page-id-8646 #rcp_user_login_wrap,
+    .page-id-8646 #rcp_user_email_wrap,
+    .page-id-8646 #rcp_user_first_wrap,
+    .page-id-8646 #rcp_user_last_wrap,
+    .page-id-8646 #rcp_password_wrap,
+    .page-id-8646 #rcp_password_again_wrap {
+        width: 100% !important;
+    }
+
+    .page-id-8646 #rcp_user_email_wrap,
+    .page-id-8646 #rcp_user_last_wrap,
+    .page-id-8646 #rcp_password_again_wrap  {
+        margin-top: 0px !important;
+        margin-left: 0px !important;
+    }
+
+
+}
+
 .page-id-8646 .rcp_login_link {
     margin-top: -40px;
 }
@@ -190,7 +224,7 @@ License URI: license.txt
     color: #fff;
     background: #c0392b;
     border: 0;
-    margin-top: 15px;
+    margin-top: 25px;
     float:left;
     margin-right: 15px;
 }
@@ -302,8 +336,57 @@ License URI: license.txt
     z-index: 5;
 }
 
+#rcp_agree_to_privacy_policy_wrap {
+    text-align: left;
+    margin-top: -30px;
+}
+
 .rcp_subscription_level label {
     margin-top: -30px;
+}
+
+.rcp-confirm-details h3 {
+    margin-top: 100px !important;
+}
+
+.rcp-confirm-details {
+    margin-bottom: 70px !important;
+}
+
+.order_summary {
+    margin-bottom: 20px;
+}
+
+#rcp-paypal-express-confirm-form input[type="submit"] {
+    margin-top: 20px;
+    margin-bottom: 80px;
+    width: 120px;
+    height: 40px;
+    line-height: 40px;
+    color: #fff;
+    background: #27ae60;
+    border: 0;
+}
+
+.page-id-8646 #rcp_registration_form #rcp_submit {
+    position: static !important;
+    margin-top: 55px !important;
+    float: right !important;
+    width: 110px !important;
+}
+
+#rcp_agree_to_terms_wrap {
+    text-align: left;
+    margin-top: -20px !important;
+    color: #000;
+    font-weight: 100 !important;
+}
+
+.rcp_agree_to_privacy_policy_fieldset {
+    text-align: left;
+    margin-top: 0px !important;
+    color: #000;
+    font-weight: 100 !important;
 }
 
 #rcp_registration_form .rcp_user_fieldset input[type="text"],

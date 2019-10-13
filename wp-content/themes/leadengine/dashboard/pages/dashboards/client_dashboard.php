@@ -154,7 +154,7 @@
       // Delete Client Modal
       var modalData = {
         'text': 'Sure you want to delete this Client?',
-        'subtext': 'This action will delete the audits and reports made with this client and is irreversible',
+        'subtext': 'This action is irreversible',
         'confirm': 'delete_confirmed',
       }
 

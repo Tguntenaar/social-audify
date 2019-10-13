@@ -14,6 +14,7 @@
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
  */
 
+
 global $rcp_options, $post, $rcp_levels_db, $rcp_register_form_atts;
 $discount = ! empty( $_REQUEST['discount'] ) ? sanitize_text_field( $_REQUEST['discount'] ) : '';
 ?>
@@ -76,25 +77,6 @@ rcp_show_error_messages( 'register' ); ?>
 	<fieldset class="rcp_subscription_fieldset tab" style="text-align: center;display:none; margin-top: 0px !important;">
 	<?php
 
-	function valid_btw($input) {
-		$vat_number = isset($input) ? $input : "";
-		$vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
-
-		$contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
-
-		if($contents === false) {
-			throw new Exception('service unavailable');
-		}
-		else {
-			$res = json_decode($contents);
-
-			if($res->valid) {
-				$output = sanitize_text_field( $vat_number );
-				update_user_meta( $user_id, 'rcp_btw_number', $output);
-			}
-		}
-	}
-
 	$levels = rcp_get_subscription_levels( 'active' );
 	$i      = 0;
 	if( $levels ) : ?>
@@ -104,18 +86,73 @@ rcp_show_error_messages( 'register' ); ?>
 		<ul id="rcp_subscription_levels">
 			<?php
 			$printLevels = array();
+			$eu_countries = array(
+				"AT" => "Austria",
+				"BE" => "Belgium",
+				"BG" => "Bulgaria",
+				"CY" => "Cyprus",
+				"CZ" => "Czech Republic",
+				"DK" => "Denmark",
+				"EE" => "Estonia",
+				"FI" => "Finland",
+				"FR" => "France",
+				"DE" => "Germany",
+				"GR" => "Greece",
+				"HU" => "Hungary",
+				"IE" => "Ireland",
+				"IT" => "Italy",
+				"LV" => "Latvia",
+				"LT" => "Lithuania",
+				"LU" => "Luxembourg",
+				"MT" => "Malta",
+				"NL" => "Netherlands",
+				"PL" => "Poland",
+				"PT" => "Portugal",
+				"RO" => "Romania",
+				"SK" => "Slovakia (Slovak Republic)",
+				"SI" => "Slovenia",
+				"ES" => "Spain",
+				"SE" => "Sweden",
+				"GB" => "United Kingdom",
+				"RD" => "Local IP" // added for testing purposes
+			);
 
-			if(is_user_logged_in()) {
-				if (valid_btw(get_user_meta( get_current_user_id() , 'rcp_btw_number', true ))) {
-					array_push($printLevels, $levels[4], $levels[3]);
+		    if (is_user_logged_in()) {
+				$vat_number = get_user_meta( get_current_user_id() , 'rcp_btw_number', true );
+				$vat_number = openssl_decrypt(esc_attr( $vat_number ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
+				$vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
+
+				$country = get_user_meta( get_current_user_id() , 'rcp_country', true );
+				// levels 1 & 2 zijn 57 & 570 euro
+				// levels 3 & 4 zijn 47 & 470 euro
+				if ($country == "NL") {
+					// NL 57
+					array_push($printLevels, $levels[0], $levels[2]);
+				} else if (array_key_exists($country, $eu_countries) && $vat_number == "") {
+					// EU zonder btw 57
+					array_push($printLevels, $levels[0], $levels[2]);
+				} else if (array_key_exists($country, $eu_countries)) {
+					// controleer btw
+					$contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
+					if ($contents === false) {
+						throw new Exception('service unavailable');
+					} else {
+						$res = json_decode($contents);
+						if ($res->valid) {
+							// EU met btw nummer 47
+							array_push($printLevels, $levels[1], $levels[3]);
+						} else {
+							// EU zonder btw 57
+							array_push($printLevels, $levels[0], $levels[2]);
+						}
+					}
 				} else {
-					array_push($printLevels, $levels[1], $levels[2]);
+					// rest 47
+					array_push($printLevels, $levels[1], $levels[3]);
 				}
-
 			} else {
 				$printLevels = $levels;
 			}
-
 		 	?>
 			<?php foreach( $printLevels as $key => $level ) : ?>
 				<?php if( rcp_show_subscription_level( $level->id ) ) :
@@ -135,13 +172,13 @@ rcp_show_error_messages( 'register' ); ?>
 						<ul>
 							<li>14 days free trial!</li>
 							<?php if( $level->id == 2) { ?>
-										 <li>From 77$ to 57$</li>
+										 <li>From 77$ to 47$</li>
 						    <?php } else if( $level->id == 3) { ?>
-										<li>From 770$ to 570$</li>
+										<li>From 770$ to 470$</li>
 							<?php } else if( $level->id == 1) { ?>
-										<li>From 67$ to 47$</li>
+										<li>From 67$ to 39$</li>
 							<?php } else if( $level->id == 4) { ?>
-										<li>From 670$ to 470$</li>
+										<li>From 670$ to 390$</li>
 							<?php } ?>
 							<li>Create audits</li>
 							<li>Create reports</li>
@@ -161,14 +198,14 @@ rcp_show_error_messages( 'register' ); ?>
 	<?php if( rcp_has_discounts() ) : ?>
 	<fieldset class="rcp_discounts_fieldset">
 		<p id="rcp_discount_code_wrap">
-			<label for="rcp_discount_code">
+			<label for="rcp_discount_code" style="margin-bottom: 38px;">
 				<?php _e( 'Discount Code', 'rcp' ); ?>
 				<span class="rcp_discount_valid" style="display: none;"> - <?php _e( 'Valid', 'rcp' ); ?></span>
 				<span class="rcp_discount_invalid" style="display: none;"> - <?php _e( 'Invalid', 'rcp' ); ?></span>
 			</label>
 			<span class="rcp_discount_code_field_wrap">
-				<input type="text" id="rcp_discount_code" name="rcp_discount" class="rcp_discount_code" value="<?php echo esc_attr( $discount ); ?>"/>
-				<button class="rcp_button" id="rcp_apply_discount"><?php _e( 'Apply', 'rcp' ); ?></button>
+				<input style="margin-bottom: 8px;" type="text" id="rcp_discount_code" name="rcp_discount" class="rcp_discount_code" value="<?php echo esc_attr( $discount ); ?>"/>
+				<button style="color: #fff; background: #27ae60; border: 0;" class="rcp_button" id="rcp_apply_discount"><?php _e( 'Apply', 'rcp' ); ?></button>
 			</span>
 		</p>
 	</fieldset>

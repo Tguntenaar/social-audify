@@ -94,6 +94,11 @@ class audit_controller {
     return $return_audits;
   }
 
+  function get_all_audits() {
+     return  $this->service->get_all_audits();
+  }
+
+
   function get_amount($date = NULL, $user_id = NULL) {
     $user = $user_id == NULL ? get_current_user_id() : $user_id;
     return $this->service->get_amount($user, $date)[0]->count;

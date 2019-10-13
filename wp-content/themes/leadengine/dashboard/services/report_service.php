@@ -30,6 +30,19 @@ class report_service extends connection {
        WHERE id = %d", $id));
   }
 
+  public function get_all_reports() {
+    return $this->dbwp->get_results(
+      "SELECT r.*, $this->content_fields, $this->visibility_fields
+       FROM Report as r
+       LEFT JOIN Report_content as c
+         ON c.report_id = r.id
+       LEFT JOIN Report_stat_visibility as v
+         ON v.report_id = r.id
+       WHERE r.create_date >= DATE(NOW()) - INTERVAL 7 DAY
+       ORDER BY r.create_date DESC");
+  }
+
+
   public function get_all($user_id, $date = null) {
     if (!isset($date)) {
       return $this->dbwp->get_results($this->dbwp->prepare(

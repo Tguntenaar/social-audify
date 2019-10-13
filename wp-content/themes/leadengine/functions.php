@@ -64,31 +64,6 @@
     wp_die();
   }
 
-  // add_action( 'wp_ajax_toggle_template_field', 'toggle_template_field');
-  // add_action( 'wp_ajax_nopriv_toggle_template_field', 'not_logged_in');
-  //
-  // function toggle_template_field() {
-  //   require_once(dirname(__FILE__)."/dashboard/services/connection.php");
-  //   require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
-  //
-  //   $connection = new connection;
-  //   $audit_service = new audit_service($connection);
-  //
-  //   $audit_id = $_POST['audit'];
-  //   $field = $_POST['field'];
-  //
-  //   $bit = $audit_service->get_field_template($audit_id, $field);
-  //
-  //   if($field == "facebook_vis_bit") {
-  //       $bit = ($bit == 1) ? 0 : 1;
-  //   }
-  //
-  //   $test = $audit_service->update($audit_id, 'Audit_template', $field, $bit, 0);
-  //
-  //   wp_send_json($test);
-  //   wp_die();
-  // }
-
   add_action( 'wp_ajax_update_ads_audit', 'edit_ads_audit');
   add_action( 'wp_ajax_nopriv_update_ads_audit', 'not_logged_in');
 
@@ -172,12 +147,6 @@
     if (strlen($page['name']) > 25) {
       $page['name'] = substr($page['name'], 0, 5);
     }
-
-    // if ($competitor != 'false') {
-    //   require_once(dirname(__FILE__)."/dashboard/assests/php/parse_functions.php");
-    //   $competitor['facebook'] = get_fb_name($competitor['facebook']);
-    //   $competitor['instagram'] = get_insta_name($competitor['instagram']);
-    // }
 
     return array($client, $options, $page, $competitor);
   }
@@ -721,43 +690,31 @@
    * Adds the custom fields to the registration form and profile editor
    */
   function pw_rcp_add_user_fields() {
-    $selected_country = isset( $_POST['rcp_country'] ) ? $_POST['rcp_country'] : '';
+    // $selected_country = isset( $_POST['rcp_country'] ) ? $_POST['rcp_country'] : '';
     $id = get_current_user_id();
     $number = get_user_meta($id, 'rcp_number', true );
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
     $calendar = get_user_meta($id, 'rcp_calendar', true );
+    $selected_country = get_user_meta($id, 'rcp_country', true );
 
-    $encrypt_method = "AES-256-CBC";
-    $secret_key = 'WS-SERVICE-KEY';
-    $secret_iv = 'WS-SERVICE-VALUE';
-    // hash
-    $key = hash('sha256', $secret_key);
-    // iv - encrypt method AES-256-CBC expects 16 bytes - else you will get a warning
-    $iv = substr(hash('sha256', $secret_iv), 0, 16);
     ?>
     <p>
       <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
     </p>
-    <!-- <p>
-      TODO:
-      <label for="rcp_number"><?php //_e( 'Your scheduler', 'rcp' ); ?></label>
-      <input name="rcp_number" id="rcp_number" type="url" value="<?php // echo esc_attr( $number ); ?>"/>
-    </p> -->
-    <p class="rcp_calander_custom" style="margin-top: -90px;">
+    <p class="rcp_calendar_custom" style="margin-top: -90px;">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
 
       <p id="rcp_country_text" style="width: 47%; margin-top: 50px; float:left;">
-          <label  for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
+          <label for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
           <select style="width: 100%; margin-top: -33px; height:55px; display:block;float:left;" name="rcp_country" id="rcp_country">
-              <?php foreach ( get_country() as $key => $value ) : ?>
-                  <option value="<?php echo esc_attr( $key ); ?>" <?php checked( $selected_country, $key ); ?>><?php echo $value['country']; ?></option>
-              <?php endforeach; ?>
+              <?php foreach ( get_country() as $key => $value ) { ?>
+                  <option value="<?php echo esc_attr( $key ); ?>" <?php selected( $selected_country, $key ); ?>><?php echo esc_attr($value['country']); ?></option>
+              <?php } ?>
           </select>
-
       </p>
 
       <p class="rcp_btw_number_custom" style="margin-top: 50px; width: 47%; margin-left: 6%; float:left;">
@@ -765,10 +722,6 @@
           <span class="btw_title_1" style="margin-top: -35px;color: grey; font-size: 12px; display: block;">By adding your VAT-number we will not have to charge VAT, resulting in a lower price.</span>
           <span class="btw_title_2" style="margin-bottom: 45px; color: grey; font-size: 12px; display: block;">*For Dutch citizens: You can request the VAT back when you do your btw-aangifte</span>
           <input  name="rcp_btw_number" placeholder="Example: NL0000.00.000.B.00" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(esc_attr( $btw_number ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()"); ?>"/>
-
-
-           <!-- var_dump(openssl_decrypt(base64_decode(esc_attr( $btw_number )), $encrypt_method, $key, 0, $iv));
-           echo openssl_decrypt(base64_decode($btw_number), $encrypt_method, $key, 0, $iv); -->
       </p>
     </p>
     <?php
@@ -836,14 +789,14 @@
       rcp_errors()->add( 'invalid_profession', __( 'Please enter your phone number', 'rcp' ), 'register' );
     }
 
-    if ( empty( $posted['rcp_country'] ) || $posted['rcp_country'] == '*' ) {
+    if (empty( $posted['rcp_country'] )) {
         rcp_errors()->add( 'empty_country', __( 'Please select your country', 'rcp' ), 'register' );
     }
 
     if ((!empty( $posted['rcp_btw_number']) && $posted['rcp_country'] == "NL")
-        || (empty( $posted['rcp_btw_number']) && $posted['rcp_country'] == "NL")
         || (!empty( $posted['rcp_btw_number']) && array_key_exists($posted['rcp_country'], get_eu_countries()))) {
-        $vat_number = isset($posted['rcp_btw_number']) ? $posted['rcp_btw_number'] : "";
+
+        $vat_number = empty($posted['rcp_btw_number']) ? "" : $posted['rcp_btw_number'];
         $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
 
         $contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
@@ -854,25 +807,22 @@
         else {
             $res = json_decode($contents);
 
-            if(!($res->valid || (string)$vat_number == "")) {
+            if(!$res->valid) {
                 rcp_errors()->add( 'invalid_location', __( 'Wrong VAT number.', 'rcp' ), 'register' );
-            } else {
-
             }
         }
-    } else if(empty($posted['rcp_btw_number']) && $posted['rcp_level'] == 1) {
-        rcp_errors()->add( 'Wrong FAT number.', __( 'Wrong VAT number.', 'rcp' ), 'register' );
-    }
+     }
   }
 
 
   add_action( 'rcp_form_processing', 'pw_rcp_save_user_fields_on_register', 10, 2 );
+
   /**
    * Stores the information submitted during registration
    */
   function pw_rcp_save_user_fields_on_register( $posted, $user_id ) {
     $output = false;
-    $output = openssl_encrypt($posted['rcp_btw_number'],"AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
+    $output = openssl_encrypt($posted['rcp_btw_number'], "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
 
 
     if( ! empty( $posted['rcp_number'] ) ) {
@@ -884,11 +834,11 @@
     }
 
     if( ! empty( $posted['rcp_btw_number'] ) ) {
-      update_user_meta( $user_id, 'rcp_btw_number', $output);
+      update_user_meta( $user_id, 'rcp_btw_number', sanitize_text_field($output));
     }
 
     if( ! empty( $posted['rcp_country'] ) ) {
-      update_user_meta( $user_id, 'rcp_country', $output);
+      update_user_meta( $user_id, 'rcp_country', sanitize_text_field( $posted['rcp_country'] ));
     }
   }
 
@@ -933,6 +883,10 @@
             }
         } else {
             update_user_meta( $user_id, 'rcp_btw_number', "");
+        }
+
+        if( ! empty( $_POST['rcp_country'] ) ) {
+          update_user_meta( $user_id, 'rcp_country', sanitize_text_field( $_POST['rcp_country'] ));
         }
     }
     add_action( 'rcp_user_profile_updated', 'pw_rcp_save_user_fields_on_profile_save', 10 );

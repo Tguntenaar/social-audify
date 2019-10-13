@@ -193,7 +193,7 @@ function askToContinue(client, page, options, competitor, manualType) {
 
   showModal(initiateModal('instagramErrorModal', 'confirm', {
     text: `Couldn\'t gather instagram data for ${str}`,
-    subtext: 'Would you like to continue to the audit and fill in the blanks manually?',
+    subtext: 'The most common reasons are: the username you specified is not a business instagram or it is an invalid username. Would you like to continue to the audit and fill in the blanks manually?',
     confirm: 'continue-to-audit',
     cancel: 'cancel-making-audit',
   }));
