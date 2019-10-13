@@ -66,6 +66,6 @@ function percent_diff($primary, $rest, $direct_print = false) {
 }
 
 function make_slug($type, $name, $id) {
-  return strtolower('/'.$type.'-'.str_replace(" ", "-", $name).'-'.$id.'/');
+  return strtolower('/'.$type.'-'.sanitize_title($name).'-'.$id.'/');
 }
 ?>

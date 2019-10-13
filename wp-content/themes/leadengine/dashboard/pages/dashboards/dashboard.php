@@ -119,9 +119,9 @@
               $name = strlen($item->name) <= 15 ? $item->name : substr($item->name, 0, 15).'...'; ?>
 
               <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row">
-                <div class="recent-send-box"><?php
-                  echo ($item->view_time === NULL ? "<i class='fas fa-envelope' style='color: #487dd7;'></i>"
-                                                  : "<i class='far fa-envelope-open' style='color: #6e9d9c;'></i>") ?>
+                <div class="recent-send-box">
+                  <i class='fas fa-envelope<?php echo $item->view_time === NULL ? "" : "-open"; ?>'
+                    style='color: <?php echo $item->type == 'audit' ? '#16a085' : '#2980b9'; ?>'></i>
                   <span class="report-audit-name"><?php echo $name; ?></span><br/>
                   <span class="report-audit-name-client"><?php echo $item->client_name; ?></span>
                 </div>
