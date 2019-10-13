@@ -44,7 +44,7 @@
           <div class="audit-result-box" id="audit-results">
             <?php
               foreach ($audits as $audit) {
-                $slug = strtolower("/audit-".$audit->name.'-'.$audit->id."/");
+                $slug = strtolower("/audit-".str_replace(' ', '-', $audit->name).'-'.$audit->id."/");
                 $audit->viewed = $audit->view_time !== NULL ? get_time_dif_days($audit->view_time) : "not yet";
                 echo '<a href="'.$slug.'" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="'.$audit->name.'">
                   <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5 audit-row-style" style="padding-left: 0;">'.$audit->client_name.'</div>
@@ -69,7 +69,7 @@
           <div class="report-result-box" id="report-results">
             <?php
               foreach ($reports as $report) {
-  							$slug = strtolower('/report-'.$report->name.'-'.$report->id.'/');
+  							$slug = strtolower('/report-'.str_replace(' ', '-', $report->name).'-'.$report->id.'/');
                 $report->viewed = $report->view_time !== NULL ? get_time_dif_days($report->view_time) : "not yet";
                 echo ' <a href="'.$slug.'" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="'. $report->name .'">
                   <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5  audit-row-style">'. $report->client_name .'</div>

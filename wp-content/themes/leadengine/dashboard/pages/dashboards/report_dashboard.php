@@ -64,7 +64,7 @@
         <div class="inner-scroll" id="report-results">
           <?php
             foreach ($this_year as $report) {
-              $slug = strtolower('/report-'.$report->name.'-'.$report->id.'/');
+              $slug = strtolower('/report-'.str_replace(' ', '-', $report->name).'-'.$report->id.'/');
               $report->viewed = $report->view_time !== NULL ? get_time_dif_days($report->view_time) : "not yet";
               if(strlen($report->name) > 18) { $name = substr($report->name,0,18).'...'; } else { $name = $report->name; }
               echo ' <a href="'.$slug.'" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="'. $report->name .'">

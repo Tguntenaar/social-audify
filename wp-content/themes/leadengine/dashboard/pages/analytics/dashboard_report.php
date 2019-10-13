@@ -72,7 +72,7 @@
           foreach ($audits as $audit) {
             $user = $user_control->get((int)$client_control->get($audit->client_id)->user_id);
             $today_count += (date('Ymd') == date('Ymd', strtotime($audit->create_date)));
-            $slug = strtolower('audit-'.$audit->name.'-'.$audit->id.'/');
+            $slug = strtolower('audit-'.str_replace(' ', '-', $audit->name).'-'.$audit->id.'/');
 
             $viewed = "not viewed";
             if ($audit->view_time != NULL) {
@@ -116,7 +116,7 @@
           foreach ($reports as $report) {
             $user = $user_control->get((int)$client_control->get($report->client_id)->user_id);
             $today_count += (date('Ymd') == date('Ymd', strtotime($report->create_date)));
-            $slug = strtolower('report-'.$report->name.'-'.$report->id.'/');
+            $slug = strtolower('report-'.str_replace(' ', '-', $report->name).'-'.$report->id.'/');
 
             $viewed = "not viewed";
             if ($report->view_time != NULL) {

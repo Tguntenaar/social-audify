@@ -65,7 +65,7 @@
         </div>
         <div class="inner-scroll" id="audit-results"><?php
           foreach ($this_year as $audit) {
-            $slug = strtolower('/audit-'.$audit->name.'-'.$audit->id.'/');
+            $slug = strtolower('/audit-'.str_replace(' ', '-', $audit->name).'-'.$audit->id.'/');
             $name = strlen($audit->name) <= 18 ? $audit->name : substr($audit->name, 0, 18).'...';
             $audit->viewed = $audit->view_time !== NULL ? get_time_dif_days($audit->view_time) : "not yet"; ?>
 

@@ -117,7 +117,7 @@
               foreach ($recent_items as $item) {
                 if(strlen($item->name) > 15) { $name = substr($item->name,0,15).'...'; } else { $name = $item->name; }
 
-                $slug = strtolower($item->type ."-". $item->name ."-". $item->id);
+                $slug = strtolower($item->type ."-". str_replace(' ', '-', $item->name)."-". $item->id);
                 echo '<a href="/'. $slug .'/" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row">
                   <div class="recent-send-box">
                     '. ($item->view_time === NULL ? "<i class='fas fa-envelope' style='color: #487dd7;'></i>"
