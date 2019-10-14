@@ -302,6 +302,7 @@
     wp_die();
   }
 
+
   add_action( 'wp_ajax_import_clients', 'add_multiple_clients');
   add_action( 'wp_ajax_nopriv_import_clients', 'not_logged_in');
 
@@ -312,16 +313,27 @@
     $client_controller = new client_controller($connection);
 
     $clients = $_POST['clients'];
-    // FIXME:
-    $clients = array();
-    // For now
+
+    $parsedClients = array();
     foreach ($clients as $c) {
-      $client_controller->create($c["Name"], $c["Facebook"], $c["Instagram"], $c["Website"], $c["Email"]);
+      // TODO : clients parsen en checken van waardes ; staat nu goed in process_client (& global_regex)
+      //  - beetje kut dat dan op twee plekken moet, is vast iets slims op te verzinnen..?
+
+      array_push($parsedClients, array(
+        "name" => $c["Name"], 
+        "fb" => $c["Facebook"], 
+        "ig" => $c["Instagram"], 
+        "wb" => $c["Website"], 
+        "mail" => $c["Email"]
+      ));
     }
+
+    $client_controller->create_multiple(get_current_user_id(), $parsedClients);
 
     wp_send_json(array("Succes"=>"added:".count($clients)));
     wp_die();
   }
+
 
   add_action( 'wp_ajax_update_meta_report', 'create_report');
   add_action( 'wp_ajax_nopriv_update_meta_report', 'not_logged_in');
