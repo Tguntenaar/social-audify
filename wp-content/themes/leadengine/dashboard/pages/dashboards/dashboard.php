@@ -86,11 +86,11 @@
 
   ?>
 
-
+  <!-- $intro_bit -->
     <?php if ($intro_bit) { ?>
 
       <div class="intro-overlay">
-        <div class="vertical-align" style="width: 50%; margin: 0 auto; height: auto;">
+        <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
           <h1>Welcome to Social Audify!</h1>
           <!-- <p>
           The tool for generating more sales and automating your reporting process!
@@ -98,7 +98,9 @@
           Within the settings you can configure your automatic emails / follow ups you want us to send, you can add your phone number so your leads can call you after watching your audit, and you can add a little avatar to add to every audit and other features.
           </p> -->
           <iframe style="display: block; margin: 0 auto; margin-bottom: 20px;" width="560" height="315" src="https://www.youtube.com/embed/O_JeCXnd3k0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 25px;">Configure profile</a>
+          <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Full tutorial<span style="position: relative; left: 5px; font-size: 9px;">(Recommended)</span></a>
+          <div style="clear: both; height: 20px;"></div>
+          <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 45px;">Configure profile</a>
         </div>
       </div>
       <script>

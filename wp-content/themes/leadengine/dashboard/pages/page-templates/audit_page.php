@@ -145,6 +145,7 @@
   $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
   $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
   $display_iframe = ($audit->video_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
+  $company_name = get_user_meta($author_id, 'rcp_company', true );
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
   if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
@@ -301,7 +302,7 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo $author->display_name;?></span><?php
+        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
@@ -665,8 +666,8 @@
     </div>
   </section>
   <div class="footer">
-    <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
-    <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
+    <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
+    <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
       <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
     } ?>
@@ -999,9 +1000,9 @@
               two: <?php echo $user->range_number_fb_2; ?>,
             },
             text: {
-              one: '<?php replace_lbs($user->text_fb_1); ?>',
-              two: '<?php replace_lbs($user->text_fb_2); ?>',
-              three: '<?php replace_lbs($user->text_fb_3); ?>',
+              one: <?php replace_lbs($user->text_fb_1); ?>,
+              two: <?php replace_lbs($user->text_fb_2); ?>,
+              three: <?php replace_lbs($user->text_fb_3); ?>,
             },<?php
           } ?>
         },<?php
@@ -1017,9 +1018,9 @@
               two: <?php echo $user->range_number_insta_2; ?>,
             },
             text: {
-              one: '<?php replace_lbs($user->text_insta_1); ?>',
-              two: '<?php replace_lbs($user->text_insta_2); ?>',
-              three: '<?php replace_lbs($user->text_insta_3); ?>',
+              one: <?php replace_lbs($user->text_insta_1); ?>,
+              two: <?php replace_lbs($user->text_insta_2); ?>,
+              three: <?php replace_lbs($user->text_insta_3); ?>,
             },<?php
           } ?>
         }, <?php
@@ -1035,9 +1036,9 @@
               two: <?php echo $user->range_number_website_2; ?>,
             },
             text: {
-              one: '<?php replace_lbs($user->text_website_1); ?>',
-              two: '<?php replace_lbs($user->text_website_2); ?>',
-              three: '<?php replace_lbs($user->text_website_3); ?>',
+              one: <?php replace_lbs($user->text_website_1); ?>,
+              two: <?php replace_lbs($user->text_website_2); ?>,
+              three: <?php replace_lbs($user->text_website_3); ?>,
             },<?php
           } ?>
         },<?php
