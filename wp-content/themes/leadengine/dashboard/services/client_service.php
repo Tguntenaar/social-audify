@@ -22,7 +22,6 @@ class client_service extends connection {
     return $this->dbwp->insert_id;
   }
 
-
   public function get($id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
       "SELECT * FROM Client WHERE id = %d", $id));

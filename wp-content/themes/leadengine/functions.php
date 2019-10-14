@@ -265,6 +265,7 @@
   add_action( 'wp_ajax_universal_update', 'update_all');
   add_action( 'wp_ajax_nopriv_universal_update', 'not_logged_in');
 
+  // TODO: check if audit/report is owned by editor
   function update_all() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
@@ -298,6 +299,27 @@
     }
 
     wp_send_json(array('succes'=>'1'));
+    wp_die();
+  }
+
+  add_action( 'wp_ajax_import_clients', 'add_multiple_clients');
+  add_action( 'wp_ajax_nopriv_import_clients', 'not_logged_in');
+
+  function add_multiple_clients() {
+    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
+    $connection = new connection;
+    $client_controller = new client_controller($connection);
+
+    $clients = $_POST['clients'];
+    // FIXME:
+    $clients = array();
+    // For now
+    foreach ($clients as $c) {
+      $client_controller->create($c["Name"], $c["Facebook"], $c["Instagram"], $c["Website"], $c["Email"]);
+    }
+
+    wp_send_json(array("Succes"=>"added:".count($clients)));
     wp_die();
   }
 

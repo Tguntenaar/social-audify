@@ -241,7 +241,7 @@
       });
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        parseClientInputFields(this);
+        changeClientInputFields(this);
       });
     });
 	</script>

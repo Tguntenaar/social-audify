@@ -239,7 +239,7 @@
       });
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        parseClientInputFields(this);
+        changeClientInputFields(this);
       });
 
       $("#competitor_confirmed").click(function() {

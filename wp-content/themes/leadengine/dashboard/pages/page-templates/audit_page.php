@@ -984,7 +984,7 @@
 
     <?php
     function replace_lbs($string) {
-      echo preg_replace("/\r|\n/", '\n', $string);
+      echo json_encode(preg_replace("/\r|\n/", '\n', $string));
     } ?>
 
     var sliderData = {<?php
@@ -999,9 +999,9 @@
               two: <?php echo $user->range_number_fb_2; ?>,
             },
             text: {
-              one: '<?php replace_lbs($user->text_fb_1); ?>',
-              two: '<?php replace_lbs($user->text_fb_2); ?>',
-              three: '<?php replace_lbs($user->text_fb_3); ?>',
+              one: <?php replace_lbs($user->text_fb_1); ?>,
+              two: <?php replace_lbs($user->text_fb_2); ?>,
+              three: <?php replace_lbs($user->text_fb_3); ?>,
             },<?php
           } ?>
         },<?php
@@ -1017,9 +1017,9 @@
               two: <?php echo $user->range_number_insta_2; ?>,
             },
             text: {
-              one: '<?php replace_lbs($user->text_insta_1); ?>',
-              two: '<?php replace_lbs($user->text_insta_2); ?>',
-              three: '<?php replace_lbs($user->text_insta_3); ?>',
+              one: <?php replace_lbs($user->text_insta_1); ?>,
+              two: <?php replace_lbs($user->text_insta_2); ?>,
+              three: <?php replace_lbs($user->text_insta_3); ?>,
             },<?php
           } ?>
         }, <?php
@@ -1035,9 +1035,9 @@
               two: <?php echo $user->range_number_website_2; ?>,
             },
             text: {
-              one: '<?php replace_lbs($user->text_website_1); ?>',
-              two: '<?php replace_lbs($user->text_website_2); ?>',
-              three: '<?php replace_lbs($user->text_website_3); ?>',
+              one: <?php replace_lbs($user->text_website_1); ?>,
+              two: <?php replace_lbs($user->text_website_2); ?>,
+              three: <?php replace_lbs($user->text_website_3); ?>,
             },<?php
           } ?>
         },<?php
