@@ -160,6 +160,135 @@ button {
 .block {
 	display: block !important;
 }
+
+/** File import **/
+.file-paste-block,
+.file-upload-block {
+	width: 100%;
+	float: auto;
+	display: none;
+	text-align: center;
+	margin-top: 70px;
+}
+
+.file-paste-block {
+	margin-top: 50px;
+}
+
+
+#enter-data-field {
+	margin-top: 5px !important;
+}
+
+#enter-data-field {
+	background: transparent;
+	position: static;
+	z-index:5;
+	background: #fff;
+	border: 7px solid #fff;
+	height: 200px;
+	width: 100%;
+}
+
+#title-import {
+	display: none;
+}
+
+#new-clients {
+	display: none;
+	width: 100%;
+	height: 200px;
+	background: #fff;
+	overflow-y: scroll;
+	color: #0f0f0f;
+	/* border: 1px solid #2980b9; */
+	border-left: 2px solid #2980b9;
+}
+
+#update-data-from-field i {
+	margin-left: 5px;
+}
+
+#update-data-from-field {
+	border: 0;
+	background: #2980b9;
+	color: #fff;
+	width: 150px;
+	height: 40px;
+	line-height: 40px;
+
+}
+
+#new-clients li {
+	height: 40px;
+	line-height: 40px;
+	padding-left: 10px;
+	font-weight: 100;
+}
+
+.background-textarea {
+	background: #fff;
+	margin-top: 5px;
+	margin-left: 5%;
+	width: 90%;
+	height: 240px;
+	position: absolute;
+}
+
+.upload-col {
+	float: left;
+	height: auto;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.file-upload input[type="file"] {
+	/* width: 150px;
+	height: 50px;
+	background: #2980b9;
+	color: #fff;
+	border: 0; */
+	display: none;
+}
+
+
+.file-upload-block #fileLabel {
+	font-weight: 400;
+}
+
+.back-icon {
+	position: absolute;
+	top: 10px;
+	left: 20px;
+	display: none;
+	cursor: pointer;
+}
+.custom-file-upload {
+	margin-top: -20px !important;
+	background: #2980b9;
+	border: 1px solid #2980b9;
+	color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+	width: 300px;
+	height: 70px;
+	line-height: 60px;
+}
+
+.custom-file-upload:hover {
+	background: transparent;
+	border: 1px solid #2980b9;
+	color: #2980b9;
+}
+
+
+.upload-container {
+	width: auto;
+	height: auto;
+	margin-top: 100px;
+}
+
 /***** Example custom styling *****/
 .myLabel {
     background: #487dd7;
