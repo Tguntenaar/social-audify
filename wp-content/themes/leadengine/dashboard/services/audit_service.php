@@ -152,7 +152,7 @@ class audit_service extends connection {
 
   private $template_fields = "introduction, conclusion, facebook_advice, instagram_advice, website_advice, facebook_score, instagram_score, website_score, video_iframe, color";
   private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp, facebook_vis_bit, instagram_vis_bit, website_vis_bit";
-  private $user_visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp";
+  private $user_visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp, facebook_std_bit, instagram_std_bit, website_std_bit";
 
   private $crawl_fields = "facebook_pixel, google_analytics, google_tagmanager, mobile_friendly, load_time, website_size";
   private $data_fields = "facebook_name, facebook_data, instagram_name, instagram_data";

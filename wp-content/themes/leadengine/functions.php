@@ -45,7 +45,16 @@
 
       $report_service->toggle_config_visibility($report_id, $field);
       wp_send_json(array('success'=>'toggled'));
+  } elseif ($type === 'user') {
+          require_once(dirname(__FILE__)."/dashboard/services/user_service.php");
+          $user_service = new user_service($connection);
+          $user_id = $_POST['user'];
+          $type_table = $_POST['type_table'];
+
+          $user_service->toggle_config_visibility($user_id, $field, $type_table);
+          wp_send_json(array('success'=>'toggled'));
     }
+
     wp_die();
   }
 
@@ -272,9 +281,14 @@
       $control = new report_controller($connection);
       $fields = $control->get_area_fields();
       $table = 'Report_content';
+  } else if ( $type == 'user' ) {
+      require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
+      $control = new user_controller($connection);
+      $fields = $control->get_area_fields();
+      $table = 'Configtext';
     }
 
-    if ($type == 'audit' || $type == 'report') {
+    if ($type == 'audit' || $type == 'report' || $type == 'user') {
       foreach( $fields as $field ) {
         if (isset($_POST[$field])) {
           $control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), $table);
