@@ -188,11 +188,10 @@ function changeClientInputFields(field) {
   }
 
   var parsed = parseClientInput(field.id.replace("_url", ""), unparsed);
-  if (field.id.includes('facebook')) {
+  if (field.id.includes('facebook') && parsed != "") {
     parsed = grabPageId(parsed);
   }
   if (parsed) {
-
     $(field).val(parsed);
   }
 }
@@ -213,13 +212,10 @@ function parseClientInput(type, input) {
     'instagram': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?',
     'website': '(.*)',
   }
+
   var found = input.match(patterns[type]);
   console.log({found});
-  if (found == null || found[1] == 'undefined') {
-    // no match found
-    return false;
-  }
-  return found[1];
+  return (found != null && found[1] != 'undefined') ? found[1] : false;
 }
 
 /**
