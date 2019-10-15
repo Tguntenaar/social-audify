@@ -28,7 +28,7 @@
     <button id="update-data-from-field">Update data</button>
 
     <!-- clients -->
-    <li id="new-clients"> </li>
+    <ul id="new-clients"> </ul>
     <button id="universal-update" class="advice-button floating-update"> Submit Clients </button>
   </div>
 
@@ -58,8 +58,13 @@
         $('#new-clients').html("");
         data.forEach(function(client) {
           var { Name, Facebook, Instagram, Website, Email } = client;
-          // TODO: js parse clients
-          $('#new-clients').append(`<ul>${Name}/${Facebook}/${Instagram}/${Website}/${Email}</ul>`);
+
+          var parsedfb = parseClientInput('facebook', Facebook);
+          parsedfb = grabPageId(parsedfb);
+
+          var parsedig = parseClientInput('instagram', Instagram);
+
+          $('#new-clients').append(`<li>${Name}/${parsedfb}/${parsedig}/${Website}/${Email}</li>`);
         });
 
         console.log(uploadedClients);

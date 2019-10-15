@@ -186,36 +186,29 @@ function changeClientInputFields(field) {
   if (!unparsed) {
     return;
   }
-
+  
   var parsed = parseClientInput(field.id.replace("_url", ""), unparsed);
-  if (field.id.includes('facebook') && parsed != "") {
-    parsed = grabPageId(parsed);
-  }
+  parsed = grabPageId(parsed);
+
   if (parsed) {
     $(field).val(parsed);
   }
 }
 
 function grabPageId(found) {
-  var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{14,17})$';
+  var fbPageID = '(?:[A-Za-z0-9_.]+)(?:\-)([0-9]{14,17})$';
   var pageID = found.match(fbPageID);
-
-  if (pageID && pageID[1] !== 'undefined') {
-    return pageID[1];
-  }
-  return found;
+  return (pageID && pageID.length > 1) ? pageID[1] : found;
 }
 
 function parseClientInput(type, input) {
   var patterns = {
-    'facebook': '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_.\-]*)?',
-    'instagram': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?',
+    'facebook': '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:(?:pages|pg)?\/)?([\w_.\-]+)?',
+    'instagram': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,30})?',
     'website': '(.*)',
   }
-
   var found = input.match(patterns[type]);
-  console.log({found});
-  return (found != null && found[1] != 'undefined') ? found[1] : false;
+  return (found && found.length > 1) ? found[1] : input;
 }
 
 /**
