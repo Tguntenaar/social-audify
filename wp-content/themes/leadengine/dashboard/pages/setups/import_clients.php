@@ -15,24 +15,90 @@
   ?>
 
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
-    <div class="file-upload">
-      <div class="file-upload-button">
-        <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
-        <label class="button" id="fileLabel" for="update-data-from-file">Upload CSV</label>
-      </div>
-      <div class="file-upload-name" id="filename">No file chosen</div>
+    <span class="back-icon"><i class="fas fa-chevron-left"></i> Back</span>
+    <h1 class="create-report-h1" style="width: 80%; text-align:center; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Mass import all your contacts.</h1>
+    <!-- <span style="width: 100%; text-align: center; font-size: 17px; margin-top: -25px;" class="option-text">Create many contacts in a few steps.</span> -->
+    <div class="audit-option-center">
+      <div class="upload-container">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option border-rightt audit-option-left" onclick="showIntro(false)">
+            <div class="vertical-align">
+              <span class="option-title">Upload your contacts</span>
+              <span class="option-text">Upload a csv or ... file with your contacts in it.</span>
+            </div>
+          </div>
+          <div class="ol-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option audit-option-right">
+            <div class="vertical-align">
+              <span class="option-title">Paste your contacts</span>
+              <span class="option-text">Paste your contacts in a text field...........</span>
+            </div>
+        </div>
+        </div>
     </div>
+    <div class="file-upload-block">
+        <div class="file-upload">
+          <div class="file-upload-button">
+              <label class="button" id="fileLabel" for="update-data-from-file">Upload CSV, click the button below.</label>
 
-    Or, paste your data from a spreadsheet:
-    <textarea id="enter-data-field"></textarea>
-    <button id="update-data-from-field">Update data</button>
+              <label class="custom-file-upload">
+                 <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
+                 Custom Upload
+             </label>
+            <!-- <div class="file-upload-name" id="filename">No file chosen</div> -->
 
+            </div>
+        </div>
+    </div>
+    <div class="file-paste-block">
+         Paste your data from a spreadsheet:
+        <textarea id="enter-data-field" placeholder="Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email..."></textarea>
+        <button id="update-data-from-field">Confirm data<i class="fas fa-download"></i></button>
+    </div>
     <!-- clients -->
-    <li id="new-clients"> </li>
-    <button id="universal-update" class="advice-button floating-update"> Submit Clients </button>
-  </div>
+    <span style="font-size: 16px; margin-bottom: 3px;" id="title-import">Imported clients</span>
+    <ul id="new-clients">
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
+        <li>Name / Facebook / Instagram / Website / Email</li>
 
+    </ul>
+  </div>
+  <button id="universal-update" class="advice-button floating-update"> Submit Clients </button>
   <script>
+    $( document ).ready(function() {
+        $( ".audit-option-left" ).click(function() {
+            $('.file-upload-block').css("display", "block");
+            $('.audit-option-center').css("display", "none");
+            $('.back-icon').css("display", "block");
+            $('#new-clients').css("display", "block");
+            $('#title-import').css("display", "block");
+        });
+
+        $( ".audit-option-right" ).click(function() {
+            $('.file-paste-block').css("display", "block");
+            $('.audit-option-center').css("display", "none");
+            $('.back-icon').css("display", "block");
+            $('#new-clients').css("display", "block");
+            $('#title-import').css("display", "block");
+        });
+
+        $( ".back-icon" ).click(function() {
+            $('.file-upload-block').css("display", "none");
+            $('.file-paste-block').css("display", "none");
+            $('.audit-option-center').css("display", "block");
+            $('.back-icon').css("display", "none");
+            $('#new-clients').css("display", "none");
+            $('#title-import').css("display", "none");
+        });
+    });
+
     var uploadedClients = [];
 
     $("#update-data-from-field").click(function() {
@@ -40,7 +106,7 @@
         console.log(data);
       });
     });
-    
+
     // Parse pasted CSV
     function changeDataFromField(cb) {
       var arr = [];
@@ -71,7 +137,7 @@
     function changeDataFromUpload(evt, cb) {
       if (!browserSupportFileUpload()) {
         console.error("The File APIs are not fully supported in this browser!");
- 
+
       } else if ((file = evt.target.files[0]) !== "") {
         var reader = new FileReader();
         $("#filename").html(file.name);
@@ -110,7 +176,7 @@
     // Submit parsed clients to functions.php
     $('#universal-update').on('click', function() {
       var data = {clients: uploadedClients};
-      
+
       console.log(data);
       if (!$.isEmptyObject(data)) {
         $.ajax({
