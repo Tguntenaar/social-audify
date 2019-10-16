@@ -50,7 +50,7 @@
     </div>
     <div class="file-paste-block">
          Paste your data from a spreadsheet:
-        <textarea id="enter-data-field" placeholder="Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email... &#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email..."></textarea>
+        <textarea id="enter-data-field" placeholder="Name...   Facebook...   Instagram...   Website...   Email...&#10;Name...   Facebook...   Instagram...   Website...   Email... &#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;Name...   Facebook...   Instagram...   Website...   Email..."></textarea>
         <button id="update-data-from-field">Confirm data<i class="fas fa-download"></i></button>
     </div>
     <!-- clients -->
