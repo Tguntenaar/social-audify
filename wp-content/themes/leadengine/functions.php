@@ -318,14 +318,15 @@
     foreach ($clients as $c) {
       // TODO : clients parsen en checken van waardes ; staat nu goed in process_client (& global_regex)
       //  - beetje kut dat dan op twee plekken moet, is vast iets slims op te verzinnen..?
-
-      array_push($parsedClients, array(
-        "name" => $c["Name"], 
-        "fb" => $c["Facebook"], 
-        "ig" => $c["Instagram"], 
-        "wb" => $c["Website"], 
-        "mail" => $c["Email"]
-      ));
+      if ($c['name'] != "" && $c['email'] != "") {
+        array_push($parsedClients, array(
+          "name" => $c["name"], 
+          "fb" => $c["facebook"], 
+          "ig" => $c["instagram"], 
+          "wb" => $c["website"], 
+          "mail" => $c["email"]
+        ));
+      }
     }
 
     $client_controller->create_multiple(get_current_user_id(), $parsedClients);

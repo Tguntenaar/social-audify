@@ -5,97 +5,93 @@
 ?>
 
 <!DOCTYPE html>
-<html lang='en'>
+<html lang="en" dir="ltr">
+
+<?php
+  // Header
+  include(dirname(__FILE__)."/../header/dashboard_header.php");
+?>
+
 <head>
-  <title>Import Clients</title>
+  <meta charset="utf-8">
+  <title>Contact Dashboard</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js" defer></script>
 </head>
-  <?php
-    include(dirname(__FILE__)."/../header/dashboard_header.php");
-  ?>
-
+<body>
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
-    <span class="back-icon"><i class="fas fa-chevron-left"></i> Back</span>
-    <h1 class="create-report-h1" style="width: 80%; text-align:center; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Mass import all your contacts.</h1>
-    <!-- <span style="width: 100%; text-align: center; font-size: 17px; margin-top: -25px;" class="option-text">Create many contacts in a few steps.</span> -->
-    <div class="audit-option-center">
-      <div class="upload-container">
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option border-rightt audit-option-left">
-            <div class="vertical-align">
-              <span class="option-title">Upload your contacts</span>
-              <span class="option-text">Upload a csv or ... file with your contacts in it.</span>
-            </div>
-          </div>
-          <div class="ol-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option audit-option-right">
-            <div class="vertical-align">
-              <span class="option-title">Paste your contacts</span>
-              <span class="option-text">Paste your contacts in a text field...........</span>
-            </div>
-        </div>
-        </div>
-    </div>
-    <div class="file-upload-block">
+  <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-height mobile-margin" style="height: 350px; text-align: center;">
+      <div class="center-center">
+        <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-top: 20px;">Mass import all your contacts</h1>
         <div class="file-upload">
           <div class="file-upload-button">
-              <label class="button" id="fileLabel" for="update-data-from-file">Upload CSV, click the button below.</label>
-
-              <label class="custom-file-upload">
-                 <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
-                 Custom Upload
-             </label>
-            <!-- <div class="file-upload-name" id="filename">No file chosen</div> -->
-
-            </div>
+            <label class="create-audit-button client-button">
+              <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
+              Chose csv file
+            </label>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="file-paste-block">
-         Paste your data from a spreadsheet:
-        <textarea id="enter-data-field" placeholder="Name...   Facebook...   Instagram...   Website...   Email...&#10;Name...   Facebook...   Instagram...   Website...   Email... &#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;Name...   Facebook...   Instagram...   Website...   Email..."></textarea>
-        <button id="update-data-from-field">Confirm data<i class="fas fa-download"></i></button>
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12  right float-right no-margin" style="margin-top: 150px;">
+      <div class="inner no-scroll client-dashboard">
+        <span class="title"><span class="title-background" style="width:220px;">Contacts to be added</span>
+          <span class="count" id="counterSpan">0</span>
+        </span>
+        <input type="text" name="search" id="search-input" placeholder="Search..."/>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
+          <div class="col-12 col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Name</div>
+          <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Facebook</div>
+          <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Instagram</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Website</div>
+          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Email</div>
+        </div>
+        <div class="inner-scroll client-dashboard" id="client-results">
+
+            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="CLIENT_NAME">
+              <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" id="test" >CLIENT_NAME</div>
+              <input style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_FB">
+              <input style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_IG">
+              <input style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_WB">
+              <input style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_EMAIL">
+            </a>  
+            <script>
+              
+              $('#test').on('click', function() {
+
+                $(this).replaceWith(`<input style="overflow:hidden" class="${$(this).attr('class')}" id="test" value="CLIENT_NAME">`);
+                $('#test').on('focusout', function() {
+                  $(this).replaceWith(`<div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" id="test" >CLIENT_NAME</div>`)
+                });
+              });
+            </script>
+
+        
+        </div>
+      </div>
     </div>
-    <!-- clients -->
-    <span style="font-size: 16px; margin-bottom: 3px;" id="title-import">Imported clients</span>
-    <ul id="new-clients">
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-        <li>Name / Facebook / Instagram / Website / Email</li>
-    </ul>
   </div>
   <button id="universal-update" class="advice-button floating-update"> Submit Clients </button>
-  <script>
-    $( document ).ready(function() {
-        $( ".audit-option-left" ).click(function() {
-            $('.file-upload-block').css("display", "block");
-            $('.audit-option-center').css("display", "none");
-            $('.back-icon').css("display", "block");
-            $('#new-clients').css("display", "block");
-            $('#title-import').css("display", "block");
-        });
 
-        $( ".audit-option-right" ).click(function() {
-            $('.file-paste-block').css("display", "block");
-            $('.audit-option-center').css("display", "none");
-            $('.back-icon').css("display", "block");
-            $('#new-clients').css("display", "block");
-            $('#title-import').css("display", "block");
-        });
+	<script charset="utf-8">
+    function createClientRow({name, facebook, instagram, website, email}) {
+      return `<a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="${name}">
+        <div style="overflow: hidden;text-overflow:ellipsis;" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">${name}</div>
+        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style">${facebook}</div>
+        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style">${instagram}</div>
+        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">${website}</div>
+        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">${email}</div></a>`;
+    }
 
-        $( ".back-icon" ).click(function() {
-            $('.file-upload-block').css("display", "none");
-            $('.file-paste-block').css("display", "none");
-            $('.audit-option-center').css("display", "block");
-            $('.back-icon').css("display", "none");
-            $('#new-clients').css("display", "none");
-            $('#title-import').css("display", "none");
-        });
+    $(function() {
+      // Search function
+      $(document).on('keyup', 'input#search-input', function() {
+        filterSearch($(this).val(), $("#client-results .audit-row"), $("#counterSpan"));
+      });
+
+      $('#facebook_url, #instagram_url, #website_url').focusout(function() {
+        changeClientInputFields(this);
+      });
     });
 
     var uploadedClients = [];
@@ -120,23 +116,29 @@
       changeDataFromUpload(e, function(data) {
         uploadedClients = data;
 
-        $('#new-clients').html("<li>Name / Facebook / Instagram / Website / Email</li>");
+        $('#client-results').html('');
         data.forEach(function(client) {
           var { name, facebook = '', instagram = '', website = '', email } = client || {};
           console.log({client});
 
-          var parsedfb = parseClientInput('facebook', facebook);
-          parsedfb = grabPageId(parsedfb);
-
-          var parsedig = parseClientInput('instagram', instagram);
-
-          $('#new-clients').append(`<li>${name} / ${parsedfb} / ${parsedig} / ${website} / ${email}</li>`);
+          facebook = grabPageId(parseClientInput('facebook', facebook));
+          instagram = parseClientInput('instagram', instagram);
+          // TODO: goedkeuren
+          if (isValid(client)) {
+            $('#client-results').append(createClientRow({name, facebook, instagram, website, email}));
+          }
         });
+
+        $("#counterSpan").text($('#client-results a').length);
 
         console.log(uploadedClients);
         toggleUpdate(true);
       });
     });
+
+    function isValid(client) {
+      return (client.name != "") && (client.email != "")
+    }
 
     // Use the HTML5 File API to read the CSV
     function changeDataFromUpload(evt, cb) {
