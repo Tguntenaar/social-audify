@@ -20,7 +20,7 @@
     <!-- <span style="width: 100%; text-align: center; font-size: 17px; margin-top: -25px;" class="option-text">Create many contacts in a few steps.</span> -->
     <div class="audit-option-center">
       <div class="upload-container">
-          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option border-rightt audit-option-left" onclick="showIntro(false)">
+          <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 audit-option border-rightt audit-option-left">
             <div class="vertical-align">
               <span class="option-title">Upload your contacts</span>
               <span class="option-text">Upload a csv or ... file with your contacts in it.</span>
@@ -50,7 +50,7 @@
     </div>
     <div class="file-paste-block">
          Paste your data from a spreadsheet:
-        <textarea id="enter-data-field" placeholder="Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email..."></textarea>
+        <textarea id="enter-data-field" placeholder="Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email... &#10;Name...   Facebook...   Instagram...   Website...   Email...&#10;&#10;Name...   Facebook...   Instagram...   Website...   Email..."></textarea>
         <button id="update-data-from-field">Confirm data<i class="fas fa-download"></i></button>
     </div>
     <!-- clients -->
@@ -67,7 +67,6 @@
         <li>Name / Facebook / Instagram / Website / Email</li>
         <li>Name / Facebook / Instagram / Website / Email</li>
         <li>Name / Facebook / Instagram / Website / Email</li>
-
     </ul>
   </div>
   <button id="universal-update" class="advice-button floating-update"> Submit Clients </button>
@@ -121,16 +120,17 @@
       changeDataFromUpload(e, function(data) {
         uploadedClients = data;
 
-        $('#new-clients').html("");
+        $('#new-clients').html("<li>Name / Facebook / Instagram / Website / Email</li>");
         data.forEach(function(client) {
-          var { Name, Facebook, Instagram, Website, Email } = client;
+          var { name, facebook = '', instagram = '', website = '', email } = client || {};
+          console.log({client});
 
-          var parsedfb = parseClientInput('facebook', Facebook);
+          var parsedfb = parseClientInput('facebook', facebook);
           parsedfb = grabPageId(parsedfb);
 
-          var parsedig = parseClientInput('instagram', Instagram);
+          var parsedig = parseClientInput('instagram', instagram);
 
-          $('#new-clients').append(`<li>${Name}/${parsedfb}/${parsedig}/${Website}/${Email}</li>`);
+          $('#new-clients').append(`<li>${name} / ${parsedfb} / ${parsedig} / ${website} / ${email}</li>`);
         });
 
         console.log(uploadedClients);
@@ -168,14 +168,33 @@
     // Parse the CSV input into JSON
     function csvToJson(data) {
       var output = [];
+      // check if 5 colums;
       for (var i = 1; i < data.length; i++) {
-        var obj = {};
+        var obj = { name:'', facebook:'', instagram:'', website:'', email:'', };
         data[0].forEach(function(col, index) {
-          obj[col] = data[i][index];
+          var newcol = translateCsvTitles(col);
+          obj[newcol] = data[i][index];
         });
         output.push(obj);
       }
       return output;
+    }
+
+    function translateCsvTitles(title) {
+      // remove "/", "\", "-" and whitespace
+      var value = title.toLowerCase().replace(/[\s\/\\-]+/, "");
+      var obj = {
+        name: ['client', 'name'],
+        facebook: ['fb', 'facebook'],
+        instagram: ['ig','insta', 'instagram'],
+        website: ['website', 'web', 'url', 'site'],
+        email: ['email', 'mail', 'gmail', 'hotmail'],
+      }
+      return getKeyByValue(obj, value);
+    }
+
+    function getKeyByValue(object, value) {
+      return Object.keys(object).find(key => object[key].includes(value));
     }
 
     // Submit parsed clients to functions.php
