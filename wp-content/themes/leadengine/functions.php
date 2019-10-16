@@ -19,6 +19,21 @@
     wp_die();
   }
 
+  add_action( 'wp_ajax_log_error', 'log_js_error');
+  add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
+
+  function log_js_error() {
+    require_once(dirname(_FILE_)."/dashboard/controllers/log_controller.php");
+    $errorLogger = new Logger;
+
+    $message = isset($_POST['message']) ? $_POST['message'] : "";
+    $stacktrace = isset($_POST['stacktrace']) ? $_POST['stacktrace'] : "";
+    $stacktrace .= isset($_POST['function']) ? "in {$_POST['function']}" : "";
+
+    $errorLogger->printJs(get_current_user_id(), $message, $stacktrace);
+    wp_die();
+  }
+  
 
   add_action( 'wp_ajax_toggle_visibility', 'toggle_visibility');
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
