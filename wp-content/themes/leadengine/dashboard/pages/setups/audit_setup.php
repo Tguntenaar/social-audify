@@ -219,9 +219,9 @@
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
             <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex; ?>" title="Only letters are allowed">
-            <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username" pattern="<?php echo $fb_regex ?>">
-            <input type="text" id="instagram_url" placeholder="Instagram username or url" pattern="<?php echo $ig_regex ?>">
-            <input type="text" id="website_url" placeholder="https://www.example.com" pattern="<?php echo $website_regex; ?>">
+            <input type="text" id="facebook_url" data-type="facebook" placeholder="Facebook page url, page id or page username" pattern="<?php echo $fb_regex ?>">
+            <input type="text" id="instagram_url" data-type="instagram" placeholder="Instagram username or url" pattern="<?php echo $ig_regex ?>">
+            <input type="text" id="website_url" data-type="website" placeholder="https://www.example.com" pattern="<?php echo $website_regex; ?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
         confirm: 'competitor_confirmed'

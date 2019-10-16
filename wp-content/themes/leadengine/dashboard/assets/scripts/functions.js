@@ -186,8 +186,8 @@ function changeClientInputFields(field) {
   if (!unparsed) {
     return;
   }
-  
-  var parsed = parseClientInput(field.id.replace("_url", ""), unparsed);
+
+  var parsed = parseClientInput($(field).data("type"), unparsed);
   parsed = grabPageId(parsed);
 
   if (parsed) {
@@ -203,11 +203,11 @@ function grabPageId(found) {
 
 function parseClientInput(type, input) {
   var patterns = {
-    'facebook': '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:(?:pages|pg)?\/)?([\w_.\-]+)?',
-    'instagram': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,30})?',
-    'website': '(.*)',
+    'facebook': /(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:(?:pages|pg)?\/)?([\w_.\-]+)?/g,
+    'instagram': /(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,30})?/g,
+    'website': /(.*)/g,
   }
-  var found = input.match(patterns[type]);
+  var found = patterns[type].exec(input);
   return (found && found.length > 1) ? found[1] : input;
 }
 

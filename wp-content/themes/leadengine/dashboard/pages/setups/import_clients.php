@@ -27,7 +27,7 @@
           <div class="file-upload-button">
             <label class="create-audit-button client-button">
               <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
-              Chose csv file
+              Choose csv file
             </label>
           </div>
         </div>
@@ -46,92 +46,68 @@
           <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Website</div>
           <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Email</div>
         </div>
-        <div class="inner-scroll client-dashboard" id="client-results">
-
-            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="CLIENT_NAME">
-              <input type="text" style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_NAME">
-              <input type="text" style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_FB">
-              <input type="text" style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_IG">
-              <input type="text" style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_WB">
-              <input type="text" style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_EMAIL">
-            </a>
-
-        </div>
+        <div class="inner-scroll client-dashboard" id="client-results"></div>
       </div>
     </div>
   </div>
   <button id="universal-update" class="advice-button floating-update"> Submit Clients </button>
 
 	<script charset="utf-8">
+    var resultLocation = $('#client-results');
+
+    
     function createClientRow({name, facebook, instagram, website, email}) {
       return `<a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="${name}">
-        <input type="text" style="" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="${name}">
-        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" value="${facebook}">
-        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" value="${instagram}">
-        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="${website}">
-        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="${email}"></a>`;
-    }
-
-    $(function() {
-      // Search function
-      $(document).on('keyup', 'input#search-input', function() {
-        filterSearch($(this).val(), $("#client-results .audit-row"), $("#counterSpan"));
-      });
-
-      $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        changeClientInputFields(this);
-      });
-    });
-
-    var uploadedClients = [];
-
-    $("#update-data-from-field").click(function() {
-      changeDataFromField(function(data) {
-        console.log(data);
-      });
-    });
-
-    // Parse pasted CSV
-    function changeDataFromField(cb) {
-      var arr = [];
-      $('#enter-data-field').val().replace( /\n/g, "^^^xyz" ).split( "^^^xyz" ).forEach(function(d) {
-        arr.push(d.replace( /\t/g, "^^^xyz" ).split( "^^^xyz" ))
-      });
-      cb(csvToJson(arr));
+        <input type="text" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="name" value="${name}">
+        <input type="text" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="facebook" value="${facebook}">
+        <input type="text" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="instagram" value="${instagram}">
+        <input type="text" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" data-type="website" value="${website}">
+        <input type="text" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" data-type="email" value="${email}"></a>`;
     }
 
     // Event handlers
     $("#update-data-from-file").change(function(e) {
       changeDataFromUpload(e, function(data) {
-        uploadedClients = data;
+        resultLocation.html('');
 
-        $('#client-results').html('');
         data.forEach(function(client) {
           var { name, facebook = '', instagram = '', website = '', email } = client || {};
           console.log({client});
 
-          facebook = grabPageId(parseClientInput('facebook', facebook));
-          instagram = parseClientInput('instagram', instagram);
-          // TODO: goedkeuren
+          client.facebook = grabPageId(parseClientInput('facebook', facebook));
+          client.instagram = parseClientInput('instagram', instagram);
+
           if (isValid(client)) {
-            $('#client-results').append(createClientRow({name, facebook, instagram, website, email}));
+            var newRow = $.parseHTML(createClientRow(client));
+            $(newRow).data("client", client);
+            resultLocation.append(newRow);
           }
         });
 
-        $("#counterSpan").text($('#client-results a').length);
+        $('.audit-row-style').focusout(function() {
+          if (/^(facebook|instagram|website)$/.test($(this).data("type"))) {
+            changeClientInputFields(this);
+          }
+          var temp = $(this).parent().data("client");
+          temp[$(this).data("type")] = $(this).val();
+          $(this).parent().data("client", temp);
+        });
 
-        console.log(uploadedClients);
+        $("#counterSpan").text(resultLocation.find('a').length);
         toggleUpdate(true);
       });
     });
 
+    // TODO: goedkeuren
     function isValid(client) {
-      return (client.name != "") && (client.email != "")
+      return (client.name != "") && (client.email != "");
     }
 
     // Use the HTML5 File API to read the CSV
     function changeDataFromUpload(evt, cb) {
-      if (!browserSupportFileUpload()) {
+
+      // Check that the browser supports the HTML5 File API
+      if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
         console.error("The File APIs are not fully supported in this browser!");
 
       } else if ((file = evt.target.files[0]) !== "") {
@@ -149,11 +125,6 @@
 
       reader.readAsText(file);
       $("#update-data-from-file")[0].value = "";
-    }
-
-    // Method that checks that the browser supports the HTML5 File API
-    function browserSupportFileUpload() {
-      return (window.File && window.FileReader && window.FileList && window.Blob);
     }
 
     // Parse the CSV input into JSON
@@ -181,26 +152,27 @@
         website: ['website', 'web', 'url', 'site'],
         email: ['email', 'mail', 'gmail', 'hotmail'],
       }
-      return getKeyByValue(obj, value);
-    }
-
-    function getKeyByValue(object, value) {
-      return Object.keys(object).find(key => object[key].includes(value));
+      return Object.keys(obj).find(key => obj[key].includes(value));
     }
 
     // Submit parsed clients to functions.php
     $('#universal-update').on('click', function() {
-      var data = {clients: uploadedClients};
+      var retrievedClients = [];
 
-      console.log(data);
-      if (!$.isEmptyObject(data)) {
+      resultLocation.find('.audit-row').each(function() {
+        retrievedClients.push($(this).data('client'));
+      });
+
+      console.log(retrievedClients);
+      if (!$.isEmptyObject(retrievedClients)) {
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: {action: 'import_clients', ...data},
+          data: {action: 'import_clients', clients: retrievedClients},
           success: function(response) {
             toggleUpdate(false);
             console.log(response);
+            // TODO redirect!
           },
           error: function (xhr, textStatus, errorThrown) {
             var send_error = error_func(xhr, textStatus, errorThrown, data);
@@ -210,6 +182,13 @@
       } else {
         toggleUpdate(false);
       }
+    });
+
+    $(function() {
+      // Search function
+      $(document).on('keyup', 'input#search-input', function() {
+        filterSearch($(this).val(), resultLocation.find(".audit-row"), $("#counterSpan"));
+      });
     });
   </script>
 </body>
