@@ -5,7 +5,7 @@
   // Error Logging
   include(dirname(__FILE__)."/../../controllers/log_controller.php");
   $ErrorLogger = new Logger;
-  
+
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
@@ -69,6 +69,7 @@
   }
 
   $post_names =  ['introduction', 'conclusion', 'social_advice', 'campaign_advice'];
+  $company_name = get_user_meta($author_id, 'rcp_company', true );
 
   foreach ($post_names as $post_name) {
     if (isset($_POST[$post_name]) && $edit_mode) {
@@ -222,7 +223,7 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo $author->display_name; ?></span><?php
+        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
@@ -418,8 +419,8 @@
     </div>
   </section>
   <div class="footer">
-    <span class="phone-number">Phonenumber: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
-    <span class="mailadres">Mailadress: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
+    <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
+    <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
   </div>
 
   <script charset='utf-8'>

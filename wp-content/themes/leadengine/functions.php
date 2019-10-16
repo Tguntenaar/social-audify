@@ -33,7 +33,7 @@
     $errorLogger->printJs(get_current_user_id(), $message, $stacktrace);
     wp_die();
   }
-
+  
 
   add_action( 'wp_ajax_toggle_visibility', 'toggle_visibility');
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
@@ -696,19 +696,28 @@
     $btw_number = get_user_meta($id, 'rcp_btw_number', true );
     $calendar = get_user_meta($id, 'rcp_calendar', true );
     $selected_country = get_user_meta($id, 'rcp_country', true );
+    $company = get_user_meta($id, 'rcp_company', true );
 
     ?>
     <p>
       <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
       <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
     </p>
-    <p class="rcp_calendar_custom" style="margin-top: -90px;">
+    <p class="rcp_calendar_custom" style="">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
+    </p>
 
-      <p id="rcp_country_text" style="width: 47%; margin-top: 50px; float:left;">
+    <p class="rcp_company_custom" style="">
+        <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
+            <label for="rcp_company"><?php _e( 'Your company name', 'rcp' ); ?></label>
+            <input name="rcp_company" id="rcp_company"  placeholder="Name will be shown on the audit/report page" type="text" value="<?php echo esc_attr( $company ); ?>"/>
+        <?php } ?>
+    </p>
+
+    <p id="rcp_country_text" style="width: 47%; margin-top: 50px; float:left;">
           <label for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
           <select style="width: 100%; margin-top: -33px; height:55px; display:block;float:left;" name="rcp_country" id="rcp_country">
               <?php foreach ( get_country() as $key => $value ) { ?>
@@ -736,6 +745,8 @@
   function pw_rcp_add_member_edit_fields($user_id = 0) {
     $number = get_user_meta( $user_id, 'rcp_number', true );
     $btw_number = get_user_meta( $user_id, 'rcp_btw_number', true );
+    $company = get_user_meta( $user_id, 'rcp_company', true );
+    $country = get_user_meta( $user_id, 'rcp_country', true );
     $encrypt_method = "AES-256-CBC";
     $secret_key = 'WS-SERVICE-KEY';
     $secret_iv = 'WS-SERVICE-VALUE';
@@ -760,7 +771,7 @@
       </th>
       <td>
         <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $number ); ?>"/>
-        <p class="description"><?php _e( 'The member\'s Calendar link.', 'rcp' ); ?></p>
+        <p class="description"><?php _e( 'The member\'s Calander link.', 'rcp' ); ?></p>
       </td>
     </tr>
 
@@ -771,6 +782,26 @@
       <td>
         <input name="rcp_btw_number" id="rcp_btw_number" type="text" value="<?php echo openssl_decrypt(esc_attr( $btw_number ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()"); ?>"/>
         <p class="description"><?php _e( 'The member\'s VAT number', 'rcp' ); ?></p>
+      </td>
+    </tr>
+
+    <tr valign="top">
+      <th scope="row" valign="top">
+        <label for="rcp_company"><?php _e( 'Company name', 'rcp' ); ?></label>
+      </th>
+      <td>
+        <input name="rcp_company" id="rcp_company" type="text" value="<?php echo esc_attr( $company ); ?>"/>
+        <p class="description"><?php _e( 'The member\'s company name', 'rcp' ); ?></p>
+      </td>
+    </tr>
+
+    <tr valign="top">
+      <th scope="row" valign="top">
+        <label for="rcp_country"><?php _e( 'Country', 'rcp' ); ?></label>
+      </th>
+      <td>
+        <input name="rcp_country" id="rcp_country" type="text" value="<?php echo esc_attr( $country ); ?>"/>
+        <p class="description"><?php _e( 'The member\'s Country', 'rcp' ); ?></p>
       </td>
     </tr>
     <?php
@@ -793,24 +824,34 @@
         rcp_errors()->add( 'empty_country', __( 'Please select your country', 'rcp' ), 'register' );
     }
 
-    if ((!empty( $posted['rcp_btw_number']) && $posted['rcp_country'] == "NL")
-        || (!empty( $posted['rcp_btw_number']) && array_key_exists($posted['rcp_country'], get_eu_countries()))) {
+    if ((!empty( $posted['rcp_btw_number']) && array_key_exists($posted['rcp_country'], get_eu_countries()) && $posted['rcp_country'] != "NL")) {
 
-        $vat_number = empty($posted['rcp_btw_number']) ? "" : $posted['rcp_btw_number'];
-        $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
 
-        $contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
+      $vat_number = empty($posted['rcp_btw_number']) ? "" : $posted['rcp_btw_number'];
+      $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
+
+      $contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
+
 
         if($contents === false) {
-            throw new Exception('service unavailable');
+            // throw new Exception('service unavailable');
+            rcp_errors()->add( 'empty_country', __( "VAT validation not possible at the moment, contact us: contact@socialaudify.com.", 'rcp' ), 'register' );
+
         }
         else {
             $res = json_decode($contents);
 
             if(!$res->valid) {
-                rcp_errors()->add( 'invalid_location', __( 'Wrong VAT number.', 'rcp' ), 'register' );
+                rcp_errors()->add( 'invalid_vat', __( 'Wrong VAT number.', 'rcp' ), 'register' );
             }
         }
+     }
+
+     if (empty( $posted['rcp_country'] )) {
+
+     }
+     if(empty( $posted['rcp_btw_number'])) {
+
      }
   }
 
@@ -888,6 +929,8 @@
         if( ! empty( $_POST['rcp_country'] ) ) {
           update_user_meta( $user_id, 'rcp_country', sanitize_text_field( $_POST['rcp_country'] ));
         }
+
+        update_user_meta( $user_id, 'rcp_company', sanitize_text_field( $_POST['rcp_company'] ) );
     }
     add_action( 'rcp_user_profile_updated', 'pw_rcp_save_user_fields_on_profile_save', 10 );
     add_action( 'rcp_edit_member', 'pw_rcp_save_user_fields_on_profile_save', 10 );
@@ -906,18 +949,6 @@
     if ( !empty($referrer) && !strstr($referrer,'wp-login') && !strstr($referrer,'wp-admin') ) {
       wp_redirect( $referrer . '?login=failed' );  // let's append some information (login=failed) to the URL for the theme to use
       exit;
-    }
-  }
-
-  function fb_filter_query( $query, $error = true ) {
-    if ( is_search() ) {
-      $query->is_search = false;
-      $query->query_vars[s] = false;
-      $query->query[s] = false;
-
-      // to error
-      if ( $error == true )
-        $query->is_404 = true;
     }
   }
 ?>
