@@ -49,24 +49,13 @@
         <div class="inner-scroll client-dashboard" id="client-results">
 
             <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="CLIENT_NAME">
-              <div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" id="test" >CLIENT_NAME</div>
-              <input style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_FB">
-              <input style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_IG">
-              <input style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_WB">
-              <input style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_EMAIL">
-            </a>  
-            <script>
-              
-              $('#test').on('click', function() {
+              <input type="text" style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_NAME">
+              <input type="text" style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_FB">
+              <input type="text" style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="CLIENT_IG">
+              <input type="text" style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_WB">
+              <input type="text" style="overflow:hidden" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="CLIENT_EMAIL">
+            </a>
 
-                $(this).replaceWith(`<input style="overflow:hidden" class="${$(this).attr('class')}" id="test" value="CLIENT_NAME">`);
-                $('#test').on('focusout', function() {
-                  $(this).replaceWith(`<div style="overflow:hidden" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" id="test" >CLIENT_NAME</div>`)
-                });
-              });
-            </script>
-
-        
         </div>
       </div>
     </div>
@@ -76,11 +65,11 @@
 	<script charset="utf-8">
     function createClientRow({name, facebook, instagram, website, email}) {
       return `<a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="${name}">
-        <div style="overflow: hidden;text-overflow:ellipsis;" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style">${name}</div>
-        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style">${facebook}</div>
-        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style">${instagram}</div>
-        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">${website}</div>
-        <div style="overflow: hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style">${email}</div></a>`;
+        <input type="text" style="" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" value="${name}">
+        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" value="${facebook}">
+        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" value="${instagram}">
+        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="${website}">
+        <input type="text" style="overflow: hidden; text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" value="${email}"></a>`;
     }
 
     $(function() {

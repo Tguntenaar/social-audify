@@ -59,14 +59,13 @@
         </span>
         <input type="text" name="search" id="search-input" placeholder="Search..."/>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
-          <div class="row-title-style remove-on-mobile col col-sm-5 col-md-5 col-lg-5">Client</div>
-          <div class="row-title-style col-12 col-sm-5 col-md-5 col-lg-5">Audit Name</div>
-          <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2">Viewed</div>
+          <div class="row-title-style remove-on-mobile col col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Client</div>
+          <div class="row-title-style col-12 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Audit Name</div>
+          <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2" style="padding-left: 0;">Viewed</div>
         </div>
         <div class="inner-scroll" id="audit-results"><?php
           foreach ($this_year as $audit) {
             $slug = strtolower('/audit-'.str_replace(" ", "-", $audit->name).'-'.$audit->id.'/');
-            $name = strlen($audit->name) <= 18 ? $audit->name : substr($audit->name, 0, 18).'...';
             $audit->viewed = $audit->view_time !== NULL ? get_time_dif_days($audit->view_time) : "not yet"; ?>
 
             <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $audit->name; ?>">

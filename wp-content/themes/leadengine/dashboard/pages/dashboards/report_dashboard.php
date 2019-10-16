@@ -65,13 +65,13 @@
           <?php
             foreach ($this_year as $report) {
               $slug = strtolower('/report-'.str_replace(" ", "-", $report->name).'-'.$report->id.'/');
-              $report->viewed = $report->view_time !== NULL ? get_time_dif_days($report->view_time) : "not yet";
-              if(strlen($report->name) > 18) { $name = substr($report->name,0,18).'...'; } else { $name = $report->name; }
-              echo ' <a href="'.$slug.'" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="'. $report->name .'">
-                <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5  audit-row-style">'. $report->client_name .'</div>
-                <div class="col-12 col-sm-5 col-md-5 col-lg-5  audit-row-style">'. $name .'</div>
-                <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style fontsize">'. $report->viewed .'</div>
-              </a>';
+              $report->viewed = $report->view_time !== NULL ? get_time_dif_days($report->view_time) : "not yet"; ?>
+
+              <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
+                <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $report->client_name; ?></div>
+                <div class="col-12 col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $name; ?></div>
+                <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style"><?php echo $report->viewed ?></div>
+              </a><?php
             }
           ?>
         </div>

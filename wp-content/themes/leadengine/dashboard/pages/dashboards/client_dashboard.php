@@ -116,17 +116,12 @@
           <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Website</div>
         </div>
         <div class="inner-scroll client-dashboard" id="client-results"><?php
-          foreach ($clients as $client) {
-            // $name = strlen($client->name) <= 18 ? $client->name : substr($client->name, 0, 18).'...';
-            // $facebook = strlen($client->facebook) <= 18 ? $client->facebook : substr($client->facebook, 0, 18).'...';
-            // $instagram = strlen($client->instagram) <= 18 ? $client->instagram : substr($client->instagram, 0, 18).'...';
-            // $website = strlen($client->website) <= 18 ? $client->website : substr($client->website, 0, 18).'...'; ?>
-
+          foreach ($clients as $client) { ?>
             <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $client->name; ?>">
-              <div style="overflow:hidden;text-overflow:ellipsis;" class="col-12 col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->name; ?></div>
-              <div style="overflow:hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->facebook; ?></div>
-              <div style="overflow:hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->instagram; ?></div>
-              <div style="overflow:hidden;text-overflow:ellipsis;" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->website; ?></div>
+              <div class="col-12 col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->name; ?></div>
+              <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->facebook; ?></div>
+              <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->instagram; ?></div>
+              <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->website; ?></div>
               <i class="fas fa-ellipsis-v delete-this-audit client_<?php echo $client->id; ?>-edit" style="color:grey; cursor:pointer;"></i>
             </a><?php
           } ?>

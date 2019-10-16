@@ -1289,7 +1289,9 @@ nav ul a li {
 
 .client-dashboard .row-title-style,
 .client-dashboard .audit-row-style {
-	width: 25%;
+  width: 25%;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 
 .form-right input[type="text"]  {
@@ -1383,7 +1385,8 @@ nav ul a li {
     font-weight: 300;
     padding: 0;
     border-bottom: 1px solid #f9f9f9;
-	overflow: hidden;
+  overflow: hidden;
+  text-overflow:ellipsis;
 	border-right: 20px solid #fff;
 }
 
@@ -3629,7 +3632,9 @@ tr input {
 	color: #000;
 	font-size: 16px;
 	font-weight: 300;
-	padding: 0;
+  padding: 0;
+  text-overflow:ellipsis;
+  overflow:hidden;
 	border-bottom: 1px solid #f9f9f9;
 }
 
