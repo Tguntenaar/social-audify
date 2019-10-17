@@ -307,8 +307,10 @@
   add_action( 'wp_ajax_nopriv_import_clients', 'not_logged_in');
 
   function add_multiple_clients() {
+    require_once(dirname(__FILE__)."/dashboard/assets/php/global_regex.php");
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
+    $Regex = new Regex;
     $connection = new connection;
     $client_controller = new client_controller($connection);
 
@@ -316,22 +318,24 @@
 
     $parsedClients = array();
     foreach ($clients as $c) {
-      // TODO : clients parsen en checken van waardes ; staat nu goed in process_client (& global_regex)
-      //  - beetje kut dat dan op twee plekken moet, is vast iets slims op te verzinnen..?
       if ($c['name'] != "" && $c['email'] != "") {
-        array_push($parsedClients, array(
-          "name" => $c["name"], 
-          "fb" => $c["facebook"], 
-          "ig" => $c["instagram"], 
-          "wb" => $c["website"], 
-          "mail" => sanitize_email( $c["email"] )
-        ));
+
+    // if ($c['name'] != "" && $c['email'] != "" && $Regex->valid_fb($c["facebook"]) 
+    //   && $Regex->valid_ig($c["instagram"]) && $Regex->valid_wb($c["website"])) {
+    //     array_push($parsedClients, array(
+    //       "name" => $c["name"], 
+    //       "fb" => $c["facebook"], 
+    //       "ig" => $c["instagram"], 
+    //       "wb" => $c["website"], 
+    //       "mail" => sanitize_email( $c["email"] )
+    //     ));
+    
       }
     }
 
-    $client_controller->create_multiple(get_current_user_id(), $parsedClients);
+    // $client_controller->create_multiple(get_current_user_id(), $parsedClients);
 
-    wp_send_json(array("Succes"=>"added:".count($clients)));
+    wp_send_json(array("Succes"=>"added: ".$clients[0]['name']));
     wp_die();
   }
 

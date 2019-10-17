@@ -197,7 +197,7 @@
             // TODO redirect!
           },
           error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            var send_error = error_func(xhr, textStatus, errorThrown, retrievedClients);
             logError(send_error, 'setups/import_clients.php', 'submit');
           }
         });

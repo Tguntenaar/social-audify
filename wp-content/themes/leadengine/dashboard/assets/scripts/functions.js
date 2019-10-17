@@ -183,15 +183,14 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 function changeClientInputFields(field) {
   var unparsed = $(field).val();
 
-  if (!unparsed) {
-    return;
-  }
-
-  var parsed = parseClientInput($(field).data("type"), unparsed);
-  parsed = grabPageId(parsed);
-
-  if (parsed) {
-    $(field).val(parsed);
+  if (unparsed) {
+    var parsed = parseClientInput($(field).data("type"), unparsed);
+    parsed = grabPageId(parsed);
+  
+    if (parsed) {
+      $(field).val(parsed);
+      return;
+    }
   }
 }
 
