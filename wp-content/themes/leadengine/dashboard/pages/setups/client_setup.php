@@ -39,10 +39,13 @@
             <li><span class="number">3.</span> Copy the URL's into the form.</li>
             <li><span class="number">4.</span> Click the submit button.</li>
             <li><span class="number">5.</span> Done. You created a contact.</li>
+            <li><span class="number">Or</span> Import clients with a csv file <a href="/client-import/">here.</a></li>
+
           </ul>
         </div>
       </div>
     </div>
+
     <div class="col-lg-6 client_right client-form">
       <div class="col-lg-12">
         <div class="content-title col-lg-9">

@@ -18,6 +18,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.min.js" defer></script>
 </head>
 <body>
+  <!-- modal? -->
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
   <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-height mobile-margin" style="height: 350px; text-align: center;">
@@ -57,37 +58,56 @@
 
     
     function createClientRow({name, facebook, instagram, website, email}) {
+      var nameValid = (name == '') ? 'invalid' : 'valid';
+      var mailValid = (email == '') ? 'invalid' : 'valid';
       return `<a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="${name}">
-        <input type="text" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="name" value="${name}">
+        <input type="text" class="col-12 col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="name" value="${name}" ${nameValid}>
         <input type="text" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="facebook" value="${facebook}">
         <input type="text" class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style" data-type="instagram" value="${instagram}">
         <input type="text" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" data-type="website" value="${website}">
-        <input type="text" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" data-type="email" value="${email}"></a>`;
+        <input type="text" class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style" data-type="email" value="${email}" ${mailValid}></a>`;
     }
 
     // Event handlers
     $("#update-data-from-file").change(function(e) {
       changeDataFromUpload(e, function(data) {
         resultLocation.html('');
+        var invalidClients = [];
 
-        data.forEach(function(client) {
-          var { name, facebook = '', instagram = '', website = '', email } = client || {};
+        data.forEach(function(client, index) {
+          var { name= '', facebook = '', instagram = '', website = '', email = ''} = client || {};
           console.log({client});
 
           client.facebook = grabPageId(parseClientInput('facebook', facebook));
           client.instagram = parseClientInput('instagram', instagram);
 
-          if (isValid(client)) {
-            var newRow = $.parseHTML(createClientRow(client));
-            $(newRow).data("client", client);
-            resultLocation.append(newRow);
+          if (!isValid(client)) {
+            invalidClients = [...invalidClients, index + 1];
           }
+          var newRow = $.parseHTML(createClientRow(client));
+          $(newRow).data("client", client);
+          resultLocation.append(newRow);
+
         });
+
+        if (invalidClients.length > 1) {
+          showModal(initiateModal('errorModal', 'error', {
+            'text': `Clients number ${invalidClients.slice(0, -1).join(',')+' and '+invalidClients.slice(-1)} seem to be invalid`,
+            'subtext': `Please provide at least their name and email.`,
+          }));
+        } else if (invalidClients.length == 1) {
+          showModal(initiateModal('errorModal', 'error', {
+            'text': `Client number ${invalidClients[0]} seems to be invalid`,
+            'subtext': `Please provide a name and email.`,
+          }));
+        }
+
 
         $('.audit-row-style').focusout(function() {
           if (/^(facebook|instagram|website)$/.test($(this).data("type"))) {
             changeClientInputFields(this);
           }
+          // update data-client attribute na het editen.
           var temp = $(this).parent().data("client");
           temp[$(this).data("type")] = $(this).val();
           $(this).parent().data("client", temp);
@@ -98,9 +118,8 @@
       });
     });
 
-    // TODO: goedkeuren
     function isValid(client) {
-      return (client.name != "") && (client.email != "");
+      return (client.name != "") && (client.email != "") && (Object.keys(client).length == 5);
     }
 
     // Use the HTML5 File API to read the CSV
@@ -135,6 +154,9 @@
         var obj = { name:'', facebook:'', instagram:'', website:'', email:'', };
         data[0].forEach(function(col, index) {
           var newcol = translateCsvTitles(col);
+          if (newcol == 'undefined') {
+            // TODO: there is an invalid column in your csv file.
+          }
           obj[newcol] = data[i][index];
         });
         output.push(obj);

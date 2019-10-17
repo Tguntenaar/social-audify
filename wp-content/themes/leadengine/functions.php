@@ -312,7 +312,7 @@
     $connection = new connection;
     $client_controller = new client_controller($connection);
 
-    $clients = $_POST['clients'];
+    $clients = sanitize_text_field( $_POST['clients'] );
 
     $parsedClients = array();
     foreach ($clients as $c) {
@@ -324,7 +324,7 @@
           "fb" => $c["facebook"], 
           "ig" => $c["instagram"], 
           "wb" => $c["website"], 
-          "mail" => $c["email"]
+          "mail" => sanitize_email( $c["email"] )
         ));
       }
     }
