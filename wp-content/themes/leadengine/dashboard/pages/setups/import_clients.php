@@ -55,7 +55,6 @@
 
 	<script charset="utf-8">
     var resultLocation = $('#client-results');
-
     
     function createClientRow({name, facebook, instagram, website, email}) {
       var nameValid = (name == '') ? 'invalid' : 'valid';
@@ -76,7 +75,6 @@
 
         data.forEach(function(client, index) {
           var { name= '', facebook = '', instagram = '', website = '', email = ''} = client || {};
-          console.log({client});
 
           client.facebook = grabPageId(parseClientInput('facebook', facebook));
           client.instagram = parseClientInput('instagram', instagram);
@@ -87,7 +85,6 @@
           var newRow = $.parseHTML(createClientRow(client));
           $(newRow).data("client", client);
           resultLocation.append(newRow);
-
         });
 
         if (invalidClients.length > 1) {
@@ -102,15 +99,14 @@
           }));
         }
 
-
         $('.audit-row-style').focusout(function() {
           if (/^(facebook|instagram|website)$/.test($(this).data("type"))) {
             changeClientInputFields(this);
           }
           // update data-client attribute na het editen.
-          var temp = $(this).parent().data("client");
-          temp[$(this).data("type")] = $(this).val();
-          $(this).parent().data("client", temp);
+          var tempClient = $(this).parent().data("client");
+          tempClient[$(this).data("type")] = $(this).val();
+          $(this).parent().data("client", tempClient);
         });
 
         $("#counterSpan").text(resultLocation.find('a').length);
@@ -122,6 +118,7 @@
       return (client.name != "") && (client.email != "") && (Object.keys(client).length == 5);
     }
 
+    
     // Use the HTML5 File API to read the CSV
     function changeDataFromUpload(evt, cb) {
 
@@ -149,32 +146,30 @@
     // Parse the CSV input into JSON
     function csvToJson(data) {
       var output = [];
-      // check if 5 colums;
-      for (var i = 1; i < data.length; i++) {
-        var obj = { name:'', facebook:'', instagram:'', website:'', email:'', };
-        data[0].forEach(function(col, index) {
-          var newcol = translateCsvTitles(col);
-          if (newcol == 'undefined') {
-            // TODO: there is an invalid column in your csv file.
-          }
-          obj[newcol] = data[i][index];
-        });
-        output.push(obj);
-      }
-      return output;
-    }
-
-    function translateCsvTitles(title) {
-      // remove "/", "\", "-" and whitespace
-      var value = title.toLowerCase().replace(/[\s\/\\-]+/, "");
-      var obj = {
+      var columns = {
         name: ['client', 'name'],
         facebook: ['fb', 'facebook'],
         instagram: ['ig','insta', 'instagram'],
         website: ['website', 'web', 'url', 'site'],
         email: ['email', 'mail', 'gmail', 'hotmail'],
       }
-      return Object.keys(obj).find(key => obj[key].includes(value));
+
+      // check if 5 colums;
+      for (var i = 1; i < data.length; i++) {
+        var obj = { name:'', facebook:'', instagram:'', website:'', email:'', };
+
+        data[0].forEach(function(column, index) {
+          var value = column.toLowerCase().replace(/[\s\/\\-]+/, "");
+         
+          var columnName = Object.keys(columns).find(key => columns[key].includes(value));
+          if (columnName == 'undefined') {
+            // TODO: there is an invalid column in your csv file.
+          }
+          obj[columnName] = data[i][index];
+        });
+        output.push(obj);
+      }
+      return output;
     }
 
     // Submit parsed clients to functions.php

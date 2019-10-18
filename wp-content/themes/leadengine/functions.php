@@ -314,28 +314,27 @@
     $connection = new connection;
     $client_controller = new client_controller($connection);
 
-    $clients = sanitize_text_field( $_POST['clients'] );
+    $clients = $_POST['clients'];
 
     $parsedClients = array();
     foreach ($clients as $c) {
-      if ($c['name'] != "" && $c['email'] != "") {
+      if ($c['name'] != "" && $c['email'] != "" && $Regex->valid_fb($c["facebook"]) &&
+        $Regex->valid_ig($c["instagram"]) && $Regex->valid_wb($c["website"])) {
 
-    // if ($c['name'] != "" && $c['email'] != "" && $Regex->valid_fb($c["facebook"]) 
-    //   && $Regex->valid_ig($c["instagram"]) && $Regex->valid_wb($c["website"])) {
-    //     array_push($parsedClients, array(
-    //       "name" => $c["name"], 
-    //       "fb" => $c["facebook"], 
-    //       "ig" => $c["instagram"], 
-    //       "wb" => $c["website"], 
-    //       "mail" => sanitize_email( $c["email"] )
-    //     ));
-    
+        array_push($parsedClients, array(
+          "name" => $c["name"], 
+          "fb" => $c["facebook"], 
+          "ig" => $c["instagram"], 
+          "wb" => $c["website"], 
+          "mail" => sanitize_email( $c["email"] )
+        ));
       }
     }
 
-    // $client_controller->create_multiple(get_current_user_id(), $parsedClients);
-
-    wp_send_json(array("Succes"=>"added: ".$clients[0]['name']));
+    $client_controller->create_multiple(get_current_user_id(), $parsedClients);
+    
+    // TODO meegeven als parsedClients count < dan clients count...
+    wp_send_json(array("Succes"=>"added: ".count($parsedClients)));
     wp_die();
   }
 
