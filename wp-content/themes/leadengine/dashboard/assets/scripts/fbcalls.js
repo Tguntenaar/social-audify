@@ -26,7 +26,7 @@ function testBatch() {
     }];
 
   FB.api('/', 'POST', {batch: batch, include_headers: false}, function (response) {
-    if (response && !response.error) {
+    if (!response || response.error) {
       console.log({response});
       response.forEach(function (element) {
 
@@ -41,9 +41,9 @@ function makeIGpromise(iba, client, competitor = 0) {
     // if (iba != null) { TODO: catch in the next promise zodat ie alsnog de insta query uitvoertals het nodig is.
     //   resolve(iba);
     // } else {
-      FB.api('/me/accounts?fields=instagram_business_account', function (response) {
+      FB.api(getIGBusinessAccountsQuery(), function (response) {
         if (response && !response.error) {
-          // post_iba_id(iba_id = getIGBusinessID(response));
+          // connectAccount(iba_id = getIGBusinessID(response), iba_name);
           resolve(getIGBusinessID(response));
         }
         resolve({error:response.error}); // TODO: hier beter over nadenken
@@ -248,22 +248,6 @@ function post_ajax(client, page, options, competitor = false, currency = null) {
   });
 }
 
-
-function post_iba_id(iba_id) {
-  var data = {
-    'action': 'update_iba_id',
-    'iba_id': iba_id,
-  };
-
-  $.ajax({
-    type: "POST",
-    url: ajaxurl,
-    data: data,
-    success: logResponse,
-    error: logResponse,
-  });
-}
-
 function getIGBusinessID(response) {
   if (!response || response.error) {
     // alert
@@ -462,6 +446,10 @@ function unpackPageInfo(response) {
       nLink, nStatus, nPhoto, nVideo, nOffer, 
       avgMessageLength, runningAdds, can_post,
       talking_about_count, native_videos, };
+}
+
+function getIGBusinessAccountsQuery() {
+  return '/me/accounts?fields=instagram_business_account';
 }
 
 function getAdAccountsQuery() {

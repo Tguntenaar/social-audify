@@ -212,6 +212,41 @@ function grabPageId(field, found) {
   }
 }
 
+function getIGBusinessAccounts() {
+  var hasInstagramBusinessAccount = function(account) {
+    return !!account.instagram_business_account
+  }
+  if (Instance.instagram_business_accounts.length == 0) {
+    FB.api(getIGBusinessAccountsQuery(), function (response) {
+      if (!response || response.error || response.data.length > 0) {
+        Instance.instagram_business_accounts = response.data;
+        response.data.forEach(function(account) {
+          if (account.hasOwnProperty('instagram_business_account')) {
+            // show account in modal
+            const {name, id} = account;
+            
+          } else {
+            // skip dit account
+          }
+        });
+      } else {
+        if (!response) {
+          // error occured please reload the page
+        } else if (response.error) { 
+          if (response.error.code == 100) {
+            // Je hebt geen permissies over huidige gekoppelede account of het bestaat niet meer
+          }
+        } else if (response.data.length == 0) {
+          // trigger de uitleg van het koppelen van een fb page aan je instagram
+          // plus je instagram upgrade naar een business instagram
+        }
+      }
+    });
+  } else {
+
+  }
+}
+
 /**
  * Deze functie word zowel in client dashboard als in report setup gebruikt
  */
@@ -252,15 +287,25 @@ function getAdAccounts(ad_id) {
 /**
  * Deze functie word zowel in client dashboard als report setup gebruikt
  */
-function connectAccount(adId, clientId) {
+function connectAccount(typeId, clientId = false) {
+  
+  console.log(typeof typeId);
+  console.log(typeof clientId);
+
+  var data = (clientId) ? {
+    'action': 'update_ad_account',
+    'ad_id': typeId,
+    'client_id': clientId,
+  } : {
+    'action': 'update_iba_id',
+    'iba_id': typeId,
+    'iba_name': "instagram_business_name", // FIXME:
+  };
+
   $.ajax({
     type: "POST",
     url: ajaxurl,
-    data: {
-      'action': 'update_ad_account',
-      'ad_id': adId,
-      'client_id': clientId,
-    },
+    data: data,
     success: logResponse,
     error: logResponse,
   });

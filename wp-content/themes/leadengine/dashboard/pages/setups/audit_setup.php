@@ -16,7 +16,6 @@
     include(dirname(__FILE__)."/../header/dashboard_header.php");
 
     $user = $user_control->get($user_id);
-    $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
   ?>
 
@@ -192,7 +191,7 @@
         manual: 0,
         competitor_manual: 0,
       },
-      iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>,
+      iba_id : <?php echo (isset($user->instagram_business_account_id) && $user->instagram_business_account_id) ? json_encode($user->instagram_business_account_id) : 'null'; ?>,
     }
 
     // Selectable list - TODO : kan wss naar dashboard-header

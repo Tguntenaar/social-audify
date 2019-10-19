@@ -216,9 +216,13 @@
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
 
+    $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+    
     $iba_id = $_POST['iba_id'];
+    $iba_name = $_POST['iba_name'];    
 
     $value = $user->update('User', 'instagram_business_account_id', $iba_id);
+    $value = $user->update('User', 'instagram_business_name', $iba_name);
 
     wp_send_json(array('instagram_business_account updated succes if 0'=>$value));
     wp_die();
