@@ -14,19 +14,28 @@
     }
   }
 
+  function modify_search_filter($query) {
+    if ($query->is_search && ! is_admin() ) {
+      $query->set('post_type', 'post');
+    }
+    return $query;
+  }
+  
+  add_filter('pre_get_posts','modify_search_filter');
+
   function not_logged_in() {
     wp_send_json_error($errormsg = array('message'=>'you are not logged in.'));
     wp_die();
   }
 
-  function my_custom_login_logo() {
+  function custom_wp_login() {
     echo '<style type="text/css">
         #wp-submit {background-color:#6e9d9a !important;border-color: #6e9d9a !important; text-shadow: 0px 0px 0px #6e9d9a !important;}
         h1 a { background-image:url('.get_bloginfo('template_directory').'/core/assets/images/logo_socialaudify.png) !important; }
     </style>';
   }
 
-  add_action('login_head', 'my_custom_login_logo'); 
+  add_action('login_head', 'custom_wp_login'); 
 
   add_action( 'wp_ajax_log_error', 'log_js_error');
   add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
