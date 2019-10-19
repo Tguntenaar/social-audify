@@ -19,6 +19,15 @@
     wp_die();
   }
 
+  function my_custom_login_logo() {
+    echo '<style type="text/css">
+        #wp-submit {background-color:#6e9d9a !important;border-color: #6e9d9a !important; text-shadow: 0px 0px 0px #6e9d9a !important;}
+        h1 a { background-image:url('.get_bloginfo('template_directory').'/core/assets/images/logo_socialaudify.png) !important; }
+    </style>';
+  }
+
+  add_action('login_head', 'my_custom_login_logo'); 
+
   add_action( 'wp_ajax_log_error', 'log_js_error');
   add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
 
