@@ -56,7 +56,7 @@
         <div class="inner no-scroll">
           <span class="title"><span class="title-background">Audits</span>
             <span class="count" id="counterSpan"><?php echo $number_of_audits; ?></span>
-            <span class="selectDelete" style="color:black; display:none"><i class="fas fa-trash"></i></span>
+            <span class="selectDelete" style="color:black; display:none"><i class="fas fa-cog"></i></span>
           </span>
           <input type="text" name="search" id="search-input" placeholder="Search..."/>
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
@@ -101,7 +101,11 @@
           selectedList = [...selectedList, $(this).data('id')];
         }
 
-        $(".selectDelete").css('display', selectedList.length == 0 ? 'none' : 'inline');
+        if (selectedList.length == 0) {
+          $(".selectDelete").hide(500);
+        } else {
+          $(".selectDelete").show(500);
+        }
       });
       
       $(".selectDelete").click(function() {
