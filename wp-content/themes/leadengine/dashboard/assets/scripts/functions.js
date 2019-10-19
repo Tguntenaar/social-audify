@@ -50,10 +50,11 @@ function getChanged(selector, allowAll = false) {
   return changed;
 }
 
-function filterSearch(value, links, counterSpan = null) {
+function filterSearch(value, links, counterSpan = null, isDiv = false) {
   var occ = 0;
   $.each(links, function() {
-    var match = $(this).prop('name').toLowerCase().includes(value.toLowerCase())
+    var name = isDiv ? $(this).data('name') : $(this).prop('name');
+    var match = name.toLowerCase().includes(value.toLowerCase())
     $(this).css('display', match ? 'block' : 'none');
     occ += match ? 1 : 0;
   });
@@ -69,7 +70,6 @@ function filterSearch(value, links, counterSpan = null) {
     });
   }
 }
-
 
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   if (!$(`#${canvas}`).is('canvas'))
