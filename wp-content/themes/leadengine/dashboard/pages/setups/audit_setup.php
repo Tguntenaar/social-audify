@@ -19,7 +19,9 @@
     $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
   ?>
-
+  
+  <div id="competitorModal" class="modal"></div>
+  
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->

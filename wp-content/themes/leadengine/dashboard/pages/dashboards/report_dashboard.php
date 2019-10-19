@@ -69,7 +69,7 @@
 
               <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
                 <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $report->client_name; ?></div>
-                <div class="col-12 col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $name; ?></div>
+                <div class="col-12 col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $report->name; ?></div>
                 <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style"><?php echo $report->viewed ?></div>
               </a><?php
             }
