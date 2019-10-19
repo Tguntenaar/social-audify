@@ -319,6 +319,9 @@ button {
     background: green !important;
 }
 
+.invalid {
+	background: #c0392b;
+}
 header {
     width: 100%;
     height: 75px;

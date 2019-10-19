@@ -101,6 +101,7 @@
       <div class="center-center">
         <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Create a contact in a few steps.</h1>
         <a class="create-audit-button client-button" href="/client-setup/">Create Contact</a>
+        <a class="create-audit-button client-button" href="/client-import/">Mass import</a>
       </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12  right float-right no-margin" style="margin-top: 150px;">

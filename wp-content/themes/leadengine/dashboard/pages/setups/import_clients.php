@@ -25,7 +25,7 @@
         <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Mass import all your contacts.</h1>
         <div class="file-upload">
           <div class="file-upload-button">
-            <label class="create-audit-button client-button" style="margin-bottom: 0px !important; margin-top: 0px !important;">
+            <label class="create-audit-button client-button" style="border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
               <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
               Choose csv file
             </label>
@@ -77,7 +77,7 @@
           var newRow = $.parseHTML(createClientRow(client, isValid(client)));
           $(newRow).data("client", client);
           resultLocation.append(newRow);
-        });        
+        });
 
         $('.audit-row-style').focusout(function() {
           $(this).parent().removeClass('invalid');
@@ -99,7 +99,7 @@
       });
     });
 
-   
+
     // Use the HTML5 File API to read the CSV
     function changeDataFromUpload(evt, cb) {
 
@@ -109,7 +109,7 @@
 
       } else if ((file = evt.target.files[0]) !== "") {
         $("#filename").html(file.name);
-        
+
         var reader = new FileReader();
         reader.onload = function(event) {
           var parsed = Papa.parse(event.target.result);
@@ -132,7 +132,7 @@
         website: ['website', 'web', 'url', 'site'],
         email: ['email', 'mail', 'gmail', 'hotmail'],
       }
-      
+
       var output = [];
       for (var i = 1; i < data.length; i++) {
         var obj = { name:'', facebook:'', instagram:'', website:'', email:'', };
@@ -167,7 +167,7 @@
         var text = invalidClients.length == 1 ? ` number ${invalidClients[0]} seems` :
           `s number ${invalidClients.slice(0, -1).join(',')} and ${invalidClients.slice(-1)} seem`;
         var subtext = invalidClients.length == 1 ? 'this client' : 'these clients';
-  
+
         showModal(initiateModal('confirmModal', 'confirm', {
           'text': `Client${text} to be invalid`,
           'subtext': `Please make sure you provide at least their name and email.</br>
