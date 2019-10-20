@@ -115,5 +115,13 @@ class audit_controller {
   public function get_area_fields() {
     return explode(", ", $this->service->get_template_fields());
   }
+
+  public function toggle_visibility($id, $field) {
+    return $this->service->toggle_config_visibility($id, $field);
+  }
+
+  public function delete_multiple($id, $audits) {
+    return $this->service->delete_multiple($id, $audits);
+  }
 }
 ?>

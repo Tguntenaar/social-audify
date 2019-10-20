@@ -145,6 +145,13 @@ class audit_service extends connection {
     return $this->dbwp->delete('Audit', array('id' => $id));
   }
 
+  public function delete_multiple($id, $audit_ids) {
+    $ids_string = implode(', ', $audit_ids);
+    return $this->dbwp->query(
+      "DELETE FROM Audit WHERE client_id IN
+      (SELECT id FROM Client WHERE user_id = $id) AND id IN ($ids_string)");
+  }
+
   public function get_template_fields() {
     return $this->template_fields;
   }

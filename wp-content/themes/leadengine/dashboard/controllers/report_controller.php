@@ -101,5 +101,11 @@ class report_controller {
   public function get_area_fields() {
     return explode(", ", $this->service->get_content_fields());
   }
+
+  public function toggle_visibility($id, $field) {
+    return $this->service->toggle_config_visibility($id, $field);
+  }
+
+  
 }
 ?>
