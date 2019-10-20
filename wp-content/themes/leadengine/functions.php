@@ -265,7 +265,6 @@
   add_action( 'wp_ajax_universal_update', 'update_all');
   add_action( 'wp_ajax_nopriv_universal_update', 'not_logged_in');
 
-  // TODO: check if audit/report is owned by editor
   function update_all() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     $connection = new connection;
@@ -301,43 +300,6 @@
     wp_send_json(array('succes'=>'1'));
     wp_die();
   }
-
-
-  add_action( 'wp_ajax_import_clients', 'add_multiple_clients');
-  add_action( 'wp_ajax_nopriv_import_clients', 'not_logged_in');
-
-  function add_multiple_clients() {
-    require_once(dirname(__FILE__)."/dashboard/assets/php/global_regex.php");
-    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
-    require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
-    $Regex = new Regex;
-    $connection = new connection;
-    $client_controller = new client_controller($connection);
-
-    $clients = $_POST['clients'];
-
-    $parsedClients = array();
-    foreach ($clients as $c) {
-      if ($c['name'] != "" && $c['email'] != "" && $Regex->valid_fb($c["facebook"]) &&
-        $Regex->valid_ig($c["instagram"]) && $Regex->valid_wb($c["website"])) {
-
-        array_push($parsedClients, array(
-          "name" => $c["name"], 
-          "fb" => $c["facebook"], 
-          "ig" => $c["instagram"], 
-          "wb" => $c["website"], 
-          "mail" => sanitize_email( $c["email"] )
-        ));
-      }
-    }
-
-    $client_controller->create_multiple(get_current_user_id(), $parsedClients);
-    
-    // TODO meegeven als parsedClients count < dan clients count...
-    wp_send_json(array("Succes"=>"added: ".count($parsedClients)));
-    wp_die();
-  }
-
 
   add_action( 'wp_ajax_update_meta_report', 'create_report');
   add_action( 'wp_ajax_nopriv_update_meta_report', 'not_logged_in');
@@ -737,10 +699,12 @@
     $company = get_user_meta($id, 'rcp_company', true );
 
     ?>
-    <p>
-      <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
-      <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
-    </p>
+    <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
+        <p>
+          <label for="rcp_number"><?php _e( 'Your phone number', 'rcp' ); ?></label>
+          <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr( $number ); ?>"/>
+        </p>
+    <?php } ?>
     <p class="rcp_calendar_custom" style="">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
@@ -853,9 +817,6 @@
   function pw_rcp_validate_user_fields_on_register( $posted ) {
     if (is_user_logged_in()) {
       return;
-    }
-    if (empty( $posted['rcp_number'])) {
-      rcp_errors()->add( 'invalid_profession', __( 'Please enter your phone number', 'rcp' ), 'register' );
     }
 
     if (empty( $posted['rcp_country'] )) {
@@ -989,4 +950,16 @@
       exit;
     }
   }
+
+  /**
+   * This will remove the username requirement on the registration form
+   * and use the email address as the username.
+   */
+  function jp_rcp_user_registration_data( $user ) {
+    rcp_errors()->remove( 'username_empty' );
+    $user['login'] = $user['email'];
+    return $user;
+  }
+
+  add_filter( 'rcp_user_registration_data', 'jp_rcp_user_registration_data' );
 ?>
