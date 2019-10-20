@@ -80,14 +80,17 @@
         });
 
         $('.audit-row-style').focusout(function() {
-          $(this).parent().removeClass('invalid');
           if (/^(facebook|instagram|website)$/.test($(this).data("type"))) {
             changeClientInputFields(this);
           }
-          // update data-client attribute na het editen.
+          
+          // update data-client attribute after edit.
           var tempClient = $(this).parent().data("client");
           tempClient[$(this).data("type")] = $(this).val();
-          if (!isValid(tempClient)) {
+          
+          if (isValid(tempClient)) {
+            $(this).parent().removeClass('invalid');
+          } else {
             $(this).parent().addClass('invalid');
           }
 
@@ -112,7 +115,7 @@
 
         var reader = new FileReader();
         reader.onload = function(event) {
-          var parsed = Papa.parse(event.target.result);
+          var parsed = Papa.parse(event.target.result, { skipEmptyLines: true });
           cb(csvToJson(parsed.data));
         };
         reader.onerror = function() {
@@ -140,7 +143,7 @@
         data[0].forEach(function(column, index) {
           var value = column.toLowerCase().replace(/[\s\/\\-]+/, "");
           var columnName = Object.keys(columns).find(key => columns[key].includes(value));
-          obj[columnName] = data[i][index];
+          obj[columnName] = data[i][index].trim();
         });
         output.push(obj);
       }
@@ -185,21 +188,21 @@
       console.log(retrievedClients);
 
       if (!$.isEmptyObject(retrievedClients) && retrievedClients.length > 0) {
-        toggleUpdate(false);
-        showBounceBall(true, 'Give us a few seconds as we import your clients');
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: {action: 'import_clients', clients: retrievedClients},
-          success: function(response) {
-            window.location.replace('https://<?php echo getenv('HTTP_HOST'); ?>/client-dashboard');
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            showBounceBall(false);
-            var send_error = error_func(xhr, textStatus, errorThrown, retrievedClients);
-            logError(send_error, 'setups/import_clients.php', 'submit');
-          }
-        });
+        // toggleUpdate(false);
+        // showBounceBall(true, 'Give us a few seconds as we import your clients');
+        // $.ajax({
+        //   type: "POST",
+        //   url: ajaxurl,
+        //   data: {action: 'import_clients', clients: retrievedClients},
+        //   success: function(response) {
+        //     window.location.replace('https://<?php echo getenv('HTTP_HOST'); ?>/client-dashboard');
+        //   },
+        //   error: function (xhr, textStatus, errorThrown) {
+        //     showBounceBall(false);
+        //     var send_error = error_func(xhr, textStatus, errorThrown, retrievedClients);
+        //     logError(send_error, 'setups/import_clients.php', 'submit');
+        //   }
+        // });
       } else {
         showModal(initiateModal('errorModal', 'error', {
           'text': `No valid clients found`,
