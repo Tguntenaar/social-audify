@@ -39,10 +39,13 @@
             <li><span class="number">3.</span> Copy the URL's into the form.</li>
             <li><span class="number">4.</span> Click the submit button.</li>
             <li><span class="number">5.</span> Done. You created a contact.</li>
+            <li><span class="number">Or</span> Import clients with a csv file <a href="/client-import/">here.</a></li>
+
           </ul>
         </div>
       </div>
     </div>
+
     <div class="col-lg-6 client_right client-form">
       <div class="col-lg-12">
         <div class="content-title col-lg-9">
@@ -50,18 +53,18 @@
         </div>
         <form class="col-lg-10 create_client_form" method="post" action="<?php echo $to; ?>">
           Name:<br>
-          <input maxlength="25" type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $name_regex ?>" title="Only letters are allowed" required>
+          <input maxlength="25" type="text" id="client_name" name="client_name" placeholder="Name" pattern="<?php echo $Regex->name ?>" title="Only letters are allowed" required>
 
           Facebook Page:<br>
-          <input type="text" id="facebook_url" name="facebook_url" placeholder="Facebook page url, page id or page username" pattern="<?php echo $fb_regex ?>" required>
+          <input type="text" id="facebook_url" data-type="facebook" name="facebook_url" placeholder="Facebook page url, page id or page username" required>
           <div class="toggleClient" id="toggle_facebook" onclick="toggle_client_options('facebook')"><i class="fas fa-minus-circle"></i></div>
 
           Instagram:<br>
-          <input type="text" id="instagram_url" name="instagram_url" placeholder="Instagram username or url" pattern="<?php echo $ig_regex ?>" maxlength="50" required>
+          <input type="text" id="instagram_url" data-type="instagram" name="instagram_url" placeholder="Instagram username or url" maxlength="50" required>
           <div class="toggleClient" id="toggle_instagram" onclick="toggle_client_options('instagram')"><i class="fas fa-minus-circle"></i></div>
 
           Website:<br>
-          <input type="text" id="website_url" name="website_url" placeholder="http://www.example.com" pattern="<?php echo $website_regex ?>" required>
+          <input type="text" id="website_url" data-type="website" name="website_url" placeholder="http://www.example.com" required>
           <div class="toggleClient" id="toggle_website" onclick="toggle_client_options('website')"><i class="fas fa-minus-circle"></i></div>
 
           E-mail:<br>
@@ -76,43 +79,41 @@
 </body>
 
 <script>
+  function toggle_client_options(option) {
+    var inpt = $(`#${option}_url`);
+    var icon = $(`#toggle_${option}`);
 
-    function toggle_client_options(option) {
-      var inpt = $(`#${option}_url`);
-      var icon = $(`#toggle_${option}`);
+    if (inpt.prop('required')) {
+      icon.html("<i class='fas fa-plus'></i>");
+      inpt.prop('required', false);
 
-      if (inpt.prop('required')) {
-          icon.html("<i class='fas fa-plus'></i>");
-          inpt.prop('required', false);
+      icon.attr('style', 'background: #6e9d9c !important;');
+      inpt.css('opacity', '0.4');
+    } else {
+      icon.html("<i class='fas fa-minus-circle'></i>");
+      inpt.prop('required', true);
 
-          icon.attr('style', 'background: #6e9d9c !important;');
-          inpt.css('opacity', '0.4');
-      } else {
-          icon.html("<i class='fas fa-minus-circle'></i>");
-          inpt.prop('required', true);
-
-          icon.attr('style', 'background: #c0392b !important;');
-          inpt.css('opacity', '1');
-      }
+      icon.attr('style', 'background: #c0392b !important;');
+      inpt.css('opacity', '1');
     }
+  }
 
-    function toggleClientOption(type) {
-      $(`#${type}_checkbox`).click(function() {
-        $(`#${type}_url`).prop(`disabled`, function(i, v) { return !v; });
-        $(`#${type}_url`).prop(`value`, ``);
-        $(`#${type}_url`).fadeToggle();
-      });
-    }
-
-    $(function() {
-      toggleClientOption('instagram');
-      toggleClientOption('facebook');
-      toggleClientOption('website');
-
-      $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        parseClientInputFields(this);
-      });
-    // END OF DOCUMENT READY
+  function toggleClientOption(type) {
+    $(`#${type}_checkbox`).click(function() {
+      $(`#${type}_url`).prop(`disabled`, function(i, v) { return !v; });
+      $(`#${type}_url`).prop(`value`, ``);
+      $(`#${type}_url`).fadeToggle();
     });
+  }
+
+  $(function() {
+    toggleClientOption('instagram');
+    toggleClientOption('facebook');
+    toggleClientOption('website');
+
+    $('#facebook_url, #instagram_url, #website_url').focusout(function() {
+      changeClientInputFields(this);
+    });
+  });
 </script>
 </html>

@@ -180,36 +180,34 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 }
 
 // Parse Client Info for client setup, audit setup and report setup.
-function parseClientInputFields(field) {
+function changeClientInputFields(field) {
   var unparsed = $(field).val();
 
-  if (!unparsed) {
-    return;
-  }
-
-  var patterns = {
-    'facebook_url': '(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:pages\/)?(?:pg\/)?([A-Za-z0-9_.\-]*)?',
-    'instagram_url': '(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,28})?',
-    'website_url': '(.*)',
-  }
-
-  var matchedArray = unparsed.match(patterns[field.id]);
-
-  if (matchedArray !== null && matchedArray[1] !== 'undefined') {
-    $(field).val(matchedArray[1]);
-    grabPageId(field, matchedArray[1]);
+  if (unparsed) {
+    var parsed = parseClientInput($(field).data("type"), unparsed);
+    parsed = grabPageId(parsed);
+  
+    if (parsed) {
+      $(field).val(parsed);
+      return;
+    }
   }
 }
 
-function grabPageId(field, found) {
-  if (field.id.includes('facebook')) {
-    var fbPageID = '(?:[A-Za-z0-9_]+)(?:\-)([0-9]{14,17})$';
-    var pageID = found.match(fbPageID);
+function grabPageId(found) {
+  var fbPageID = '(?:[A-Za-z0-9_.]+)(?:\-)([0-9]{14,17})$';
+  var pageID = found.match(fbPageID);
+  return (pageID && pageID.length > 1) ? pageID[1] : found;
+}
 
-    if (pageID) {
-      $(field).val(pageID[1]);
-    }
+function parseClientInput(type, input) {
+  var patterns = {
+    'facebook': /(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:[A-Za-z0-9_])*#!\/)?(?:(?:pages|pg)?\/)?([\w_.\-]+)?/g,
+    'instagram': /(?:(?:(?:http|https):\/\/)?(?:www.)?instagram.com\/|\@)?([A-Za-z0-9_.\-]{0,30})?/g,
+    'website': /(.*)/g,
   }
+  var found = patterns[type].exec(input);
+  return (found && found.length > 1) ? found[1] : input;
 }
 
 /**
