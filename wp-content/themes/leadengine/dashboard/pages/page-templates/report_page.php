@@ -5,7 +5,7 @@
   // Error Logging
   include(dirname(__FILE__)."/../../controllers/log_controller.php");
   $ErrorLogger = new Logger;
-  
+
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
@@ -222,7 +222,7 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo $author->display_name; ?></span><?php
+        <span class="audit-company-name"><?php $company = get_user_meta($user_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
