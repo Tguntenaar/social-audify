@@ -2596,6 +2596,7 @@ h4 {
 	color: #fff;
 	float:left;
 	font-weight: 100;
+	border: 1px solid #487dd7;
 }
 
 .create-audit-button:hover {

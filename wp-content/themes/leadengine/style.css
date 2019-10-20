@@ -66,6 +66,12 @@ License URI: license.txt
   height: 20px !important;
 } */
 
+#rcp_user_login_wrap,
+#rcp_user_first_wrap,
+#rcp_user_last_wrap {
+    display: none;
+}
+
 .register #rcp_user_login_wrap,
 .register #rcp_user_email_wrap,
 .register #rcp_user_last_wrap,
@@ -231,7 +237,7 @@ License URI: license.txt
 
 .register #rcp_user_email_wrap {
     margin-top: 40px;
-    margin-left: 6%;
+    width: 100%;
 }
 
 .register #rcp_user_last_wrap {
