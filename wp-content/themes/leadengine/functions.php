@@ -182,14 +182,30 @@
       require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
       require_once(dirname(__FILE__)."/dashboard/models/report.php");
       $control = new report_controller($connection);
+    } else if ($type == 'user') {
+      require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
+      require_once(dirname(__FILE__)."/dashboard/models/user.php");
+      $control = new user_controller($connection);
     }
 
     $page = $control->get($page_id);
-    $table = ($type == 'audit') ? 'Audit_template' : 'Report_content';
-    $page->update('color', sanitize_hex_color($_POST['color']), $table);
+
+    if($type == 'audit') {
+        $table = 'Audit_template';
+        $page->update('color', sanitize_hex_color($_POST['color']), $table);
+    } else if($type == 'report') {
+        $table = 'Report_content';
+        $page->update('color', sanitize_hex_color($_POST['color']), $table);
+    } else {
+        $table = 'Configtext';
+        $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
+    }
+
 
     if ($type == 'audit') {
       $page->update('mail_bit', $_POST['value'] == 'true');
+    } else if($type == 'user') {
+        $controller->update($_POST['user_id'], 'mail_bit', $_POST['value'] == 'true');
     }
 
     wp_send_json(array('color' => $_POST['color']));

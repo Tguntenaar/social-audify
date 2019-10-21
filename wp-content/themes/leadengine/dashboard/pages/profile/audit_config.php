@@ -81,29 +81,29 @@
   // }
 
    // Overall scores
-  //  $score = array(
-  //   'fb' => $audit->facebook_score  != NULL ? $audit->facebook_score : 50,
-  //   'ig' => $audit->instagram_score != NULL ? $audit->instagram_score : 50,
-  //   'wb' => $audit->website_score   != NULL ? $audit->website_score : 50
-  // );
+   $score = array(
+    'fb' => 50,
+    'ig' => 50,
+    'wb' => 50
+  );
   //
   // // Advice boxes
-  // $advice = array(
-  //   'fb' => selectAdvice($audit->facebook_advice, $score['fb'], $user, "fb"),
-  //   'ig' => selectAdvice($audit->instagram_advice, $score['ig'], $user, "insta"),
-  //   'wb' => selectAdvice($audit->website_advice, $score['wb'], $user, "website")
-  // );
+  $advice = array(
+    'fb' => selectAdvice("", $score['fb'], $user, "fb"),
+    'ig' => selectAdvice("", $score['ig'], $user, "insta"),
+    'wb' => selectAdvice("", $score['wb'], $user, "website")
+  );
 
-  // function selectAdvice($advice, $score, $user, $type) {
-  //   if ($advice != NULL) {
-  //     return $advice;
-  //   } if ($score < (int) $user->{"range_number_{$type}_1"}) {
-  //     return $user->{"text_{$type}_1"};
-  //   } if ($score < (int) $user->{"range_number_{$type}_2"}) {
-  //     return $user->{"text_{$type}_2"};
-  //   }
-  //   return $user->{"text_{$type}_3"};
-  // }
+  function selectAdvice($advice, $score, $user, $type) {
+    if ($advice != NULL) {
+      return $advice;
+    } if ($score < (int) $user->{"range_number_{$type}_1"}) {
+      return $user->{"text_{$type}_1"};
+    } if ($score < (int) $user->{"range_number_{$type}_2"}) {
+      return $user->{"text_{$type}_2"};
+    }
+    return $user->{"text_{$type}_3"};
+  }
 
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
@@ -175,6 +175,98 @@
         $(this).toggleClass('open');
         $('.mobile-hide').toggleClass('block');
       });
+
+
+      // tutorial
+      $('.yes-tut').click(function() {
+          $('.into-tutorial').css("display", "none");
+          $('.video-options').css({"z-index": "5555"});
+          $('.video-explenation').css({"display": "block"});
+          $('.video-button').css({"display": "block"});
+      });
+
+      $('.video-button').click(function() {
+          $('.video-options').css({"z-index": "5"});
+          $('.video-explenation').css({"display": "none"});
+          $('.video-button').css({"display": "none"});
+          $('.introtext-button').css({"display": "block"});
+          $('.audit-intro').css({"z-index": "5555", "position": "relative"});
+          $('html, body').animate({
+                scrollTop: $(".audit-intro-text").offset().top
+          }, 2000);
+          $('.intro-explenation').css({"display": "block"});
+      });
+
+      $('.introtext-button').click(function() {
+          $('.audit-intro').css({"z-index": "5"});
+          $('.audit-intro').css({"z-index": "5"});
+          $('.title-button').css({"display": "block"});
+          $('.video-button').css({"display": "none"});
+          $('.title-explenation').css({"display": "block"});
+          $('.intro-explenation').css({"display": "none"});
+
+          $('.facebook-inf-title').css({"z-index": "5555", "position": "relative"});
+          $('.sub-title').css({"z-index": "5555", "position": "relative"});
+
+          $('html, body').animate({
+                scrollTop: $(".facebook-inf-title").offset().top
+          }, 2000);
+      });
+
+      $('.title-button').click(function() {
+
+          $('.facebook-inf-title').css({"z-index": "5", "position": "relative"});
+          $('.sub-title').css({"z-index": "5", "position": "relative"});
+
+          $('#facebook_vis_bit_icon').css({"z-index": "5555", "color": "#fff"});
+
+          $('.title-button').css({"display": "block"});
+          $('.introtext-button').css({"display": "none"});
+
+          $('.title-explenation').css({"display": "none"});
+          $('.visibility-explenation').css({"display": "block"});
+      });
+
+      $('.title-button').click(function() {
+          $('#facebook_vis_bit_icon').css({"z-index": "5", "color": "#fff"});
+          $('.title-button').css({"display": "none"});
+          $('.visibility-button').css({"display": "block"});
+
+          $('.social-text-explenation').css({"display": "block"});
+          $('.visibility-explenation').css({"display": "none"});
+
+          $('.config-right').css({"z-index": "5555"});
+
+          $('html, body').animate({
+                scrollTop: $(".config-right").offset().top
+          }, 2000);
+      });
+
+      $('.visibility-button').click(function() {
+          $('.visibility-button').css({"display": "none"});
+          $('.end-button').css({"display": "block"});
+
+          $('.social-text-explenation').css({"display": "none"});
+          $('.end-explenation').css({"display": "block"});
+
+          $('.config-right').css({"z-index": "5"});
+
+          $('html, body').animate({
+                scrollTop: $(".config-right").offset().top
+          }, 2000);
+      });
+
+      $('.no-tut').click(function() {
+          $('.tutorial-screen').css({"display": "none"});
+      });
+
+      $('.no-end-tut').click(function() {
+          $('.tutorial-screen').css({"display": "none"});
+      });
+
+      $('.yes-end-tut').click(function() {
+          $('.tutorial-screen').css({"display": "none"});
+      });
     });
   </script>
   <style>
@@ -197,6 +289,54 @@
   </style>
 </head>
 <body class="custom-body">
+  <div class='tutorial-screen'>
+      <div class="into-tutorial vertical-align" style="text-align: center;">
+          <div style="height: auto; width: 340px; margin: 0 auto;">
+              <h2>Do you want to follow a tutorial?</h2>
+              <div class="create-audit-button yes-tut" style="cursor: pointer;">Yes, recommended!</div>
+              <div class="create-audit-button no-tut" style="color: #fff !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
+          </div>
+      </div>
+
+      <div class="video-explenation vertical-align" style="text-align: center; left: 100px;">
+          <span class="tut-title">Video explenation</span>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+      </div>
+
+      <div class="intro-explenation vertical-align" style="text-align: center;">
+          <span class="tut-title">Text explenation</span>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+      </div>
+
+      <div class="title-explenation vertical-align" style="text-align: center;">
+          <span class="tut-title">Title explenation</span>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+      </div>
+
+      <div class="visibility-explenation vertical-align" style="text-align: center;">
+          <span class="tut-title">Visibility explenation</span>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+      </div>
+
+      <div class="social-text-explenation vertical-align" style="text-align: center; right: 300px">
+          <span class="tut-title">Social media text explenation</span>
+          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+      </div>
+
+      <div class="end-explenation vertical-align" style="text-align: center;">
+          <div style="height: auto; width: 340px; margin: 0 auto;">
+              <span class="tut-title" style="margin-bottom: 15px; line-height:23px;">This was a short tutorial on how to configurate your audits, want to see more check out our tutorial.</span>
+              <div style="clear: both; margin-bottom: 15px;"></div>
+              <a href="https://www.socialaudify.com/tutorial/" target="_blank" style="border: 0 !important;" rel="norefferer" class="create-audit-button yes-end-tut" style="cursor: pointer;">Yes, recommended!</a>
+              <div class="create-audit-button no-end-tut" style="color: #fff !important; border: 0 !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
+          </div>
+      </div>
+
+      <div class="create-audit-button video-button tut-button">Next</div>
+      <div class="create-audit-button introtext-button tut-button">Next</div>
+      <div class="create-audit-button title-button tut-button">Next</div>
+      <div class="create-audit-button visibility-button tut-button" style="left: 40px; right: auto;">Next</div>
+  </div>
   <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
@@ -278,24 +418,37 @@
             <textarea maxlength="999" input="text"  name="intro_audit" id="intro_audit" style="background: #f5f6fa;"><?php echo $user->intro_audit; ?></textarea>
           </form><?php
         } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo $user->introduction;  ?></p><?php
+          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo $user->intro_audit;  ?></p><?php
         } ?>
       </div>
-    </div><?php
+  </div><?php
     if ($user->facebook_vis_bit || $edit_mode) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
         <?php if($user->facebook_title != NULL) { $facebook_title = $user->facebook_title; } else { $facebook_title = 'Facebook stats:'; } ?>
         <?php if($user->facebook_sub_title != NULL) { $facebook_sub_title = $user->facebook_sub_title; } else { $facebook_sub_title = 'Statistics of your Facebook page.'; } ?>
 
-        <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp; <input type="text" maxlength="40" name="facebook_title" id="facebook_title" value="<?php echo $facebook_title; ?>" /></span>
-        <span class="sub-title"><input maxlength="40" type="text" name="facebook_sub_title" id="facebook_sub_title" value="<?php echo $facebook_sub_title; ?>" /></span>
+        <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp;
+            <?php if(!$edit_mode) { ?>
+                <?php echo $facebook_title; ?>
+            <?php } else { ?>
+                <input type="text" maxlength="40" name="facebook_title" id="facebook_title" value="<?php echo $facebook_title; ?>" />
+            <?php } ?>
+        </span>
+
+        <span class="sub-title">
+            <?php if(!$edit_mode) { ?>
+                <?php echo $facebook_sub_title; ?>
+            <?php } else { ?>
+                <input maxlength="40" type="text" name="facebook_sub_title" id="facebook_sub_title" value="<?php echo $facebook_sub_title; ?>" />
+            <?php } ?>
+        </span>
         <?php
-        visibility_short_code($edit_mode, $user->facebook_std_bit, 'facebook_std_bit', 'visibility-first-level'); ?>
+        visibility_short_code($edit_mode, $user->facebook_vis_bit, 'facebook_vis_bit', 'visibility-first-level'); ?>
 
         <div class="col-lg-6 left bottom-40">
           <div class="inner"><?php
             foreach ($facebook_blocks as $item) {
-              if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
+              if (show_block($edit_mode, $user->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6 col-md-12">
                   <div class="inner">
                     <span class="title-box facebook"><?php echo $item["name"]; ?></span>
@@ -310,7 +463,7 @@
               }
             }
             foreach ($facebook_ad_blocks as $item) {
-              if (($audit->has_comp || !$item["is_comp"]) && show_block($edit_mode, $audit->{$item["type"]})) {
+              if (($audit->has_comp || !$item["is_comp"]) && show_block($edit_mode, $user->{$item["type"]})) {
                 $path = $item["is_comp"] ? $audit->competitor : $audit; ?>
                 <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
@@ -347,6 +500,7 @@
             } ?>
           </div>
         </div>
+        <?php if(!$edit_mode) { ?>
         <div class="col-lg-6 right">
           <div class="inner custom-inner">
             <div class="score col-lg-12">
@@ -355,7 +509,7 @@
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="facebook_value"></span>%</span>
                   <div class="slidecontainer">
-                    <input type="range" min="1" max="100" value="<?php echo $score['fb']; ?>" class="slider" id="facebook_score">
+                    <input type="range" min="1" max="100" value="50" class="slider" id="facebook_score">
                   </div><?php
                 } else { ?>
                   <span class="score-text"><?php echo $score['fb']; ?>%</span><?php
@@ -374,17 +528,55 @@
             </div>
           </div>
         </div>
+      <?php } else { ?>
+          <div class="col-lg-6 right config-right" style="padding-left: 15px; padding-right: 15px;">
+              <h2 class="config-title">Facebook text</h2>
+              <?php
+
+              $ranges_fb = (object) array(
+                ["name" => "facebook", "code" => "fb", "db" => "fb"]
+              );
+                $item = (object) $ranges_fb; ?>
+                <?php
+                  for ($i = 1; $i <= 3; $i++) {
+                    if ($i < 3) { ?>
+                      <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                      <input maxlength="2" type="text" id="<?php echo "range_number_fb_$i"; ?>" name="<?php echo "range_number_fb_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                      value="<?php echo $user->{"range_number_fb_$i"}; ?>"><?php
+                    } else { ?>
+                      <h6>The last range is less than or equal to 100 percent</h6><?php
+                    } ?>
+                    <textarea maxlength="999" input="text" name="<?php echo "text_fb_$i"; ?>" name="<?php echo "audit_facebook_$i"; ?>"><?php
+                      echo $user->{"text_fb_$i"}; ?></textarea><?php
+                    }
+                ?>
+          </div>
+      <?php } ?>
       </div><?php
     }
-    if ($user->instagram_std_bit || $edit_mode) { ?>
+    if ($user->instagram_vis_bit || $edit_mode) { ?>
       <div class="col-lg-12 facebook-info">
         <?php if($user->instagram_title != NULL) { $instagram_title = $user->instagram_title; } else { $instagram_title = 'Instagram stats:'; } ?>
         <?php if($user->instagram_sub_title != NULL) { $instagram_sub_title = $user->instagram_sub_title; } else { $instagram_sub_title = 'Statistics of your Instagram page.'; } ?>
 
-        <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; <input type="text" maxlength="40" name="instagram_title" id="instagram_title" value="<?php echo $instagram_title; ?>" /></span>
-        <span class="sub-title"><input maxlength="40" type="text" name="instagram_sub_title" id="instagram_sub_title" value="<?php echo $instagram_sub_title; ?>" /></span>
+        <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp;
+            <?php if(!$edit_mode) { ?>
+                <?php echo $instagram_title; ?>
+            <?php } else { ?>
+                 <input type="text" maxlength="40" name="instagram_title" id="instagram_title" value="<?php echo $instagram_title; ?>" />
+            <?php } ?>
+        </span>
+
+        <span class="sub-title">
+            <?php if(!$edit_mode) { ?>
+                <?php echo $instagram_sub_title; ?>
+            <?php } else { ?>
+                <input maxlength="40" type="text" name="instagram_sub_title" id="instagram_sub_title" value="<?php echo $instagram_sub_title; ?>" />
+            <?php } ?>
+        </span>
+
         <?php
-        visibility_short_code($edit_mode,  $user->instagram_std_bit, 'instagram_std_bit', 'visibility-first-level');
+        visibility_short_code($edit_mode,  $user->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level');
         if ($audit->manual && $edit_mode) { ?>
           <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
             There is no instagram or instagram business account found, so <a target="_blank" rel="noreferrer" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
@@ -416,22 +608,19 @@
               </div>
             </div><?php
 
-          if (show_block($edit_mode, $audit->insta_lpd) && (!$audit->manual)) { ?>
+          if (show_block($edit_mode, $user->insta_lpd)) { ?>
             <div class="col-lg-12 left custom-left" style="padding: 0;"><?php
-              visibility_short_code($edit_mode, $audit->insta_lpd, 'insta_lpd'); ?>
+              visibility_short_code($edit_mode, $user->insta_lpd, 'insta_lpd'); ?>
 
               <div class="chart-info">
                 <span class="stat-box-title">Likes on your posts Instagram</span>
                 <span class="graph-procent" style="margin-top: 2px;">Average 50</span>
                 <span class="graph-info"><?php
-                  if ($audit->has_comp && (isset($audit->competitor) && !$audit->competitor->manual)) {
+
 
                     $likes_comp = array_sum($audit->competitor->instagram_data->likesPerPost);
                     $procent_increace = procent_calc($sumPostLikes, $likes_comp);
                     $color = $sumPostLikes < $likes_comp ? "#c0392b" : ($sumPostLikes == $likes_comp ? "#2980b9" : "#27ae60"); ?>
-
-                    <span style="color: <?php echo $color; ?>"><?php echo $procent_increace; ?>% compared to competitor</span><?php
-                  } ?>
                 </span>
               </div>
               <div class="inner custom-inner" style="">
@@ -504,7 +693,7 @@
 
         foreach ($instagram_blocks as $item) {
           // Laat hem zien als edit mode aanstaat ?? of die bestaat in de database..
-          if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
+          if (show_block($edit_mode, $user->{$item["type"]})) { ?>
             <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
               <div class="inner">
                 <span class="title-box instagram"><?php
@@ -514,7 +703,7 @@
 
                 competitor_code($audit, $edit_mode, $item);
                 // preview mode show visibility icon
-                visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
 
               </div>
             </div><?php
@@ -526,14 +715,16 @@
             <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; "><?php
           } else { ?>
             <div class="col-lg-12 instagram-score" style="float:right; "><?php
-          } ?>
-            <div class="col-lg-12 insta-score" >
+          }
+
+          if(!$edit_mode) { ?>
+            <div class="col-lg-12 insta-score">
               <div class="col-lg-12 align">
                 <span class="score-tag insta-advice-tag">Score</span><?php
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="instagram_value"></span>%</span>
                   <div class="slidecontainer">
-                    <input type="range" min="1" max="100" value="<?php echo $score['ig']; ?>" class="slider" id="instagram_score">
+                    <input type="range" min="1" max="100" value="50" class="slider" id="instagram_score">
                   </div><?php
                 } else { ?>
                   <span class="score-text"><?php echo $score['ig']; ?>%</span><?php
@@ -552,34 +743,69 @@
                 } ?>
             </div>
           </div>
+          <?php } else { ?>
+              <div class="col-lg-12 insta-score config-right" style="padding: 20px;">
+                  <h2 class="config-title">Instagram text</h2>
+                  <?php
+
+                    $ranges_fb = (object) array(
+                        ["name" => "instagram", "code" => "ig", "db" => "insta"]
+                    );
+                    $item = (object) $ranges_fb; ?>
+                    <?php
+                      for ($i = 1; $i <= 3; $i++) {
+                        if ($i < 3) { ?>
+                          <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                          <input maxlength="2" type="text" id="<?php echo "range_number_insta_$i"; ?>" name="<?php echo "range_number_insta_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                          value="<?php echo $user->{"range_number_insta_$i"}; ?>"><?php
+                        } else { ?>
+                          <h6>The last range is less than or equal to 100 percent</h6><?php
+                        } ?>
+                        <textarea maxlength="999" input="text" id="<?php echo "text_insta_$i"; ?>" name="<?php echo "audit_insta_$i"; ?>"><?php
+                          echo $user->{"text_insta_$i"}; ?></textarea><?php
+                        }
+                    ?>
+                </div>
+          <?php } ?>
           </div>
         </div>
       </div><?php
     }
-    if ($user->website_std_bit || $edit_mode) { ?>
+    if ($user->website_vis_bit || $edit_mode) { ?>
       <div class="col-lg-12 facebook-info website-info" id="website-info">
 
           <?php if($user->website_title != NULL) { $website_title = $user->website_title; } else { $website_title = 'Website stats:'; } ?>
           <?php if($user->website_sub_title != NULL) { $website_sub_title = $user->website_sub_title; } else { $website_sub_title = 'Statistics of your Website page.'; } ?>
 
+          <span class="facebook-inf-title"><span class="round website">W</span> &nbsp;
+              <?php if(!$edit_mode) { ?>
+                  <?php echo $website_title; ?>
+              <?php } else { ?>
+                  <input type="text" maxlength="40" name="website_title" id="website_title" value="<?php echo $website_title; ?>" />
+              <?php } ?>
+           </span>
+           <span class="sub-title">
+              <?php if(!$edit_mode) { ?>
+                  <?php echo $website_sub_title; ?>
+              <?php } else { ?>
+                  <input maxlength="40" type="text" name="website_sub_title" id="website_sub_title" value="<?php echo $website_sub_title; ?>" />
+              <?php } ?>
+          </span>
 
 
-
-        <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; <input type="text" maxlength="40" name="website_title" id="website_title" value="<?php echo $website_title; ?>" /></span>
-        <span class="sub-title"><input maxlength="40" type="text" name="website_sub_title" id="website_sub_title" value="<?php echo $website_sub_title; ?>" /></span><?php
-        visibility_short_code($edit_mode, $user->website_std_bit, 'website_std_bit', 'visibility-first-level'); ?>
+        <?php visibility_short_code($edit_mode, $user->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?>
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
           <div class="inner custom-inner"><?php
 
             foreach ($website_blocks as $item) {
-              if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
+              if (show_block($edit_mode, $user->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
                   <div class="inner">
                     <span class="title-box website"><?php echo $item["name"]; ?></span>
                     <span class="data_animation"><?php
                       echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website); ?>
                     </span><?php
-                      visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                      visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
                   </div>
                 </div><?php
@@ -587,26 +813,51 @@
             } ?>
           </div>
         </div>
+        <?php if(!$edit_mode) { ?>
         <div class="col-lg-6 right instagram-right" style="padding: 20px 20px; margin-top: 35px !important;">
-          <span class="score-tag website-advice-tag">Score</span><?php
-          if ($edit_mode) { ?>
-            <span class="score-text"><span id="website_value"></span>%</span>
-            <div class="slidecontainer">
-              <input type="range" min="1" max="100" value="<?php echo $score['wb']; ?>" class="slider" id="website_score">
-            </div>
-            <span class="advice-title margin-advice-title">Website advice</span>
-            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
+              <span class="score-tag website-advice-tag">Score</span><?php
+              if ($edit_mode) { ?>
+                <span class="score-text"><span id="website_value"></span>%</span>
+                <div class="slidecontainer">
+                  <input type="range" min="1" max="100" value="50" class="slider" id="website_score">
+                </div>
+                <span class="advice-title margin-advice-title">Website advice</span>
+                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
 
-              <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
-            </form><?php
-          } else { ?>
-            <span class="score-text"><?php echo $score['wb']; ?>%</span>
-            <span class="advice-title margin-advice-title">Website advice</span>
-            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['wb']; ?></p>
-            <?php
-            call_to_contact($phone, $author->user_email, $calendar_link);
-          } ?>
+                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
+                </form><?php
+              } else { ?>
+                <span class="score-text"><?php echo $score['wb']; ?>%</span>
+                <span class="advice-title margin-advice-title">Website advice</span>
+                <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['wb']; ?></p>
+                <?php
+                call_to_contact($phone, $author->user_email, $calendar_link);
+            } ?>
         </div>
+        <?php } else { ?>
+            <div class="col-lg-6 right instagram-right config-right" style="padding: 20px !important; margin-top: 35px !important;">
+                <h2 class="config-title">Website text</h2>
+                <?php
+
+                  $ranges_fb = (object) array(
+                      ["name" => "website", "code" => "wb", "db" => "website"]
+                  );
+                  $item = (object) $ranges_fb; ?>
+                  <?php
+                    for ($i = 1; $i <= 3; $i++) {
+                      if ($i < 3) { ?>
+                        <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                        <input maxlength="2" type="text" id="<?php echo "range_number_website_$i"; ?>" name="<?php echo "range_number_website_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                        value="<?php echo $user->{"range_number_website_$i"}; ?>"><?php
+                      } else { ?>
+                        <h6>The last range is less than or equal to 100 percent</h6><?php
+                      } ?>
+                      <textarea maxlength="999" input="text" id="<?php echo "text_website_$i"; ?>" name="<?php echo "audit_website_$i"; ?>"><?php
+                        echo $user->{"text_website_$i"}; ?></textarea><?php
+                      }
+                  ?>
+            </div>
+        <?php } ?>
       </div><?php
     } ?>
   </section>
@@ -818,11 +1069,7 @@
       // Auto Mail + color Model
       var modalData = {
         text:`Configuration audit`,
-        html:`Do you want to sent this client automatic reminders?
-          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
-          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
-          <a href='/profile-page/#mail-settings'>here</a>.<br><br>
-          Do you want a custom color for this audit?<br>
+        html:`Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
         confirm: 'config_confirmed'
@@ -839,7 +1086,8 @@
           url: ajaxurl,
           data: {
             action: 'update_config', color: $('#color').val(),
-            value: $("#mail_bit_check").is(':checked'), ...commonPost
+            value: $("#mail_bit_check").is(':checked'), ...commonPost,
+            user_id: <?php echo $user_id; ?>
           },
           success: function() {
             window.location.reload()

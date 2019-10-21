@@ -45,7 +45,7 @@
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-  $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
+  $theme_color = $user->color_audit;
 
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
@@ -141,10 +141,11 @@
     </div><?php
   }
 
-  $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
-  $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
-  $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
-  $display_iframe = ($audit->video_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
+  $video_nothing = ($audit->video_iframe == NULL && $user->std_iframe == NULL) ? 'checked' : '';
+  $video_iframe = ($audit->video_iframe != NULL || $user->std_iframe != NULL) ? 'checked' : '';
+
+  $display_nothing = ($audit->video_iframe == NULL && $user->std_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
+  $display_iframe = ($audit->video_iframe != NULL || $user->std_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
   $company_name = get_user_meta($author_id, 'rcp_company', true );
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
@@ -268,7 +269,15 @@
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
-    if ($audit->video_iframe != NULL) { ?>
+    if($user->std_iframe != NULL && $audit->video_iframe == NULL) { ?>
+        <div class="intro-video"><?php
+          $video = str_replace("&#34;", '"', stripslashes($user->std_iframe));
+
+          if(strpos($video, 'height') !== false) {
+              echo "<iframe ". $video ."</iframe>";
+          } ?>
+        </div><?php
+    } else if ($audit->video_iframe != NULL) { ?>
       <div class="intro-video"><?php
         $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
 
@@ -286,11 +295,11 @@
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="tutorial/#1570543881921-3fd7746a-9da5">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
 
-          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL || $user->std_iframe != NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
-          <input type="radio" class="iframe-radio" data-display="none" <?php echo $audit->video_iframe == NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" data-display="none" <?php echo $audit->video_iframe == NULL && $user->std_iframe ==  NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
-          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL) ? 'block' : 'none'; ?>"
+          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL || $user->std_iframe != NULL) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $audit->video_iframe != NULL ? '<iframe '.stripslashes($audit->video_iframe).'</iframe>' : ''; ?>'/>
           </div>
         </form>
@@ -314,8 +323,22 @@
     </div><?php
     if ($audit->facebook_bit == "1" && ($audit->facebook_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
-        <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp; Facebook stats:</span>
-        <span class="sub-title">Statistics of your Facebook page.</span><?php
+        <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp;
+            <?php if($user->facebook_title == "") { ?>
+                Facebook stats:
+            <?php } else {
+                echo $user->facebook_title;
+            } ?>
+        </span>
+
+        <span class="sub-title">
+            <?php if($user->facebook_sub_title == "") { ?>
+                Statistics of your Facebook page.
+            <?php } else {
+                echo $user->facebook_sub_title;
+            } ?>
+        </span><?php
+
         visibility_short_code($edit_mode, $audit->facebook_vis_bit, 'facebook_vis_bit', 'visibility-first-level'); ?>
 
         <div class="col-lg-6 left bottom-40">
