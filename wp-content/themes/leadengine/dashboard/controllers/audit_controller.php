@@ -121,7 +121,8 @@ class audit_controller {
   }
 
   public function delete_multiple($id, $audits) {
-    return $this->service->delete_multiple($id, $audits);
+    $audits_string = implode(', ', $audits);
+    return $this->service->delete_multiple($id, $audits_string);
   }
 }
 ?>

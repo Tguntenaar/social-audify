@@ -6,35 +6,33 @@
 
 <!DOCTYPE html>
 <html lang='en'>
-
-<?php
-  // Header
-  include(dirname(__FILE__)."/../header/dashboard_header.php");
-
-  $this_month = $audit_control->get_all(0);
-  $this_year = $audit_control->get_all(12);
-
-  // Counts the audits
-  $monthly_values = calculate_monthly_amount($this_year);
-  $daily_values   = calculate_daily_amount($this_month);
-
-  $alter_percent_audit = $monthly_values[11] > 0 ? "100%" : "-";
-
-  // Functions for caculating percentages above chart.
-  $average_previous_months = (array_sum($monthly_values) - $monthly_values[11]) / 11;
-  $yearly_increase = percent_diff($monthly_values[11], $average_previous_months);
-  $last_month_increase = percent_diff($monthly_values[11], $monthly_values[10]);
-
-  function get_time_dif_days($date) {
-    $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s')));
-    $days = $interval->format('%a');
-    return $days < 1 ? "today" : ($days < 2 ? "yesterday" : $interval->format('%a days ago'));
-  }
-?>
 <head>
   <title>Audit Dashboard</title>
 </head>
-<body>
+  <?php
+    // Header
+    include(dirname(__FILE__)."/../header/dashboard_header.php");
+
+    // Get audits from external DB
+    $this_month = $audit_control->get_all(0);
+    $this_year = $audit_control->get_all(12);
+
+    // Counts the audits
+    $monthly_values = calculate_monthly_amount($this_year);
+    $daily_values   = calculate_daily_amount($this_month);
+    $alter_percent_audit = $monthly_values[11] > 0 ? "100%" : "-";
+
+    // Functions for caculating percentages above chart.
+    $average_previous_months = (array_sum($monthly_values) - $monthly_values[11]) / 11;
+    $yearly_increase = percent_diff($monthly_values[11], $average_previous_months);
+    $last_month_increase = percent_diff($monthly_values[11], $monthly_values[10]);
+
+    function get_time_dif_days($date) {
+      $interval = date_diff(date_create($date), date_create(date('Y-m-d H:i:s')));
+      $days = $interval->format('%a');
+      return $days < 1 ? "today" : ($days < 2 ? "yesterday" : $interval->format('%a days ago'));
+    }
+  ?>
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9">
     <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 screen-height">
@@ -56,7 +54,7 @@
         <div class="inner no-scroll">
           <span class="title"><span class="title-background">Audits</span>
             <span class="count" id="counterSpan"><?php echo $number_of_audits; ?></span>
-            <span class="selectDelete" style="color:black; display:none"><i class="fas fa-cog"></i></span>
+            <span class="selectDelete" style="color:black; display:none"><i class="fas fa-trash"></i></span>
           </span>
           <input type="text" name="search" id="search-input" placeholder="Search..."/>
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
@@ -87,25 +85,10 @@
       generateChart('chart-audit', [<?php echo json_encode($daily_values); ?>]);
 
       var elems = $('#audit-results .audit-row');
-      var counterSpan = $('#counterSpan');
-
       var selectedList = [];
       
       elems.on('click', function() {
-        if ($(this).attr('class').endsWith('selected')) {
-          $(this).removeClass('selected');
-          selectedList.splice(selectedList.indexOf($(this).data('id')), 1);
-          
-        } else {
-          $(this).addClass('selected');
-          selectedList = [...selectedList, $(this).data('id')];
-        }
-
-        if (selectedList.length == 0) {
-          $(".selectDelete").hide(500);
-        } else {
-          $(".selectDelete").show(500);
-        }
+        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"));
       });
       
       $(".selectDelete").click(function() {
@@ -132,6 +115,7 @@
       });
 
       // Search list
+      var counterSpan = $('#counterSpan');
       $(document).on('keyup', 'input#search-input', function() {
         filterSearch($(this).val(), elems, counterSpan, true);
       });

@@ -173,15 +173,15 @@
           data: data,
           success: function (response) { location.reload(); },
           error: function (xhr, textStatus, errorThrown) {
-               var send_error = error_func(xhr, textStatus, errorThrown, data);
-               logError(send_error, 'page-templates/client_dashboard.php', 'delete_confirmed');
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/client_dashboard.php', 'delete_confirmed');
 
-                var modalData = {
-                'text': "Can't delete this client",
-                'subtext': "Please try again later or notify an admin if the issue persists"
-                }
-                showModal(initiateModal('errorModal', 'error', modalData));
-                console.log({errorThrown});
+            var modalData = {
+            'text': "Can't delete this client",
+            'subtext': "Please try again later or notify an admin if the issue persists"
+            }
+            showModal(initiateModal('errorModal', 'error', modalData));
+            console.log({errorThrown});
           },
         });
       });

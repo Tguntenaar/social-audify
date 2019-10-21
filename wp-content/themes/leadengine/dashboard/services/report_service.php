@@ -80,23 +80,19 @@ class report_service extends connection {
     return $this->dbwp->update($table, array($field_name => $field_value), array($priref => $id));
   }
 
-
-  public function delete($id) {
-    return $this->dbwp->delete('Report', array('id' => $id));
-  }
-
-
+  
+  
   public function insert_content($id) {
     return $this->dbwp->insert('Report_content', array('report_id' => $id));
   }
-
+  
   public function insert_visibility($report_id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
       "INSERT INTO `Report_stat_visibility` (report_id, $this->user_visibility_fields)
        SELECT %d, $this->user_visibility_fields
        FROM `User_report_visibility` WHERE user_id = %d", $report_id, get_current_user_id()));
   }
-
+  
   public function insert_data($id, $social_stats, $chart_data, $competitor = 0, $manual, $currency, $instagram_name) {
     if ($competitor) {
       return $this->dbwp->insert('Report_content',
@@ -109,28 +105,40 @@ class report_service extends connection {
       ));
     }
     return $this->dbwp->insert('Report_content',
-      array(
-        'report_id'      => $id,
-        'social_stats'   => $social_stats,
-        'chart_data'     => $chart_data,
-        'currency'       => $currency,
-        'manual'         => $manual,
-        'instagram_name' => $instagram_name
-      ));
+    array(
+      'report_id'      => $id,
+      'social_stats'   => $social_stats,
+      'chart_data'     => $chart_data,
+      'currency'       => $currency,
+      'manual'         => $manual,
+      'instagram_name' => $instagram_name
+    ));
   }
 
-
+  
   public function toggle_config_visibility($id, $field_name) {
     // TODO : dit is nog niet attack-veilig, is wss een betere wp functie voor...
     return $this->dbwp->get_results($this->dbwp->prepare(
       "UPDATE `Report_stat_visibility` SET $field_name = !$field_name WHERE report_id = %d", $id));
   }
-
-
+    
+    
   public function get_content_fields() {
     return $this->content_fields;
   }
 
+
+  public function delete($id) {
+    return $this->dbwp->delete('Report', array('id' => $id));
+  }
+
+  public function delete_multiple($id, $report_ids) {
+    return $this->dbwp->query(
+      "DELETE FROM Report WHERE client_id IN
+      (SELECT id FROM Client WHERE user_id = $id) AND id IN ($report_ids)");
+  }
+
+  
   private $content_fields = "introduction, social_advice, campaign_advice, conclusion, social_stats, chart_data, social_stats_compare, chart_data_compare, manual, currency, instagram_name, color";
   private $visibility_fields = "soc_pl, soc_aml, soc_inf, soc_inaf, soc_iae, soc_plm, cam_imp, cam_cpc, cam_cpm, cam_cpp, cam_ctr, cam_frq, cam_spd, cam_rch, cam_lcl, cam_ras, campaign_vis_bit, graph_vis_bit";
   private $user_visibility_fields = "soc_pl, soc_aml, soc_inf, soc_inaf, soc_iae, soc_plm, cam_imp, cam_cpc, cam_cpm, cam_cpp, cam_ctr, cam_frq, cam_spd, cam_rch, cam_lcl, cam_ras";

@@ -71,6 +71,26 @@ function filterSearch(value, links, counterSpan = null, isDiv = false) {
   }
 }
 
+function toggleSelected(element, selectedList, triggerButton = null) {
+  if (element.attr('class').endsWith('selected')) {
+    element.removeClass('selected');
+    selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+    
+  } else {
+    element.addClass('selected');
+    selectedList = [...selectedList, element.data('id')];
+  }
+
+  if (triggerButton) {
+    if (selectedList.length == 0) {
+      triggerButton.hide(500);
+    } else {
+      triggerButton.show(500);
+    }
+  }
+  return selectedList;
+}
+
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   if (!$(`#${canvas}`).is('canvas'))
     return;

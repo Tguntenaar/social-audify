@@ -106,6 +106,9 @@ class report_controller {
     return $this->service->toggle_config_visibility($id, $field);
   }
 
-  
+  public function delete_multiple($id, $reports) {
+    $reports_string = implode(', ', $reports);
+    return $this->service->delete_multiple($id, $reports_string);
+  }  
 }
 ?>

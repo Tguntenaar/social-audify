@@ -34,64 +34,91 @@
     }
   ?>
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9">
-  <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 screen-height">
-      <div class="center-center">
-        <h1 class="create-report-h1">Create a report in a few steps.</h1>
-        <a class="create-audit-button" href="/report-setup/">Create Report</a>
-      </div>
-    </div>
-    <div class="graph-box no-border col-xs-12 col-sm-12 col-md-12 col-lg-6">
-      <span class="stat-box-title">% increase in number of reports this month</span>
-      <span class="graph-procent"><?php echo percent_print($yearly_increase, $alter_percent_report); ?></span>
-      <span class="graph-info">
-        <?php echo percent_print($last_month_increase, $alter_percent_report); ?> compared to last month<br />
-        (<?php echo $monthly_values[11]." Reports in ".date("F Y"); ?>)
-      </span>
-      <canvas id="chart-report"></canvas>
-    </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 right float-right report-input">
-      <div class="inner no-scroll">
-        <span class="title"><span class="title-background">Reports</span>
-          <span class="count" id="counterSpan"><?php echo $number_of_reports; ?></span>
-        </span>
-        <input type="text" name="search" id="search-input" placeholder="Search..."/>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
-          <div class="row-title-style remove-on-mobile col col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Client</div>
-          <div class="row-title-style col-12 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Report Name</div>
-          <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2" style="padding-left: 0;">Viewed</div>
+    <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 screen-height">
+        <div class="center-center">
+          <h1 class="create-report-h1">Create a report in a few steps.</h1>
+          <a class="create-audit-button" href="/report-setup/">Create Report</a>
         </div>
-        <div class="inner-scroll" id="report-results">
-          <?php
+      </div>
+      <div class="graph-box no-border col-xs-12 col-sm-12 col-md-12 col-lg-6">
+        <span class="stat-box-title">% increase in number of reports this month</span>
+        <span class="graph-procent"><?php echo percent_print($yearly_increase, $alter_percent_report); ?></span>
+        <span class="graph-info">
+          <?php echo percent_print($last_month_increase, $alter_percent_report); ?> compared to last month<br />
+          (<?php echo $monthly_values[11]." Reports in ".date("F Y"); ?>)
+        </span>
+        <canvas id="chart-report"></canvas>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6 right float-right report-input">
+        <div class="inner no-scroll">
+          <span class="title"><span class="title-background">Reports</span>
+            <span class="count" id="counterSpan"><?php echo $number_of_reports; ?></span>
+            <span class="selectDelete" style="color:black; display:none"><i class="fas fa-trash"></i></span>
+          </span>
+          <input type="text" name="search" id="search-input" placeholder="Search..."/>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
+            <div class="row-title-style col-12 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Report Name</div>
+            <div class="row-title-style remove-on-mobile col col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Client</div>
+            <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2" style="padding-left: 0;">Viewed</div>
+          </div>
+          <div class="inner-scroll" id="report-results"><?php
             foreach ($this_year as $report) {
               $slug = strtolower('/report-'.str_replace(" ", "-", $report->name).'-'.$report->id.'/');
               $report->viewed = $report->view_time !== NULL ? get_time_dif_days($report->view_time) : "not yet"; ?>
 
-              <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $report->name; ?>">
+             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" data-id="<?php echo $report->id; ?>" name="<?php echo $report->name; ?>">
+                <div class="col-12 col-sm-5 col-md-5 col-lg-5 audit-row-style"><a href="<?php echo $slug; ?>"><?php echo $report->name; ?></a></div>
                 <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $report->client_name; ?></div>
-                <div class="col-12 col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $report->name; ?></div>
                 <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style"><?php echo $report->viewed ?></div>
-              </a><?php
-            }
-          ?>
+              </div><?php
+            } ?>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
   </section>
 
 	<script charset='utf-8'>
     $(function() {
-			generateChart('chart-report', [<?php echo json_encode($daily_values); ?>]);
-		});
+      generateChart('chart-report', [<?php echo json_encode($daily_values); ?>]);
+      
+      var elems = $("#report-results .audit-row");
+      var selectedList = [];
 
-    // Search list
-    var elems = $("#report-results .audit-row");
-    var counterSpan = $("#counterSpan");
+      elems.on('click', function() {
+        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"));
+      });
+      
+      $(".selectDelete").click(function() {
+        showModal(initiateModal('confirmModal', 'confirm', {
+          'text': `Delete Reports`,
+          'subtext': `Would you like to delete the selected Report${(selectedList.length == 1 ? '' : 's')}?`,
+          'confirm': 'delete_confirmed'
+        }));
 
-		$(document).on('keyup', 'input#search-input', function() {
-			filterSearch($(this).val(), elems, counterSpan);
+        $("#delete_confirmed").click(function() {
+          showBounceBall(true, 'Deleting Reports...');
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: {action: 'delete_multiple', ids: selectedList, type: 'report'},
+            success: function(response) { location.reload(); },
+            error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, selectedList);
+              logError(send_error, 'setups/delete_reports.php', 'submit');
+              location.reload();
+            }
+          });
+        });
+      });
+      
+      // Search list
+      var counterSpan = $("#counterSpan");
+      $(document).on('keyup', 'input#search-input', function() {
+        filterSearch($(this).val(), elems, counterSpan);
+      });
 		});
 	</script>
 </body>
