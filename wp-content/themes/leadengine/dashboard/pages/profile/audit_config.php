@@ -48,38 +48,6 @@
 
   $theme_color = $user->color_audit;
 
-  if ($audit->manual == 0) {
-    $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
-  }
-
-  // function advice_equal_to_user($user, $audit, $type) {
-  //   if (
-  //     $type == 'fb' &&
-  //     ($user->text_fb_1 == $audit->facebook_advice ||
-  //     $user->text_fb_2 == $audit->facebook_advice ||
-  //     $user->text_fb_3 == $audit->facebook_advice)
-  //   ) {
-  //     return true;
-  //   }
-  //   if (
-  //     $type == 'ig' &&
-  //     ($user->text_insta_1 == $audit->instagram_advice ||
-  //     $user->text_insta_2 == $audit->instagram_advice ||
-  //     $user->text_insta_3 == $audit->instagram_advice)
-  //   ) {
-  //     return true;
-  //   }
-  //   if (
-  //     $type == 'wb' &&
-  //     ($user->text_website_1 == $audit->website_advice ||
-  //     $user->text_website_2 == $audit->website_advice ||
-  //     $user->text_website_3 == $audit->website_advice)
-  //   ) {
-  //     return true;
-  //   }
-  //   return false;
-  // }
-
    // Overall scores
    $score = array(
     'fb' => 50,
@@ -267,6 +235,13 @@
       $('.yes-end-tut').click(function() {
           $('.tutorial-screen').css({"display": "none"});
       });
+
+      $('#tutorial_link').click(function() {
+          console.log("Test");
+          $('.tutorial-screen').css({"display": "block"});
+      });
+
+
     });
   </script>
   <style>
@@ -289,54 +264,67 @@
   </style>
 </head>
 <body class="custom-body">
-  <div class='tutorial-screen'>
-      <div class="into-tutorial vertical-align" style="text-align: center;">
-          <div style="height: auto; width: 340px; margin: 0 auto;">
-              <h2>Do you want to follow a tutorial?</h2>
-              <div class="create-audit-button yes-tut" style="cursor: pointer;">Yes, recommended!</div>
-              <div class="create-audit-button no-tut" style="color: #fff !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
+    <?php if($edit_mode &&
+            ($user->intro_audit == "" && $user->intro_conclusion == ""
+            && $user->text_fb_1 == "" && $user->text_fb_2 == ""
+            && $user->text_fb_3 == "" && $user->text_insta_1 == ""
+            && $user->text_insta_2 == "" && $user->text_fb_3 == ""
+            && $user->text_website_1 == "" && $user->text_website_2 == ""
+            && $user->text_website_3 == "")) {
+                $display = "block";
+
+    } else {
+        $display = "none";
+    }?>
+
+      <div class='tutorial-screen' style="display: <?php echo $display; ?>;">
+          <div class="into-tutorial vertical-align" style="text-align: center;">
+              <div style="height: auto; width: 340px; margin: 0 auto;">
+                  <h2>Do you want to follow a tutorial?</h2>
+                  <div class="create-audit-button yes-tut" style="cursor: pointer;">Yes, recommended!</div>
+                  <div class="create-audit-button no-tut" style="color: #fff !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
+              </div>
           </div>
-      </div>
 
-      <div class="video-explenation vertical-align" style="text-align: center; left: 100px;">
-          <span class="tut-title">Video explenation</span>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-      </div>
-
-      <div class="intro-explenation vertical-align" style="text-align: center;">
-          <span class="tut-title">Text explenation</span>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-      </div>
-
-      <div class="title-explenation vertical-align" style="text-align: center;">
-          <span class="tut-title">Title explenation</span>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-      </div>
-
-      <div class="visibility-explenation vertical-align" style="text-align: center;">
-          <span class="tut-title">Visibility explenation</span>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-      </div>
-
-      <div class="social-text-explenation vertical-align" style="text-align: center; right: 300px">
-          <span class="tut-title">Social media text explenation</span>
-          <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
-      </div>
-
-      <div class="end-explenation vertical-align" style="text-align: center;">
-          <div style="height: auto; width: 340px; margin: 0 auto;">
-              <span class="tut-title" style="margin-bottom: 15px; line-height:23px;">This was a short tutorial on how to configurate your audits, want to see more check out our tutorial.</span>
-              <div style="clear: both; margin-bottom: 15px;"></div>
-              <a href="https://www.socialaudify.com/tutorial/" target="_blank" style="border: 0 !important;" rel="norefferer" class="create-audit-button yes-end-tut" style="cursor: pointer;">Yes, recommended!</a>
-              <div class="create-audit-button no-end-tut" style="color: #fff !important; border: 0 !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
+          <div class="video-explenation vertical-align" style="text-align: center; left: 100px;">
+              <span class="tut-title">Video explenation</span>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
           </div>
-      </div>
 
-      <div class="create-audit-button video-button tut-button">Next</div>
-      <div class="create-audit-button introtext-button tut-button">Next</div>
-      <div class="create-audit-button title-button tut-button">Next</div>
-      <div class="create-audit-button visibility-button tut-button" style="left: 40px; right: auto;">Next</div>
-  </div>
+          <div class="intro-explenation vertical-align" style="text-align: center;">
+              <span class="tut-title">Text explenation</span>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          </div>
+
+          <div class="title-explenation vertical-align" style="text-align: center;">
+              <span class="tut-title">Title explenation</span>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          </div>
+
+          <div class="visibility-explenation vertical-align" style="text-align: center;">
+              <span class="tut-title">Visibility explenation</span>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          </div>
+
+          <div class="social-text-explenation vertical-align" style="text-align: center; right: 300px">
+              <span class="tut-title">Social media text explenation</span>
+              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+          </div>
+
+          <div class="end-explenation vertical-align" style="text-align: center;">
+              <div style="height: auto; width: 340px; margin: 0 auto;">
+                  <span class="tut-title" style="margin-bottom: 15px; line-height:23px;">This was a short tutorial on how to configurate your audits, want to see more check out our tutorial.</span>
+                  <div style="clear: both; margin-bottom: 15px;"></div>
+                  <a href="https://www.socialaudify.com/tutorial/" target="_blank" style="border: 0 !important;" rel="norefferer" class="create-audit-button yes-end-tut" style="cursor: pointer;">Yes, recommended!</a>
+                  <div class="create-audit-button no-end-tut" style="color: #fff !important; border: 0 !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
+              </div>
+          </div>
+
+          <div class="create-audit-button video-button tut-button">Next</div>
+          <div class="create-audit-button introtext-button tut-button">Next</div>
+          <div class="create-audit-button title-button tut-button">Next</div>
+          <div class="create-audit-button visibility-button tut-button" style="left: 40px; right: auto;">Next</div>
+      </div>
   <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
     <!-- Animated CSS stuff -->
@@ -359,8 +347,10 @@
       Audit
 
       <?php if ($edit_mode) { ?>
+
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
+        <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;"> <i class="fab fa-youtube"></i> Tutorial </button>
         <?php
       } else {
         if ($user_id == $author_id) {?>
@@ -462,9 +452,7 @@
                 </div><?php
               }
             }
-            foreach ($facebook_ad_blocks as $item) {
-              if (($audit->has_comp || !$item["is_comp"]) && show_block($edit_mode, $user->{$item["type"]})) {
-                $path = $item["is_comp"] ? $audit->competitor : $audit; ?>
+            foreach ($facebook_ad_blocks as $item) { ?>
                 <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
                     <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
@@ -479,15 +467,13 @@
                       </span><?php
                     // edit mode
                     } else { ?>
-                      <form class="ads-radio" action=""><?php
-                        $checked = $path->facebook_data->runningAdds;
-                        $name = $item["is_comp"] ? "ads_c" : "ads"; ?>
-                        <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo 0 ? "checked" : ""; ?>/>
+                      <form class="ads-radio" action="">
+                        <input type="radio"  value="yes" <?php echo 0 ? "checked" : ""; ?>/>
                           <span class="label_ads">Yes</span>
-                        <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo !0 ? "checked" : ""; ?>/>
+                        <input type="radio" value="no" <?php echo !0 ? "checked" : ""; ?>/>
                           <span class="label_ads">No</span>
                       </form><?php
-                        visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
                       <span class="explenation-ads">
                         <a target="_blank" rel="noreferrer" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
@@ -496,7 +482,6 @@
                     } ?>
                   </div>
                 </div><?php
-              }
             } ?>
           </div>
         </div>
@@ -576,23 +561,13 @@
         </span>
 
         <?php
-        visibility_short_code($edit_mode,  $user->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level');
-        if ($audit->manual && $edit_mode) { ?>
-          <span class="manual-text"><span style="color: #e74c3c;">Attention: </span>
-            There is no instagram or instagram business account found, so <a target="_blank" rel="noreferrer" href="https://www.instagram.com/<?php echo $audit->instagram_name; ?>">click here</a> to gather your data!
-          </span><?php
-        }
-        if ($edit_mode && (isset($audit->competitor->manual) && $audit->competitor->manual)) { ?>
-          <span class="manual-text" style="margin-top: 15px;"><span style=" color: #e74c3c;">
-            Attention: </span>There is no competitor instagram or instagram business account found, so <a href="https://www.instagram.com/<?php echo $audit->competitor_name; ?>">click here</a> to gather your data!
-          </span><?php
-        } ?>
+        visibility_short_code($edit_mode,  $user->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level'); ?>
 
         <div style="clear:both"></div>
         <div class="col-lg-6 instagram-left" style="float:left;">
 
             <div class="col-lg-12 left custom-left" style="padding: 0;"><?php
-              visibility_short_code($edit_mode, $audit->insta_hashtag, 'insta_hashtag'); ?>
+              visibility_short_code($edit_mode, $user->insta_hashtag, 'insta_hashtag'); ?>
 
               <div class="chart-info">
                 <span class="stat-box-title">Hashtags used</span>
@@ -604,7 +579,6 @@
 
               <div class="legend">
                   <span class="round-color you-color"></span> <span class="space">You</span>
-                  <?php if ($audit->has_comp && !$audit->competitor->manual) { ?><span class="round-color competitor-color"></span> <?php echo ucfirst($audit->competitor_name); } ?>
               </div>
             </div><?php
 
@@ -615,68 +589,34 @@
               <div class="chart-info">
                 <span class="stat-box-title">Likes on your posts Instagram</span>
                 <span class="graph-procent" style="margin-top: 2px;">Average 50</span>
-                <span class="graph-info"><?php
+                <span class="graph-info">
 
-
-                    $likes_comp = array_sum($audit->competitor->instagram_data->likesPerPost);
-                    $procent_increace = procent_calc($sumPostLikes, $likes_comp);
-                    $color = $sumPostLikes < $likes_comp ? "#c0392b" : ($sumPostLikes == $likes_comp ? "#2980b9" : "#27ae60"); ?>
                 </span>
               </div>
               <div class="inner custom-inner" style="">
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
-                  <span class="round-color you-color"></span> <span class="space">You</span><?php
-                  if ($audit->has_comp && !$audit->competitor->manual) { ?>
-                    <span class="round-color competitor-color" style="margin-right: 4px;"></span><?php
-                    echo ucfirst($audit->competitor_name);
-                  } ?>
+                  <span class="round-color you-color"></span> <span class="space">You</span>
+
               </div>
             </div><?php
           } ?>
-        </div><?php
+        </div>
 
-        if (($audit->manual == 1)) { ?>
-          <div class="col-lg-12 instagram-right" style="padding: 0;float: right;">
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 50%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
-        } else { ?>
-          <div class="col-lg-6 instagram-right" style="padding: 0;float: right;">
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
-        }
+
+        <div class="col-lg-6 instagram-right" style="padding: 0;float: right;">
+        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
+
 
         function competitor_code($audit, $edit_mode, $item) {
           // Preview mode hide description animation
-          if (!$audit->manual) { ?>
-            <span class="data_animation"><?php
-          }
-          if ($audit->has_comp) { ?>
-            <span class="data-view">
-              <span class="comp-label">
-                You: <br />
-              </span><?php
-              manual_check($audit, $item, $edit_mode, 0);?>
-            </span>
-
-            <!-- LEFT SIDE OF BLOCK -->
-            <span class="vertical-line"></span>
-            <!-- RIGHT SIDE OF BLOCK -->
-
-              <span class="competitor-stats">
-                <span class="comp-label"><?php
-                  echo ucfirst($audit->competitor_name); ?>: <br />
-                </span><?php
-                manual_check($audit, $item, $edit_mode, 1);?>
-              </span><?php
-
-          } else { // heeft geen competitor
-            manual_check($audit, $item, $edit_mode, 0);
-          }
-          // Preview mode hide description animation
-          if (!$audit->manual) { ?>
-            </span>
-            <span class="explenation"><?php echo $item["desc"]; ?></span><?php
-          }
+            ?>
+                <span class="data_animation"><?php
+                echo 0; ?>
+                </span>
+                <span class="explenation"><?php echo $item["desc"]; ?></span>
+            <?php
         }
 
         function manual_check($audit, $item, $edit_mode, $comp) {
@@ -701,7 +641,7 @@
                 </span><?php
                 // Als preview mode laat description staan en hide client info
 
-                competitor_code($audit, $edit_mode, $item);
+                competitor_code($user, $edit_mode, $item);
                 // preview mode show visibility icon
                 visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
 
@@ -709,13 +649,10 @@
             </div><?php
           }
         }?>
-        </form><?php
+        </form>
 
-          if ($audit->manual == 1) { ?>
-            <div class="col-lg-6 instagram-score" style="margin-top: -10px; float:left; "><?php
-          } else { ?>
-            <div class="col-lg-12 instagram-score" style="float:right; "><?php
-          }
+        <div class="col-lg-12 instagram-score" style="float:right; "><?php
+
 
           if(!$edit_mode) { ?>
             <div class="col-lg-12 insta-score">
@@ -803,7 +740,7 @@
                   <div class="inner">
                     <span class="title-box website"><?php echo $item["name"]; ?></span>
                     <span class="data_animation"><?php
-                      echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website); ?>
+                      echo 0; ?>
                     </span><?php
                       visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
                     <span class="explenation"><?php echo $item["desc"]; ?></span>
@@ -869,7 +806,7 @@
       if ($edit_mode) { ?>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
           <textarea maxlength="999" input="text"  name="conclusion_audit" id="conclusion_audit"><?php
-            echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
+            echo $user->conclusion_audit;
           ?></textarea>
         </form><?php
       } else { ?>
@@ -894,41 +831,6 @@
     'type': 'user',
     'user': '<?php echo $user_id; ?>',
   }
-
-  <?php // Website Crawl
-  if ($audit->website_bit && !$audit->has_website) { ?>
-    var modalData = {
-      'text': 'Website data available',
-      'subtext': 'Confirm to reload the page and view the crawled website data',
-      'confirm': 'reload_confirmed'
-    }
-
-    var reloadModal = initiateModal('reloadModal', 'confirm', modalData);
-    $('#reload_confirmed').click(function() {
-      window.location.reload();
-    });
-
-    function crawlFinishedCheck() {
-      $.ajax({
-        type: "POST",
-        url: ajaxurl,
-        data: { action: 'crawl_data_check', ...commonPost },
-        success: function (response) {
-          if (response.length !== 0) {
-            showModal(reloadModal);
-          } else {
-            setTimeout(function() { crawlFinishedCheck(); }, 8000);
-          }
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
-            logError(send_error, 'page-templates/audit_page.php', 'toggle_visibility');
-        },
-      });
-    }
-    crawlFinishedCheck();<?php
-  } ?>
-
 
 
     // Line Chart values
@@ -1195,70 +1097,6 @@
       echo json_encode(preg_replace("/\r|\n/", '\n', $string));
     } ?>
 
-    var sliderData = {<?php
-      if ($audit->facebook_bit == "1") { ?>
-        fb: { <?php
-          if ($audit->facebook_advice != "" && !advice_equal_to_user($user, $audit, 'fb')) { ?>
-            range: false,
-            text: false,<?php
-          } else { ?>
-            range: {
-              one: <?php echo $user->range_number_fb_1; ?>,
-              two: <?php echo $user->range_number_fb_2; ?>,
-            },
-            text: {
-              one: <?php replace_lbs($user->text_fb_1); ?>,
-              two: <?php replace_lbs($user->text_fb_2); ?>,
-              three: <?php replace_lbs($user->text_fb_3); ?>,
-            },<?php
-          } ?>
-        },<?php
-      }
-      if ($audit->instagram_bit == "1") { ?>
-        ig: {<?php
-          if ($audit->instagram_advice != "" && !advice_equal_to_user($user, $audit, 'ig')) { ?>
-            range: false,
-            text: false,<?php
-          } else { ?>
-            range: {
-              one: <?php echo $user->range_number_insta_1; ?>,
-              two: <?php echo $user->range_number_insta_2; ?>,
-            },
-            text: {
-              one: <?php replace_lbs($user->text_insta_1); ?>,
-              two: <?php replace_lbs($user->text_insta_2); ?>,
-              three: <?php replace_lbs($user->text_insta_3); ?>,
-            },<?php
-          } ?>
-        }, <?php
-      }
-      if ($audit->website_bit == "1") { ?>
-        wb: {<?php
-          if ($audit->website_advice != "" && !advice_equal_to_user($user, $audit, 'wb')) { ?>
-            range: false, // disabled slider text
-            text: false,<?php
-          } else { ?>
-            range: {
-              one: <?php echo $user->range_number_website_1; ?>,
-              two: <?php echo $user->range_number_website_2; ?>,
-            },
-            text: {
-              one: <?php replace_lbs($user->text_website_1); ?>,
-              two: <?php replace_lbs($user->text_website_2); ?>,
-              three: <?php replace_lbs($user->text_website_3); ?>,
-            },<?php
-          } ?>
-        },<?php
-      } ?>
-    }
-    if (!!sliderData.fb) {
-      handleSlider('facebook', sliderData.fb.range, sliderData.fb.text);
-    }
-    if (!!sliderData.ig) {
-      handleSlider('instagram', sliderData.ig.range, sliderData.ig.text);
-    }
-    if (!!sliderData.wb) {
-      handleSlider('website', sliderData.wb.range, sliderData.wb.text);
-    }<?php
+    <?php
   } ?>
 </script>
