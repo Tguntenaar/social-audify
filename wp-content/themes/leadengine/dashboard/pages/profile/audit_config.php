@@ -516,6 +516,7 @@
       <?php } else { ?>
           <div class="col-lg-6 right config-right" style="padding-left: 15px; padding-right: 15px;">
               <h2 class="config-title">Facebook text</h2>
+              <div class="diplay-facebook-error" style="margin-top: 10px;"></div>
               <?php
 
               $ranges_fb = (object) array(
@@ -540,7 +541,7 @@
       </div><?php
     }
     if ($user->instagram_vis_bit || $edit_mode) { ?>
-      <div class="col-lg-12 facebook-info">
+      <div class="col-lg-12 facebook-info" >
         <?php if($user->instagram_title != NULL) { $instagram_title = $user->instagram_title; } else { $instagram_title = 'Instagram stats:'; } ?>
         <?php if($user->instagram_sub_title != NULL) { $instagram_sub_title = $user->instagram_sub_title; } else { $instagram_sub_title = 'Statistics of your Instagram page.'; } ?>
 
@@ -681,8 +682,9 @@
             </div>
           </div>
           <?php } else { ?>
-              <div class="col-lg-12 insta-score config-right" style="padding: 20px;">
+              <div class="col-lg-12 insta-score config-right" id="instagram-info" style="padding: 20px;">
                   <h2 class="config-title">Instagram text</h2>
+                  <div class="diplay-instagram-error" style="margin-top: 10px;"></div>
                   <?php
 
                     $ranges_fb = (object) array(
@@ -709,7 +711,7 @@
       </div><?php
     }
     if ($user->website_vis_bit || $edit_mode) { ?>
-      <div class="col-lg-12 facebook-info website-info" id="website-info">
+      <div class="col-lg-12 facebook-info website-info">
 
           <?php if($user->website_title != NULL) { $website_title = $user->website_title; } else { $website_title = 'Website stats:'; } ?>
           <?php if($user->website_sub_title != NULL) { $website_sub_title = $user->website_sub_title; } else { $website_sub_title = 'Statistics of your Website page.'; } ?>
@@ -772,8 +774,9 @@
             } ?>
         </div>
         <?php } else { ?>
-            <div class="col-lg-6 right instagram-right config-right" style="padding: 20px !important; margin-top: 35px !important;">
+            <div class="col-lg-6 right instagram-right config-right" id="website-info" style="padding: 20px !important; margin-top: 35px !important;">
                 <h2 class="config-title">Website text</h2>
+                <div class="diplay-website-error" style="margin-top: 10px;"></div>
                 <?php
 
                   $ranges_fb = (object) array(
@@ -811,7 +814,7 @@
         </form><?php
       } else { ?>
         <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-          echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
+          echo $user->conclusion_audit;
         ?></p><?php
       } ?>
     </div>
@@ -923,6 +926,35 @@
       }
 
       function updateAll() {
+          $('.diplay-website-error').empty();
+          $('.diplay-instagram-error').empty();
+          $('.diplay-facebook-error').empty();
+
+          if ($('#range_number_fb_1').val() >= $('#range_number_fb_2').val()) {
+                document.querySelector('#facebook-info').scrollIntoView({
+                  behavior: 'smooth'
+                });
+
+              $('.diplay-facebook-error').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
+              return;
+          }
+
+          if ($('#range_number_insta_1').val() >= $('#range_number_insta_2').val()) {
+              document.querySelector('#instagram-info').scrollIntoView({
+                behavior: 'smooth'
+              });
+
+              $('.diplay-instagram-error').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
+              return;
+          }
+          if ($('#range_number_website_1').val() >= $('#range_number_website_2').val()) {
+              document.querySelector('#website-info').scrollIntoView({
+                behavior: 'smooth'
+              });
+
+              $('.diplay-website-error').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
+              return;
+          }
         var data = {
           ...getChanged('textarea'),
           ...getChanged("input[type=text]", true),
