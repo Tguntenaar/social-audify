@@ -531,7 +531,7 @@
                     } else { ?>
                       <h6>The last range is less than or equal to 100 percent</h6><?php
                     } ?>
-                    <textarea maxlength="999" input="text" name="<?php echo "text_fb_$i"; ?>" name="<?php echo "audit_facebook_$i"; ?>"><?php
+                    <textarea maxlength="999" input="text" id="<?php echo "text_fb_$i"; ?>" name="<?php echo "audit_facebook_$i"; ?>"><?php
                       echo $user->{"text_fb_$i"}; ?></textarea><?php
                     }
                 ?>
