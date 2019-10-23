@@ -297,7 +297,7 @@
       $control = new report_controller($connection);
       $fields = $control->get_area_fields();
       $table = 'Report_content';
-  } else if ( $type == 'user' ) {
+    } else if ( $type == 'user' ) {
       require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
       $control = new user_controller($connection);
       $fields = $control->get_area_fields();
@@ -307,7 +307,7 @@
     if ($type == 'audit' || $type == 'report' || $type == 'user') {
       foreach( $fields as $field ) {
         if (isset($_POST[$field])) {
-          $control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), $table);
+          $test = $control->update($id, $field, sanitize_textarea_field(stripslashes($_POST[$field])), $table);
         }
       }
     }

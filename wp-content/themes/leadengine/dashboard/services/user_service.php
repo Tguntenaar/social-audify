@@ -53,6 +53,8 @@ class user_service extends connection {
           ON User.id = Mail_config.user_id
         INNER JOIN User_audit_visibility
           ON User.id = User_audit_visibility.user_id
+        INNER JOIN User_report_visibility
+          ON User.id = User_report_visibility.user_id
         WHERE User.id = %d", $user_id));
   }
 
@@ -66,7 +68,7 @@ class user_service extends connection {
 
   public function get_area_fields() {
       return "intro_audit, conclusion_audit, intro_report, conclusion_report, color_audit, color_report, range_number_fb_1, range_number_fb_2, text_fb_1, text_fb_2, text_fb_3, range_number_insta_1, range_number_insta_2, text_insta_1, text_insta_2, text_insta_3, range_number_website_1, range_number_website_2, text_website_1, text_website_2, text_website_3, std_iframe, facebook_title, facebook_sub_title, instagram_title, instagram_sub_title
-      , website_title, website_sub_title";
+      , website_title, website_sub_title, campaign_advice, graph_advice";
 
   }
 
