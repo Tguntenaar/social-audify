@@ -155,7 +155,7 @@
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
 
-  $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/' . get_post_field( 'post_name', get_post() );
+  $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
   <title>Audit</title>
@@ -248,7 +248,7 @@
 
       if ($edit_mode) { ?>
         <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
-        <a class="copy-link" href="mailto:bramhoogenkamp@live.nl?subject=look at this website&body=<?php echo $mail_contents; ?>"><i class="fab fa-telegram"></i>Send mail</a>
+        <a class="copy-link" href="mailto:<?php echo $audit->email; ?>?subject=Audit&body=<?php echo $mail_contents; ?>"><i class="fab fa-telegram"></i>Send mail</a>
         <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="preview"><i class="far fa-eye"></i> Preview </a>
