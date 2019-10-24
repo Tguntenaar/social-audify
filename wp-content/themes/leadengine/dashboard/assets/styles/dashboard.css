@@ -3328,8 +3328,109 @@ label {
 	opacity: 0;
 }
 
+.config-title {
+	font-size: 21px;
+}
 
+.config-right #range_number_fb_1,
+.config-right #range_number_fb_2,
+.config-right #range_number_fb_3,
+.config-right #range_number_insta_1,
+.config-right #range_number_insta_2,
+.config-right #range_number_insta_3,
+.config-right #range_number_website_1,
+.config-right #range_number_website_2,
+.config-right #range_number_website_3 {
+	width: 35px;
+	height: 35px;
+	display: block;
+	float:none;
+	color: #000;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-align: center;
+}
 
+#facebook_title,
+#facebook_sub_title,
+#instagram_title,
+#instagram_sub_title,
+#website_title,
+#website_sub_title {
+	background: #fcfcfc;
+	border: 1px solid #ecf0f1;
+	padding: 5px;
+	width: 320px;
+}
+.tutorial-screen {
+	background: rgba(0, 0, 0, 0.8);
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	z-index: 555;
+}
+
+.into-tutorial {
+	text-align: center;
+	overflow: hidden;
+}
+
+.into-tutorial h2 {
+	color: #fff;
+	font-size: 21px;
+	margin-bottom: 20px;
+}
+
+.video-explenation,
+.intro-explenation,
+.title-explenation,
+.visibility-explenation,
+.social-text-explenation,
+.end-explenation {
+	display: none;
+	width: 400px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.tut-title {
+	font-size: 20px;
+	color: #6e9d9c;
+	margin-bottom: 20px;
+	font-weight: bold;
+}
+
+.tut-button:hover {
+	border: 0;
+	cursor: pointer;
+}
+.tut-button {
+	position: absolute;
+	right: 40px;
+	bottom: 40px;
+	display: none;
+}
+
+.tutorial-screen,
+.end-explenation p {
+	color: #fff;
+	font-size: 16px;
+	font-weight: 100;
+}
+
+.into-tutorial .create-audit-button:hover {
+	background: transparent !important;
+	border: 0;
+}
+
+.config-right h6 {
+	margin-bottom: 5px;
+}
+
+.config-right textarea {
+	border: 1px solid #ecf0f1;
+	padding: 10px;
+}
 
 .custom-label {
 	margin-bottom: 45px !important;
