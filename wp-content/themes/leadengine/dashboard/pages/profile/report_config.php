@@ -486,7 +486,9 @@
           url: ajaxurl,
           data: {
             action: 'update_config',
+            flag: 'report',
             color: $('#color').val(),
+            user_id: <?php echo $user_id; ?>,
             ...commonPost,
           },
           success: function(r) {

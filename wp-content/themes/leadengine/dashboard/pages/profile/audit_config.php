@@ -1019,6 +1019,7 @@
           type: "POST",
           url: ajaxurl,
           data: {
+            flag: 'audit',
             action: 'update_config', color: $('#color').val(),
             value: $("#mail_bit_check").is(':checked'), ...commonPost,
             user_id: <?php echo $user_id; ?>

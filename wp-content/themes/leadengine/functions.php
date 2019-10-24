@@ -33,7 +33,7 @@
     $errorLogger->printJs(get_current_user_id(), $message, $stacktrace);
     wp_die();
   }
-  
+
 
   add_action( 'wp_ajax_toggle_visibility', 'toggle_visibility');
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
@@ -213,14 +213,18 @@
         $page->update('color', sanitize_hex_color($_POST['color']), $table);
     } else {
         $table = 'Configtext';
-        $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
+
+        if($_POST['flag'] == 'report') {
+            $control->update($_POST['user_id'], 'color_report', sanitize_hex_color($_POST['color']), $table);
+        } else {
+            $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
+        }
     }
 
-
     if ($type == 'audit') {
-      $page->update('mail_bit', $_POST['value'] == 'true');
+       $page->update('mail_bit', $_POST['value'] == 'true');
     } else if($type == 'user') {
-        $controller->update($_POST['user_id'], 'mail_bit', $_POST['value'] == 'true');
+        // $control->update($_POST['user_id'], 'mail_bit', $_POST['value'] == 'true', );
     }
 
     wp_send_json(array('color' => $_POST['color']));
