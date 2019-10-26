@@ -95,12 +95,7 @@
   function create_audit() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
-    require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
-    require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
-
     require_once(dirname(__FILE__)."/dashboard/models/audit.php");
-    require_once(dirname(__FILE__)."/dashboard/models/client.php");
-    require_once(dirname(__FILE__)."/dashboard/models/user.php");
 
     $safe_audit = sanitize_audit();
     list($client, $options, $page, $competitor) = validate_audit($safe_audit);
@@ -447,31 +442,6 @@
       wp_send_json(array("Succes"=>"deleted: ".$rows));
     }
 
-    wp_die();
-  }
-
-
-
-  add_action( 'wp_ajax_delete_client', 'remove_client');
-  add_action( 'wp_ajax_nopriv_delete_client', 'not_logged_in');
-
-  function remove_client() {
-    include(dirname(__FILE__)."/dashboard/services/connection.php");
-    include(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
-    include(dirname(__FILE__)."/dashboard/models/client.php");
-
-    $connection = new connection;
-    $client_control = new client_controller($connection);
-    $_POST  = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
-
-    $client_id = $_POST['client'];
-    $client = $client_control->get($client_id);
-
-    if (get_current_user_id() == $client->user_id) {
-      $client->delete();
-    }
-
-    wp_send_json(array('id'=>$client->id));
     wp_die();
   }
 
