@@ -344,7 +344,7 @@
         <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
       } ?>
 
-      Audit
+      Audit config
 
       <?php if ($edit_mode) { ?>
 

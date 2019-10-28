@@ -153,6 +153,47 @@ label.myLabel input[type="file"] {
 	width: 100% !important;
 }
 
+.easy-config-button {
+	width: auto;
+	height: auto;
+	padding: 10px 15px;
+	color: #fff;
+	background: #487dd7;
+	border: 0;
+	display: block;
+	float: left;
+	font-weight: 100;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+}
+
+.easy-config-button:hover {
+	text-decoration: none;
+	opacity: 0.8;
+	color: #fff;
+}
+
+.advanced-settings {
+	display: block;
+	width: 100%;
+	float:left;
+	color: #7c9fdc;
+	font-size: 14px;
+	margin-bottom: 15px;
+	cursor: pointer;
+}
+
+#advanced-audit,
+#advanced-report {
+	display: none;
+}
+
+.profile-page .easy-config-button i {
+	color: #fff !important;
+	margin-right: 10px;
+}
+
 button {
 	cursor: pointer;
 }

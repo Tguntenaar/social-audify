@@ -132,7 +132,7 @@
      "db_name" => "mobile_friendly",
 		 "comp_name" => "mf_c",
      "desc" => "Passes the Google Mobile Friendly check.",
-     "is_icon" => 1
+     "is_icon" => 0
     ],
     ["type" => "website_lt", // DEZE
      "name" => "Desktop Load Time",
