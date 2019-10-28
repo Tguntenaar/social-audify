@@ -270,7 +270,11 @@
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
-    if($user->std_iframe != NULL && $audit->video_iframe == NULL) { ?>
+    if($audit->video_iframe == "" && !$edit_mode) {
+
+    } else if(isset($audit->video_iframe) && $edit_mode) {
+        ?><div class="intro-video"></div><?php
+    } else if($user->std_iframe != NULL && $audit->video_iframe == NULL && $audit->video_iframe != "") { ?>
         <div class="intro-video"><?php
           $video = str_replace("&#34;", '"', stripslashes($user->std_iframe));
 
@@ -278,7 +282,7 @@
               echo "<iframe ". $video ."</iframe>";
           } ?>
         </div><?php
-    } else if ($audit->video_iframe != NULL) { ?>
+    } else if ($audit->video_iframe != NULL ) { ?>
       <div class="intro-video"><?php
         $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
 
@@ -286,7 +290,7 @@
             echo "<iframe ". $video ."</iframe>";
         } ?>
       </div><?php
-    } else if ($audit->video_iframe != "" || $edit_mode) { ?>
+    } else if (!isset($audit->video_iframe) || $edit_mode) { ?>
       <div class="intro-video"></div><?php
     }
 
@@ -296,11 +300,11 @@
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="tutorial/#1570543881921-3fd7746a-9da5">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
 
-          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL || $user->std_iframe != NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" data-display="block" <?php echo ($audit->video_iframe != NULL || ($user->std_iframe != NULL && $audit->video_iframe != "")) ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
-          <input type="radio" class="iframe-radio" data-display="none" <?php echo $audit->video_iframe == NULL && $user->std_iframe ==  NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" id="video_iframe" value="" data-display="none" <?php echo ($audit->video_iframe == NULL && $user->std_iframe ==  NULL || $audit->video_iframe == "") ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
-          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL || $user->std_iframe != NULL) ? 'block' : 'none'; ?>"
+          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL || ($user->std_iframe != NULL && $audit->video_iframe != '')) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $audit->video_iframe != NULL ? '<iframe '.stripslashes($audit->video_iframe).'</iframe>' : ''; ?>'/>
         </form>
       </div><?php
@@ -839,6 +843,7 @@
           ...getChanged('textarea'),
           ...getChanged("#manual-ig-form input[type=text]", true),
           ...getChanged("input[type=range]"),
+          ...getChanged("input[type=radio]"),
           ...getIframe(),
         };
         console.log(data);

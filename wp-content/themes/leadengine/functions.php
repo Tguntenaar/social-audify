@@ -311,6 +311,10 @@
 
       check_manual_instagram_postfields($control, $id, 0);
       check_manual_instagram_postfields($control, $id, 1);
+
+      if(!isset($_POST['iframe-input'])) {
+          $_POST['iframe-input'] = "";
+      }
     } else if ( $type == 'report' ) {
       require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
       $control = new report_controller($connection);
@@ -321,6 +325,11 @@
       $control = new user_controller($connection);
       $fields = $control->get_area_fields();
       $table = 'Configtext';
+
+      if(!isset($_POST['std_iframe'])) {
+          $_POST['std_iframe'] = "";
+      }
+
     }
 
     if ($type == 'audit' || $type == 'report' || $type == 'user') {

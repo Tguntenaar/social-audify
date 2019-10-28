@@ -368,7 +368,7 @@
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
-    if ($user->std_iframe != NULL) { ?>
+    if ($user->std_iframe != NULL && $user->std_iframe != "") { ?>
       <div class="intro-video"><?php
         $video = str_replace("&#34;", '"', stripslashes($user->std_iframe));
 
@@ -388,7 +388,7 @@
 
           <input type="radio" class="iframe-radio" data-display="block" <?php echo $user->std_iframe != NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
-          <input type="radio" class="iframe-radio" data-display="none" <?php echo $user->std_iframe == NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" id="std_iframe" value="" name="std_iframe" data-display="none" <?php echo $user->std_iframe == NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
           <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($user->std_iframe != NULL) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $user->std_iframe != NULL ? '<iframe '.stripslashes($user->std_iframe).'</iframe>' : ''; ?>'/>
@@ -959,6 +959,7 @@
           ...getChanged('textarea'),
           ...getChanged("input[type=text]", true),
           ...getChanged("input[type=range]"),
+          ...getChanged("input[type=radio]"),
           ...getIframe(),
         };
         console.log(data);
