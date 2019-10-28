@@ -8,8 +8,13 @@ class audit_service extends connection {
   }
 
 
-  public function create($data) {
-    $this->dbwp->insert('Audit', $data);
+  public function create($id, $data) {
+    $keys = implode(", ", array_keys($data));
+    $values = implode(", ", array_values($data));
+    $this->dbwp->query(
+      "INSERT INTO Audit ($keys, mail_bit) VALUES ($values, 
+        (SELECT std_mail_bit FROM Configtext WHERE user_id = $id))");
+
     return $this->dbwp->insert_id;
   }
 
