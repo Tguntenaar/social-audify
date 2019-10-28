@@ -155,7 +155,7 @@
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
 
-  $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
+  // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
   <title>Audit</title>

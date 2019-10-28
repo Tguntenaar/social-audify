@@ -137,9 +137,9 @@
     return round((($new - $old) / max($old, 1)) * 100);
   }
 
-  $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
-  var_dump($report);
-  echo $report->id;
+  // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
+  // var_dump($report);
+  // echo $report->id;
 ?>
 
 <head>
