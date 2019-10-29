@@ -72,20 +72,20 @@ function filterSearch(value, links, counterSpan = null, isDiv = false) {
 }
 
 function toggleSelected(element, selectedList, triggerButton = null) {
-  if (element.attr('class').endsWith('selected')) {
-    element.removeClass('selected');
+  if (element.attr('class').endsWith('selected-dashboards')) {
+    element.removeClass('selected-dashboards');
     selectedList.splice(selectedList.indexOf(element.data('id')), 1);
-    
+
   } else {
-    element.addClass('selected');
+    element.addClass('selected-dashboards');
     selectedList = [...selectedList, element.data('id')];
   }
 
   if (triggerButton) {
     if (selectedList.length == 0) {
-      triggerButton.hide(500);
+      triggerButton.hide(1000);
     } else {
-      triggerButton.show(500);
+      triggerButton.show(1000);
     }
   }
   return selectedList;
@@ -206,7 +206,7 @@ function changeClientInputFields(field) {
   if (unparsed) {
     var parsed = parseClientInput($(field).data("type"), unparsed);
     parsed = grabPageId(parsed);
-  
+
     if (parsed) {
       $(field).val(parsed);
       return;

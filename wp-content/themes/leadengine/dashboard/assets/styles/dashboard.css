@@ -88,6 +88,12 @@ label.myLabel input[type="file"] {
     top: -1000px;
 }
 
+.selectDelete {
+	position: absolute;
+	margin-left: 10px;
+	color: #c0392b !important;
+}
+
 .content-right .rcp_calander_custom {
 	margin-top: 0px !important;
 }
@@ -1256,6 +1262,29 @@ nav ul a li {
 
 .overflow-y .audit-row-style {
 	padding-left: 15px !important;
+}
+
+.selected-dashboards {
+	opacity: 0.5;
+}
+
+.audit-row-style a {
+	color: #000;
+	height: 100%;
+	width: 100%;
+	float: left;
+	display: block;
+	position: relative;
+	z-index: 55;
+	/* color: #487dd7; */
+}
+
+.audit-row-style a:hover {
+	text-decoration: none;
+}
+
+.audit-row-style {
+	cursor: pointer;
 }
 
 .row-title,
