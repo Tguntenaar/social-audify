@@ -6,7 +6,9 @@ class audit_controller {
     $this->service = new audit_service($connection);
   }
 
+ 
   function create($page, $client, $options, $competitor) {
+    $user_id = get_current_user_id();
     $competitor_name = isset($competitor['name']) ? $competitor['name'] : NULL;
 
     $instance = new audit($this->service, (object) array(
@@ -17,12 +19,16 @@ class audit_controller {
       'facebook_bit'    => $options['facebook_checkbox'],
       'instagram_bit'   => $options['instagram_checkbox'],
       'website_bit'     => $options['website_checkbox'],
-      'mail_bit'        => 0,
-      'competitor_name' => $competitor_name,
+      'competitor_name' => $competitor_name
     ));
 
     // create audit in database
-    $instance->id = $this->service->create($instance->get_array_data());
+    $valueList = array_values($instance->get_array_data());
+    $valueString = "";
+    foreach ($valueList as $value) {
+      $valueString .= "'{$value}', ";
+    }
+    $instance->id = $this->service->create($user_id, $valueString);
 
     $this->service->insert_template($instance->id);
     $this->service->insert_visibility($instance->id);
@@ -30,7 +36,7 @@ class audit_controller {
     $slug = strtolower("audit-".str_replace(' ', '-', $instance->name)."-" . $instance->id);
 
     $new_post = array(
-      'post_author' =>  get_current_user_id(),
+      'post_author' =>  $user_id,
       'post_title'  =>  $slug,
       'post_type'   => 'page',
       'post_status' => 'publish',

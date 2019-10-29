@@ -368,7 +368,7 @@
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
-    if ($user->std_iframe != NULL) { ?>
+    if ($user->std_iframe != NULL && $user->std_iframe != "") { ?>
       <div class="intro-video"><?php
         $video = str_replace("&#34;", '"', stripslashes($user->std_iframe));
 
@@ -388,7 +388,7 @@
 
           <input type="radio" class="iframe-radio" data-display="block" <?php echo $user->std_iframe != NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
-          <input type="radio" class="iframe-radio" data-display="none" <?php echo $user->std_iframe == NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" id="std_iframe" value="" name="std_iframe" data-display="none" <?php echo $user->std_iframe == NULL ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
           <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($user->std_iframe != NULL) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $user->std_iframe != NULL ? '<iframe '.stripslashes($user->std_iframe).'</iframe>' : ''; ?>'/>
@@ -959,6 +959,7 @@
           ...getChanged('textarea'),
           ...getChanged("input[type=text]", true),
           ...getChanged("input[type=range]"),
+          ...getChanged("input[type=radio]"),
           ...getIframe(),
         };
         console.log(data);
@@ -1003,7 +1004,10 @@
       // Auto Mail + color Model
       var modalData = {
         text:`Configuration audit`,
-        html:`Do you want a custom color for this audit?<br>
+        html:`Do you want to sent this client automatic reminders?
+          <input type="checkbox" id="std_mail_bit" <?php echo $user->std_mail_bit ? 'checked': ''; ?>><br><br>
+          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
+          <a href='/profile-page/#mail-settings'>here</a>.<br><br>Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
         confirm: 'config_confirmed'
@@ -1021,7 +1025,7 @@
           data: {
             flag: 'audit',
             action: 'update_config', color: $('#color').val(),
-            value: $("#mail_bit_check").is(':checked'), ...commonPost,
+            value: $("#std_mail_bit").is(':checked'), ...commonPost,
             user_id: <?php echo $user_id; ?>
           },
           success: function() {

@@ -155,7 +155,7 @@
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
 
-  $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
+  // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
   <title>Audit</title>
@@ -270,7 +270,11 @@
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
-    if($user->std_iframe != NULL && $audit->video_iframe == NULL) { ?>
+    if($audit->video_iframe == "" && !$edit_mode) {
+
+    } else if(isset($audit->video_iframe) && $edit_mode) {
+        ?><div class="intro-video"></div><?php
+    } else if($user->std_iframe != NULL && $audit->video_iframe == NULL && $audit->video_iframe != "") { ?>
         <div class="intro-video"><?php
           $video = str_replace("&#34;", '"', stripslashes($user->std_iframe));
 
@@ -278,7 +282,7 @@
               echo "<iframe ". $video ."</iframe>";
           } ?>
         </div><?php
-    } else if ($audit->video_iframe != NULL) { ?>
+    } else if ($audit->video_iframe != NULL ) { ?>
       <div class="intro-video"><?php
         $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
 
@@ -286,7 +290,7 @@
             echo "<iframe ". $video ."</iframe>";
         } ?>
       </div><?php
-    } else if ($audit->video_iframe != "" || $edit_mode) { ?>
+    } else if (!isset($audit->video_iframe) || $edit_mode) { ?>
       <div class="intro-video"></div><?php
     }
 
@@ -296,11 +300,11 @@
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="tutorial/#1570543881921-3fd7746a-9da5">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
 
-          <input type="radio" class="iframe-radio" data-display="block" <?php echo $audit->video_iframe != NULL || $user->std_iframe != NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" data-display="block" <?php echo ($audit->video_iframe != NULL || ($user->std_iframe != NULL && $audit->video_iframe != "")) ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
-          <input type="radio" class="iframe-radio" data-display="none" <?php echo $audit->video_iframe == NULL && $user->std_iframe ==  NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" id="video_iframe" value="" data-display="none" <?php echo ($audit->video_iframe == NULL && $user->std_iframe ==  NULL || $audit->video_iframe == "") ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
-          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL || $user->std_iframe != NULL) ? 'block' : 'none'; ?>"
+          <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL || ($user->std_iframe != NULL && $audit->video_iframe != '')) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $audit->video_iframe != NULL ? '<iframe '.stripslashes($audit->video_iframe).'</iframe>' : ''; ?>'/>
         </form>
       </div><?php
@@ -839,6 +843,7 @@
           ...getChanged('textarea'),
           ...getChanged("#manual-ig-form input[type=text]", true),
           ...getChanged("input[type=range]"),
+          ...getChanged("input[type=radio]"),
           ...getIframe(),
         };
         console.log(data);
@@ -881,13 +886,12 @@
 
       // Auto Mail + color Model
       var modalData = {
-        text:`Configuration audit`,
+        text:`<span style="font-weight:bold; display:block; font-size: 18px; margin-bottom: 10px;">Configuration audit</span>`,
         html:`Do you want to sent this client automatic reminders?
           <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
-          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
-          <a href='/profile-page/#mail-settings'>here</a>.<br><br>
+          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails: <a style='margin-top: 5px;' href='/profile-page/#mail-settings'>[here]</a><br><br>
           Do you want a custom color for this audit?<br>
-          Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
+          <span style='margin-top: 10px; font-weight: 500;'>Theme color:</span> <input style='margin-bottom: 5px;' type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
         confirm: 'config_confirmed'
       }
