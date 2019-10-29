@@ -86,11 +86,11 @@
 
       var elems = $('#audit-results .audit-row');
       var selectedList = [];
-      
+
       elems.on('click', function() {
-        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"));
+        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"), 1);
       });
-      
+
       $(".selectDelete").click(function() {
         showModal(initiateModal('confirmModal', 'confirm', {
           'text': `Delete Audits`,

@@ -71,14 +71,25 @@ function filterSearch(value, links, counterSpan = null, isDiv = false) {
   }
 }
 
-function toggleSelected(element, selectedList, triggerButton = null) {
-  if (element.attr('class').endsWith('selected-dashboards')) {
-    element.removeClass('selected-dashboards');
-    selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+function toggleSelected(element, selectedList, triggerButton = null, dashboardList = 0) {
+  if(dashboardList == 1) {
+      if (element.attr('class').endsWith('selected-dashboards')) {
+        element.removeClass('selected-dashboards');
+        selectedList.splice(selectedList.indexOf(element.data('id')), 1);
 
+      } else {
+        element.addClass('selected-dashboards');
+        selectedList = [...selectedList, element.data('id')];
+      }
   } else {
-    element.addClass('selected-dashboards');
-    selectedList = [...selectedList, element.data('id')];
+      if (element.attr('class').endsWith('selected')) {
+        element.removeClass('selected');
+        selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+
+      } else {
+        element.addClass('selected');
+        selectedList = [...selectedList, element.data('id')];
+      }
   }
 
   if (triggerButton) {

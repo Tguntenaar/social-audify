@@ -83,14 +83,14 @@
 	<script charset='utf-8'>
     $(function() {
       generateChart('chart-report', [<?php echo json_encode($daily_values); ?>]);
-      
+
       var elems = $("#report-results .audit-row");
       var selectedList = [];
 
       elems.on('click', function() {
-        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"));
+        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"), 1);
       });
-      
+
       $(".selectDelete").click(function() {
         showModal(initiateModal('confirmModal', 'confirm', {
           'text': `Delete Reports`,
@@ -113,7 +113,7 @@
           });
         });
       });
-      
+
       // Search list
       var counterSpan = $("#counterSpan");
       $(document).on('keyup', 'input#search-input', function() {

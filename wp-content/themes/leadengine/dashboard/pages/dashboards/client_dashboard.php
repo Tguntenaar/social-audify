@@ -97,8 +97,8 @@
           <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Website</div>
         </div>
         <div class="inner-scroll client-dashboard" id="client-results"><?php
-          foreach ($clients as $client) { 
-            $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram, 
+          foreach ($clients as $client) {
+            $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
               "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" data-id="<?php echo $client->id; ?>" data-client="<?php echo htmlentities(json_encode($data)); ?>">
@@ -118,7 +118,7 @@
     var Instance = {
       adAccounts : [],
     };
-   
+
     function editClient(rowIcon) {
       const {id, name, fb, ig, wb, ml, ad_id} = $(rowIcon).parent().data('client');
 
@@ -145,7 +145,7 @@
       var selectedList = [];
 
       elems.find('.audit-row-style').on('click', function() {
-        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"));
+        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"), 1);
       });
 
       $('#delete_button_client').click(function() { deleteClients([$('#client_id').val()]); });
@@ -204,7 +204,7 @@
           $('#connect-ad-account').text('Change');
           $('#ad_id').val(selectedOption.val());
           connectAccount(selectedOption.val(), $("#client_id").val());
-          
+
           $('#adAccountModal').css({'display': 'none'});
         }
       });
