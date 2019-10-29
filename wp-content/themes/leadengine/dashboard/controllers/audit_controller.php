@@ -9,7 +9,7 @@ class audit_controller {
  
   function create($page, $client, $options, $competitor) {
     $user_id = get_current_user_id();
-    $competitor_name = isset($competitor['name']) ? $competitor['name'] : "-";
+    $competitor_name = isset($competitor['name']) ? $competitor['name'] : NULL;
 
     $instance = new audit($this->service, (object) array(
       'client_id'       => $client['id'],
@@ -23,7 +23,12 @@ class audit_controller {
     ));
 
     // create audit in database
-    $instance->id = $this->service->create($user_id, $instance->get_array_data());
+    $valueList = array_values($instance->get_array_data());
+    $valueString = "";
+    foreach ($valueList as $value) {
+      $valueString .= "'{$value}', ";
+    }
+    $instance->id = $this->service->create($user_id, $valueString);
 
     $this->service->insert_template($instance->id);
     $this->service->insert_visibility($instance->id);
