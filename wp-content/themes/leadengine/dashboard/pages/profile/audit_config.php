@@ -955,6 +955,7 @@
               $('.diplay-website-error').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
               return;
           }
+
         var data = {
           ...getChanged('textarea'),
           ...getChanged("input[type=text]", true),
