@@ -39,35 +39,38 @@
   add_action( 'wp_ajax_nopriv_toggle_visibility', 'not_logged_in');
 
   function toggle_visibility() {
-    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
-    $connection = new connection;
+      require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+      $connection = new connection;
 
-    $type = $_POST['type'];
-    if ($type === 'audit') {
-      $id = $_POST['audit'];
-      require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
-      $control = new audit_controller($connection);
-    }
-    elseif ($type === 'report') {
-      $id = $_POST['report'];
-      require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
-      $control = new report_controller($connection);
-    }
-    
-    if (isset($id)) {
-      $control->toggle_visibility($id, $_POST['field']);
-      wp_send_json(array('success'=>'toggled'));
-  } elseif ($type === 'user') {
-          require_once(dirname(__FILE__)."/dashboard/services/user_service.php");
-          $user_service = new user_service($connection);
-          $user_id = $_POST['user'];
-          $type_table = $_POST['type_table'];
+      $field = $_POST['field'];
+      $type = $_POST['type'];
 
-          $user_service->toggle_config_visibility($user_id, $field, $type_table);
-          wp_send_json(array('success'=>'toggled'));
-    }
+      if ($type === 'audit') {
+        require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+        $audit_service = new audit_service($connection);
+        $audit_id = $_POST['audit'];
 
-    wp_die();
+        $audit_service->toggle_config_visibility($audit_id, $field);
+        wp_send_json(array('success'=>'toggled'));
+      }
+      elseif ($type === 'report') {
+        require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
+        $report_service = new report_service($connection);
+        $report_id = $_POST['report'];
+
+        $report_service->toggle_config_visibility($report_id, $field);
+        wp_send_json(array('success'=>'toggled'));
+    } elseif ($type === 'user') {
+            require_once(dirname(__FILE__)."/dashboard/services/user_service.php");
+            $user_service = new user_service($connection);
+            $user_id = $_POST['user'];
+            $type_table = $_POST['type_table'];
+
+            $user_service->toggle_config_visibility($user_id, $field, $type_table);
+            wp_send_json(array('success'=>'toggled'));
+      }
+
+      wp_die();
   }
 
   add_action( 'wp_ajax_update_ads_audit', 'edit_ads_audit');
@@ -426,7 +429,7 @@
         $control = new audit_controller($connection);
         break;
 
-      case 'report': 
+      case 'report':
         require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
         $control = new report_controller($connection);
         break;
