@@ -2851,12 +2851,13 @@ h4 {
 	z-index: 5555;
 	padding-right: 10px;
 	padding-left: 10px;
+	font-weight: 100;
 }
 
 .modal input[type="checkbox"] {
 	margin: 0 auto;
 	margin-right: auto;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 #color {
