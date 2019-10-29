@@ -11,28 +11,8 @@
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
 
-  // TODO:
-  class clientMedia {
-    public $name, $id, $fb, $ig, $wb, $ml;
-
-    public function __construct($client) {
-      $this->id = $client->id;
-      $this->name = $client->name;
-      $this->fb = $client->facebook;
-      $this->ig = $client->instagram;
-      $this->wb = $client->website;
-      $this->ml = $client->mail;
-      $this->ad_id = $client->ad_id;
-    }
-  }
-
   // Get all the clients
   $clients = $client_control->get_all();
-  $jsClients = array();
-
-  foreach ($clients as $c) {
-    array_push($jsClients, new clientMedia($c));
-  }
 ?>
 
 <head>
@@ -108,6 +88,7 @@
       <div class="inner no-scroll client-dashboard">
         <span class="title"><span class="title-background">Contacts</span>
           <span class="count" id="counterSpan"><?php echo $number_of_clients; ?></span>
+          <span class="selectDelete" style="color:black; display:none"><i class="fas fa-trash"></i></span>
         </span>
         <input type="text" name="search" id="search-input" placeholder="Search..."/>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
@@ -117,14 +98,17 @@
           <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Website</div>
         </div>
         <div class="inner-scroll client-dashboard" id="client-results"><?php
-          foreach ($clients as $client) { ?>
-            <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" name="<?php echo $client->name; ?>">
+          foreach ($clients as $client) {
+            $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
+              "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
+
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" data-id="<?php echo $client->id; ?>" data-client="<?php echo htmlentities(json_encode($data)); ?>">
               <div class="col-12 col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->name; ?></div>
               <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->facebook; ?></div>
               <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->instagram; ?></div>
               <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->website; ?></div>
-              <i class="fas fa-ellipsis-v delete-this-audit client_<?php echo $client->id; ?>-edit" style="color:grey; cursor:pointer;"></i>
-            </a><?php
+              <i class="fas fa-ellipsis-v delete-this-audit client-edit" style="color:grey; cursor:pointer;" onclick="editClient(this)"></i>
+            </div><?php
           } ?>
         </div>
       </div>
@@ -132,69 +116,78 @@
   </div>
 
 	<script charset="utf-8">
+    var Instance = {
+      adAccounts : [],
+    };
+
+    function editClient(rowIcon) {
+      const {id, name, fb, ig, wb, ml, ad_id} = $(rowIcon).parent().data('client');
+
+      $('#client_id').val(id);
+      $('#client_name').val(name);
+      $('#facebook_url').val(fb);
+      $('#instagram_url').val(ig);
+      $('#website_url').val(wb);
+      $('#mail_adress').val(ml);
+      $('#ad_id').val(ad_id);
+
+      // Change the button
+      $('.connect-ad-account').text((ad_id == null) ? 'Connect' : 'Change');
+      $('#edit-client-modal').css({'display': 'block'});
+    }
+
     function showConnectAdAccount() {
       $('#fb-login-wrapper').css({display: 'none'});
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
 
-    var Instance = {
-      adAccounts : [],
-    };
-
     $(function() {
+      var elems = $("#client-results .audit-row");
+      var selectedList = [];
+
+      elems.find('.audit-row-style').on('click', function() {
+        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"), 1);
+      });
+
+      $('#delete_button_client').click(function() { deleteClients([$('#client_id').val()]); });
+      $('.selectDelete').click(function() { deleteClients(selectedList); });
+
+      function deleteClients(selectedList) {
+        console.log(selectedList);
+        showModal(initiateModal('confirmModal', 'confirm', {
+          'text': `Delete Clients`,
+          'subtext': `Would you like to delete the selected Client${(selectedList.length == 1 ? '' : 's')}?`,
+          'confirm': 'delete_confirmed'
+        }));
+
+        $("#delete_confirmed").click(function() {
+          $('#edit-client-modal').css({'display': 'none'});
+          showBounceBall(true, 'Deleting Clients...');
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: {action: 'delete_multiple', ids: selectedList, type: 'client'},
+            success: function(response) { location.reload(); },
+            error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, selectedList);
+              logError(send_error, 'setups/delete_clients.php', 'submit');
+              location.reload();
+            }
+          });
+        });
+      }
+
       // Close the pop up form
       $('#close_model').click(function() {
         $('#edit-client-modal').css({'display': 'none'});
       });
 
-      // Delete Client Modal
-      var modalData = {
-        'text': 'Sure you want to delete this Client?',
-        'subtext': 'This action is irreversible',
-        'confirm': 'delete_confirmed',
-      }
-
-      var deleteModal = initiateModal('confirmDeleteModal', 'confirm', modalData);
-
-      $('#delete_button_client').click(function() {
-        showModal(deleteModal);
-      });
-
-      $('#delete_confirmed').click(function() {
-        var data = {
-          'action': 'delete_client',
-          'client': $('#client_id').val(),
-          'auth': '<?php echo hash('sha256', 'auth'.$user_id.'salted'.date('Y-m-d H:i').'randomstuff'); ?>',
-          'client_name': $('#client_name').val(),
-        };
-
-        $.ajax({
-          type: 'POST',
-          url: ajaxurl,
-          data: data,
-          success: function (response) { location.reload(); },
-          error: function (xhr, textStatus, errorThrown) {
-               var send_error = error_func(xhr, textStatus, errorThrown, data);
-               logError(send_error, 'page-templates/client_dashboard.php', 'delete_confirmed');
-
-                var modalData = {
-                'text': "Can't delete this client",
-                'subtext': "Please try again later or notify an admin if the issue persists"
-                }
-                showModal(initiateModal('errorModal', 'error', modalData));
-                console.log({errorThrown});
-          },
-        });
-      });
-
       // Connect Ad Account Modal FIXME:
-      var modalData = {
+      var adAccountModal = initiateModal('adAccountModal', 'confirm', {
         text: 'Select the right ad account for the right campaigns',
         html: `<select size="2" id="ad-account-list" class="ad-account-list"></select>`,
         confirm: 'adAccountConfirm'
-      }
-
-      var adAccountModal = initiateModal('adAccountModal', 'confirm', modalData);
+      });
 
       $('#connect-ad-account').on('click', function() {
         // 1. SET CLIENT ID
@@ -207,33 +200,21 @@
       });
 
       $('#adAccountConfirm').click(function() {
-          connect();
+        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
+          // Change the button
+          $('#connect-ad-account').text('Change');
+          $('#ad_id').val(selectedOption.val());
+          connectAccount(selectedOption.val(), $("#client_id").val());
+
+          $('#adAccountModal').css({'display': 'none'});
+        }
       });
 
-      // Create for every client an on click event listener
-      var clientList = <?php echo json_encode($jsClients); ?>;
-      for (var i = 0; i < clientList.length; i++) {
-        const {name, id, fb, ig, wb, ml, ad_id} = clientList[i];
-
-        $(`.client_${id}-edit`).on('click', function() {
-
-          $('#edit-client-modal').css({'display': 'block'});
-          $('#client_name').val(`${name}`);
-          $('#client_id').val(`${id}`);
-          $('#mail_adress').val(`${ml}`);
-          $('#facebook_url').val(`${fb}`);
-          $('#instagram_url').val(`${ig}`);
-          $('#website_url').val(`${wb}`);
-          $('#ad_id').val(`${ad_id}`);
-
-          // Change the button
-          $('.connect-ad-account').text((ad_id == null) ? 'Connect' : 'Change');
-        });
-      }
 
       // Search function
+      var counterSpan = $('#counterSpan');
       $(document).on('keyup', 'input#search-input', function() {
-        filterSearch($(this).val(), $("#client-results .audit-row"), $("#counterSpan"));
+        filterSearch($(this).val(), elems, counterSpan);
       });
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
@@ -242,15 +223,4 @@
     });
 	</script>
 </body>
-<script>
-    function connect() {
-        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
-          // Change the button
-          $('#connect-ad-account').text('Change');
-          $('#ad_id').val(selectedOption.val());
-          connectAccount(selectedOption.val(), $("#client_id").val());
-          $('#adAccountModal').css({'display': 'none'});
-        }
-    }
-</script>
 </html>

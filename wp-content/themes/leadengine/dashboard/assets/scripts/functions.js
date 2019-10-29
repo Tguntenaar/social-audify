@@ -50,10 +50,11 @@ function getChanged(selector, allowAll = false) {
   return changed;
 }
 
-function filterSearch(value, links, counterSpan = null) {
+function filterSearch(value, links, counterSpan = null, isDiv = false) {
   var occ = 0;
   $.each(links, function() {
-    var match = $(this).prop('name').toLowerCase().includes(value.toLowerCase())
+    var name = isDiv ? $(this).data('name') : $(this).prop('name');
+    var match = name.toLowerCase().includes(value.toLowerCase())
     $(this).css('display', match ? 'block' : 'none');
     occ += match ? 1 : 0;
   });
@@ -70,6 +71,36 @@ function filterSearch(value, links, counterSpan = null) {
   }
 }
 
+function toggleSelected(element, selectedList, triggerButton = null, dashboardList = 0) {
+  if(dashboardList == 1) {
+      if (element.attr('class').endsWith('selected-dashboards')) {
+        element.removeClass('selected-dashboards');
+        selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+
+      } else {
+        element.addClass('selected-dashboards');
+        selectedList = [...selectedList, element.data('id')];
+      }
+  } else {
+      if (element.attr('class').endsWith('selected')) {
+        element.removeClass('selected');
+        selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+
+      } else {
+        element.addClass('selected');
+        selectedList = [...selectedList, element.data('id')];
+      }
+  }
+
+  if (triggerButton) {
+    if (selectedList.length == 0) {
+      triggerButton.hide(1000);
+    } else {
+      triggerButton.show(1000);
+    }
+  }
+  return selectedList;
+}
 
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
   if (!$(`#${canvas}`).is('canvas'))
@@ -186,7 +217,7 @@ function changeClientInputFields(field) {
   if (unparsed) {
     var parsed = parseClientInput($(field).data("type"), unparsed);
     parsed = grabPageId(parsed);
-  
+
     if (parsed) {
       $(field).val(parsed);
       return;

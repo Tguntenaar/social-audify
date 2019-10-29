@@ -65,6 +65,12 @@ class client_service extends connection {
     return $this->dbwp->delete('Client', array('id' => $id));
   }
 
+  public function delete_multiple($id, $client_ids) {
+    return $this->dbwp->query(
+      "DELETE FROM Client WHERE user_id = $id AND id IN ($client_ids)");
+  }
+
+
   private $common_fields = "user_id, name, facebook, instagram, website, mail, create_date";
 }
 ?>
