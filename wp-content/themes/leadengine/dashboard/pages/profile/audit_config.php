@@ -188,17 +188,19 @@
 
           $('#facebook_vis_bit_icon').css({"z-index": "5555", "color": "#fff"});
 
-          $('.title-button').css({"display": "block"});
+          $('.title-button').css({"display": "none"});
           $('.introtext-button').css({"display": "none"});
+          $('.visibility-button').css({"display": "block"});
 
           $('.title-explenation').css({"display": "none"});
           $('.visibility-explenation').css({"display": "block"});
       });
 
-      $('.title-button').click(function() {
+      $('.visibility-button').click(function() {
           $('#facebook_vis_bit_icon').css({"z-index": "5", "color": "#fff"});
           $('.title-button').css({"display": "none"});
-          $('.visibility-button').css({"display": "block"});
+          $('.visibility-button').css({"display": "none"});
+          $('.between-button').css({"display": "block"});
 
           $('.social-text-explenation').css({"display": "block"});
           $('.visibility-explenation').css({"display": "none"});
@@ -210,9 +212,9 @@
           }, 2000);
       });
 
-      $('.visibility-button').click(function() {
+      $('.between-button').click(function() {
+          $('.between-button').css({"display": "none"});
           $('.visibility-button').css({"display": "none"});
-          $('.end-button').css({"display": "block"});
 
           $('.social-text-explenation').css({"display": "none"});
           $('.end-explenation').css({"display": "block"});
@@ -281,7 +283,9 @@
       <div class='tutorial-screen' style="display: <?php echo $display; ?>;">
           <div class="into-tutorial vertical-align" style="text-align: center;">
               <div style="height: auto; width: 340px; margin: 0 auto;">
-                  <h2>Do you want to follow a tutorial?</h2>
+                  <h2 style="color: #6e9d9c;">Do you want to follow a tutorial?</h2>
+                  <p>We will walk you through all steps of the audit. You can start adding text right now as we go through the audit, this text will be shown as standard for every audit (but you can still change the individual text per audit of course).</p><br />
+                  <br />
                   <div class="create-audit-button yes-tut" style="cursor: pointer;">Yes, recommended!</div>
                   <div class="create-audit-button no-tut" style="color: #fff !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
               </div>
@@ -289,27 +293,27 @@
 
           <div class="video-explenation vertical-align" style="text-align: center; left: 100px;">
               <span class="tut-title">Video explenation</span>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <p>You can add a video at the top of every audit. This can be a video you uploaded to YouTube, or a Loom you recorded. In order to do this, you need to select 'video' and then paste the iframe code. Both YouTube and Loom offer this when you go to the 'share' option and select 'embed code'. Copy and past the code and the video will be added, adding a personal touch to your audit!</p>
           </div>
 
           <div class="intro-explenation vertical-align" style="text-align: center;">
-              <span class="tut-title">Text explenation</span>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <span class="tut-title">Introduction explenation</span>
+              <p>This is the standard introduction that will be shown on top of your audit. If you already use a video, you may also choose to hide the introductoin as your video may already be your introduction.</p>
           </div>
 
           <div class="title-explenation vertical-align" style="text-align: center;">
-              <span class="tut-title">Title explenation</span>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <span class="tut-title">Facebook stats</span>
+              <p>This will be the title of the sectoin about Facebook. Here you can choose the title which will be shown for this section, as well as the subtitle.</p>
           </div>
 
           <div class="visibility-explenation vertical-align" style="text-align: center;">
               <span class="tut-title">Visibility explenation</span>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <p>You can turn off the visibility of a certain statistic by clicking on the eye. It will no longer be shown in the audit.</p>
           </div>
 
           <div class="social-text-explenation vertical-align" style="text-align: center; right: 300px">
-              <span class="tut-title">Social media text explenation</span>
-              <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
+              <span class="tut-title">Facebook Text</span>
+              <p>When making an audit, you can give a score to someone's FaceBook. Using this option allows you to have a few standard texts appear when you give a certain score. For example: the first textblock will be shown if the score you give is between 0 and 30 (you can also change the percentage). The 2nd text block will be shown for scores between 30 and 70. The final text block will be shown for a score of 70 and above.</p>
           </div>
 
           <div class="end-explenation vertical-align" style="text-align: center;">
@@ -324,7 +328,8 @@
           <div class="create-audit-button video-button tut-button">Next</div>
           <div class="create-audit-button introtext-button tut-button">Next</div>
           <div class="create-audit-button title-button tut-button">Next</div>
-          <div class="create-audit-button visibility-button tut-button" style="left: 40px; right: auto;">Next</div>
+          <div class="create-audit-button between-button tut-button" style="left: 40px; right: auto;">Next</div>
+          <div class="create-audit-button visibility-button tut-button" >Next</div>
       </div>
   <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.<h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
