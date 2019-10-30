@@ -569,8 +569,7 @@
             color: $('#color').val(),
             ...commonPost,
           },
-          success: function(r) {
-            console.log(r);
+          success: function() {
             window.location.reload();
           },
           error: function(xhr, textStatus, errorThrown) {

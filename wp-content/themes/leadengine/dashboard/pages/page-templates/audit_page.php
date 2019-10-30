@@ -45,7 +45,7 @@
   $audit = $audit_control->get($id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-  $theme_color = $user->color_audit;
+  $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
@@ -251,7 +251,7 @@
         <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="preview"><i class="far fa-eye"></i> Preview </a>
-        <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a>
+        <!-- <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a> -->
         <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
         <?php
       } else {
@@ -906,10 +906,12 @@
           type: "POST",
           url: ajaxurl,
           data: {
-            action: 'update_config', color: $('#color').val(),
-            value: $("#mail_bit_check").is(':checked'), ...commonPost
+            action: 'update_config',
+            color: $('#color').val(),
+            value: $("#mail_bit_check").is(':checked'),
+            ...commonPost
           },
-          success: function() {
+          success: function(response) {
             window.location.reload()
           },
           error: function (xhr, textStatus, errorThrown) {

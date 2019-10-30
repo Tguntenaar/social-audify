@@ -214,6 +214,7 @@
         }
     }
 
+
     if ($type == 'audit') {
        $page->update('mail_bit', (($_POST['value'] == 'true') ? 2 : 0));
     } else if($type == 'user') {
