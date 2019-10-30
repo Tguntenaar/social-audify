@@ -47,27 +47,24 @@
 
       if ($type === 'audit') {
         require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+
         $audit_service = new audit_service($connection);
         $audit_id = $_POST['audit'];
-
         $audit_service->toggle_config_visibility($audit_id, $field);
-        wp_send_json(array('success'=>'toggled'));
-      }
-      elseif ($type === 'report') {
+      } elseif ($type === 'report') {
         require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
+
         $report_service = new report_service($connection);
         $report_id = $_POST['report'];
-
         $report_service->toggle_config_visibility($report_id, $field);
-        wp_send_json(array('success'=>'toggled'));
-    } elseif ($type === 'user') {
-            require_once(dirname(__FILE__)."/dashboard/services/user_service.php");
-            $user_service = new user_service($connection);
-            $user_id = $_POST['user'];
-            $type_table = $_POST['type_table'];
+      } elseif ($type === 'user') {
+        require_once(dirname(__FILE__)."/dashboard/services/user_service.php");
+        
+        $user_service = new user_service($connection);
+        $user_id = $_POST['user'];
+        $type_table = $_POST['type_table'];
 
-            $user_service->toggle_config_visibility($user_id, $field, $type_table);
-            wp_send_json(array('success'=>'toggled'));
+        $user_service->toggle_config_visibility($user_id, $field, $type_table);
       }
 
       wp_die();
@@ -215,6 +212,7 @@
             $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
         }
     }
+
 
     if ($type == 'audit') {
        $page->update('mail_bit', (($_POST['value'] == 'true') ? 2 : 0));
