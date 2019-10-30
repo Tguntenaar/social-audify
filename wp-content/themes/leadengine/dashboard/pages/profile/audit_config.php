@@ -263,6 +263,7 @@
     }
   </style>
 </head>
+
 <body class="custom-body">
     <?php if($edit_mode &&
             ($user->intro_audit == "" && $user->intro_conclusion == ""
@@ -385,10 +386,9 @@
         <h3>Video banner:</h3>
         <span class="eplenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="tutorial/#1570543881921-3fd7746a-9da5">[here]</a> to learn how to find this link.</span>
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
-
-          <input type="radio" class="iframe-radio" data-display="block" <?php echo $user->std_iframe != NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" data-display="block" <?php echo ($user->std_iframe != NULL && $user->std_iframe != "") ? 'checked' : ''; ?>/>
             <span class="radio-label">Video</span>
-          <input type="radio" class="iframe-radio" id="std_iframe" value="" name="std_iframe" data-display="none" <?php echo $user->std_iframe == NULL ? 'checked' : ''; ?>/>
+          <input type="radio" class="iframe-radio" id="std_iframe" value="" name="std_iframe" data-display="none" <?php echo ($user->std_iframe == NULL || $user->std_iframe == "") ? 'checked' : ''; ?>/>
             <span class="radio-label">Nothing</span>
           <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($user->std_iframe != NULL) ? 'block' : 'none'; ?>"
             pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $user->std_iframe != NULL ? '<iframe '.stripslashes($user->std_iframe).'</iframe>' : ''; ?>'/>
