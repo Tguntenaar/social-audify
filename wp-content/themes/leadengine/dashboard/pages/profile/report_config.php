@@ -189,6 +189,9 @@
             <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
           }
         } ?>
+        <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
+          <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
+        </a>
     </div>
   </div>
 
