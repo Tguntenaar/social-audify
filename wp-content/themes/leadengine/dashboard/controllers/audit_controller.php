@@ -30,8 +30,8 @@ class audit_controller {
     }
     $instance->id = $this->service->create($user_id, $valueString);
 
-    $this->service->insert_template($instance->id);
-    $this->service->insert_visibility($instance->id);
+    $this->service->insert_template($user_id, $instance->id);
+    $this->service->insert_visibility($user_id, $instance->id);
 
     $slug = strtolower("audit-".str_replace(' ', '-', $instance->name)."-" . $instance->id);
 
