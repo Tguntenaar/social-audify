@@ -25,6 +25,9 @@ class user_controller {
     }
   }
 
+  public function update($id, $field_name, $field_value, $table) {
+    return $this->service->update($id, $field_name, $field_value, $table);
+  }
 
   function get_all() {
     $sql_users = $this->service->get_all();
@@ -39,6 +42,10 @@ class user_controller {
 
   function get_amount() {
     return $this->service->get_amount()[0]->count;
+  }
+
+  public function get_area_fields() {
+    return explode(", ", $this->service->get_area_fields());
   }
 }
 ?>

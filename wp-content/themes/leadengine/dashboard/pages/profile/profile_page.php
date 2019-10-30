@@ -75,80 +75,87 @@
 
           <div id="audit-settings">
             <h3 class="h3-fix">Audit Settings</h3>
-            <ul>
-              <li id="intro-audit-item" class="active-menu-item">Intro text</li>
-              <li id="conclusion-audit-item">Conclusion text</li>
-              <li id="fb-audit-item">Facebook text</li>
-              <li id="ig-audit-item">Instagram text</li>
-              <li id="wb-audit-item">Website text</li>
-              <li id="visibility-audit-item">Visibility preference</li>
-              <li id="color-audit-item">Audit Colors</li>
-            </ul>
-            <form action="/ppc?settings=audit" id="audit-form" method="post" enctype="multipart/form-data">
-              <!-- intro -->
-              <div class="intro-audit-block tab">
-                <h4>Introduction Audit</h4>
-                <textarea maxlength="999" input="text"  name="introduction-audit" id="introduction-audit"><?php
-                  echo trim($user->intro_audit);
-                ?></textarea>
-              </div>
-              <!-- conclusion -->
-              <div class="conclusion-audit-block tab">
-                <h4>Conclusion Audit</h4>
-                <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
-                  echo trim($user->conclusion_audit);
-                  ?></textarea>
-              </div>
-              <?php
-              // facebook instagram website blocks
-              foreach ($ranges as $range) {
-                $item = (object) $range; ?>
-                <div class="<?php echo $item->code; ?>-audit-block tab">
-                    <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
-                  for ($i = 1; $i <= 3; $i++) {
-                    if ($i < 3) { ?>
-                      <h6>Show this text up to the selected range, making it faster to create an audit</h6>
-                      <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i";?>" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
-                      value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
-                    } else { ?>
-                      <h6>The last range is less than or equal to 100 percent</h6><?php
-                    } ?>
-                    <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
-                      echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
-                    } ?>
-                </div><?php
-              } ?>
-              <!-- visibility block -->
-              <div class="visibility-audit-block tab" style="display:none">
-                <h4>Audit visibility</h4>
-                <ul>
-                  <li id="fb-audit-visibility-item" class="active-menu-item">Facebook</li>
-                  <li id="ig-audit-visibility-item">Instagram</li>
-                  <li id="wb-audit-visibility-item">Website</li>
-                </ul>
-                <div class="fb-audit-visibility-block tab"><?php
-                  print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
-                </div>
-                <div class="ig-audit-visibility-block tab" style='display:none'><?php
-                  print_list_checkboxes(array_merge($instagram_blocks, $instagram_graph_blocks), 'instagram', $audit_visibility); ?>
-                </div>
-                <div class="wb-audit-visibility-block tab" style='display:none'><?php
-                  print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
-                </div>
-              </div>
-              <!-- audit colors block -->
-              <div class="color-audit-block tab" style="display:none;">
-                <h4>Audit Colors</h4>
-                <div>
-                    <input type="color" name="audit-color" value="<?php echo $user->color_audit?>">
-                    <i class="fas fa-undo" onclick="$('input[name=audit-color]').val(`#6e9d9c`)" ></i>
-                </div>
-              </div>
+            <a href="/audit-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy config<span style="font-size: 10px;">(recommended)</span></a>
+            <span class="advanced-settings" id="advanced-audit-settings">Advanced settings</span>
+            <div style="clear:both;"></div>
 
-              <!-- error notify -->
-              <div class="error-display-audit"></div>
-              <input type="submit" value="Update" class="update-button" >
-            </form>
+            <div id="advanced-audit">
+                <ul>
+                  <li id="intro-audit-item" class="active-menu-item">Intro text</li>
+                  <li id="conclusion-audit-item">Conclusion text</li>
+                  <li id="fb-audit-item">Facebook text</li>
+                  <li id="ig-audit-item">Instagram text</li>
+                  <li id="wb-audit-item">Website text</li>
+                  <li id="visibility-audit-item">Visibility preference</li>
+                  <li id="color-audit-item">Audit Colors</li>
+                </ul>
+                <div style="clear:both;"></div>
+                <form action="/ppc?settings=audit" id="audit-form" method="post" enctype="multipart/form-data">
+                  <!-- intro -->
+                  <div class="intro-audit-block tab">
+                    <h4>Introduction Audit</h4>
+                    <textarea maxlength="999" input="text"  name="introduction-audit" id="introduction-audit"><?php
+                      echo trim($user->intro_audit);
+                    ?></textarea>
+                  </div>
+                  <!-- conclusion -->
+                  <div class="conclusion-audit-block tab">
+                    <h4>Conclusion Audit</h4>
+                    <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
+                      echo trim($user->conclusion_audit);
+                      ?></textarea>
+                  </div>
+                  <?php
+                  // facebook instagram website blocks
+                  foreach ($ranges as $range) {
+                    $item = (object) $range; ?>
+                    <div class="<?php echo $item->code; ?>-audit-block tab">
+                        <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
+                      for ($i = 1; $i <= 3; $i++) {
+                        if ($i < 3) { ?>
+                          <h6>Show this text up to the selected range, making it faster to create an audit</h6>
+                          <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i";?>" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
+                          value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
+                        } else { ?>
+                          <h6>The last range is less than or equal to 100 percent</h6><?php
+                        } ?>
+                        <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
+                          echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
+                        } ?>
+                    </div><?php
+                  } ?>
+                  <!-- visibility block -->
+                  <div class="visibility-audit-block tab" style="display:none">
+                    <h4>Audit visibility</h4>
+                    <ul>
+                      <li id="fb-audit-visibility-item" class="active-menu-item">Facebook</li>
+                      <li id="ig-audit-visibility-item">Instagram</li>
+                      <li id="wb-audit-visibility-item">Website</li>
+                    </ul>
+                    <div class="fb-audit-visibility-block tab"><?php
+                      print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
+                    </div>
+                    <div class="ig-audit-visibility-block tab" style='display:none'><?php
+                      print_list_checkboxes(array_merge($instagram_blocks, $instagram_graph_blocks), 'instagram', $audit_visibility); ?>
+                    </div>
+                    <div class="wb-audit-visibility-block tab" style='display:none'><?php
+                      print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
+                    </div>
+                  </div>
+                  <!-- audit colors block -->
+                  <div class="color-audit-block tab" style="display:none;">
+                    <h4>Audit Colors</h4>
+                    <div>
+                        <input type="color" name="audit-color" value="<?php echo $user->color_audit?>">
+                        <i class="fas fa-undo" onclick="$('input[name=audit-color]').val(`#6e9d9c`)" ></i>
+                    </div>
+                  </div>
+
+                  <!-- error notify -->
+                  <div class="error-display-audit"></div>
+                  <input type="submit" value="Update" class="update-button" >
+                </form>
+            </div>
 
             <div class="profile-exp">
               <i id="audit-exp" class="info-i fas fa-info"></i>
@@ -157,52 +164,58 @@
 
           <div id="report-settings">
             <h3 class="h3-fix">Report Settings</h3>
-            <ul>
-              <li id="intro-report-item" class="active-menu-item">Intro text</li>
-              <li id="conclusion-report-item">Conclusion text</li>
-              <li id="visibility-report-item">Visibility report</li>
-              <li id="color-report-item">Report colors</li>
-            </ul>
-            <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
-              <!-- intro report -->
-              <div class="intro-report-block tab">
-                <h4>Introduction Report</h4>
-                <textarea maxlength="999" input="text"  name="introduction-report"><?php
-                  echo trim($user->intro_report);
-                ?></textarea>
-              </div>
-              <!-- conclusion report -->
-              <div class="conclusion-report-block tab">
-                <h4>Conclusion Report</h4>
-                <textarea maxlength="999" input="text"  name="conclusion-report"><?php
-                  echo trim($user->conclusion_report);
-                ?></textarea>
-              </div>
-              <!-- Visibility Report -->
-              <div class="visibility-report-block tab" style="display:none">
-                <h4>Report visibility</h4>
+            <a href="/report-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy config<span style="font-size: 10px;">(recommended)</span></a>
+            <span class="advanced-settings" id="advanced-report-settings">Advanced settings</span>
+            <div style="clear:both;"></div>
+
+            <div id="advanced-report">
                 <ul>
-                  <li id="social-report-visibility-item" class="active-menu-item">Social</li>
-                  <li id="campaign-report-visibility-item">Campaign</li>
+                  <li id="intro-report-item" class="active-menu-item">Intro text</li>
+                  <li id="conclusion-report-item">Conclusion text</li>
+                  <li id="visibility-report-item">Visibility report</li>
+                  <li id="color-report-item">Report colors</li>
                 </ul>
-                <div class="social-report-visibility-block tab">
-                  <?php print_list_checkboxes($social_blocks, 'social', $report_visibility); ?>
-                </div>
-                <div class="campaign-report-visibility-block tab" style='display:none'>
-                  <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
-                </div>
-              </div>
-              <!-- Report colors -->
-              <div class="color-report-block tab" style="display:none;">
-                <h4>Report Colors</h4>
-                <div>
-                    <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">
-                    <i class="fas fa-undo" onclick="$('input[name=report-color]').val(`#6e9d9c`)" ></i>
-                </div>
-              </div>
-              <div class="error-display-report"></div>
-              <input type="submit" value="Update" class="update-button" >
-            </form>
+                <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
+                  <!-- intro report -->
+                  <div class="intro-report-block tab">
+                    <h4>Introduction Report</h4>
+                    <textarea maxlength="999" input="text"  name="introduction-report"><?php
+                      echo trim($user->intro_report);
+                    ?></textarea>
+                  </div>
+                  <!-- conclusion report -->
+                  <div class="conclusion-report-block tab">
+                    <h4>Conclusion Report</h4>
+                    <textarea maxlength="999" input="text"  name="conclusion-report"><?php
+                      echo trim($user->conclusion_report);
+                    ?></textarea>
+                  </div>
+                  <!-- Visibility Report -->
+                  <div class="visibility-report-block tab" style="display:none">
+                    <h4>Report visibility</h4>
+                    <ul>
+                      <li id="social-report-visibility-item" class="active-menu-item">Social</li>
+                      <li id="campaign-report-visibility-item">Campaign</li>
+                    </ul>
+                    <div class="social-report-visibility-block tab">
+                      <?php print_list_checkboxes($social_blocks, 'social', $report_visibility); ?>
+                    </div>
+                    <div class="campaign-report-visibility-block tab" style='display:none'>
+                      <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
+                    </div>
+                  </div>
+                  <!-- Report colors -->
+                  <div class="color-report-block tab" style="display:none;">
+                    <h4>Report Colors</h4>
+                    <div>
+                        <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">
+                        <i class="fas fa-undo" onclick="$('input[name=report-color]').val(`#6e9d9c`)" ></i>
+                    </div>
+                  </div>
+                  <div class="error-display-report"></div>
+                  <input type="submit" value="Update" class="update-button" >
+                </form>
+            </div>
             <div class="profile-exp">
               <i id="report-exp" class="info-i fas fa-info"></i>
             </div>
@@ -313,7 +326,7 @@
     });
 
     /**
-    * MAIL FORM   
+    * MAIL FORM
     */
     $("#mail_config").submit(function(e) {
       e.preventDefault();
@@ -411,6 +424,14 @@
       $("#phone-exp-text").toggle();
     });
 
+    $("#advanced-audit-settings").on('click', function(event){
+      $("#advanced-audit").toggle();
+    });
+
+    $("#advanced-report-settings").on('click', function(event){
+      $("#advanced-report").toggle();
+    });
+
     $("#mail-exp").on('click', function(event){
       $("#mail-exp-text").toggle();
     });
@@ -467,8 +488,8 @@
       });
     });
 
-    [{type:'audit', url:'tutorial/#1488725417825-2758920e-e7ef'}, 
-     {type:'report', url:'tutorial/#1489503964921-3acbdde1-0dcf'}, 
+    [{type:'audit', url:'tutorial/#1488725417825-2758920e-e7ef'},
+     {type:'report', url:'tutorial/#1489503964921-3acbdde1-0dcf'},
      {type:'mail', url:'tutorial/#1489503963784-5b2be039-5cee'},].forEach(function(el) {
       $(`#${el.type}-exp`).on('click', function() {
 

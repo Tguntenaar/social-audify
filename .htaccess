@@ -1,15 +1,18 @@
 # Block WordPress xmlrpc.php requests
 
 <Files xmlrpc.php>
-
-order deny,allow
-deny from all
-
+  order deny,allow
+  deny from all
 </Files>
+
+<files wp-config.php>
+  order allow,deny
+  deny from all
+</files>
 
 # END protect xmlrpc.php
 
-# Force HTTPS on the server
+# Force HTTPS on the site
 RewriteEngine On
 RewriteCond %{HTTPS} !=on
 RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
@@ -21,13 +24,14 @@ RewriteRule ^public\/(.*)$ ./wp-content/themes/leadengine/dashboard/public_route
 # RewriteRule ^wp-login.php\/$ - [L,R=404]
 
 # BEGIN WordPress
+
 <IfModule mod_rewrite.c>
-RewriteEngine On
-RewriteBase /
-RewriteRule ^index\.php$ - [L]
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule . /index.php [L]
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.php$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.php [L]
 </IfModule>
 
 # END WordPress

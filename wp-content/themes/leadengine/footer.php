@@ -108,10 +108,7 @@
               }
 
 
-              if(document.getElementById('rcp_user_login').value == ''
-                 || document.getElementById('rcp_user_email').value == ''
-                 || document.getElementById('rcp_user_first').value == ''
-                 || document.getElementById('rcp_user_last').value == ''
+              if(document.getElementById('rcp_user_email').value == ''
                  || document.getElementById('rcp_password').value == ''
                  || document.getElementById('rcp_password_again').value == '') {
                      alert("Fill in all the required fields.");

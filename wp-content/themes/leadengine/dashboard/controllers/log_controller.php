@@ -2,7 +2,8 @@
 class logger {
 
   public function __construct($phpLocation = "runtime_error.log", $jsLocation = "js_error.log") {
-    $this->stdOutput = dirname(__FILE__).'/../error_logs';
+    // $this->stdOutput = dirname(__FILE__).'/../error_logs';
+    $this->stdOutput = "C:\\xampp\\htdocs\\errors";
 
     // Set php.ini settings
     ini_set('display_startup_errors', '0');

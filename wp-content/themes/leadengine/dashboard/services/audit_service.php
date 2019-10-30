@@ -8,8 +8,10 @@ class audit_service extends connection {
   }
 
 
-  public function create($data) {
-    $this->dbwp->insert('Audit', $data);
+  public function create($id, $values) {
+    $this->dbwp->query(
+      "INSERT INTO Audit ($this->create_fields) VALUES ($values
+        (SELECT std_mail_bit FROM Configtext WHERE user_id = $id))");
     return $this->dbwp->insert_id;
   }
 
@@ -115,16 +117,17 @@ class audit_service extends connection {
   }
 
 
-  public function insert_template($id) {
-    return $this->dbwp->insert('Audit_template', array('audit_id' => $id));
+  public function insert_template($id, $audit_id) {
+    return $this->dbwp->get_results($this->dbwp->prepare(
+      "INSERT INTO Audit_template (audit_id, video_iframe) VALUES (%d,
+        (SELECT std_iframe FROM Configtext WHERE user_id = %d))", $audit_id, $id));
   }
 
 
-  public function insert_visibility($audit_id) {
+  public function insert_visibility($id, $audit_id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "INSERT INTO `Audit_stat_visibility` (audit_id, $this->user_visibility_fields)
-       SELECT %d, $this->user_visibility_fields
-       FROM `User_audit_visibility` WHERE user_id = %d", $audit_id, get_current_user_id()));
+      "INSERT INTO Audit_stat_visibility (audit_id, $this->visibility_fields) 
+        SELECT %d, $this->visibility_fields FROM User_audit_visibility WHERE user_id = %d", $audit_id, $id));
   }
 
 
@@ -145,14 +148,21 @@ class audit_service extends connection {
     return $this->dbwp->delete('Audit', array('id' => $id));
   }
 
+  public function delete_multiple($id, $audit_ids) {
+    return $this->dbwp->query(
+      "DELETE FROM Audit WHERE client_id IN
+      (SELECT id FROM Client WHERE user_id = $id) AND id IN ($audit_ids)");
+  }
+
   public function get_template_fields() {
     return $this->template_fields;
   }
 
+  private $create_fields = "client_id, name, create_date, post_id, facebook_bit, instagram_bit, website_bit, competitor_name, mail_bit";
+  private $create_template_fields = "introduction, conclusion, video_iframe, color";
 
   private $template_fields = "introduction, conclusion, facebook_advice, instagram_advice, website_advice, facebook_score, instagram_score, website_score, video_iframe, color";
   private $visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp, facebook_vis_bit, instagram_vis_bit, website_vis_bit";
-  private $user_visibility_fields = "fb_likes, fb_pem, fb_dpp, fb_dph, fb_apl, fb_loc, fb_ntv, fb_tab, fb_cp, insta_nof, insta_ae, insta_nplm, insta_nopf, insta_ac, insta_al, website_pixel, website_ga, website_googletag, website_mf, website_lt, website_ws, insta_hashtag, insta_lpd, fb_ads, fb_ads_comp";
 
   private $crawl_fields = "facebook_pixel, google_analytics, google_tagmanager, mobile_friendly, load_time, website_size";
   private $data_fields = "facebook_name, facebook_data, instagram_name, instagram_data";

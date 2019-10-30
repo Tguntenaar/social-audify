@@ -34,9 +34,12 @@
   <?php endif; ?>
 </head>
 <body>
+  <?php if ($_SERVER['HTTP_HOST'] == 'www.socialaudify.com' || $_SERVER['HTTP_HOST'] == 'socialaudify.com'): ?>
   <!-- Google Tag Manager (noscript) -->
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KC4JDF9" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
+  <?php endif; ?>
+
   <!-- Facebook Pixel Code -->
      <script>
       !function(f,b,e,v,n,t,s)
@@ -95,36 +98,24 @@
     });
   </script>
 
-  <div class="white-screen" style="display: none;">
-    <div class="wrap">
-      <div class="loading">
-        <div class="bounceball"></div>
-        <div class="text"></div>
-      </div>
-    </div>
-  </div>
-
-
   <!-- Global popup modals -->
   <div id="errorModal" class="modal"></div>
+  <div id="confirmModal" class="modal"></div>
 
   <div id="instagramErrorModal" class="modal"></div>
-  <div id="competitorModal" class="modal"></div>
   <div id="adAccountModal" class="modal"></div>
+
 
   <div class="sub-header col-lg-12">
     <a href="../dashboard/" class="home-link">
       <i class="fas fa-th-large"></i> Dashboard
     </a>
 
-
-
     <a href="https://www.facebook.com/socialaudify/" target="_blank" rel="norefferer" style="float:right;margin-right:50px;">
      <i style="margin-right: 5px;" class="far fa-comment"></i>Questions
     </a>
-
     <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
-        <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
+      <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
     </a>
     <a href="../search-page/" class="search-icon">
       <i style="margin-right: 5px;" class="fas fa-search"></i>Search
@@ -175,5 +166,14 @@
         <span></span>
         <span></span>
         <span></span>
+      </div>
+    </div>
+
+    <div class="white-screen" style="display: none;">
+      <div class="wrap">
+        <div class="loading">
+          <div class="bounceball"></div>
+          <div class="text"></div>
+        </div>
       </div>
     </div>

@@ -8,18 +8,15 @@ class client_service extends connection {
   }
 
 
-  public function create($id, $name, $fb, $ig, $wb, $mail, $ad_id) {
-    $this->dbwp->insert('Client',
-      array('user_id' => $id,
-        'name' => $name,
-        'facebook' => $fb,
-        'instagram' => $ig,
-        'website' => $wb,
-        'mail' => $mail,
-        'ad_id' => $ad_id,
-        'create_date' => date('Y-m-d H:i:s')
-      ));
+  public function create($data) {
+    $this->dbwp->insert('Client', $data);
     return $this->dbwp->insert_id;
+  }
+
+  public function create_multiple($data_list) {
+    $data_string = implode(', ', $data_list);
+    return $this->dbwp->query(
+      "INSERT INTO Client ($this->common_fields) VALUES $data_string");
   }
 
 
@@ -67,5 +64,13 @@ class client_service extends connection {
   public function delete($id) {
     return $this->dbwp->delete('Client', array('id' => $id));
   }
+
+  public function delete_multiple($id, $client_ids) {
+    return $this->dbwp->query(
+      "DELETE FROM Client WHERE user_id = $id AND id IN ($client_ids)");
+  }
+
+
+  private $common_fields = "user_id, name, facebook, instagram, website, mail, create_date";
 }
 ?>

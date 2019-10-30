@@ -21,7 +21,9 @@
 
     $clients = $client_control->get_all();
   ?>
-
+  
+  <div id="competitorModal" class="modal"></div>
+  
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->
@@ -156,14 +158,14 @@
                 </label>
               </div>
               <div class="custom-label" >
-                  <div style="clear: both;"></div>
-                  <span class="name-label" style="margin-top: -20px; float: left;">Selected:</span>
-                  <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                    <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
-                  </div>
-                  <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                    <span class="selected-client">Selected competitor = <strong class="show-compare"></strong></span>
-                  </div>
+                <div style="clear: both;"></div>
+                <span class="name-label" style="margin-top: -20px; float: left;">Selected:</span>
+                <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
+                  <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+                </div>
+                <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
+                  <span class="selected-client">Selected competitor = <strong class="show-compare"></strong></span>
+                </div>
               </div>
             </div>
             <div>
@@ -243,10 +245,10 @@
       var modalData = {
         text: 'New Competitor:',
         html: `<div class="new-competitor" style="align:center">
-            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $name_regex; ?>" title="Only letters are allowed">
-            <input type="text" id="facebook_url" placeholder="Facebook page url, page id or page username" pattern="<?php echo $fb_regex ?>">
-            <input type="text" id="instagram_url" placeholder="Instagram username or url" pattern="<?php echo $ig_regex ?>">
-            <input type="text" id="website_url" placeholder="https://www.example.com" pattern="<?php echo $website_regex; ?>">
+            <input type="text" id="competitor-name" placeholder="Name" pattern="<?php echo $Regex->name; ?>" title="Only letters are allowed">
+            <input type="text" id="facebook_url" data-type="facebook" placeholder="Facebook page url, page id or page username">
+            <input type="text" id="instagram_url" data-type="instagram" placeholder="Instagram username or url">
+            <input type="text" id="website_url" data-type="website" placeholder="https://www.example.com" pattern="<?php echo $Regex->wb; ?>">
           </div>`,
         subtext: 'Create a new temporary client for just this audit',
         confirm: 'competitor_confirmed'
@@ -264,7 +266,7 @@
       });
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
-        parseClientInputFields(this);
+        changeClientInputFields(this);
       });
 
       $("#competitor_confirmed").click(function() {

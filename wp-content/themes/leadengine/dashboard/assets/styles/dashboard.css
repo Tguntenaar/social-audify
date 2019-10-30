@@ -88,6 +88,12 @@ label.myLabel input[type="file"] {
     top: -1000px;
 }
 
+.selectDelete {
+	position: absolute;
+	margin-left: 10px;
+	color: #c0392b !important;
+}
+
 .content-right .rcp_calander_custom {
 	margin-top: 0px !important;
 }
@@ -153,6 +159,47 @@ label.myLabel input[type="file"] {
 	width: 100% !important;
 }
 
+.easy-config-button {
+	width: auto;
+	height: auto;
+	padding: 10px 15px;
+	color: #fff;
+	background: #487dd7;
+	border: 0;
+	display: block;
+	float: left;
+	font-weight: 100;
+	margin-top: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+}
+
+.easy-config-button:hover {
+	text-decoration: none;
+	opacity: 0.8;
+	color: #fff;
+}
+
+.advanced-settings {
+	display: block;
+	width: 100%;
+	float:left;
+	color: #7c9fdc;
+	font-size: 14px;
+	margin-bottom: 15px;
+	cursor: pointer;
+}
+
+#advanced-audit,
+#advanced-report {
+	display: none;
+}
+
+.profile-page .easy-config-button i {
+	color: #fff !important;
+	margin-right: 10px;
+}
+
 button {
 	cursor: pointer;
 }
@@ -160,6 +207,135 @@ button {
 .block {
 	display: block !important;
 }
+
+/** File import **/
+.file-paste-block,
+.file-upload-block {
+	width: 100%;
+	float: auto;
+	display: none;
+	text-align: center;
+	margin-top: 70px;
+}
+
+.file-paste-block {
+	margin-top: 50px;
+}
+
+
+#enter-data-field {
+	margin-top: 5px !important;
+}
+
+#enter-data-field {
+	background: transparent;
+	position: static;
+	z-index:5;
+	background: #fff;
+	border: 7px solid #fff;
+	height: 200px;
+	width: 100%;
+}
+
+#title-import {
+	display: none;
+}
+
+#new-clients {
+	display: none;
+	width: 100%;
+	height: 200px;
+	background: #fff;
+	overflow-y: scroll;
+	color: #0f0f0f;
+	/* border: 1px solid #2980b9; */
+	border-left: 2px solid #2980b9;
+}
+
+#update-data-from-field i {
+	margin-left: 5px;
+}
+
+#update-data-from-field {
+	border: 0;
+	background: #2980b9;
+	color: #fff;
+	width: 150px;
+	height: 40px;
+	line-height: 40px;
+
+}
+
+#new-clients li {
+	height: 40px;
+	line-height: 40px;
+	padding-left: 10px;
+	font-weight: 100;
+}
+
+.background-textarea {
+	background: #fff;
+	margin-top: 5px;
+	margin-left: 5%;
+	width: 90%;
+	height: 240px;
+	position: absolute;
+}
+
+.upload-col {
+	float: left;
+	height: auto;
+	padding-top: 4px;
+	padding-bottom: 4px;
+}
+
+.file-upload input[type="file"] {
+	/* width: 150px;
+	height: 50px;
+	background: #2980b9;
+	color: #fff;
+	border: 0; */
+	display: none;
+}
+
+
+.file-upload-block #fileLabel {
+	font-weight: 400;
+}
+
+.back-icon {
+	position: absolute;
+	top: 10px;
+	left: 20px;
+	display: none;
+	cursor: pointer;
+}
+.custom-file-upload {
+	margin-top: -20px !important;
+	background: #2980b9;
+	border: 1px solid #2980b9;
+	color: #fff;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+	width: 300px;
+	height: 70px;
+	line-height: 60px;
+}
+
+.custom-file-upload:hover {
+	background: transparent;
+	border: 1px solid #2980b9;
+	color: #2980b9;
+}
+
+
+.upload-container {
+	width: auto;
+	height: auto;
+	margin-top: 100px;
+}
+
 /***** Example custom styling *****/
 .myLabel {
     background: #487dd7;
@@ -190,6 +366,9 @@ button {
     background: green !important;
 }
 
+.invalid {
+	background: #c0392b;
+}
 header {
     width: 100%;
     height: 75px;
@@ -1129,6 +1308,29 @@ nav ul a li {
 	padding-left: 15px !important;
 }
 
+.selected-dashboards {
+	opacity: 0.5;
+}
+
+.audit-row-style a {
+	color: #000;
+	height: 100%;
+	width: 100%;
+	float: left;
+	display: block;
+	position: relative;
+	z-index: 55;
+	/* color: #487dd7; */
+}
+
+.audit-row-style a:hover {
+	text-decoration: none;
+}
+
+.audit-row-style {
+	cursor: pointer;
+}
+
 .row-title,
 .row-title{
     height: auto;
@@ -1160,7 +1362,9 @@ nav ul a li {
 
 .client-dashboard .row-title-style,
 .client-dashboard .audit-row-style {
-	width: 25%;
+  width: 25%;
+  text-overflow:ellipsis;
+  overflow:hidden;
 }
 
 .form-right input[type="text"]  {
@@ -1254,7 +1458,8 @@ nav ul a li {
     font-weight: 300;
     padding: 0;
     border-bottom: 1px solid #f9f9f9;
-	overflow: hidden;
+  overflow: hidden;
+  text-overflow:ellipsis;
 	border-right: 20px solid #fff;
 }
 
@@ -2461,6 +2666,7 @@ h4 {
 	color: #fff;
 	float:left;
 	font-weight: 100;
+	border: 1px solid #487dd7;
 }
 
 .create-audit-button:hover {
@@ -2513,14 +2719,16 @@ h4 {
 	width: 100%;
 	height: 100vh;
 	background: #fff;
-	position: absolute;
+	/* position: absolute; */
 	top: 0; left: 0;
 	z-index: 60;
 }
 .wrap {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  /* top: 50%;
+  left: 50%; */
+  top: 20%;
+  left: 60%;
   transform: translate(-50%, -50%);
 }
 
@@ -2672,12 +2880,13 @@ h4 {
 	z-index: 5555;
 	padding-right: 10px;
 	padding-left: 10px;
+	font-weight: 100;
 }
 
 .modal input[type="checkbox"] {
 	margin: 0 auto;
 	margin-right: auto;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 #color {
@@ -3190,8 +3399,109 @@ label {
 	opacity: 0;
 }
 
+.config-title {
+	font-size: 21px;
+}
 
+.config-right #range_number_fb_1,
+.config-right #range_number_fb_2,
+.config-right #range_number_fb_3,
+.config-right #range_number_insta_1,
+.config-right #range_number_insta_2,
+.config-right #range_number_insta_3,
+.config-right #range_number_website_1,
+.config-right #range_number_website_2,
+.config-right #range_number_website_3 {
+	width: 35px;
+	height: 35px;
+	display: block;
+	float:none;
+	color: #000;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-align: center;
+}
 
+#facebook_title,
+#facebook_sub_title,
+#instagram_title,
+#instagram_sub_title,
+#website_title,
+#website_sub_title {
+	background: #fcfcfc;
+	border: 1px solid #ecf0f1;
+	padding: 5px;
+	width: 320px;
+}
+.tutorial-screen {
+	background: rgba(0, 0, 0, 0.8);
+	width: 100%;
+	height: 100vh;
+	position: fixed;
+	z-index: 555;
+}
+
+.into-tutorial {
+	text-align: center;
+	overflow: hidden;
+}
+
+.into-tutorial h2 {
+	color: #fff;
+	font-size: 21px;
+	margin-bottom: 20px;
+}
+
+.video-explenation,
+.intro-explenation,
+.title-explenation,
+.visibility-explenation,
+.social-text-explenation,
+.end-explenation {
+	display: none;
+	width: 400px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.tut-title {
+	font-size: 20px;
+	color: #6e9d9c;
+	margin-bottom: 20px;
+	font-weight: bold;
+}
+
+.tut-button:hover {
+	border: 0;
+	cursor: pointer;
+}
+.tut-button {
+	position: absolute;
+	right: 40px;
+	bottom: 40px;
+	display: none;
+}
+
+.tutorial-screen,
+.end-explenation p {
+	color: #fff;
+	font-size: 16px;
+	font-weight: 100;
+}
+
+.into-tutorial .create-audit-button:hover {
+	background: transparent !important;
+	border: 0;
+}
+
+.config-right h6 {
+	margin-bottom: 5px;
+}
+
+.config-right textarea {
+	border: 1px solid #ecf0f1;
+	padding: 10px;
+}
 
 .custom-label {
 	margin-bottom: 45px !important;
@@ -3500,7 +3810,9 @@ tr input {
 	color: #000;
 	font-size: 16px;
 	font-weight: 300;
-	padding: 0;
+  padding: 0;
+  text-overflow:ellipsis;
+  overflow:hidden;
 	border-bottom: 1px solid #f9f9f9;
 }
 

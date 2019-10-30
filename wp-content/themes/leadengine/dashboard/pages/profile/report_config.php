@@ -1,3 +1,8 @@
+<?php
+/**
+ * Template Name: Report config
+ */
+?>
 <!DOCTYPE html>
 <html lang="en" style="overflow-y: scroll;">
 
@@ -40,33 +45,9 @@
   $user_control   = new user_controller($connection);
   $report_control = new report_controller($connection);
 
-  // Get report by post_id
-  $id = $report_control->get_id($post_id);
-  $report = $report_control->get($id);
-
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-  $theme_color = ($report->color == "") ? $user->color_report : $report->color;
-  // Graph data
-  $graph_data = json_decode($report->chart_data);
-
-  // Blocks data - last element in graph_data is the average.
-  $social_stats = json_decode($report->social_stats);
-  $avg_campaign = array_pop($graph_data)->insights;
-
-  // Graph chart data
-  list($graph_data_list, $graph_labels) = create_graph_data($graph_data, $campaign_blocks);
-
-  // Compare Blocks data
-  $comp_social = json_decode($report->social_stats_compare);
-  $comp_data = json_decode($report->chart_data_compare);
-  $report->has_comp = isset($comp_data);
-
-  if ($report->has_comp) {
-    // Campaign info and graph chart data
-    $comp_campaign = array_pop($comp_data)->insights;
-    list($comp_graph_data_list, $comp_graph_labels) = create_graph_data($comp_data, $campaign_blocks);
-  }
+  $theme_color = $user->color_report;
 
   $post_names =  ['introduction', 'conclusion', 'social_advice', 'campaign_advice'];
   $company_name = get_user_meta($author_id, 'rcp_company', true );
@@ -136,10 +117,6 @@
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
   }
-
-  // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
-  // var_dump($report);
-  // echo $report->id;
 ?>
 
 <head>
@@ -202,11 +179,9 @@
           <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard</a><?php
         } ?>
 
-        Report: <?php echo $report->name; ?> | <?php echo date('Y-m-d', strtotime($report->create_date));
+        Report: <?php echo 'config report';
 
         if ($edit_mode) { ?>
-          <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
-          <button id="copy_link" class="copy-link" style="margin-right: 15px;"><i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
         } else {
@@ -214,6 +189,9 @@
             <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
           }
         } ?>
+        <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
+          <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
+        </a>
     </div>
   </div>
 
@@ -227,21 +205,20 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php $company = get_user_meta($user_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
+        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
+            <textarea maxlength="999" input="text" name="introduction" id="intro_report"><?php echo $user->intro_report; ?></textarea>
           </form><?php
         } else { ?>
           <p><?php
-            echo ($report->introduction == NULL) ? $user->intro_report: $report->introduction; ?>
+            echo $user->intro_report; ?>
           </p><?php
         } ?>
       </div>
     </div> <?php
 
-    if (($social_stats->instagram_data != NULL
-        && $social_stats->facebook_data != NULL) && ($report->campaign_vis_bit || $edit_mode)) { ?>
+    if ($user->campaign_vis_bit || $edit_mode) { ?>
 
     <div id="social-stats" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 stat-container" >
       <!-- Social Statistics -->
@@ -250,81 +227,44 @@
 
       if($edit_mode) { ?>
       <div onclick="toggle_visibility('campaign_vis_bit')" id="campaign_vis_bit_icon" style="top: 20px;" class="visibility-first-level">
-        <?php if($report->campaign_vis_bit == 1) { ?>
+        <?php if($user->campaign_vis_bit == 1) { ?>
+
             <i class="far fa-eye"></i>
         <?php } else { ?>
             <i class="far fa-eye-slash"></i>
         <?php } ?>
-      </div> <?php }
-
-      if ($report->manual && $edit_mode) { ?>
-        <span class="manual-text" style="width: 100%;">
-          <span style="color: #e74c3c;">Attention: </span>
-          There is no instagram or instagram business account found, so
-          <a target="_blank" rel="noreferrer" href="https://www.instagram.com/<?php echo $report->instagram_name; ?>">click here</a>
-          to gather your data!
-        </span><?php
-      } ?>
+    </div> <?php } ?>
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6" style="float:left; height: auto;"><?php
-      if ($report->manual && $edit_mode) { ?>
-        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#social-stats" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
-      }
       foreach ($social_blocks as $item) {
-        if (show_block($edit_mode, $report->{$item["type"]}, isset($social_stats->{$item["data"]}->{$item["fb_name"]}))) { ?>
+          if (show_block($edit_mode, $user->{$item["type"]}, 1)) { ?>
           <div class="col-lg-6 report-social-style" style="float: left; padding:5px;">
             <div class="stat-block col-lg-12">
               <div class="inner">
-                <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
-                if (!$report->manual) { ?>
+                <span class="title-box facebook"><?php echo $item["name"]; ?></span>
+
                   <span class="explenation"><?php echo $item["desc"]; ?></span>
                   <span class="data_animation"><?php
-                    echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, $item["decimals"], '.', ''); ?>
-                  </span><?php
-                }
-                if ($report->manual && !$item["fb"] && $edit_mode) { ?>
-                  <input type="text" id="<?php echo $item["fb_name"]; ?>" name="<?php echo $item["fb_name"]; ?>" value="<?php echo $social_stats->{$item["data"]}->{$item["fb_name"]} ?>" /><?php
-                }
-
-                if ($report->has_comp) {
-                  $percent = !isset($comp_social->{$item["data"]}->{$item["fb_name"]}) ? 0 :
-                    procent_calc($social_stats->{$item["data"]}->{$item["fb_name"]}, $comp_social->{$item["data"]}->{$item["fb_name"]});
-
-                  $color = "#2980b9";
-                  $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
-
-                  <span class="competitor-stats" style="color: <?php echo $color; ?>"><?php
-                  if ($icon != "window-minimize") { ?>
-                    <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; margin-top: -3px; color: <?php echo $color; ?>"></i><?php
-                  } ?>
-                    <span class="percentage"><?php echo $percent !== 0 ? "$percent%" : ""; ?></span>
-                  </span><?php
-                }
-                if (!$report->manual) { ?>
-                  </span> <?php
-                } ?>
+                    echo 0; ?>
+                  </span>
               <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility"><?php
-                visibility_icon($edit_mode, $report->{$item["type"]}); ?>
+                visibility_icon($edit_mode, $user->{$item["type"]}); ?>
               </div>
             </div>
           </div>
           </div> <?php
         }
       } ?>
-      </div><?php
-      if ($report->manual && $edit_mode) { ?>
-        <input type="submit" class="edite-button" value="Update data" style="width: 150px !important; margin-left: 17px;"/>
-        </form><?php
-      } ?>
+      </div>
 
       <div class="col-lg-6 float outer-chart" style="padding-left: 15px; margin-top: 25px;">
         <div class="col-lg-12 inner-chart" style="height: 460px;">
           <span class="title-report-box">Social Notes</span><?php
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#social_advice" method="post" enctype="multipart/form-data">
-              <textarea maxlength="999" style="height: 290px;" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
+              <textarea maxlength="999" style="height: 290px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $user->campaign_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$report->social_advice</p>";
+            echo "<p>$user->campaign_advice</p>";
           } ?>
         </div>
       </div>
@@ -332,7 +272,7 @@
     } ?>
 
       <!-- Campaign Statistics -->
-      <?php if($report->graph_vis_bit || $edit_mode) { ?>
+      <?php if($user->graph_vis_bit || $edit_mode) { ?>
       <div class="graph-report">
       <div style="clear:both; margin-top: 90px;"></div>
       <span class="facebook-inf-title" style="text-align:center; margin: 0; margin-top: 50px;">Campaign Stats:</span>
@@ -340,7 +280,7 @@
 
       if($edit_mode) { ?>
       <div onclick="toggle_visibility('graph_vis_bit')" id="graph_vis_bit_icon" style="top: 150px;" class="visibility-first-level">
-        <?php if($report->graph_vis_bit == 1) { ?>
+        <?php if($user->graph_vis_bit == 1) { ?>
             <i class="far fa-eye"></i>
         <?php } else { ?>
             <i class="far fa-eye-slash"></i>
@@ -349,36 +289,23 @@
 
       $counter = 1;
 
+
       foreach ($campaign_blocks as $item) {
-        if (show_block($edit_mode, $report->{$item["type"]}, isset($avg_campaign->{$item["fb_name"]}))) {
+        if (show_block($edit_mode, $user->{$item["type"]}, 1)) {
           $float = $counter % 2 == 0 ? 'right' : 'left' ?>
           <div class="col-lg-6 report-style instagram-<?php echo $float; ?>" style="float:<?php echo $float; ?>">
             <div class="col-lg-12 left custom-left" style="padding: 0;">
-                <!-- Procent increase/decrease  -->
-                <?php
-                  if ($report->has_comp) {
-                    $percent = procent_calc($avg_campaign->{$item["fb_name"]}, $comp_campaign->{$item["fb_name"]});
-                    $color = "#2980b9";
-                    $icon = $percent < 0 ? "chevron-down" : ($percent == 0 ? "window-minimize" : "chevron-up"); ?>
-
-                    <span class="competitor-stats" style="z-index:555; color: <?php echo $color; ?>"><?php
-                      if ($icon != "window-minimize") { ?>
-                          <i class="fas fa-<?php echo $icon; ?>" style="display: inline-block; color: <?php echo $color; ?>"></i><?php
-                      }
-                      echo "$percent%"; ?>
-                    </span><?php
-                  } ?>
               <div onclick="toggle_visibility('<?php echo $item['type']; ?>')" id="<?php echo $item['type']; ?>_icon" class="visibility">
-                <?php visibility_icon($edit_mode, $report->{$item["type"]}); ?></div>
+              <?php visibility_icon($edit_mode, $user->{$item["type"]}); ?></div>
               <span class="title-box facebook"><?php echo $item["name"]; ?><i id="block-info-<?php echo $item['type']; ?>" class="info-i info-i-report fas fa-info"></i></span>
               <div class="chart-info">
 
                 <span class="stat-box-title"><?php echo $item["desc"]; ?></span>
                 <span class="graph-procent" style="margin-top: 4px;">
                     <?php
-                        echo substr($avg_campaign->{$item["fb_name"]}, 0, 6);
+
                         if ($item["currency"]) {?>
-                        <span class="currency"> <?php echo $report->currency; ?> </span>
+                            <span class="currency"> <?php echo 'EU'; ?> </span>
                     <?php } ?>
                 </span>
 
@@ -396,10 +323,10 @@
           <span class="title-report-box">Campaign Notes</span><?php
           if ($edit_mode) { ?>
             <form action="<?php echo $slug_s; ?>#campaign_advice" method="post" enctype="multipart/form-data">
-              <textarea maxlength="999" style="height: 330px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $report->campaign_advice; ?></textarea>
+              <textarea maxlength="999" style="height: 330px;" input="text" name="graph_advice" id="graph_advice"><?php echo $user->graph_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$report->campaign_advice</p>";
+            echo "<p>$user->graph_advice</p>";
           } ?>
         </div>
       </div>
@@ -413,11 +340,11 @@
       <div style="clear:both"></div><?php
       if ($edit_mode) { ?>
         <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
+          <textarea maxlength="999" input="text" name="conclusion_report" id="conclusion_report"><?php echo $user->conclusion_report; ?></textarea>
         </form><?php
       } else { ?>
         <p><?php
-          echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
+          echo $user->conclusion_report; ?>
         </p><?php
       } ?>
     </div>
@@ -429,37 +356,33 @@
 
   <script charset='utf-8'>
     var commonPost = {
-      'report': '<?php echo $report->id; ?>',
-      'type': 'report',
+      'user': '<?php echo $user_id; ?>',
+      'type': 'user',
     } <?php
 
-    if ($report->graph_vis_bit == 1 || $edit_mode) { ?>
+    if ($user->graph_vis_bit == 1 || $edit_mode) { ?>
 
       $(function() {
-        var data = <?php echo json_encode($graph_data_list); ?>;
-        var blockNames = <?php echo json_encode($campaign_blocks); ?>;
-        var labels = <?php echo json_encode($graph_labels); ?>;
+          var data = {"impressions":["2159","2350"],"reach":["1751","1668"],"cpc":["0.012706","0.03866"],"cpm":["2.566003","3.191489"],"ctr":["20.194535","8.255319"],"frequency":["1.23301","1.408873"],
+                      "spend":["5.54","7.5"],"unique_inline_link_clicks":["2","5"],"website_purchase_roas":["3","5"]};
+         var blockNames = [{"type":"cam_imp","name":"Impressions","fb_name":"impressions","desc":"Average impressions","currency":0},{"type":"cam_rch","name":"Reach","fb_name":"reach","desc":"Average reach","currency":0},{"type":"cam_cpc",
+                            "name":"Cost per click","fb_name":"cpc","desc":"Average cost per click","currency":1},{"type":"cam_cpm","name":"Cost per mille","fb_name":"cpm","desc":"The average cost for 1,000 impressions","currency":1},{"type":"cam_ctr","name":"Click through ratio","fb_name":"ctr",
+                            "desc":"Average ratio click throughs","currency":0},{"type":"cam_frq","name":"Frequency","fb_name":"frequency","desc":"Average frequency ads","currency":0},{"type":"cam_spd","name":"Spend","fb_name":"spend","desc":"Average amount spend","currency":1},
+                            {"type":"cam_lcl","name":"Link clicks","fb_name":"unique_inline_link_clicks","desc":"Average link clicks","currency":0},{"type":"cam_ras","name":"Return on ad spent","fb_name":"website_purchase_roas","desc":"Average return on ads spend","currency":0}];
+          var labels = [["Example campaign"],["Example campaign"]];
+
 
         blockNames.forEach(function(block, index) {
           $(`#block-info-${block.type}`).on('click', function() {
             showModal(initiateModal('errorModal', 'error', { 'text': block.name, 'subtext': block.desc }));
           });
-        }); <?php
+        });
 
-        if ($report->has_comp) { ?>
-          var compLabels = <?php echo json_encode($comp_graph_labels); ?>;
-          var compData = <?php echo json_encode($comp_graph_data_list); ?>;
 
-          blockNames.forEach(function(block, index) {
-            generateBarChart(`canvas${index + 1}`,
-              [data[block['fb_name']], compData[block['fb_name']]], [labels, compLabels], [true, true]);
-          }); <?php
-
-        } else { ?>
           blockNames.forEach(function(block, index) {
             generateBarChart(`canvas${index + 1}`, [data[block['fb_name']]], [labels], [true, true]);
-          }); <?php
-        } ?>
+          });
+
       });<?php
     } ?>
 
@@ -566,10 +489,13 @@
           url: ajaxurl,
           data: {
             action: 'update_config',
+            flag: 'report',
             color: $('#color').val(),
+            user_id: <?php echo $user_id; ?>,
             ...commonPost,
           },
-          success: function() {
+          success: function(r) {
+            console.log(r);
             window.location.reload();
           },
           error: function(xhr, textStatus, errorThrown) {
@@ -596,34 +522,7 @@
       var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
       $('#delete-this-audit').click(function() {
         showModal(deleteModal);
-      });
-
-      $('#delete_confirmed').click(function() {
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: {
-            'action': 'delete_page',
-            'report': '<?php echo $report->id; ?>',
-            'type': 'report',
-          },
-          success: function (response) {
-            window.location.replace('https://<?php echo $env; ?>/report-dashboard')
-          },
-          error: function(xhr, textStatus, errorThrown) {
-            var error = error_func(xhr, textStatus, errorThrown, data);
-            logError(JSON.stringify(error), 'page-templates/report_page.php', '$(\'#delete_confirmed\').click');
-            logResponse(response);
-
-            var modalData = {
-              'text': "Can't delete this audit",
-              'subtext': "Please try again later or notify an admin if the issue persists"
-            }
-            showModal(initiateModal('errorModal', 'error', modalData));
-            console.log(errorThrown);
-          }
-        });
-      });<?php
+      }); <?php
     } ?>
   </script>
 </body>

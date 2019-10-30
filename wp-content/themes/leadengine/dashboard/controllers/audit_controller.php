@@ -6,7 +6,9 @@ class audit_controller {
     $this->service = new audit_service($connection);
   }
 
+ 
   function create($page, $client, $options, $competitor) {
+    $user_id = get_current_user_id();
     $competitor_name = isset($competitor['name']) ? $competitor['name'] : NULL;
 
     $instance = new audit($this->service, (object) array(
@@ -17,20 +19,24 @@ class audit_controller {
       'facebook_bit'    => $options['facebook_checkbox'],
       'instagram_bit'   => $options['instagram_checkbox'],
       'website_bit'     => $options['website_checkbox'],
-      'mail_bit'        => 0,
-      'competitor_name' => $competitor_name,
+      'competitor_name' => $competitor_name
     ));
 
     // create audit in database
-    $instance->id = $this->service->create($instance->get_array_data());
+    $valueList = array_values($instance->get_array_data());
+    $valueString = "";
+    foreach ($valueList as $value) {
+      $valueString .= "'{$value}', ";
+    }
+    $instance->id = $this->service->create($user_id, $valueString);
 
-    $this->service->insert_template($instance->id);
-    $this->service->insert_visibility($instance->id);
+    $this->service->insert_template($user_id, $instance->id);
+    $this->service->insert_visibility($user_id, $instance->id);
 
     $slug = strtolower("audit-".str_replace(' ', '-', $instance->name)."-" . $instance->id);
 
     $new_post = array(
-      'post_author' =>  get_current_user_id(),
+      'post_author' =>  $user_id,
       'post_title'  =>  $slug,
       'post_type'   => 'page',
       'post_status' => 'publish',
@@ -114,6 +120,15 @@ class audit_controller {
 
   public function get_area_fields() {
     return explode(", ", $this->service->get_template_fields());
+  }
+
+  public function toggle_visibility($id, $field) {
+    return $this->service->toggle_config_visibility($id, $field);
+  }
+
+  public function delete_multiple($id, $audits) {
+    $audits_string = implode(', ', $audits);
+    return $this->service->delete_multiple($id, $audits_string);
   }
 }
 ?>
