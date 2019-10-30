@@ -23,6 +23,10 @@ function checkLoginState(showError = true) {
   FB.getLoginStatus(function(response) {
     if (response.status === 'connected') {
       $('.step').eq(currentTab).addClass('finish');
+      console.log(Instance.instagram_business_accounts.current);
+      if (!Instance.instagram_business_accounts.current) {
+        openIGBaccountDialog(false);
+      }
       nextPrev(1, true);
     } else if (showError) {
       showModal(initiateModal('errorModal', 'error', {
@@ -30,7 +34,7 @@ function checkLoginState(showError = true) {
         'subtext': `In order to create ${type} you have to log in to facebook.`
       }));
     }
-  }, true);
+  });
 
   return false;
 }
@@ -206,7 +210,6 @@ function validateName() {
 // Find selected option in list
 function findSelected(optionList) {
   var selected = $(optionList).find('.selected');
-  console.log({selected});
   if (selected.length == 0) {
     optionList.fadeOut(50).fadeIn(400);
     return false;

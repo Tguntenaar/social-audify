@@ -239,10 +239,9 @@
     $iba_id = $_POST['iba_id'];
     $iba_name = $_POST['iba_name'];    
 
-    $value = $user->update('User', 'instagram_business_account_id', $iba_id);
-    $value = $user->update('User', 'instagram_business_name', $iba_name);
+    $status = $user->update_list('User', array('instagram_business_account_id'=>$iba_id,'instagram_business_name'=>$iba_name));
 
-    wp_send_json(array('instagram_business_account updated succes if 0'=>$value));
+    wp_send_json(array('update succes = 1:'=>$status));
     wp_die();
   }
 

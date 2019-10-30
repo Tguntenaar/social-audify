@@ -213,38 +213,60 @@ function grabPageId(field, found) {
 }
 
 function getIGBusinessAccounts() {
-  var hasInstagramBusinessAccount = function(account) {
-    return !!account.instagram_business_account
-  }
-  if (Instance.instagram_business_accounts.length == 0) {
+  
+  if (Instance.instagram_business_accounts.all.length == 0) {
+    console.log(getIGBusinessAccountsQuery());
     FB.api(getIGBusinessAccountsQuery(), function (response) {
-      if (!response || response.error || response.data.length > 0) {
-        Instance.instagram_business_accounts = response.data;
-        response.data.forEach(function(account) {
-          if (account.hasOwnProperty('instagram_business_account')) {
-            // show account in modal
-            const {name, id} = account;
-            
-          } else {
-            // skip dit account
-          }
-        });
+      console.log(response);
+      if (!response) {
+        // error occured please reload the page
+        console.log("no response found");
+      } else if (response.error) { 
+        console.log(response.error.message);
+        if (response.error.code == 100) {
+          // Je hebt geen permissies over huidige gekoppelede account of het bestaat niet meer
+        } // misschien nog meer afvangen.
+      } else if (response.data.length == 0) {
+        console.log('no response data');
+        // trigger de uitleg van het koppelen van een fb page aan je instagram
+        // plus je instagram upgrade naar een business instagram
       } else {
-        if (!response) {
-          // error occured please reload the page
-        } else if (response.error) { 
-          if (response.error.code == 100) {
-            // Je hebt geen permissies over huidige gekoppelede account of het bestaat niet meer
-          }
-        } else if (response.data.length == 0) {
+        Instance.instagram_business_accounts.all = response.data;
+        var foundIGBaccount = displayIGBAccounts(response.data);
+      
+        if (!foundIGBaccount) {
+          // No accounts found
           // trigger de uitleg van het koppelen van een fb page aan je instagram
           // plus je instagram upgrade naar een business instagram
         }
       }
     });
   } else {
-
+    // je hebt deze aanvraag al een keer gemaakt.
+    displayIGBAccounts(Instance.instagram_business_accounts.all);
   }
+}
+
+function displayIGBAccounts(data) {
+  var foundIGBaccount = false;
+  data.forEach(function(account) {
+    if (account.hasOwnProperty('instagram_business_account')) {
+      // show account in modal
+      const {name, id} = account.instagram_business_account;
+      foundIGBaccount = true;
+      var str = `<option onclick="connectIGBAccount({name:'${name}', id:'${id}'});" class="row-ad-accounts click-option" value="${id}">${name} ${id}</option>`;
+     $('#ad-account-list').append(str);
+    } else {
+      // skip dit account
+    }
+  });
+  return foundIGBaccount;
+}
+
+function connectIGBAccount(account) {
+  console.log({account});
+  connectAccount(account);
+  Instance.instagram_business_accounts.current = account.id;
 }
 
 /**
@@ -284,13 +306,14 @@ function getAdAccounts(ad_id) {
   }
 }
 
+function isNumeric(num){
+  return !isNaN(num)
+}
+
 /**
  * Deze functie word zowel in client dashboard als report setup gebruikt
  */
 function connectAccount(typeId, clientId = false) {
-  
-  console.log(typeof typeId);
-  console.log(typeof clientId);
 
   var data = (clientId) ? {
     'action': 'update_ad_account',
@@ -298,15 +321,15 @@ function connectAccount(typeId, clientId = false) {
     'client_id': clientId,
   } : {
     'action': 'update_iba_id',
-    'iba_id': typeId,
-    'iba_name': "instagram_business_name", // FIXME:
+    'iba_id': typeId.id,
+    'iba_name': typeId.name, // FIXME: dit is de iba_name niet typeId.name
   };
 
   $.ajax({
     type: "POST",
     url: ajaxurl,
     data: data,
-    success: logResponse,
+    success: $('#adAccountModal').hide(),
     error: logResponse,
   });
 }

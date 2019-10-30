@@ -1,3 +1,5 @@
+"use strict";
+
 function testAPI() {
   console.log('Welcome! Fetching your information.... ');
   FB.api('/me', function (response) {
@@ -38,26 +40,20 @@ function testBatch() {
 
 function makeIGpromise(iba, client, competitor = 0) {
   var firstPromise = new Promise(function (resolve, reject) {
-    // if (iba != null) { TODO: catch in the next promise zodat ie alsnog de insta query uitvoertals het nodig is.
-    //   resolve(iba);
-    // } else {
-      FB.api(getIGBusinessAccountsQuery(), function (response) {
-        if (response && !response.error) {
-          // connectAccount(iba_id = getIGBusinessID(response), iba_name);
-          resolve(getIGBusinessID(response));
-        }
-        resolve({error:response.error}); // TODO: hier beter over nadenken
-      });
-    // }
+    if (iba) {
+      resolve(iba);
+    } else {
+      console.log({iba});
+    } 
   });
 
   var secondPromise = new Promise(function (resolve, reject) {
-    firstPromise.then(function (iba_id) {
-      if (typeof iba_id !== 'object') {
-        console.log(getInstaQuery(iba_id, client.instagram));
-        FB.api(getInstaQuery(iba_id, client.instagram), function (response) {
+    firstPromise.then(function (iba) {
+      if (iba) {
+        console.log(getInstaQuery(iba, client.instagram));
+        FB.api(getInstaQuery(iba, client.instagram), function (response) {
           if (response && !response.error) {
-            response.iba_id = iba_id;
+            response.iba_id = iba;
             resolve(response);
           }
           var type = (competitor) ? 'competitor' : 'client';
@@ -66,7 +62,8 @@ function makeIGpromise(iba, client, competitor = 0) {
 
       } else {
         // error occured retrieving the instagram business account
-        resolve({error:'invalid instagram', iba_id}); // TODO: iba_iba.error?
+        resolve({error:'invalid instagram', iba});
+
       }
     });
   });
@@ -95,11 +92,15 @@ function makeFbPromise(client, competitor = 0) {
  * ! facebook en instagram options rekening mee houden.
  */
 function makeApiCalls(instance) {
-  const {client, competitor, page, options, currency, ...iba_id} = instance;
+  console.log({instance});
+  const {client, competitor, page, options, currency, instagram_business_accounts} = instance;
 
   var emptyPromise = Promise.resolve('This option is disabled');
 
-  var igPromise = igPromiseComp = fbPromise = fbPromiseComp = emptyPromise;
+  var igPromise = emptyPromise;
+  var igPromiseComp = emptyPromise;
+  var fbPromise = emptyPromise;
+  var fbPromiseComp = emptyPromise;
 
   var facebook_data, instagram_data, coverPhotoSize, fbPageData;
 
@@ -107,13 +108,16 @@ function makeApiCalls(instance) {
 
 
   if (options.instagram_checkbox) {
-    igPromise = makeIGpromise(iba_id, client);
-    if (competitor && page.type === 'audit') { igPromiseComp = makeIGpromise(iba_id, competitor, 1) }
+    console.log('instagram_business_accounts.current');
+    console.log(instagram_business_accounts);
+    
+    igPromise = makeIGpromise(instagram_business_accounts.current, client);
+    if (competitor && page.type === 'audit') { igPromiseComp = makeIGpromise(instagram_business_accounts.current, competitor, 1); }
   }
 
   if (options.facebook_checkbox) {
     fbPromise = makeFbPromise(client);
-    if (competitor && page.type === 'audit') { fbPromiseComp = makeFbPromise(competitor, 1) }
+    if (competitor && page.type === 'audit') { fbPromiseComp = makeFbPromise(competitor, 1); }
   }
 
   // push them on the array
@@ -143,24 +147,25 @@ function makeApiCalls(instance) {
       competitor.data = {instagram_data, facebook_data};
     }
 
-    // FIXME: dit is om te kijken of een manual bit aan moet voor client en competitor apart
     if ((allResponses[0] != undefined && !!allResponses[0].error) || (competitor && (allResponses[2] != undefined && !!allResponses[2].error))) {
-      var i = 0;
-
-      if ((allResponses[0] != undefined && !!allResponses[0].error)) {
-        i++;
-        if ((competitor && (allResponses[2] != undefined && !!allResponses[2].error))) {
-          i++;
-        }
-      }
-
-      // if ((allResponses[0] != undefined && !!allResponses[0].error) && (competitor && (allResponses[2] != undefined && !!allResponses[2].error))) {
-      //   i = 2;
-      // } else if (!!allResponses[0].error) {
-      //   i = 1;
-      // } else if ((competitor && !!allResponses[2].error)) {
-      //   i = 0;
+      
+      // FIXME: dit is om te kijken of een manual bit aan moet voor client en competitor apart
+      // var i = 0;
+      // if ((allResponses[0] != undefined && !!allResponses[0].error)) {
+      //   i++;
+      //   if ((competitor && (allResponses[2] != undefined && !!allResponses[2].error))) {
+      //     i++;
+      //   }
       // }
+
+      // TODO:
+      if ((allResponses[0] != undefined && !!allResponses[0].error) && (competitor && (allResponses[2] != undefined && !!allResponses[2].error))) {
+        var i = 2;
+      } else if (!!allResponses[0].error) {
+        var i = 1;
+      } else if ((competitor && !!allResponses[2].error)) {
+        var i = 0;
+      }
 
       askToContinue(client, page, options, competitor, i);
     } else {
@@ -172,7 +177,7 @@ function makeApiCalls(instance) {
     console.log(`%c Reason is ${reason}`, 'color: red');
     console.log({reason});
 
-    var msg = (typeof reason == 'string') ? reason : reason.error.message;
+    var msg = (!!reason.error) ? reason.error.message : reason;
 
     showModal(initiateModal('errorModal', 'error', {
       'text': `${msg}`,
@@ -285,13 +290,13 @@ function handleResponseInsta(response) {
 
     info.followers_count = bd.followers_count;
     info.follows_count = bd.follows_count;
-    return info
+    return info;
   }
 }
 
 function unpackMediaInfo(media) {
   var tLikes, tComments, tPosts, likesLM, commentsLM, postsLM, averageComments,
-      averageLikes;
+      averageLikes, avgEngagement;
   tLikes = tComments = tPosts = likesLM = commentsLM = postsLM = 0;
   var captions = [];
   var likesPerPost = [];
@@ -397,9 +402,9 @@ function getCoverPhotosDetails(response) {
 function unpackPageInfo(response) {
   var loc, vid, pst;
 
-  if(response.location != null) { loc = 1; } else { loc = 0; }
-  if(response.videos != null) { vid = response.videos.data.length; } else { vid = 0; }
-  if(response.posts != null) { pst = response.posts.data; } else { pst = {}; }
+  loc = (!response.location) ? 0 : 1;
+  vid = (!response.videos) ? 0 : response.videos.data.length;
+  pst = (!response.posts) ? {} : response.posts.data;
 
   var country_page_likes = response.fan_count,
       pfData = response.picture.data,
@@ -410,8 +415,8 @@ function unpackPageInfo(response) {
       native_videos = vid,
       location = loc;
 
-  var nLink, nStatus, nPhoto, nVideo, nOffer, totalMessageLength, tPosts, avgMessageLength, totalPostLastMonth;
-  nLink = nStatus = nPhoto = nVideo = nOffer = totalMessageLength = tPosts = avgMessageLength = totalPostLastMonth = 0;
+  var nLink, nStatus, nPhoto, nVideo, nOffer, totalMessageLength, tPosts, avgMessageLength, totalPostLastMonth, runningAdds;
+  nLink = nStatus = nPhoto = nVideo = nOffer = totalMessageLength = tPosts = avgMessageLength = totalPostLastMonth = runningAdds = 0;
 
   for (var i = 0; i < posts.length; i++) {
     if (posts[i].created_time) {
@@ -438,8 +443,6 @@ function unpackPageInfo(response) {
 
   avgMessageLength = ( totalMessageLength / Math.max(1, tPosts) ).toFixed(2);
 
-  var runningAdds = 0;
-
   return {
       totalPostLastMonth, country_page_likes, 
       pf_picture_size, location,
@@ -449,7 +452,7 @@ function unpackPageInfo(response) {
 }
 
 function getIGBusinessAccountsQuery() {
-  return '/me/accounts?fields=instagram_business_account';
+  return '/me/accounts?fields=instagram_business_account{name},name';
 }
 
 function getAdAccountsQuery() {
@@ -464,12 +467,8 @@ function getInstaQuery(iba_id, business_name) {
   return `${iba_id}?fields=business_discovery.username(${business_name}){username, media_count, followers_count, follows_count, media{timestamp, like_count, comments_count, caption}}`;
 }
 
-/**
- * Edge is campaigns or ads
- */
 function getCampaignsQuery(act_id, edge) {
     return `/${act_id}?fields=currency,${edge}{id,name,insights{reach, impressions, cpc, cpm, cpp, ctr, frequency, spend, unique_inline_link_clicks, website_purchase_roas}}`;
-    // return `/${act_id}/${edge}?fields=id,name,insights{impressions, cpm, cpp, ctr, frequency, spend}`;
 }
 
 function handleResponseCoverphoto(response) {

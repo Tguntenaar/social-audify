@@ -16,6 +16,9 @@
     include(dirname(__FILE__)."/../header/dashboard_header.php");
 
     $user = $user_control->get($user_id);
+    // FIXME:
+    $instagram_id = (isset($user->instagram_business_account_id) && $user->instagram_business_account_id) ? json_encode($user->instagram_business_account_id) : 'null';
+
     $clients = $client_control->get_all();
   ?>
 
@@ -86,7 +89,7 @@
                   data-show-faces="false"
                   data-auto-logout-link="true"
                   data-use-continue-as="false"
-                  onlogin="checkLoginState();">
+                  onlogin="checkLoginState();<?php echo $ask_ig;?>;">
               </div>
             </div>
 
@@ -186,12 +189,35 @@
   <script>
     // Audit Instance - filled in multistep.
     var Instance = {
-      page : {
-        type: 'audit',
-        manual: 0,
-        competitor_manual: 0,
+      instagram_business_accounts: {
+        all: [],
+        current: <?php echo $instagram_id; ?>,
       },
-      iba_id : <?php echo (isset($user->instagram_business_account_id) && $user->instagram_business_account_id) ? json_encode($user->instagram_business_account_id) : 'null'; ?>,
+      page : {
+        competitor_manual: 0,
+        manual: 0,
+        type: 'audit',
+      },
+    };
+
+    function openIGBaccountDialog(connected) {
+      if (connected) {
+        // no permission error
+        var str = 'You have no permission to use your current instagram business account.';
+      } else {
+        // no account configured yet
+        var str = 'You have no instagram business account configured yet.';
+      }
+
+      // Connect Instagram Business Account Modal
+      showModal(initiateModal('adAccountModal', 'select', {
+        text: `${str}<br/>Select your <strong><ins>personal</ins></strong> instagram business account.`,
+        html: `<select size="2" id="ad-account-list" class="ad-account-list"></select>
+                <input type="hidden" id="client_id" name="client_id" value="0">
+                <input type="hidden" id="ad_id" name="ad_id" value="">`,
+      }));
+
+      getIGBusinessAccounts();
     }
 
     // Selectable list - TODO : kan wss naar dashboard-header
@@ -292,6 +318,8 @@
         // If makeApiCalls doesn't redirect...
         return false;
       }).catch((reason) => {
+        
+        console.log(reason);
         showModal(initiateModal('errorModal', 'error', {
           'text': "Problem with Login Status",
           'subtext': "Please try again later or notify an admin if the issue persists"

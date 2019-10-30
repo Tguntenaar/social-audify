@@ -380,6 +380,46 @@
       return avg;
     }
 
+    function calculateAvgObject(data) {
+      var sum = {};
+      if (data.length == 1) {
+        return data[0];
+      }
+
+      data.forEach(function(object, index) {
+        for (var key in object) {
+          // Couldn't parse to float
+          var value = parseFloat(object[key])
+          if (Number.isNaN(value)) {
+            // check if start date is earlier than current
+            if (key == date_start && (!(date_start in sum) 
+            || isEarlier(object.date_start, sum.date_start))
+            || (key == date_stop && (!(date_stop in sum) 
+            || isLater(object.date_start, sum.date_stop)))) {
+              sum[key] = object[key];
+            }
+          } else {
+            sum[key] = (key in sum) ? sum[key] + value : value;
+          }
+        }
+      });
+      
+      for (key in sum) {
+        if (typeof sum[key] == 'number') {
+          sum[key] /= data.length;
+        }
+      }
+      
+      return avg;
+    }
+
+    function isEarlier(d1, d2) {
+      return (new Date(d1).getTime() < new Date(d2).getTime());
+    }
+    function isLater(d1, d2) {
+      return (new Date(d1).getTime() > new Date(d2).getTime());
+    }
+
     $(function() {
       <?php
       if (isset($_GET['cid'])) { ?>
@@ -397,10 +437,9 @@
         html: `<select size="2" id="ad-account-list" class="ad-account-list"></select>
                 <input type="hidden"  id="client_id" name="client_id" value="0">
                 <input type="hidden" id="ad_id" name="ad_id" value="">`,
-        confirm: 'adAccountConfirm'
       }
 
-      var adAccountModal = initiateModal('adAccountModal', 'confirm', modalData);
+      var adAccountModal = initiateModal('adAccountModal', 'select', modalData);
 
       // Connect Ad Account
       $('.connect-ad-account, .change-ad-account').on('click', function() {
@@ -421,10 +460,6 @@
         $('#ad-account-list').focus();
       }
 
-      // 3. Update Ad id
-      $('#adAccountConfirm').click(function() {
-        connect();
-      });
 
       // Searchable lists
       ['client', 'compare'].forEach(function(name) {
@@ -490,33 +525,32 @@
         }));
       });
     }
+
+    function connect() {
+      if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
+
+        var clientId = $('#client_id').val();
+        var adId = selectedOption.val();
+        var clickedClient = $(`.campaign-${clientId}`);
+
+        // Change the data-client attribute
+        var clientDataAttribute = clickedClient.data('client');
+
+        clientDataAttribute.ad_id = adId;
+        clickedClient.data("client", clientDataAttribute);
+
+        // Change the class of the overlay
+        var overlay = clickedClient.find('div');
+        overlay.addClass('change-ad-account').removeClass('connect-ad-account');
+        // Change the link
+        var link = overlay.find('p');
+        link.text('Change ad account');
+
+        // Connect the account
+        connectAccount(selectedOption.val(), clientId);
+        $('#adAccountModal').hide();
+      }
+    }
   </script>
 </body>
-<script>
-    function connect() {
-        if (selectedOption = getSelectedAdAccount($('#ad-account-list'))) {
-
-          var clientId = $('#client_id').val();
-          var adId = selectedOption.val();
-          var clickedClient = $(`.campaign-${clientId}`);
-
-          // Change the data-client attribute
-          var clientDataAttribute = clickedClient.data('client');
-
-          clientDataAttribute.ad_id = adId;
-          clickedClient.data("client", clientDataAttribute);
-
-          // Change the class of the overlay
-          var overlay = clickedClient.find('div');
-          overlay.addClass('change-ad-account').removeClass('connect-ad-account');
-          // Change the link
-          var link = overlay.find('p');
-          link.text('Change ad account');
-
-          // Connect the account
-          connectAccount(selectedOption.val(), clientId);
-          $('#adAccountModal').css({'display': 'none'});
-        }
-    }
-</script>
 </html>
