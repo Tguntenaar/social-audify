@@ -227,7 +227,7 @@
         <?php echo get_avatar($author_id, 32); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php $company = get_user_meta($user_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
+        <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
         if ($edit_mode) { ?>
           <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
