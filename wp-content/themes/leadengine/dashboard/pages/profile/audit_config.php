@@ -554,7 +554,7 @@
       </div><?php
     }
     if ($user->instagram_vis_bit || $edit_mode) { ?>
-      <div class="col-lg-12 facebook-info" >
+      <div class="col-lg-12 facebook-info" id="instagram-info">
         <?php if($user->instagram_title != NULL) { $instagram_title = $user->instagram_title; } else { $instagram_title = 'Instagram stats:'; } ?>
         <?php if($user->instagram_sub_title != NULL) { $instagram_sub_title = $user->instagram_sub_title; } else { $instagram_sub_title = 'Statistics of your Instagram page.'; } ?>
 
@@ -724,7 +724,7 @@
       </div><?php
     }
     if ($user->website_vis_bit || $edit_mode) { ?>
-      <div class="col-lg-12 facebook-info website-info">
+      <div class="col-lg-12 facebook-info website-info" id="website-info">
 
           <?php if($user->website_title != NULL) { $website_title = $user->website_title; } else { $website_title = 'Website stats:'; } ?>
           <?php if($user->website_sub_title != NULL) { $website_sub_title = $user->website_sub_title; } else { $website_sub_title = 'Statistics of your Website page.'; } ?>
@@ -814,7 +814,6 @@
       </div><?php
     } ?>
   </section>
-  <?php var_dump($user->conclusion_vis_bit); ?>
   <?php if($user->conclusion_vis_bit == 1 || $edit_mode) { ?>
       <section class="audit-conclusion col-lg-12">
         <?php visibility_short_code($edit_mode, $user->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
@@ -894,7 +893,56 @@
     };
 
     $(function() {
-      // On change of an text area show update all
+       $("#picture_vis_bit_icon").hover(function(){
+           $('.client-profile-picture').css("opacity", "0.4");
+           $('.audit-company-name').css("opacity", "0.4");
+       });
+
+       $( "#picture_vis_bit_icon" ).mouseleave(function() {
+           $('.client-profile-picture').css("opacity", "1");
+           $('.audit-company-name').css("opacity", "1");
+       });
+
+       $("#introduction_vis_bit_icon").hover(function(){
+           $('#intro_audit').css("opacity", "0.4");
+       });
+
+       $( "#introduction_vis_bit_icon" ).mouseleave(function() {
+           $('#intro_audit').css("opacity", "1");
+       });
+
+       $("#conclusion_vis_bit_icon").hover(function(){
+           $('.left-conlusion').css("opacity", "0.4");
+       });
+
+       $("#conclusion_vis_bit_icon" ).mouseleave(function() {
+           $('.left-conlusion').css("opacity", "1");
+       });
+
+       $("#facebook_vis_bit_icon").hover(function(){
+           $('#facebook-info').css("opacity", "0.4");
+       });
+
+       $("#facebook_vis_bit_icon").mouseleave(function(){
+           $('#facebook-info').css("opacity", "1");
+       });
+
+       $("#instagram_vis_bit_icon").hover(function(){
+           $('#instagram-info').css("opacity", "0.4");
+       });
+
+       $("#instagram_vis_bit_icon").mouseleave(function(){
+           $('#instagram-info').css("opacity", "1");
+       });
+
+       $("#website_vis_bit_icon").hover(function(){
+           $('#website-info').css("opacity", "0.4");
+       });
+
+       $("#website_vis_bit_icon").mouseleave(function(){
+           $('#website-info').css("opacity", "1");
+       });
+       // On change of an text area show update all
       $("textarea, input[type=text]").on('keyup paste change', function() {
         $(this).data('changed', true);
         toggleUpdate(true);
