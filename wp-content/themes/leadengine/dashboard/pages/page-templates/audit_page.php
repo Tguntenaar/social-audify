@@ -306,12 +306,19 @@
       </div><?php
     } ?>
 
+    <?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?>
+
     <div class="audit-intro<?php echo ($audit->video_iframe != NULL && $audit->video_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
+      <?php if($audit->picture_vis_bit == 1 || $edit_mode) { ?>
       <div class="client-profile-picture">
         <?php echo get_avatar($author_id, 32); ?>
+        <?php visibility_short_code($edit_mode, $audit->picture_vis_bit, 'picture_vis_bit', 'visibility-first-level'); ?>
       </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
+      } else { echo '<div class="audit-intro-text">'; }
+
+      if($audit->introduction_vis_bit == 1 || $edit_mode) {
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
@@ -320,6 +327,7 @@
           <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></p><?php
         } ?>
       </div>
+    <?php }  else { echo '</div>'; }?>
     </div><?php
     if ($audit->facebook_bit == "1" && ($audit->facebook_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
@@ -670,24 +678,29 @@
       </div><?php
     } ?>
   </section>
-  <section class="audit-conclusion col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php
-            echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
-          ?></textarea>
-        </form><?php
-      } else { ?>
-        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-          echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
-        ?></p><?php
-      } ?>
-    </div>
-  </section>
+
+  <?php if($audit->conclusion_vis_bit == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion col-lg-12">
+        <?php visibility_short_code($edit_mode, $audit->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
+
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php
+                echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
+              ?></textarea>
+            </form><?php
+          } else { ?>
+            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+              echo $audit->conclusion == NULL ? $user->conclusion_audit : $audit->conclusion;
+            ?></p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php

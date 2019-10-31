@@ -132,6 +132,15 @@
     }
   }
 
+  function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
+    if ($edit_mode) {
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
+        <i class="far fa-eye<?php echo $slash; ?>"></i>
+      </div><?php
+    }
+  }
+
   // Percent Calculator
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
@@ -222,21 +231,29 @@
          value="https://<?php echo $env; ?>/public/<?php echo $slug; ?>" />
 
     <!-- Intro -->
+    <?php visibility_short_code($edit_mode, $report->introduction_vis_bit_report, 'introduction_vis_bit_report', 'visibility-first-level'); ?>
+
     <div class="audit-intro report-variant-intro col-lg-10 col-lg-offset-2">
-      <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
-      </div>
+      <?php if($report->picture_vis_bit_report == 1 || $edit_mode) { ?>
+          <div class="client-profile-picture">
+            <?php echo get_avatar($author_id, 32); ?>
+            <?php visibility_short_code($edit_mode, $report->picture_vis_bit_report, 'picture_vis_bit_report', 'visibility-first-level'); ?>
+          </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
-        if ($edit_mode) { ?>
-          <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
-          </form><?php
-        } else { ?>
-          <p><?php
-            echo ($report->introduction == NULL) ? $user->intro_report: $report->introduction; ?>
-          </p><?php
-        } ?>
+        } else { echo '<div class="audit-intro-text">'; }
+
+        if($report->introduction_vis_bit_report == 1 || $edit_mode) {
+            if ($edit_mode) { ?>
+              <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
+                <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
+              </form><?php
+            } else { ?>
+              <p><?php
+                echo ($report->introduction == NULL) ? $user->intro_report: $report->introduction; ?>
+              </p><?php
+            } ?>
+        <?php } ?>
       </div>
     </div> <?php
 
@@ -406,22 +423,26 @@
     </div>
     <?php } ?>
   </section>
-  <section class="audit-conclusion audit-conclusion-variant col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
-        </form><?php
-      } else { ?>
-        <p><?php
-          echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
-        </p><?php
-      } ?>
-    </div>
-  </section>
+
+  <?php if($report->conclusion_vis_bit_report == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion audit-conclusion-variant col-lg-12">
+        <?php visibility_short_code($edit_mode, $report->conclusion_vis_bit_report, 'conclusion_vis_bit_report', 'visibility-first-level'); ?>
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
+            </form><?php
+          } else { ?>
+            <p><?php
+              echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
+            </p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>

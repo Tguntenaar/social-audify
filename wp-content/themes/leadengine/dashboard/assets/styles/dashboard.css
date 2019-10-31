@@ -530,6 +530,26 @@ header {
 	cursor: pointer;
 }
 
+#introduction_vis_bit_icon,
+#introduction_vis_bit_report_icon {
+	margin-top: 45px;
+	top: auto;
+	position: absolute;
+}
+
+#picture_vis_bit_icon,
+#picture_vis_bit_report_icon {
+	right: auto;
+	top: auto;
+	bottom: -80px;
+	margin-left: -37px;
+}
+
+#conclusion_vis_bit_icon,
+#conclusion_vis_bit_report_icon {
+	margin-top: -30px;
+}
+
 .visibility-first-level i {
 	font-size: 20px;
 	margin-left: 10px;
@@ -2041,7 +2061,8 @@ nav ul a li {
 	height: auto;
 }
 
-.custom-content .lds-dual-ring {
+.custom-content .lds-dual-ring,
+.visibility-first-level .lds-dual-ring {
 		width: 25px !important;
 		height: 25px !important;
 		margin-left: -12px !important;
@@ -2050,7 +2071,9 @@ nav ul a li {
 		top: 10px;
 }
 
-.custom-content .lds-dual-ring:after {
+
+.custom-content .lds-dual-ring:after,
+.visibility-first-level .lds-dual-ring:after {
 	width: 25px !important;
 	height: 25px !important;
 	margin-left: -12px !important;
