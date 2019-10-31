@@ -402,19 +402,27 @@
       </div><?php
     } ?>
 
+    <?php visibility_short_code($edit_mode, $user->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?>
+
     <div class="audit-intro<?php echo ($user->std_iframe != NULL && $user->std_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
-      <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
-      </div>
+     <?php if($user->picture_vis_bit == 1 || $edit_mode) { ?>
+          <div class="client-profile-picture">
+            <?php echo get_avatar($author_id, 32); ?>
+            <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'visibility-first-level'); ?>
+          </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
-        if ($edit_mode) { ?>
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text"  name="intro_audit" id="intro_audit" style="background: #f5f6fa;"><?php echo $user->intro_audit; ?></textarea>
-          </form><?php
-        } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo $user->intro_audit;  ?></p><?php
-        } ?>
+        } else { echo '<div class="audit-intro-text">'; }
+
+        if($user->introduction_vis_bit == 1 || $edit_mode) {
+            if ($edit_mode) { ?>
+              <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
+                <textarea maxlength="999" input="text"  name="intro_audit" id="intro_audit" style="background: #f5f6fa;"><?php echo $user->intro_audit; ?></textarea>
+              </form><?php
+            } else { ?>
+              <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo $user->intro_audit;  ?></p><?php
+            }
+        } else { echo '</div>'; }?>
       </div>
   </div><?php
     if ($user->facebook_vis_bit || $edit_mode) { ?>
@@ -806,24 +814,30 @@
       </div><?php
     } ?>
   </section>
-  <section class="audit-conclusion col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text"  name="conclusion_audit" id="conclusion_audit"><?php
-            echo $user->conclusion_audit;
-          ?></textarea>
-        </form><?php
-      } else { ?>
-        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-          echo $user->conclusion_audit;
-        ?></p><?php
-      } ?>
-    </div>
-  </section>
+  <?php var_dump($user->conclusion_vis_bit); ?>
+  <?php if($user->conclusion_vis_bit == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion col-lg-12">
+        <?php visibility_short_code($edit_mode, $user->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
+
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text"  name="conclusion_audit" id="conclusion_audit"><?php
+                echo $user->conclusion_audit;
+              ?></textarea>
+            </form><?php
+          } else { ?>
+            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+              echo $user->conclusion_audit;
+            ?></p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
+
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php

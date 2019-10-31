@@ -113,6 +113,15 @@
     }
   }
 
+  function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
+    if ($edit_mode) {
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
+        <i class="far fa-eye<?php echo $slash; ?>"></i>
+      </div><?php
+    }
+  }
+
   // Percent Calculator
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
@@ -200,20 +209,28 @@
          value="https://<?php echo $env; ?>/public/<?php echo $slug; ?>" />
 
     <!-- Intro -->
+    <?php visibility_short_code($edit_mode, $user->introduction_vis_bit_report, 'introduction_vis_bit_report', 'visibility-first-level'); ?>
+
     <div class="audit-intro report-variant-intro col-lg-10 col-lg-offset-2">
-      <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
-      </div>
+      <?php if($user->picture_vis_bit_report == 1 || $edit_mode) { ?>
+          <div class="client-profile-picture">
+            <?php echo get_avatar($author_id, 32); ?>
+            <?php visibility_short_code($edit_mode, $user->picture_vis_bit_report, 'picture_vis_bit_report', 'visibility-first-level'); ?>
+          </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
-        if ($edit_mode) { ?>
-          <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text" name="introduction" id="intro_report"><?php echo $user->intro_report; ?></textarea>
-          </form><?php
-        } else { ?>
-          <p><?php
-            echo $user->intro_report; ?>
-          </p><?php
+        } else { echo '<div class="audit-intro-text">'; }
+
+        if($user->introduction_vis_bit_report == 1 || $edit_mode) {
+            if ($edit_mode) { ?>
+              <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
+                <textarea maxlength="999" input="text" name="introduction" id="intro_report"><?php echo $user->intro_report; ?></textarea>
+              </form><?php
+            } else { ?>
+              <p><?php
+                echo $user->intro_report; ?>
+              </p><?php
+            }
         } ?>
       </div>
     </div> <?php
@@ -333,22 +350,27 @@
     </div>
     <?php } ?>
   </section>
-  <section class="audit-conclusion audit-conclusion-variant col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text" name="conclusion_report" id="conclusion_report"><?php echo $user->conclusion_report; ?></textarea>
-        </form><?php
-      } else { ?>
-        <p><?php
-          echo $user->conclusion_report; ?>
-        </p><?php
-      } ?>
-    </div>
-  </section>
+
+  <?php if($user->conclusion_vis_bit_report == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion audit-conclusion-variant col-lg-12">
+        <?php visibility_short_code($edit_mode, $user->conclusion_vis_bit_report, 'conclusion_vis_bit_report', 'visibility-first-level'); ?>
+
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text" name="conclusion_report" id="conclusion_report"><?php echo $user->conclusion_report; ?></textarea>
+            </form><?php
+          } else { ?>
+            <p><?php
+              echo $user->conclusion_report; ?>
+            </p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
@@ -443,7 +465,7 @@
               'field': field_name,
               ...commonPost,
             },
-            success: function () { field.html(html) },
+            success: function (response) { console.log(response); field.html(html) },
             error: function(xhr, textStatus, errorThrown) {
                 var error = error_func(xhr, textStatus, errorThrown, data);
                 logError(JSON.stringify(error), 'page-templates/report_page.php', 'toggle_visiblity');
