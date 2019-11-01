@@ -241,7 +241,7 @@
               <?php
             } else { ?>
               <p><?php
-                echo change_tags($user->intro_report); ?>
+                echo "<pre>" . change_tags($user->intro_report) . "</pre>"; ?>
               </p><?php
             }
         } ?>
@@ -295,7 +295,7 @@
             </form><?php
           } else {
               $c_advice = change_tags($user->campaign_advice);
-              echo "<p>$c_advice</p>";
+              echo "<pre>$c_advice</pre>";
           } ?>
         </div>
       </div>
@@ -358,7 +358,7 @@
             </form><?php
           } else {
             $g_advice = change_tags($user->graph_advice);
-            echo "<p>$g_advice</p>";
+            echo "<pre>$g_advice</pre>";
           } ?>
         </div>
       </div>
@@ -380,7 +380,7 @@
             </form><?php
           } else { ?>
             <p><?php
-              echo $user->conclusion_report; ?>
+              echo "<pre>" . $user->conclusion_report . "</pre>"; ?>
             </p><?php
           } ?>
         </div>

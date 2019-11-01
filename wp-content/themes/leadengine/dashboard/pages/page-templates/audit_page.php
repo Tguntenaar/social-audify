@@ -377,8 +377,9 @@
               You can insert the following tags in all the text fields: <span style="color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
           </div>
           <?php
-        } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php if ($audit->introduction == NULL) { echo change_tags($user->intro_audit, $client, $audit); } else { echo change_tags($audit->introduction, $client, $audit); } ?></p><?php
+      } else {  ?>
+          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
+              <?php if ($audit->introduction == NULL) { echo "<pre>" . change_tags($user->intro_audit, $client, $audit) . "</pre>"; } else { echo "<pre>" . change_tags($audit->introduction, $client, $audit) . "</pre>"; } ?></p><?php
         } ?>
       </div>
     <?php }  else { echo '</div>'; }?>
@@ -483,10 +484,10 @@
                 <span class="advice-title">Facebook advice</span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
-                    <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
+                    <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo  $advice['fb']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['fb'], $client, $audit); ?></p><?php
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['fb'], $client, $audit) . "</pre>"; ?><?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
               </div>
@@ -663,7 +664,7 @@
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['ig'], $client, $audit); ?> </p>
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['ig'], $client, $audit) . "</pre>"; ?> </p>
                   <?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
@@ -724,7 +725,7 @@
           } else { ?>
             <span class="score-text"><?php echo $score['wb']; ?>%</span>
             <span class="advice-title margin-advice-title">Website advice</span>
-            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['wb'], $client, $audit); ?></p>
+            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['wb'], $client, $audit) . "</pre>"; ?></p>
             <?php
             call_to_contact($phone, $author->user_email, $calendar_link);
           } ?>
@@ -749,7 +750,7 @@
             </form><?php
           } else { ?>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-              echo $audit->conclusion == NULL ? change_tags($user->conclusion_audit, $client, $audit) : change_tags($audit->conclusion, $client, $audit);
+              echo $audit->conclusion == NULL ? "<pre>" . change_tags($user->conclusion_audit, $client, $audit) . "</pre>" : "<pre>" . change_tags($audit->conclusion, $client, $audit) . "</pre>";
             ?></p><?php
           } ?>
         </div>

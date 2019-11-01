@@ -266,7 +266,7 @@
               <?php
             } else { ?>
               <p><?php
-                echo ($report->introduction == NULL) ? change_tags($user->intro_report, $client): change_tags($report->introduction, $client); ?>
+                echo ($report->introduction == NULL) ? "<pre>" . change_tags($user->intro_report, $client) . "</pre>" : "<pre>" . change_tags($report->introduction, $client) . "</pre>"; ?>
               </p><?php
             } ?>
         <?php } ?>
@@ -358,7 +358,7 @@
             </form><?php
           } else {
               $social_advice = change_tags($report->social_advice, $client);
-              echo "<p>$social_advice</p>";
+              echo "<pre>$social_advice</pre>";
           } ?>
         </div>
       </div>
@@ -434,7 +434,7 @@
             </form><?php
           } else {
               $campaign_advice = change_tags($report->campaign_advice, $client);
-              echo "<p>$campaign_advice</p>";
+              echo "<pre>$campaign_advice</pre>";
           } ?>
         </div>
       </div>
@@ -455,7 +455,7 @@
             </form><?php
           } else { ?>
             <p><?php
-              echo ($report->conclusion == NULL) ? change_tags($user->conclusion_report, $client) : change_tags($report->conclusion, $client); ?>
+              echo ($report->conclusion == NULL) ? "<pre>" . change_tags($user->conclusion_report, $client) . "</pre>" : "<pre>" . change_tags($report->conclusion, $client) . "</pre>"; ?>
             </p><?php
           } ?>
         </div>

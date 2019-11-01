@@ -452,7 +452,7 @@
                   You can insert the following tags in all the text fields: <span style="color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
               </div> <?php
             } else { ?>
-              <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo change_tags($user->intro_audit);  ?></p><?php
+              <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo "<pre>" . change_tags($user->intro_audit) . "</pre>";  ?></p><?php
             }
         } else { echo '</div>'; }?>
       </div>
@@ -551,7 +551,7 @@
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['fb']); ?></p><?php
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['fb']) . "</pre>"; ?></p><?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
               </div>
@@ -720,7 +720,7 @@
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['ig']); ?> </p>
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['ig']) . "</pre>"; ?> </p>
                   <?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
@@ -808,7 +808,7 @@
                 <span class="advice-title margin-advice-title">Website advice</span>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
 
-                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo change_tags($advice['wb']); ?></textarea>
+                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo "<pre>" . change_tags($advice['wb']) . "</pre>"; ?></textarea>
                 </form><?php
               } else { ?>
                 <span class="score-text"><?php echo $score['wb']; ?>%</span>
@@ -862,7 +862,7 @@
             </form><?php
           } else { ?>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-              echo change_tags($user->conclusion_audit);
+              echo "<pre>" . change_tags($user->conclusion_audit) . "</pre>";
             ?></p><?php
           } ?>
         </div>
