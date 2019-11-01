@@ -550,6 +550,12 @@ header {
 	margin-top: -30px;
 }
 
+
+#picture_vis_bit_icon:hover  .client-profile-picture img,
+#picture_vis_bit_report_icon:hover  .client-profile-picture img {
+	opacity: 0.6;
+}
+
 .visibility-first-level i {
 	font-size: 20px;
 	margin-left: 10px;

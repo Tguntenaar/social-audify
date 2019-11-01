@@ -377,6 +377,50 @@
   </div>
 
   <script charset='utf-8'>
+      $(function() {
+         $("#picture_vis_bit_report_icon").hover(function(){
+             $('.client-profile-picture').css("opacity", "0.4");
+             $('.audit-company-name').css("opacity", "0.4");
+         });
+
+         $("#picture_vis_bit_report_icon" ).mouseleave(function() {
+             $('.client-profile-picture').css("opacity", "1");
+             $('.audit-company-name').css("opacity", "1");
+         });
+
+         $("#introduction_vis_bit_report_icon").hover(function(){
+             $('#intro_report').css("opacity", "0.4");
+         });
+
+         $( "#introduction_vis_bit_report_icon" ).mouseleave(function() {
+             $('#intro_report').css("opacity", "1");
+         });
+
+         $("#conclusion_vis_bit_report_icon").hover(function(){
+             $('.left-conlusion').css("opacity", "0.4");
+         });
+
+         $("#conclusion_vis_bit_report_icon" ).mouseleave(function() {
+             $('.left-conlusion').css("opacity", "1");
+         });
+
+         $("#campaign_vis_bit_icon").hover(function(){
+             $('#social-stats').css("opacity", "0.4");
+         });
+
+         $("#campaign_vis_bit_icon").mouseleave(function(){
+             $('#social-stats').css("opacity", "1");
+         });
+
+         $("#graph_vis_bit_icon").hover(function(){
+             $('.graph-report').css("opacity", "0.4");
+         });
+
+         $("#graph_vis_bit_icon").mouseleave(function(){
+             $('.graph-report').css("opacity", "1");
+         });
+
+      });
     var commonPost = {
       'user': '<?php echo $user_id; ?>',
       'type': 'user',

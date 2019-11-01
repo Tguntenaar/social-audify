@@ -497,6 +497,50 @@
         updateAll();
       });
 
+      $(function() {
+         $("#picture_vis_bit_report_icon").hover(function(){
+             $('.client-profile-picture').css("opacity", "0.4");
+             $('.audit-company-name').css("opacity", "0.4");
+         });
+
+         $("#picture_vis_bit_report_icon" ).mouseleave(function() {
+             $('.client-profile-picture').css("opacity", "1");
+             $('.audit-company-name').css("opacity", "1");
+         });
+
+         $("#introduction_vis_bit_report_icon").hover(function(){
+             $('#introduction').css("opacity", "0.4");
+         });
+
+         $( "#introduction_vis_bit_report_icon" ).mouseleave(function() {
+             $('#introduction').css("opacity", "1");
+         });
+
+         $("#conclusion_vis_bit_report_icon").hover(function(){
+             $('.left-conlusion').css("opacity", "0.4");
+         });
+
+         $("#conclusion_vis_bit_report_icon" ).mouseleave(function() {
+             $('.left-conlusion').css("opacity", "1");
+         });
+
+         $("#campaign_vis_bit_icon").hover(function(){
+             $('#social-stats').css("opacity", "0.4");
+         });
+
+         $("#campaign_vis_bit_icon").mouseleave(function(){
+             $('#social-stats').css("opacity", "1");
+         });
+
+         $("#graph_vis_bit_icon").hover(function(){
+             $('.graph-report').css("opacity", "0.4");
+         });
+
+         $("#graph_vis_bit_icon").mouseleave(function(){
+             $('.graph-report').css("opacity", "1");
+         });
+
+      });
 
       function updateAll() {
           var data = {

@@ -442,7 +442,7 @@
       </div><?php
     }
     if ($audit->instagram_bit == "1" && ($audit->instagram_vis_bit || $edit_mode)) { ?>
-      <div class="col-lg-12 facebook-info">
+      <div class="col-lg-12 facebook-info" id="instagram-info">
         <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; Instagram stats:</span>
         <span class="sub-title">Statistics of your Instagram page.</span><?php
         visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level');
@@ -797,6 +797,58 @@
     };
 
     $(function() {
+        $("#picture_vis_bit_icon").hover(function(){
+            $('.client-profile-picture').css("opacity", "0.6");
+            $('.audit-company-name').css("opacity", "0.4");
+        });
+
+        $( "#picture_vis_bit_icon" ).mouseleave(function() {
+            $('.client-profile-picture').css("opacity", "1");
+            $('.audit-company-name').css("opacity", "1");
+        });
+
+        $("#introduction_vis_bit_icon").hover(function(){
+            $('#introduction').css("opacity", "0.4");
+        });
+
+        $( "#introduction_vis_bit_icon" ).mouseleave(function() {
+            $('#introduction').css("opacity", "1");
+        });
+
+        $("#conclusion_vis_bit_icon").hover(function(){
+            $('.left-conlusion').css("opacity", "0.4");
+        });
+
+        $("#conclusion_vis_bit_icon").mouseleave(function(){
+            $('.left-conlusion').css("opacity", "1");
+        });
+
+        $("#facebook_vis_bit_icon").hover(function(){
+            $('#facebook-info').css("opacity", "0.4");
+        });
+
+        $("#facebook_vis_bit_icon").mouseleave(function(){
+            $('#facebook-info').css("opacity", "1");
+        });
+
+        $("#instagram_vis_bit_icon").hover(function(){
+            $('#instagram-info').css("opacity", "0.4");
+        });
+
+        $("#instagram_vis_bit_icon").mouseleave(function(){
+            $('#instagram-info').css("opacity", "1");
+        });
+
+        $("#website_vis_bit_icon").hover(function(){
+            $('#website-info').css("opacity", "0.4");
+        });
+
+        $("#website_vis_bit_icon").mouseleave(function(){
+            $('#website-info').css("opacity", "1");
+        });
+
+
+
       // On change of an text area show update all
       $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
         $(this).data('changed', true);
