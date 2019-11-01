@@ -546,6 +546,7 @@
 
       var configModal = initiateModal('configModal', 'confirm', modalData);
       $('#config_link').click(function() {
+        $('#color').val('<?php echo $user->color_report; ?>')
         showModal(configModal);
       });
 

@@ -614,14 +614,15 @@
         var modalData = {
         text:`Configuration report`,
         subtext:`
-          Do you want a custom color for this audit?<br>
+          Do you want a custom color for this report?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i>`,
         confirm: 'config_confirmed'
       }
 
       var configModal = initiateModal('configModal', 'confirm', modalData);
       $('#config_link').click(function() {
+        $('#color').val('<?php echo $theme_color; ?>');
         showModal(configModal);
       });
 
