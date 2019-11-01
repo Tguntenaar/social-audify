@@ -159,6 +159,15 @@ label.myLabel input[type="file"] {
 	width: 100% !important;
 }
 
+.description-tags {
+	width: 90%;
+	height: 50px;
+	line-height: 14px;
+	float: left;
+	color: #aaaaaa;
+	font-size: 10px;
+}
+
 .easy-config-button {
 	width: auto;
 	height: auto;
@@ -528,6 +537,15 @@ header {
 	font-weight: 100;
 	font-size: 16px;
 	cursor: pointer;
+}
+
+.custom-visibility {
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	font-weight: 100;
+	font-size: 21px;
+	bottom: -110px !important;
 }
 
 #introduction_vis_bit_icon,

@@ -25,10 +25,12 @@
   // Import controllers & models
   include(dirname(__FILE__)."/../../controllers/user_controller.php");
   include(dirname(__FILE__)."/../../controllers/report_controller.php");
+  include(dirname(__FILE__)."/../../controllers/client_controller.php");
   include(dirname(__FILE__)."/../../services/connection.php");
 
   include(dirname(__FILE__)."/../../models/report.php");
   include(dirname(__FILE__)."/../../models/user.php");
+  include(dirname(__FILE__)."/../../models/client.php");
 
   // Import block titles
   include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
@@ -39,11 +41,12 @@
   $connection = new connection;
   $user_control   = new user_controller($connection);
   $report_control = new report_controller($connection);
+  $client_control   = new client_controller($connection);
 
   // Get report by post_id
   $id = $report_control->get_id($post_id);
   $report = $report_control->get($id);
-
+  $client = $client_control->get($report->client_id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
   $theme_color = ($report->color == "") ? $user->color_report : $report->color;
@@ -139,6 +142,15 @@
         <i class="far fa-eye<?php echo $slash; ?>"></i>
       </div><?php
     }
+  }
+
+  function change_tags($text, $client) {
+      // Client name -> #{client}
+      if (strpos($text, '#{client}') !== false) {
+            $text = str_replace('#{client}', $client->name, $text);
+      }
+
+      return $text;
   }
 
   // Percent Calculator
@@ -237,7 +249,7 @@
       <?php if($report->picture_vis_bit_report == 1 || $edit_mode) { ?>
           <div class="client-profile-picture">
             <?php echo get_avatar($author_id, 32); ?>
-            <?php visibility_short_code($edit_mode, $report->picture_vis_bit_report, 'picture_vis_bit_report', 'visibility-first-level'); ?>
+            <?php visibility_short_code($edit_mode, $report->picture_vis_bit_report, 'picture_vis_bit_report', 'custom-visibility '); ?>
           </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
@@ -247,10 +259,14 @@
             if ($edit_mode) { ?>
               <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
                 <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
-              </form><?php
+              </form>
+              <div class="description-tags">
+                  You can insert the following tag in all the text fields: <span style="color: #000;">#{client}</span>
+              </div>
+              <?php
             } else { ?>
               <p><?php
-                echo ($report->introduction == NULL) ? $user->intro_report: $report->introduction; ?>
+                echo ($report->introduction == NULL) ? change_tags($user->intro_report, $client): change_tags($report->introduction, $client); ?>
               </p><?php
             } ?>
         <?php } ?>
@@ -341,7 +357,8 @@
               <textarea maxlength="999" style="height: 290px;" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$report->social_advice</p>";
+              $social_advice = change_tags($report->social_advice, $client);
+              echo "<p>$social_advice</p>";
           } ?>
         </div>
       </div>
@@ -416,7 +433,8 @@
               <textarea maxlength="999" style="height: 330px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $report->campaign_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$report->campaign_advice</p>";
+              $campaign_advice = change_tags($report->campaign_advice, $client);
+              echo "<p>$campaign_advice</p>";
           } ?>
         </div>
       </div>
@@ -437,7 +455,7 @@
             </form><?php
           } else { ?>
             <p><?php
-              echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
+              echo ($report->conclusion == NULL) ? change_tags($user->conclusion_report, $client) : change_tags($report->conclusion, $client); ?>
             </p><?php
           } ?>
         </div>

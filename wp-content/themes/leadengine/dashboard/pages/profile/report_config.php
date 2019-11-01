@@ -122,6 +122,15 @@
     }
   }
 
+  function change_tags($text) {
+      // Client name -> #{client}
+      if (strpos($text, '#{client}') !== false) {
+            $text = str_replace('#{client}', "Example client", $text);
+      }
+
+      return $text;
+  }
+
   // Percent Calculator
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
@@ -215,7 +224,7 @@
       <?php if($user->picture_vis_bit_report == 1 || $edit_mode) { ?>
           <div class="client-profile-picture">
             <?php echo get_avatar($author_id, 32); ?>
-            <?php visibility_short_code($edit_mode, $user->picture_vis_bit_report, 'picture_vis_bit_report', 'visibility-first-level'); ?>
+            <?php visibility_short_code($edit_mode, $user->picture_vis_bit_report, 'picture_vis_bit_report', 'custom-visibility'); ?>
           </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
@@ -225,10 +234,14 @@
             if ($edit_mode) { ?>
               <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
                 <textarea maxlength="999" input="text" name="introduction" id="intro_report"><?php echo $user->intro_report; ?></textarea>
-              </form><?php
+              </form>
+              <div class="description-tags">
+                  You can insert the following tag in all the text fields: <span style="color: #000;">#{client}</span>
+              </div>
+              <?php
             } else { ?>
               <p><?php
-                echo $user->intro_report; ?>
+                echo change_tags($user->intro_report); ?>
               </p><?php
             }
         } ?>
@@ -281,7 +294,8 @@
               <textarea maxlength="999" style="height: 290px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $user->campaign_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$user->campaign_advice</p>";
+              $c_advice = change_tags($user->campaign_advice);
+              echo "<p>$c_advice</p>";
           } ?>
         </div>
       </div>
@@ -343,7 +357,8 @@
               <textarea maxlength="999" style="height: 330px;" input="text" name="graph_advice" id="graph_advice"><?php echo $user->graph_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$user->graph_advice</p>";
+            $g_advice = change_tags($user->graph_advice);
+            echo "<p>$g_advice</p>";
           } ?>
         </div>
       </div>

@@ -110,6 +110,35 @@
     </div><?php
   }
 
+  function change_tags($text) {
+      // Client name -> #{client}
+      if (strpos($text, '#{client}') !== false) {
+            $text = str_replace('#{client}', "Example client", $text);
+      }
+
+      // Competitor name -> #{competitor}
+      if (strpos($text, '#{competitor}') !== false) {
+            $text = str_replace('#{competitor}', "Example competitor", $text);
+      }
+
+      // Facebook score -> #{fb_score}
+      if (strpos($text, '#{fb_score}') !== false) {
+            $text = str_replace('#{fb_score}', "100", $text);
+      }
+
+      // Instagram score -> #{instagram_score}
+      if (strpos($text, '#{insta_score}') !== false) {
+            $text = str_replace('#{insta_score}', "90", $text);
+      }
+
+      // Website score -> #{website_score}
+      if (strpos($text, '#{website_score}') !== false) {
+            $text = str_replace('#{website_score}', "80", $text);
+      }
+
+      return $text;
+  }
+
   // $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
   // $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
   // $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
@@ -408,7 +437,7 @@
      <?php if($user->picture_vis_bit == 1 || $edit_mode) { ?>
           <div class="client-profile-picture">
             <?php echo get_avatar($author_id, 32); ?>
-            <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'visibility-first-level'); ?>
+            <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
           </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
@@ -418,9 +447,12 @@
             if ($edit_mode) { ?>
               <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
                 <textarea maxlength="999" input="text"  name="intro_audit" id="intro_audit" style="background: #f5f6fa;"><?php echo $user->intro_audit; ?></textarea>
-              </form><?php
+              </form>
+              <div class="description-tags">
+                  You can insert the following tags in all the text fields: <span style="color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+              </div> <?php
             } else { ?>
-              <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo $user->intro_audit;  ?></p><?php
+              <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo change_tags($user->intro_audit);  ?></p><?php
             }
         } else { echo '</div>'; }?>
       </div>
@@ -519,7 +551,7 @@
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p><?php
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['fb']); ?></p><?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
               </div>
@@ -688,7 +720,7 @@
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo change_tags($advice['ig']); ?> </p>
                   <?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
@@ -776,7 +808,7 @@
                 <span class="advice-title margin-advice-title">Website advice</span>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
 
-                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
+                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo change_tags($advice['wb']); ?></textarea>
                 </form><?php
               } else { ?>
                 <span class="score-text"><?php echo $score['wb']; ?>%</span>
@@ -830,7 +862,7 @@
             </form><?php
           } else { ?>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-              echo $user->conclusion_audit;
+              echo change_tags($user->conclusion_audit);
             ?></p><?php
           } ?>
         </div>
