@@ -559,6 +559,7 @@ pre {
 	font-weight: 100;
 	font-size: 21px;
 	bottom: -110px !important;
+	cursor: pointer;
 }
 
 #introduction_vis_bit_icon,
