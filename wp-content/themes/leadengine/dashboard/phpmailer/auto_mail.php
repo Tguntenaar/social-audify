@@ -107,14 +107,17 @@ foreach ($users as $user_id) {
                         $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
                         $mail->Port       = 465;                                    // TCP port to connect to
 
-                        //Recipients
-                        $mail->setFrom('automail@socialaudify.com', $user_id->display_name);
+                        //Recipients  
+                        $company = get_user_meta($user_id->ID, 'rcp_company', true );
+                        $name = isset($company) ? $company : $user->display_name;
+
+                        $mail->setFrom('automail@socialaudify.com', $name);
                         $mail->addAddress($client->mail, $client->name);     // Add a recipient              // Name is optional
-                        $mail->addReplyTo($user_id->user_email, $user_id->display_name);
+                        $mail->addReplyTo($user_id->user_email, $name);
 
                          // Content
                          $mail->isHTML(true);                                  // Set email format to HTML
-                         $mail->Subject = 'Hi, a reminder to open the audit we made for you!';
+                         $mail->Subject = 'Hi, here is a reminder to open the audit we made for you!';
                          $mail->Body    = $body_string;
                          $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
