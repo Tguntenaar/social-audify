@@ -159,6 +159,15 @@ label.myLabel input[type="file"] {
 	width: 100% !important;
 }
 
+.description-tags {
+	width: 90%;
+	height: 50px;
+	line-height: 14px;
+	float: left;
+	color: #aaaaaa;
+	font-size: 10px;
+}
+
 .easy-config-button {
 	width: auto;
 	height: auto;
@@ -528,6 +537,54 @@ header {
 	font-weight: 100;
 	font-size: 16px;
 	cursor: pointer;
+}
+
+.inner pre,
+.instagram-score pre,
+.instagram-right pre {
+	margin-bottom: 20px;
+}
+pre {
+	font-size: 14px;
+	font-weight: 100;
+	line-height: 22px;
+	float:left;
+	width: 100%;
+	height: auto;
+}
+.custom-visibility {
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	font-weight: 100;
+	font-size: 21px;
+	bottom: -110px !important;
+}
+
+#introduction_vis_bit_icon,
+#introduction_vis_bit_report_icon {
+	margin-top: 45px;
+	top: auto;
+	position: absolute;
+}
+
+#picture_vis_bit_icon,
+#picture_vis_bit_report_icon {
+	right: auto;
+	top: auto;
+	bottom: -80px;
+	margin-left: -37px;
+}
+
+#conclusion_vis_bit_icon,
+#conclusion_vis_bit_report_icon {
+	margin-top: -30px;
+}
+
+
+#picture_vis_bit_icon:hover  .client-profile-picture img,
+#picture_vis_bit_report_icon:hover  .client-profile-picture img {
+	opacity: 0.6;
 }
 
 .visibility-first-level i {
@@ -2041,7 +2098,8 @@ nav ul a li {
 	height: auto;
 }
 
-.custom-content .lds-dual-ring {
+.custom-content .lds-dual-ring,
+.visibility-first-level .lds-dual-ring {
 		width: 25px !important;
 		height: 25px !important;
 		margin-left: -12px !important;
@@ -2050,7 +2108,9 @@ nav ul a li {
 		top: 10px;
 }
 
-.custom-content .lds-dual-ring:after {
+
+.custom-content .lds-dual-ring:after,
+.visibility-first-level .lds-dual-ring:after {
 	width: 25px !important;
 	height: 25px !important;
 	margin-left: -12px !important;

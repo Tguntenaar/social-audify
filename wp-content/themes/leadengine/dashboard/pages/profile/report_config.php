@@ -113,6 +113,24 @@
     }
   }
 
+  function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
+    if ($edit_mode) {
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
+        <i class="far fa-eye<?php echo $slash; ?>"></i>
+      </div><?php
+    }
+  }
+
+  function change_tags($text) {
+      // Client name -> #{client}
+      if (strpos($text, '#{client}') !== false) {
+            $text = str_replace('#{client}', "Example client", $text);
+      }
+
+      return $text;
+  }
+
   // Percent Calculator
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
@@ -200,20 +218,32 @@
          value="https://<?php echo $env; ?>/public/<?php echo $slug; ?>" />
 
     <!-- Intro -->
+    <?php visibility_short_code($edit_mode, $user->introduction_vis_bit_report, 'introduction_vis_bit_report', 'visibility-first-level'); ?>
+
     <div class="audit-intro report-variant-intro col-lg-10 col-lg-offset-2">
-      <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
-      </div>
+      <?php if($user->picture_vis_bit_report == 1 || $edit_mode) { ?>
+          <div class="client-profile-picture">
+            <?php echo get_avatar($author_id, 32); ?>
+            <?php visibility_short_code($edit_mode, $user->picture_vis_bit_report, 'picture_vis_bit_report', 'custom-visibility'); ?>
+          </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
-        if ($edit_mode) { ?>
-          <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text" name="introduction" id="intro_report"><?php echo $user->intro_report; ?></textarea>
-          </form><?php
-        } else { ?>
-          <p><?php
-            echo $user->intro_report; ?>
-          </p><?php
+        } else { echo '<div class="audit-intro-text">'; }
+
+        if($user->introduction_vis_bit_report == 1 || $edit_mode) {
+            if ($edit_mode) { ?>
+              <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
+                <textarea maxlength="999" input="text" name="introduction" id="intro_report"><?php echo $user->intro_report; ?></textarea>
+              </form>
+              <div class="description-tags">
+                  You can insert the following tag in all the text fields: <span style="color: #000;">#{client}</span>
+              </div>
+              <?php
+            } else { ?>
+              <p><?php
+                echo "<pre>" . change_tags($user->intro_report) . "</pre>"; ?>
+              </p><?php
+            }
         } ?>
       </div>
     </div> <?php
@@ -264,7 +294,8 @@
               <textarea maxlength="999" style="height: 290px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $user->campaign_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$user->campaign_advice</p>";
+              $c_advice = change_tags($user->campaign_advice);
+              echo "<pre>$c_advice</pre>";
           } ?>
         </div>
       </div>
@@ -326,35 +357,85 @@
               <textarea maxlength="999" style="height: 330px;" input="text" name="graph_advice" id="graph_advice"><?php echo $user->graph_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$user->graph_advice</p>";
+            $g_advice = change_tags($user->graph_advice);
+            echo "<pre>$g_advice</pre>";
           } ?>
         </div>
       </div>
     </div>
     <?php } ?>
   </section>
-  <section class="audit-conclusion audit-conclusion-variant col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text" name="conclusion_report" id="conclusion_report"><?php echo $user->conclusion_report; ?></textarea>
-        </form><?php
-      } else { ?>
-        <p><?php
-          echo $user->conclusion_report; ?>
-        </p><?php
-      } ?>
-    </div>
-  </section>
+
+  <?php if($user->conclusion_vis_bit_report == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion audit-conclusion-variant col-lg-12">
+        <?php visibility_short_code($edit_mode, $user->conclusion_vis_bit_report, 'conclusion_vis_bit_report', 'visibility-first-level'); ?>
+
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text" name="conclusion_report" id="conclusion_report"><?php echo $user->conclusion_report; ?></textarea>
+            </form><?php
+          } else { ?>
+            <p><?php
+              echo "<pre>" . $user->conclusion_report . "</pre>"; ?>
+            </p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
   </div>
 
   <script charset='utf-8'>
+      $(function() {
+         $("#picture_vis_bit_report_icon").hover(function(){
+             $('.client-profile-picture').css("opacity", "0.4");
+             $('.audit-company-name').css("opacity", "0.4");
+         });
+
+         $("#picture_vis_bit_report_icon" ).mouseleave(function() {
+             $('.client-profile-picture').css("opacity", "1");
+             $('.audit-company-name').css("opacity", "1");
+         });
+
+         $("#introduction_vis_bit_report_icon").hover(function(){
+             $('#intro_report').css("opacity", "0.4");
+         });
+
+         $( "#introduction_vis_bit_report_icon" ).mouseleave(function() {
+             $('#intro_report').css("opacity", "1");
+         });
+
+         $("#conclusion_vis_bit_report_icon").hover(function(){
+             $('.left-conlusion').css("opacity", "0.4");
+         });
+
+         $("#conclusion_vis_bit_report_icon" ).mouseleave(function() {
+             $('.left-conlusion').css("opacity", "1");
+         });
+
+         $("#campaign_vis_bit_icon").hover(function(){
+             $('#social-stats').css("opacity", "0.4");
+         });
+
+         $("#campaign_vis_bit_icon").mouseleave(function(){
+             $('#social-stats').css("opacity", "1");
+         });
+
+         $("#graph_vis_bit_icon").hover(function(){
+             $('.graph-report').css("opacity", "0.4");
+         });
+
+         $("#graph_vis_bit_icon").mouseleave(function(){
+             $('.graph-report').css("opacity", "1");
+         });
+
+      });
     var commonPost = {
       'user': '<?php echo $user_id; ?>',
       'type': 'user',
@@ -443,7 +524,7 @@
               'field': field_name,
               ...commonPost,
             },
-            success: function () { field.html(html) },
+            success: function (response) { console.log(response); field.html(html) },
             error: function(xhr, textStatus, errorThrown) {
                 var error = error_func(xhr, textStatus, errorThrown, data);
                 logError(JSON.stringify(error), 'page-templates/report_page.php', 'toggle_visiblity');
@@ -474,12 +555,13 @@
         subtext:`
           Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('#6e9d9c')" ></i>`,
         confirm: 'config_confirmed'
       }
 
       var configModal = initiateModal('configModal', 'confirm', modalData);
       $('#config_link').click(function() {
+        $('#color').val('<?php echo $user->color_report; ?>')
         showModal(configModal);
       });
 
