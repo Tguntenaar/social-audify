@@ -1087,13 +1087,13 @@
       // Auto Mail + color Model
       var modalData = {
         text:`<span style="font-weight:bold; display:block; font-size: 18px; margin-bottom: 10px;">Configuration audit</span>`,
-        subtext:`Do you want to sent this client automatic reminders?
+        subtext:`Do you want to sent this client automatic reminders?<br/>
           <input type="checkbox" id="std_mail_bit" <?php echo $user->std_mail_bit ? 'checked': ''; ?>><br><br>
           Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
           <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a>.<br><br>
           Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('#6e9d9c')" ></i>`,
         confirm: 'config_confirmed'
       }
 

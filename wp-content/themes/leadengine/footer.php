@@ -26,7 +26,7 @@
          <i class="fa fa-angle-up"></i>
       </div>
 <?php endif; ?>
-<?php if(get_post_field( 'post_name', get_post() ) == "register" && empty($_GET)) { ?>
+<?php if(get_post_field( 'post_name', get_post() ) == "register" && (empty($_GET) || !empty($_GET['ref']))) { ?>
 <script>
 
         var listAllCountries = [

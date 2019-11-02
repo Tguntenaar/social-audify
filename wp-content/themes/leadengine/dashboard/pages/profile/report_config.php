@@ -555,7 +555,7 @@
         subtext:`
           Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('#6e9d9c')" ></i>`,
         confirm: 'config_confirmed'
       }
 

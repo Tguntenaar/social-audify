@@ -208,6 +208,16 @@
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149815594-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-149815594-1');
+  </script>
+
   <title>Audit</title>
   <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -1003,11 +1013,11 @@
       // Auto Mail + color Model
       var modalData = {
         text:`<span style="font-weight:bold; font-size: 18px;">Configuration audit</span>`,
-        subtext:`Do you want to sent this client automatic reminders?
-          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br><br>
+        subtext:`Do you want to sent this client automatic reminders?<br/>
+          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br/><br/>
           Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails: 
           <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a><br><br>
-          Do you want a custom color for this audit?<br>
+          Do you want a custom color for this audit?<br/>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i>`,
         confirm: 'config_confirmed'

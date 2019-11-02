@@ -109,7 +109,7 @@ foreach ($users as $user_id) {
 
                         //Recipients  
                         $company = get_user_meta($user_id->ID, 'rcp_company', true );
-                        $name = isset($company) ? $company : $user->display_name;
+                        $name = isset($company) && $company !== "" ? $company : $user->display_name;
 
                         $mail->setFrom('automail@socialaudify.com', $name);
                         $mail->addAddress($client->mail, $client->name);     // Add a recipient              // Name is optional
