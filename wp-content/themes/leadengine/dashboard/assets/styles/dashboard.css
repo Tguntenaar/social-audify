@@ -544,6 +544,7 @@ header {
 .instagram-right pre {
 	margin-bottom: 20px;
 }
+
 pre {
 	font-size: 14px;
 	font-weight: 100;
@@ -551,7 +552,9 @@ pre {
 	float:left;
 	width: 100%;
 	height: auto;
+	white-space: pre-line;
 }
+
 .custom-visibility {
 	width: 50px;
 	height: 50px;
@@ -4492,6 +4495,14 @@ h4 {
 }
 
 @media only screen and (max-width: 992px) {
+	.intro-overlay iframe {
+		width: 80%;
+	}
+
+	.intro-overlay h1 {
+		font-size: 32px;
+	}
+
 	.beta {
 		position: relative;
 		margin-left: -15px;
@@ -4812,6 +4823,18 @@ h4 {
 }
 
 @media only screen and (max-width: 768px) {
+	.score-text {
+		margin-top: 20px;
+	}
+
+	.calendar {
+		position: relative !important;
+		margin-left: 0px !important;
+		right: 0 !important;
+		bottom: 0 !important;
+		margin-top: 5px !important;
+	}
+
 	.mobile-hide {
 		margin-top: 20px;
 		display: none;
@@ -4933,6 +4956,28 @@ h4 {
 
 
 @media only screen and (max-width: 620px) {
+	.facebook-inf-title {
+		font-size: 24px;
+	}
+
+	.sub-title {
+		font-size: 12px;
+		padding-left: 72px;
+	}
+
+	.footer .calendar {
+		float: left;
+		margin-bottom: 20px;
+	}
+	
+	.round i {
+		margin-top: 13px;
+	}
+
+	.intro-overlay iframe {
+		height: 250px;
+	}
+
 	.fb_iframe_widget_fluid {
 		margin-top: 20px;
 	}

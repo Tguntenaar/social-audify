@@ -287,12 +287,21 @@
 <body class="custom-body">
   <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.</h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
-    <!-- Animated CSS stuff -->
-    <div id="nav-icon2">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
+
+    <?php if($user_id == $author_id) { ?>
+
+      <!-- Animated CSS stuff -->
+      <div id="nav-icon2">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+    <?php } ?>
+
+    <?php if($user_id != $author_id) { ?>
+        Audit: <?php echo $audit->name;
+    } ?>
 
     <?php
     if ($edit_mode) { ?>
@@ -304,7 +313,9 @@
         <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
       } ?>
 
+      
       Audit: <?php echo $audit->name;
+    
 
       if ($edit_mode) { ?>
         <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
@@ -770,6 +781,7 @@
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
+      <div style="clear:both;"></div>
       <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
     } ?>
   </div>
