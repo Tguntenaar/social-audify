@@ -544,6 +544,7 @@ header {
 .instagram-right pre {
 	margin-bottom: 20px;
 }
+
 pre {
 	font-size: 14px;
 	font-weight: 100;
@@ -551,7 +552,9 @@ pre {
 	float:left;
 	width: 100%;
 	height: auto;
+	white-space: pre-line;
 }
+
 .custom-visibility {
 	width: 50px;
 	height: 50px;
