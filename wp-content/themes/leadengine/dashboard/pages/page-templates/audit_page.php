@@ -137,7 +137,7 @@
 
   function call_to_contact($phone, $mail, $calendar_link) { ?>
     <div class="info">
-      <a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a>
+      <?php if(isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a><?php } ?>
       <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
       <?php
       if ($calendar_link != "") { ?>
@@ -778,7 +778,7 @@
       </section>
   <?php } ?>
   <div class="footer">
-    <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
+    <?php if(isset($phone) && $phone != "") { ?><span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span><?php } ?>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
       <div style="clear:both;"></div>
