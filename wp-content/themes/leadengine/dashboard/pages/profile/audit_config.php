@@ -110,6 +110,35 @@
     </div><?php
   }
 
+  function change_tags($text) {
+      // Client name -> #{client}
+      if (strpos($text, '#{client}') !== false) {
+            $text = str_replace('#{client}', "Example client", $text);
+      }
+
+      // Competitor name -> #{competitor}
+      if (strpos($text, '#{competitor}') !== false) {
+            $text = str_replace('#{competitor}', "Example competitor", $text);
+      }
+
+      // Facebook score -> #{fb_score}
+      if (strpos($text, '#{fb_score}') !== false) {
+            $text = str_replace('#{fb_score}', "100", $text);
+      }
+
+      // Instagram score -> #{instagram_score}
+      if (strpos($text, '#{insta_score}') !== false) {
+            $text = str_replace('#{insta_score}', "90", $text);
+      }
+
+      // Website score -> #{website_score}
+      if (strpos($text, '#{website_score}') !== false) {
+            $text = str_replace('#{website_score}', "80", $text);
+      }
+
+      return $text;
+  }
+
   // $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
   // $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
   // $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
@@ -366,7 +395,6 @@
     </div>
   </div>
 
-  <div id="shareModal" class="modal"></div>
   <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="reloadModal" class="modal"></div>
@@ -402,19 +430,30 @@
       </div><?php
     } ?>
 
+    <?php visibility_short_code($edit_mode, $user->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?>
+
     <div class="audit-intro<?php echo ($user->std_iframe != NULL && $user->std_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
-      <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
-      </div>
+     <?php if($user->picture_vis_bit == 1 || $edit_mode) { ?>
+          <div class="client-profile-picture">
+            <?php echo get_avatar($author_id, 32); ?>
+            <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
+          </div>
       <div class="audit-intro-text">
         <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
-        if ($edit_mode) { ?>
-          <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text"  name="intro_audit" id="intro_audit" style="background: #f5f6fa;"><?php echo $user->intro_audit; ?></textarea>
-          </form><?php
-        } else { ?>
-          <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo $user->intro_audit;  ?></p><?php
-        } ?>
+        } else { echo '<div class="audit-intro-text">'; }
+
+        if($user->introduction_vis_bit == 1 || $edit_mode) {
+            if ($edit_mode) { ?>
+              <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
+                <textarea maxlength="999" input="text"  name="intro_audit" id="intro_audit" style="background: #f5f6fa;"><?php echo $user->intro_audit; ?></textarea>
+              </form>
+              <div class="description-tags">
+                  You can insert the following tags in all the text fields: <span style="color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+              </div> <?php
+            } else { ?>
+              <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php  echo "<pre>" . change_tags($user->intro_audit) . "</pre>";  ?></p><?php
+            }
+        } else { echo '</div>'; }?>
       </div>
   </div><?php
     if ($user->facebook_vis_bit || $edit_mode) { ?>
@@ -511,7 +550,7 @@
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['fb']; ?></p><?php
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['fb']) . "</pre>"; ?></p><?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
               </div>
@@ -546,7 +585,7 @@
       </div><?php
     }
     if ($user->instagram_vis_bit || $edit_mode) { ?>
-      <div class="col-lg-12 facebook-info" >
+      <div class="col-lg-12 facebook-info" id="instagram-info">
         <?php if($user->instagram_title != NULL) { $instagram_title = $user->instagram_title; } else { $instagram_title = 'Instagram stats:'; } ?>
         <?php if($user->instagram_sub_title != NULL) { $instagram_sub_title = $user->instagram_sub_title; } else { $instagram_sub_title = 'Statistics of your Instagram page.'; } ?>
 
@@ -680,7 +719,7 @@
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
                   </form><?php
                 } else { ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['ig']; ?> </p>
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['ig']) . "</pre>"; ?> </p>
                   <?php
                   call_to_contact($phone, $author->user_email, $calendar_link);
                 } ?>
@@ -716,7 +755,7 @@
       </div><?php
     }
     if ($user->website_vis_bit || $edit_mode) { ?>
-      <div class="col-lg-12 facebook-info website-info">
+      <div class="col-lg-12 facebook-info website-info" id="website-info">
 
           <?php if($user->website_title != NULL) { $website_title = $user->website_title; } else { $website_title = 'Website stats:'; } ?>
           <?php if($user->website_sub_title != NULL) { $website_sub_title = $user->website_sub_title; } else { $website_sub_title = 'Statistics of your Website page.'; } ?>
@@ -768,7 +807,7 @@
                 <span class="advice-title margin-advice-title">Website advice</span>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
 
-                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
+                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo "<pre>" . change_tags($advice['wb']) . "</pre>"; ?></textarea>
                 </form><?php
               } else { ?>
                 <span class="score-text"><?php echo $score['wb']; ?>%</span>
@@ -806,24 +845,29 @@
       </div><?php
     } ?>
   </section>
-  <section class="audit-conclusion col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text"  name="conclusion_audit" id="conclusion_audit"><?php
-            echo $user->conclusion_audit;
-          ?></textarea>
-        </form><?php
-      } else { ?>
-        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
-          echo $user->conclusion_audit;
-        ?></p><?php
-      } ?>
-    </div>
-  </section>
+  <?php if($user->conclusion_vis_bit == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion col-lg-12">
+        <?php visibility_short_code($edit_mode, $user->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
+
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text"  name="conclusion_audit" id="conclusion_audit"><?php
+                echo $user->conclusion_audit;
+              ?></textarea>
+            </form><?php
+          } else { ?>
+            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+              echo "<pre>" . change_tags($user->conclusion_audit) . "</pre>";
+            ?></p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
+
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
@@ -880,7 +924,56 @@
     };
 
     $(function() {
-      // On change of an text area show update all
+       $("#picture_vis_bit_icon").hover(function(){
+           $('.client-profile-picture').css("opacity", "0.4");
+           $('.audit-company-name').css("opacity", "0.4");
+       });
+
+       $( "#picture_vis_bit_icon" ).mouseleave(function() {
+           $('.client-profile-picture').css("opacity", "1");
+           $('.audit-company-name').css("opacity", "1");
+       });
+
+       $("#introduction_vis_bit_icon").hover(function(){
+           $('#intro_audit').css("opacity", "0.4");
+       });
+
+       $( "#introduction_vis_bit_icon" ).mouseleave(function() {
+           $('#intro_audit').css("opacity", "1");
+       });
+
+       $("#conclusion_vis_bit_icon").hover(function(){
+           $('.left-conlusion').css("opacity", "0.4");
+       });
+
+       $("#conclusion_vis_bit_icon" ).mouseleave(function() {
+           $('.left-conlusion').css("opacity", "1");
+       });
+
+       $("#facebook_vis_bit_icon").hover(function(){
+           $('#facebook-info').css("opacity", "0.4");
+       });
+
+       $("#facebook_vis_bit_icon").mouseleave(function(){
+           $('#facebook-info').css("opacity", "1");
+       });
+
+       $("#instagram_vis_bit_icon").hover(function(){
+           $('#instagram-info').css("opacity", "0.4");
+       });
+
+       $("#instagram_vis_bit_icon").mouseleave(function(){
+           $('#instagram-info').css("opacity", "1");
+       });
+
+       $("#website_vis_bit_icon").hover(function(){
+           $('#website-info').css("opacity", "0.4");
+       });
+
+       $("#website_vis_bit_icon").mouseleave(function(){
+           $('#website-info').css("opacity", "1");
+       });
+       // On change of an text area show update all
       $("textarea, input[type=text]").on('keyup paste change', function() {
         $(this).data('changed', true);
         toggleUpdate(true);
@@ -991,36 +1084,22 @@
         }
       }
 
-      // Share & Track Modal
-      var modalData = {
-        'text': "This link is copied to your clipboard:",
-        'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
-        'subtext': `You can send this link from your own email address to your lead. If your lead
-          clicks on the link, you will see it in your dashboard, so make sure you don’t
-          click on the link yourself in order to be able to track this.`,
-      }
-
-      var shareModal = initiateModal('shareModal', 'notification', modalData);
-      $('#copy_link').click(function() {
-        showModal(shareModal);
-        document.getElementById("public_link").select();
-        document.execCommand("copy");
-      });
-
       // Auto Mail + color Model
       var modalData = {
-        text:`Configuration audit`,
-        html:`Do you want to sent this client automatic reminders?
+        text:`<span style="font-weight:bold; display:block; font-size: 18px; margin-bottom: 10px;">Configuration audit</span>`,
+        subtext:`Do you want to sent this client automatic reminders?<br/>
           <input type="checkbox" id="std_mail_bit" <?php echo $user->std_mail_bit ? 'checked': ''; ?>><br><br>
           Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
-          <a href='/profile-page/#mail-settings'>here</a>.<br><br>Do you want a custom color for this audit?<br>
+          <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a>.<br><br>
+          Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_audit; ?>')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('#6e9d9c')" ></i>`,
         confirm: 'config_confirmed'
       }
 
       var configModal = initiateModal('configModal', 'confirm', modalData);
       $('#config_link').click(function() {
+        $('#color').val('<?php echo $theme_color; ?>');
         showModal(configModal);
       });
 

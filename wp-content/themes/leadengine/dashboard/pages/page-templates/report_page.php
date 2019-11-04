@@ -25,10 +25,12 @@
   // Import controllers & models
   include(dirname(__FILE__)."/../../controllers/user_controller.php");
   include(dirname(__FILE__)."/../../controllers/report_controller.php");
+  include(dirname(__FILE__)."/../../controllers/client_controller.php");
   include(dirname(__FILE__)."/../../services/connection.php");
 
   include(dirname(__FILE__)."/../../models/report.php");
   include(dirname(__FILE__)."/../../models/user.php");
+  include(dirname(__FILE__)."/../../models/client.php");
 
   // Import block titles
   include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
@@ -39,11 +41,12 @@
   $connection = new connection;
   $user_control   = new user_controller($connection);
   $report_control = new report_controller($connection);
+  $client_control   = new client_controller($connection);
 
   // Get report by post_id
   $id = $report_control->get_id($post_id);
   $report = $report_control->get($id);
-
+  $client = $client_control->get($report->client_id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
   $theme_color = ($report->color == "") ? $user->color_report : $report->color;
@@ -132,6 +135,24 @@
     }
   }
 
+  function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
+    if ($edit_mode) {
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
+        <i class="far fa-eye<?php echo $slash; ?>"></i>
+      </div><?php
+    }
+  }
+
+  function change_tags($text, $client) {
+      // Client name -> #{client}
+      if (strpos($text, '#{client}') !== false) {
+            $text = str_replace('#{client}', $client->name, $text);
+      }
+
+      return $text;
+  }
+
   // Percent Calculator
   function procent_calc($new, $old) {
     return round((($new - $old) / max($old, 1)) * 100);
@@ -143,6 +164,16 @@
 ?>
 
 <head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149815594-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-149815594-1');
+  </script>
+
   <title>Report</title>
   <!-- TODO: Moet nog met JMeter worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
@@ -222,21 +253,33 @@
          value="https://<?php echo $env; ?>/public/<?php echo $slug; ?>" />
 
     <!-- Intro -->
+    <?php visibility_short_code($edit_mode, $report->introduction_vis_bit_report, 'introduction_vis_bit_report', 'visibility-first-level'); ?>
+
     <div class="audit-intro report-variant-intro col-lg-10 col-lg-offset-2">
-      <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
-      </div>
+      <?php if($report->picture_vis_bit_report == 1 || $edit_mode) { ?>
+          <div class="client-profile-picture">
+            <?php echo get_avatar($author_id, 32); ?>
+            <?php visibility_short_code($edit_mode, $report->picture_vis_bit_report, 'picture_vis_bit_report', 'custom-visibility '); ?>
+          </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php $company = get_user_meta($user_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
-        if ($edit_mode) { ?>
-          <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
-            <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
-          </form><?php
-        } else { ?>
-          <p><?php
-            echo ($report->introduction == NULL) ? $user->intro_report: $report->introduction; ?>
-          </p><?php
-        } ?>
+        <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
+        } else { echo '<div class="audit-intro-text">'; }
+
+        if($report->introduction_vis_bit_report == 1 || $edit_mode) {
+            if ($edit_mode) { ?>
+              <form action="<?php echo $slug_s; ?>#introduction" method="post" enctype="multipart/form-data">
+                <textarea maxlength="999" input="text" name="introduction" id="introduction"><?php echo ($report->introduction == NULL) ? $user->intro_report : $report->introduction; ?></textarea>
+              </form>
+              <div class="description-tags">
+                  You can insert the following tag in all the text fields: <span style="color: #000;">#{client}</span>
+              </div>
+              <?php
+            } else { ?>
+              <p><?php
+                echo ($report->introduction == NULL) ? "<pre>" . change_tags($user->intro_report, $client) . "</pre>" : "<pre>" . change_tags($report->introduction, $client) . "</pre>"; ?>
+              </p><?php
+            } ?>
+        <?php } ?>
       </div>
     </div> <?php
 
@@ -324,7 +367,8 @@
               <textarea maxlength="999" style="height: 290px;" input="text" name="social_advice" id="social_advice"><?php echo $report->social_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$report->social_advice</p>";
+              $social_advice = change_tags($report->social_advice, $client);
+              echo "<pre>$social_advice</pre>";
           } ?>
         </div>
       </div>
@@ -399,29 +443,34 @@
               <textarea maxlength="999" style="height: 330px;" input="text" name="campaign_advice" id="campaign_advice"><?php echo $report->campaign_advice; ?></textarea>
             </form><?php
           } else {
-            echo "<p>$report->campaign_advice</p>";
+              $campaign_advice = change_tags($report->campaign_advice, $client);
+              echo "<pre>$campaign_advice</pre>";
           } ?>
         </div>
       </div>
     </div>
     <?php } ?>
   </section>
-  <section class="audit-conclusion audit-conclusion-variant col-lg-12">
-    <div class="left-conlusion col-lg-7">
-      <h3>Conclusion</h3>
-      <hr class="under-line" />
-      <div style="clear:both"></div><?php
-      if ($edit_mode) { ?>
-        <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
-          <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
-        </form><?php
-      } else { ?>
-        <p><?php
-          echo ($report->conclusion == NULL) ? $user->conclusion_report : $report->conclusion; ?>
-        </p><?php
-      } ?>
-    </div>
-  </section>
+
+  <?php if($report->conclusion_vis_bit_report == 1 || $edit_mode) { ?>
+      <section class="audit-conclusion audit-conclusion-variant col-lg-12">
+        <?php visibility_short_code($edit_mode, $report->conclusion_vis_bit_report, 'conclusion_vis_bit_report', 'visibility-first-level'); ?>
+        <div class="left-conlusion col-lg-7">
+          <h3>Conclusion</h3>
+          <hr class="under-line" />
+          <div style="clear:both"></div><?php
+          if ($edit_mode) { ?>
+            <form action="<?php echo $slug_s; ?>#conclusion" method="post" enctype="multipart/form-data">
+              <textarea maxlength="999" input="text" name="conclusion" id="conclusion"><?php if ($report->conclusion == NULL) { echo $user->conclusion_report; } else { echo $report->conclusion; } ?></textarea>
+            </form><?php
+          } else { ?>
+            <p><?php
+              echo ($report->conclusion == NULL) ? "<pre>" . change_tags($user->conclusion_report, $client) . "</pre>" : "<pre>" . change_tags($report->conclusion, $client) . "</pre>"; ?>
+            </p><?php
+          } ?>
+        </div>
+      </section>
+  <?php } ?>
   <div class="footer">
     <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span>
@@ -476,6 +525,50 @@
         updateAll();
       });
 
+      $(function() {
+         $("#picture_vis_bit_report_icon").hover(function(){
+             $('.client-profile-picture').css("opacity", "0.4");
+             $('.audit-company-name').css("opacity", "0.4");
+         });
+
+         $("#picture_vis_bit_report_icon" ).mouseleave(function() {
+             $('.client-profile-picture').css("opacity", "1");
+             $('.audit-company-name').css("opacity", "1");
+         });
+
+         $("#introduction_vis_bit_report_icon").hover(function(){
+             $('#introduction').css("opacity", "0.4");
+         });
+
+         $( "#introduction_vis_bit_report_icon" ).mouseleave(function() {
+             $('#introduction').css("opacity", "1");
+         });
+
+         $("#conclusion_vis_bit_report_icon").hover(function(){
+             $('.left-conlusion').css("opacity", "0.4");
+         });
+
+         $("#conclusion_vis_bit_report_icon" ).mouseleave(function() {
+             $('.left-conlusion').css("opacity", "1");
+         });
+
+         $("#campaign_vis_bit_icon").hover(function(){
+             $('#social-stats').css("opacity", "0.4");
+         });
+
+         $("#campaign_vis_bit_icon").mouseleave(function(){
+             $('#social-stats').css("opacity", "1");
+         });
+
+         $("#graph_vis_bit_icon").hover(function(){
+             $('.graph-report').css("opacity", "0.4");
+         });
+
+         $("#graph_vis_bit_icon").mouseleave(function(){
+             $('.graph-report').css("opacity", "1");
+         });
+
+      });
 
       function updateAll() {
           var data = {
@@ -549,14 +642,15 @@
         var modalData = {
         text:`Configuration report`,
         subtext:`
-          Do you want a custom color for this audit?<br>
+          Do you want a custom color for this report?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $user->color_report; ?>')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i>`,
         confirm: 'config_confirmed'
       }
 
       var configModal = initiateModal('configModal', 'confirm', modalData);
       $('#config_link').click(function() {
+        $('#color').val('<?php echo $theme_color; ?>');
         showModal(configModal);
       });
 
