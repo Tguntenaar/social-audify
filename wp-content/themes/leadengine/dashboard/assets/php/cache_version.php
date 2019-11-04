@@ -1,3 +1,3 @@
 <?php
-$cache_version = "?v=105";
+$cache_version = "?v=106";
 ?>
