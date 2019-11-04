@@ -1012,7 +1012,7 @@ nav ul a li {
 }
 
 .with-video {
-	margin-top: -130px !important;
+	margin-top: -95px !important;
 }
 
 .with-video .audit-intro-text {
@@ -2441,7 +2441,33 @@ h3 {
 .audit-intro {
 		height: auto;
 		margin: 0 auto;
-		padding: 40px 0;
+		/* padding: 40px 0; */
+}
+
+.affwp-wrap label {
+	margin-left: 15px !important;
+	margin-bottom: 5px !important;
+	margin-top: 0px !important;
+}
+
+.affwp-wrap input[type="text"] {
+	height: 50px;
+	width: 50%;
+	padding-left: 10px;
+	font-size: 14px;
+}
+
+.affwp-wrap {
+	margin-bottom: 20px !important;
+}
+
+.affwp-wrap input[type="submit"] {
+	margin-top: 10px;
+}
+
+#affwp-affiliate-dashboard-url-generator h5 {
+	font-size: 16px;
+	margin-top: 45px;
 }
 
 .client-profile-picture {
@@ -2787,6 +2813,8 @@ h4 {
 	top: 0; left: 0;
 	z-index: 60;
 }
+
+
 .wrap {
   position: absolute;
   /* top: 50%;
@@ -4499,6 +4527,20 @@ h4 {
 		width: 80%;
 	}
 
+	.white-screen .wrap {
+		left: 50%;
+	}
+
+	.bounceball {
+		display: block;
+		margin: 0 auto;
+	}
+
+	.white-screen .text {
+		text-align: center;
+		margin-top: 20px;
+	}
+
 	.intro-overlay h1 {
 		font-size: 32px;
 	}
@@ -4956,6 +4998,10 @@ h4 {
 
 
 @media only screen and (max-width: 620px) {
+	.graph-procent {
+		font-size: 24px;
+	}
+	
 	.facebook-inf-title {
 		font-size: 24px;
 	}
