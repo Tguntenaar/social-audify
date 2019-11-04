@@ -33,10 +33,18 @@
 
     // Check how many audits are viewed
     $viewed_audit = $viewed_audit_month = 0;
+    $viewed_audits = array();
 
     foreach ($year_audits as $audit) {
-      $viewed_audit += $audit->view_time !== NULL ? 1 : 0;
+      if ($audit->view_time !== NULL) {
+        array_push($viewed_audits, array(
+          "name" => $audit->name, 
+          "id"   => $audit->id,
+          "slug" => make_slug("audit", $audit->name, $audit->id)
+        ));
+      }
     }
+    $viewed_audit = count($viewed_audits);
 
     foreach ($month_audits as $audit) {
       $viewed_audit_month += $audit->view_time !== NULL ? 1 : 0;
@@ -150,7 +158,7 @@
               <?php echo percent_diff($viewed_audit_month, $viewed_audit - $viewed_audit_month, true); ?>
             </span>
           </div>
-          <div class="stat-box" style="border-top: 2px solid #16a085;">
+          <div class="stat-box" onclick="showOpenedAudits()" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">Open rate</span>
             <span class="stat-box-data"><?php echo percent_print($open_rate_audit); ?></span>
             <span class="stat-box-procent ">
@@ -207,11 +215,23 @@
   </section>
 
 	<script charset="utf-8">
+
+    function showOpenedAudits() {
+      var openedAudits = <?php echo json_encode($viewed_audits); ?>;
+      var list = openedAudits.map( audit => `<a href="${audit.slug}">${audit.name}</a>`);
+      showModal(initiateModal('confirmModal', 'select', {
+        'text': `#audits opened ${openedAudits.length}`,
+        'subtext': `${list.join("<br/>")}`,
+      }));
+    }
+
 		$(function() {
 			var data = <?php echo json_encode($graph_values); ?>;
 
       generateChart('chart-audit', [data[0]]);
       generateChart('chart-report', [data[1]]);
+
+
 		});
 	</script>
 </body>
