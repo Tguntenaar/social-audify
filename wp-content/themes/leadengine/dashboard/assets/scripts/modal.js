@@ -14,7 +14,7 @@ function initiateModal(id, type, data) {
   var buttons = type == "confirm" ?
     "<button class='agree' id='" + confirmName + "'>"+confirmText+"</button>" +
     "<button class='deny' id='" + cancelName + "'>Cancel</button>" :
-    "<button class='agree' id='" + confirmName + "'>Understood</button>";
+    "<button class='agree' id='" + confirmName + "'>"+confirmText+"</button>";
   var buttons =  type == "link" ? 
     `<a href="${link}"><button class='agree' id="${confirmName}">${confirmText}</button></a>`: buttons;
 

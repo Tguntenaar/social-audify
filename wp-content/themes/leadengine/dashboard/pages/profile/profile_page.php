@@ -53,7 +53,7 @@
             <li id="audit-click">Audit settings</li>
             <li id="report-click">Reports settings</li>
             <li id="mail-click">Mail configuration</li> <?php
-            if ( current_user_can( 'manage_affiliates' ) ) { ?>
+            if ( 'active' == affwp_get_affiliate_status( affwp_get_affiliate_id() ) ) { ?>
               <li><a href="/affiliate-area/">Affiliate Area</a></li> <?php
             } ?>
           </ul>

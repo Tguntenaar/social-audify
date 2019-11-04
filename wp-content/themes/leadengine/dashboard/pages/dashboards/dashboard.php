@@ -151,14 +151,14 @@
             <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
             <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
           </div>
-          <div class="stat-box" style="border-top: 2px solid #16a085;">
+          <div class="stat-box clickable" onclick="showOpenedAudits()" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">Audits opened</span>
             <span class="stat-box-data"> <?php echo $viewed_audit; ?> </span>
             <span class="stat-box-procent ">
               <?php echo percent_diff($viewed_audit_month, $viewed_audit - $viewed_audit_month, true); ?>
             </span>
           </div>
-          <div class="stat-box" onclick="showOpenedAudits()" style="border-top: 2px solid #16a085;">
+          <div class="stat-box clickable" onclick="showOpenedAudits()" style="border-top: 2px solid #16a085;">
             <span class="stat-box-title">Open rate</span>
             <span class="stat-box-data"><?php echo percent_print($open_rate_audit); ?></span>
             <span class="stat-box-procent ">
@@ -218,10 +218,11 @@
 
     function showOpenedAudits() {
       var openedAudits = <?php echo json_encode($viewed_audits); ?>;
-      var list = openedAudits.map( audit => `<a href="${audit.slug}">${audit.name}</a>`);
+      var list = openedAudits.map( audit => `<a href="${audit.slug}" class="viewed-list">${audit.name}</a>`);
       showModal(initiateModal('confirmModal', 'select', {
-        'text': `#audits opened ${openedAudits.length}`,
-        'subtext': `${list.join("<br/>")}`,
+        'text': `Audits opened this month: ${openedAudits.length}`,
+        'subtext': `<div class="viewed-height">${list.join("")}</div>`,
+        'confirmtext': `Close`
       }));
     }
 
