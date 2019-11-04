@@ -2813,6 +2813,8 @@ h4 {
 	top: 0; left: 0;
 	z-index: 60;
 }
+
+
 .wrap {
   position: absolute;
   /* top: 50%;
@@ -4523,6 +4525,20 @@ h4 {
 @media only screen and (max-width: 992px) {
 	.intro-overlay iframe {
 		width: 80%;
+	}
+
+	.white-screen .wrap {
+		left: 50%;
+	}
+
+	.bounceball {
+		display: block;
+		margin: 0 auto;
+	}
+
+	.white-screen .text {
+		text-align: center;
+		margin-top: 20px;
 	}
 
 	.intro-overlay h1 {
