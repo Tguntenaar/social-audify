@@ -278,6 +278,7 @@
      */
     function submitForm() {
       showBounceBall(true, "Give us a few seconds as we create your awesome audit");
+
       var loggedInPromise = new Promise((resolve, reject) => {
         FB.getLoginStatus(function(response) {
           if (response.status === 'connected') {
