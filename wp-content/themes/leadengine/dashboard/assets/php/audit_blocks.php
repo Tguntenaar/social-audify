@@ -83,12 +83,12 @@
     ["type" => "insta_ac",
       "name" => "Average Comments",
       "ig_name" => "averageComments",
-      "desc" => "Number of accounts followed."
+      "desc" => "The average amount of comments on the last 25 posts."
     ],
     ["type" => "insta_al",
       "name" => "Average Likes",
       "ig_name" => "averageLikes",
-      "desc" => "Number of accounts followed."
+      "desc" => "The average number of likes on the last 25 posts."
     ]
   );
 
