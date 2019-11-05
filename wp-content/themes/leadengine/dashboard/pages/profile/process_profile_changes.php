@@ -43,12 +43,15 @@
     );
 
     $post_list_mail = array(
-      'day_1' => 'day_1',
-      'day_2' => 'day_2',
-      'day_3' => 'day_3',
-      'mail_text' => 'mail_text',
-      'second_mail_text' => 'second_mail_text',
-      'third_mail_text' => 'third_mail_text',
+      'day_1'             => 'day_1',
+      'day_2'             => 'day_2',
+      'day_3'             => 'day_3',
+      'mail_text'         => 'mail_text',
+      'second_mail_text'  => 'second_mail_text',
+      'third_mail_text'   => 'third_mail_text',
+      'mail_subject_1'    => 'subject_1',
+      'mail_subject_2'    => 'subject_2',
+      'mail_subject_3'    => 'subject_3',
     );
 
     // TODO ; meer input validation    

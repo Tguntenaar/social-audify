@@ -75,7 +75,7 @@
 
           <div id="audit-settings">
             <h3 class="h3-fix">Audit Settings</h3>
-            <a href="/audit-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy config<span style="font-size: 10px;">(recommended)</span></a>
+            <a href="/audit-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configurtion<span style="font-size: 10px;">(recommended)</span></a>
             <span class="advanced-settings" id="advanced-audit-settings">Advanced settings</span>
             <div style="clear:both;"></div>
 
@@ -164,7 +164,7 @@
 
           <div id="report-settings">
             <h3 class="h3-fix">Report Settings</h3>
-            <a href="/report-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy config<span style="font-size: 10px;">(recommended)</span></a>
+            <a href="/report-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configurtion<span style="font-size: 10px;">(recommended)</span></a>
             <span class="advanced-settings" id="advanced-report-settings">Advanced settings</span>
             <div style="clear:both;"></div>
 
@@ -248,20 +248,24 @@
                   <li id="third-content-mail-item">Mail 3</li>
                 </ul>
                 <!-- mail 1 block -->
-                <p>Use #{name} to type the name of receiver in the mail.</p>
+                <p>Use #{name} to type the name of receiver in the subject/mail.</p>
+                <p>Use #{company} to type the name your company in the subject/mail.</p>
                 <div class="first-content-mail-block tab">
+                  <input class="subject-line" type="text" name="mail_subject_1" id="mail_subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
                   <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
                     echo trim($user->mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
                 <div class="second-content-mail-block tab" style="display:none">
+                  <input class="subject-line" type="text" name="mail_subject_2" id="mail_subject_2" placeholder="Subject" value="<?php echo $user->subject_2?>">
                   <textarea maxlength="1999" input="text" name="second_mail_text" id="mail_text2"><?php
                     echo trim($user->second_mail_text);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
                 <div class="third-content-mail-block tab" style="display:none">
+                  <input class="subject-line" type="text" name="mail_subject_3" id="mail_subject_3" placeholder="Subject" value="<?php echo $user->subject_3?>">
                   <textarea maxlength="1999" input="text" name="third_mail_text" id="mail_text3"><?php
                     echo trim($user->third_mail_text);
                   ?></textarea>
