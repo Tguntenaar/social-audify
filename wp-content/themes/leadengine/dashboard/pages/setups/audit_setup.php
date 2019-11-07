@@ -19,9 +19,9 @@
     $iba_id = $user->instagram_business_account_id;
     $clients = $client_control->get_all();
   ?>
-  
+
   <div id="competitorModal" class="modal"></div>
-  
+
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->
@@ -250,7 +250,7 @@
           name : $('#competitor-name').val(),
           facebook : $('#facebook_url').val(),
           instagram : $('#instagram_url').val(),
-          website : $('#website_url').val().replace("https://", "").replace("http://", ""),
+          website : JSON.stringify($('#website_url').val().replace("https://", "").replace("http://", ""))
         });
         var name = (newCompare.data('compare').name !== "") ? newCompare.data('compare').name: 'empty';
         newCompare.html(`New Competitor <span style="color:grey;">(${name})</span>`);

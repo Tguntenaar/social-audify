@@ -686,7 +686,7 @@ pre {
 }
 
 nav {
-	width: 104px;
+	width: 111px;
 	height: auto;
 	margin: 0 auto;
 }
@@ -770,9 +770,13 @@ nav ul a:hover {
 
 .beta {
 	position: absolute;
-	right: -10px;
+	right: 0px;
 	bottom: -20px;
 	font-size: 12px !important;
+}
+
+#profile-member #rcp_profile_display_name_wrap {
+	display: none !important;
 }
 
 nav ul a li {

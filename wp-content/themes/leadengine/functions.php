@@ -204,6 +204,7 @@
     if($type == 'audit') {
         $table = 'Audit_template';
         $page->update('color', sanitize_hex_color($_POST['color']), $table);
+        $page->update('language', sanitize_text_field($_POST['language']), $table);
     } else if($type == 'report') {
         $table = 'Report_content';
         $page->update('color', sanitize_hex_color($_POST['color']), $table);
@@ -224,7 +225,7 @@
        $control->update($_POST['user_id'], 'std_mail_bit', $_POST['value'] == 'true', $table);
     }
 
-    wp_send_json(array('color' => $_POST['color']));
+    wp_send_json(array('color' => $_POST['language']));
     wp_die();
   }
 

@@ -6,7 +6,7 @@ class audit_controller {
     $this->service = new audit_service($connection);
   }
 
- 
+
   function create($page, $client, $options, $competitor) {
     $user_id = get_current_user_id();
     $competitor_name = isset($competitor['name']) ? $competitor['name'] : NULL;
@@ -67,7 +67,7 @@ class audit_controller {
 
       // Check if competitor is set.
       if ($competitor != 'false') {
-        $instance->request_website_meta($competitor['website'], 1);
+          $instance->request_website_meta($competitor['website'], 1);
       }
     }
 

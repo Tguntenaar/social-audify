@@ -23,6 +23,9 @@
                 ($user_id == $author_id || $user_id == 2) : false;
 
   // Import controllers & models
+  include(dirname(__FILE__)."/../../assets/languages/language_file.php");
+
+  // Import controllers & models
   include(dirname(__FILE__)."/../../services/connection.php");
   include(dirname(__FILE__)."/../../controllers/audit_controller.php");
   include(dirname(__FILE__)."/../../controllers/user_controller.php");
@@ -200,11 +203,25 @@
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
   if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
-    $url = "https://crawl.socialaudify.com/pdf/" . $post_url;
+    $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
 
+  $options = "";
+  foreach($language as $key => $value) {
+        if($audit->language == NULL && $key == "Englisch") {
+            $options .= "<option value='". $key ."' selected>". $key ."</option>";    
+        } elseif($audit->language == $key) {
+            $options .= "<option value='". $key ."' selected >". $key ."</option>";           
+        } else {
+             $options .= "<option value='". $key ."' >". $key ."</option>";           
+        }
+  }
+  
+  $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
+
+  $language = $language[$audit->language];
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
@@ -313,16 +330,16 @@
         <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a><?php
       } ?>
 
-      
+
       Audit: <?php echo $audit->name;
-    
+
 
       if ($edit_mode) { ?>
         <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
         <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="preview"><i class="far fa-eye"></i> Preview </a>
-        <!-- <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a> -->
+        <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a>
         <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
         <?php
       } else {
@@ -409,7 +426,7 @@
       <div class="col-lg-12 facebook-info" id="facebook-info">
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp;
             <?php if($user->facebook_title == "") { ?>
-                Facebook stats:
+                <?php echo $language['fb_title']; ?>:
             <?php } else {
                 echo $user->facebook_title;
             } ?>
@@ -417,7 +434,7 @@
 
         <span class="sub-title">
             <?php if($user->facebook_sub_title == "") { ?>
-                Statistics of your Facebook page.
+                <?php echo $language['fb_subtitle']; ?>
             <?php } else {
                 echo $user->facebook_sub_title;
             } ?>
@@ -431,7 +448,7 @@
               if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6 col-md-12">
                   <div class="inner">
-                    <span class="title-box facebook"><?php echo $item["name"]; ?></span>
+                    <span class="title-box facebook"><?php echo $language[$item["name"]]; ?></span>
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
@@ -444,7 +461,7 @@
                       echo printValue(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']);
                     } ?>
                     </span>
-                    <span class="explenation"><?php echo $item["desc"]; ?></span><?php
+                    <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span><?php
                       visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                   </div>
                 </div><?php
@@ -455,13 +472,13 @@
                 $path = $item["is_comp"] ? $audit->competitor : $audit; ?>
                 <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
-                    <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
+                    <span class="title-box facebook"><?php echo $language[$item["name"]]; ?></span><?php
                     // preview mode
                     if (!$edit_mode) {
                       $class = $path->facebook_data->runningAdds ? "check" : "times";
                       $color = $path->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
 
-                      <span class="explenation">Is the page currently running ads</span>
+                      <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span>
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
@@ -492,7 +509,7 @@
           <div class="inner custom-inner">
             <div class="score col-lg-12">
               <div class="inner custom-text">
-                <span class="score-tag">Score</span><?php
+                <span class="score-tag"><?php echo $language['score']; ?></span><?php
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="facebook_value"></span>%</span>
                   <div class="slidecontainer">
@@ -502,7 +519,7 @@
                   <span class="score-text"><?php echo $score['fb']; ?>%</span><?php
                 } ?>
 
-                <span class="advice-title">Facebook advice</span><?php
+                <span class="advice-title"><?php echo $language['facebook_advice']; ?></span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo  $advice['fb']; ?></textarea>
@@ -519,8 +536,8 @@
     }
     if ($audit->instagram_bit == "1" && ($audit->instagram_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="instagram-info">
-        <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; Instagram stats:</span>
-        <span class="sub-title">Statistics of your Instagram page.</span><?php
+        <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; <?php echo $language['insta_title']; ?>:</span>
+        <span class="sub-title"><?php echo $language['insta_subtitle']; ?></span><?php
         visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level');
 
         if ($audit->manual && $edit_mode) { ?>
@@ -541,8 +558,8 @@
               visibility_short_code($edit_mode, $audit->insta_hashtag, 'insta_hashtag'); ?>
 
               <div class="chart-info">
-                <span class="stat-box-title">Hashtags used</span>
-                <span class="graph-procent" style="margin-top: 4px;">Most used '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
+                <span class="stat-box-title"><?php echo $language['hastag_used']; ?></span>
+                <span class="graph-procent" style="margin-top: 4px;"><?php echo $language['hastag_most_used']; ?> '<?php echo $audit->instagram_data->hashtags[0][0]; ?>'</span>
               </div>
               <div class="inner custom-inner" style="padding: 0;">
                 <canvas id="hashtag-chart" class="chart-instagram"  style="height: 292px;"></canvas>
@@ -559,8 +576,8 @@
               visibility_short_code($edit_mode, $audit->insta_lpd, 'insta_lpd'); ?>
 
               <div class="chart-info">
-                <span class="stat-box-title">Likes on your posts Instagram</span>
-                <span class="graph-procent" style="margin-top: 2px;">Average <?php
+                <span class="stat-box-title"><?php echo $language['likes_on_post']; ?></span>
+                <span class="graph-procent" style="margin-top: 2px;"><?php echo $language['average']; ?> <?php
                   echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span>
                 <span class="graph-info"><?php
                   if ($audit->has_comp && (isset($audit->competitor) && !$audit->competitor->manual)) {
@@ -595,7 +612,7 @@
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
         }
 
-        function competitor_code($audit, $edit_mode, $item) {
+        function competitor_code($audit, $edit_mode, $item, $language) {
           // Preview mode hide description animation
           if (!$audit->manual) { ?>
             <span class="data_animation"><?php
@@ -625,7 +642,7 @@
           // Preview mode hide description animation
           if (!$audit->manual) { ?>
             </span>
-            <span class="explenation"><?php echo $item["desc"]; ?></span><?php
+            <span class="explenation"><?php echo $language[$item['name'] . " exp"]; ?></span><?php
           }
         }
 
@@ -647,11 +664,11 @@
             <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
               <div class="inner">
                 <span class="title-box instagram"><?php
-                  echo $item["name"]; ?>
+                  echo $language[$item["name"]]; ?>
                 </span><?php
                 // Als preview mode laat description staan en hide client info
 
-                competitor_code($audit, $edit_mode, $item);
+                competitor_code($audit, $edit_mode, $item, $language);
                 // preview mode show visibility icon
                 visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
 
@@ -668,7 +685,7 @@
           } ?>
             <div class="col-lg-12 insta-score" >
               <div class="col-lg-12 align">
-                <span class="score-tag insta-advice-tag">Score</span><?php
+                <span class="score-tag insta-advice-tag"><?php echo $language['score']; ?></span><?php
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="instagram_value"></span>%</span>
                   <div class="slidecontainer">
@@ -679,7 +696,7 @@
                 } ?>
               </div>
               <div class="col-lg-12 align" id="instagram-info">
-                <span class="advice-title">Instagram advice</span><?php
+                <span class="advice-title"><?php echo $language['instagram_advice']; ?></span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
@@ -700,8 +717,8 @@
         if (!$audit->has_website) { ?>
           <div class="wait-for-crawl"><p>Please wait a moment, the website data is being prepared.</p></div><?php
         } ?>
-        <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; Website stats:</span>
-        <span class="sub-title">Statistics of your webpage.</span><?php
+        <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; <?php echo $language['website_title']; ?>:</span>
+        <span class="sub-title"><?php echo $language['website_subtitle']; ?></span><?php
         visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?>
 
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
@@ -711,7 +728,7 @@
               if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
                   <div class="inner">
-                    <span class="title-box website"><?php echo $item["name"]; ?></span>
+                    <span class="title-box website"><?php echo $language[$item["name"]]; ?></span>
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
@@ -724,7 +741,7 @@
                     } ?>
                     </span><?php
                       visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                    <span class="explenation"><?php echo $item["desc"]; ?></span>
+                    <span class="explenation"><?php echo $language[$item["name"] . " exp"] ?></span>
                   </div>
                 </div><?php
               }
@@ -732,20 +749,20 @@
           </div>
         </div>
         <div class="col-lg-6 right instagram-right" style="padding: 20px 20px; margin-top: 35px !important;">
-          <span class="score-tag website-advice-tag">Score</span><?php
+          <span class="score-tag website-advice-tag"><?php echo $language['score']; ?></span><?php
           if ($edit_mode) { ?>
             <span class="score-text"><span id="website_value"></span>%</span>
             <div class="slidecontainer">
               <input type="range" min="1" max="100" value="<?php echo $score['wb']; ?>" class="slider" id="website_score">
             </div>
-            <span class="advice-title margin-advice-title">Website advice</span>
+            <span class="advice-title margin-advice-title"><?php echo $language['website_advice']; ?></span>
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
               <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo $advice['wb']; ?></textarea>
             </form>
             <?php
           } else { ?>
             <span class="score-text"><?php echo $score['wb']; ?>%</span>
-            <span class="advice-title margin-advice-title">Website advice</span>
+            <span class="advice-title margin-advice-title"><?php echo $language['website_advice']; ?></span>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['wb'], $client, $audit) . "</pre>"; ?></p>
             <?php
             call_to_contact($phone, $author->user_email, $calendar_link);
@@ -760,7 +777,7 @@
         <?php visibility_short_code($edit_mode, $audit->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
 
         <div class="left-conlusion col-lg-7">
-          <h3>Conclusion</h3>
+          <h3><?php echo $language['conclusion']; ?></h3>
           <hr class="under-line" />
           <div style="clear:both"></div><?php
           if ($edit_mode) { ?>
@@ -778,11 +795,11 @@
       </section>
   <?php } ?>
   <div class="footer">
-    <?php if(isset($phone) && $phone != "") { ?><span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span><?php } ?>
-    <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
+    <?php if(isset($phone) && $phone != "") { ?><span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span><?php } ?>
+    <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
       <div style="clear:both;"></div>
-      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
+      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo $language['make_appointment']; ?></a><?php
     } ?>
   </div>
 </body>
@@ -996,7 +1013,12 @@
               // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL,
               //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
               //  - daarbij zit er ook een php check op.
-              $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
+              if(data.video_iframe.includes("src=") || data.video_iframe == "") {
+                $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
+
+              } else {
+                alert("You have to insert a Iframe.");
+              }
             },
             error: function (xhr, textStatus, errorThrown) {
               var send_error = error_func(xhr, textStatus, errorThrown, data);
@@ -1027,11 +1049,13 @@
         text:`<span style="font-weight:bold; font-size: 18px;">Configuration audit</span>`,
         subtext:`Do you want to sent this client automatic reminders?<br/>
           <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br/><br/>
-          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails: 
+          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails:
           <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a><br><br>
-          Do you want a custom color for this audit?<br/>
-          Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i>`,
+          Do you want a custom color for this audit?<br/><br />
+          <span style="font-weight: 500;">Theme color:</span><br /> <input type="color" id="color" value="<?php echo $theme_color; ?>">
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i><br /><br />
+          <span style="font-weight: 500;">Audit language:</span><br />
+          <?php echo $language_options; ?>`,
         confirm: 'config_confirmed'
       }
 
@@ -1049,9 +1073,11 @@
             action: 'update_config',
             color: $('#color').val(),
             value: $("#mail_bit_check").is(':checked'),
+            language: $("#language :selected").val(),
             ...commonPost
           },
           success: function(response) {
+            console.log(response);
             window.location.reload()
           },
           error: function (xhr, textStatus, errorThrown) {
