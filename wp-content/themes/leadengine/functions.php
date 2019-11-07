@@ -215,6 +215,7 @@
             $control->update($_POST['user_id'], 'color_report', sanitize_hex_color($_POST['color']), $table);
         } else {
             $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
+            $control->update($_POST['user_id'], 'language', sanitize_text_field($_POST['language']), $table);            
         }
     }
 

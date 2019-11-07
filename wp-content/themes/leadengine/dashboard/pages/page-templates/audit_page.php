@@ -22,7 +22,7 @@
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
                 ($user_id == $author_id || $user_id == 2) : false;
 
-  // Import controllers & models
+  // Language file
   include(dirname(__FILE__)."/../../assets/languages/language_file.php");
 
   // Import controllers & models
@@ -210,9 +210,11 @@
 
   $options = "";
   foreach($language as $key => $value) {
-        if($audit->language == NULL && $key == "Englisch") {
+        if($audit->language == NULL && $user->language != NULL && $user->language == $key) {
+          $options .= "<option value='". $key ."' selected>". $key ."</option>";   
+        } else if($audit->language == NULL && $key == "Englisch") {
             $options .= "<option value='". $key ."' selected>". $key ."</option>";    
-        } elseif($audit->language == $key) {
+        } else if($audit->language == $key) {
             $options .= "<option value='". $key ."' selected >". $key ."</option>";           
         } else {
              $options .= "<option value='". $key ."' >". $key ."</option>";           
@@ -220,6 +222,12 @@
   }
   
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
+
+  if($audit->language == NULL && $user->language != NULL) {
+    $audit->language = $user->language;
+  } else if($audit->language == NULL) {
+    $audit->language = "Englisch";
+  }
 
   $language = $language[$audit->language];
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
@@ -566,7 +574,7 @@
               </div>
 
               <div class="legend">
-                  <span class="round-color you-color"></span> <span class="space">You</span>
+                  <span class="round-color you-color"></span> <span class="space"><?php echo $client->name; ?></span>
                   <?php if ($audit->has_comp && !$audit->competitor->manual) { ?><span class="round-color competitor-color"></span> <?php echo ucfirst($audit->competitor_name); } ?>
               </div>
             </div><?php
@@ -594,7 +602,7 @@
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
-                  <span class="round-color you-color"></span> <span class="space">You</span><?php
+                  <span class="round-color you-color"></span> <span class="space"><?php echo $client->name; ?></span><?php
                   if ($audit->has_comp && !$audit->competitor->manual) { ?>
                     <span class="round-color competitor-color" style="margin-right: 4px;"></span><?php
                     echo ucfirst($audit->competitor_name);
