@@ -1652,7 +1652,7 @@ nav ul a li {
 	width: 100%;
 	height: 200px;
 	overflow-x: hidden;
-	overflow-y scroll;
+	/* overflow-y: scroll; */
 }
 
 .left li {
