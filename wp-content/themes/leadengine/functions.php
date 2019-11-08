@@ -765,7 +765,7 @@
     <p class="rcp_calendar_custom" style="">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
-          <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
+          <input name="rcp_calendar" id="rcp_calendar" type="url" placeholder="https://" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
     </p>
 
