@@ -28,6 +28,9 @@
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
                 ($user_id == $author_id || $user_id == 2) : false;
 
+  // Language file
+  include(dirname(__FILE__)."/../../assets/languages/language_file.php");
+
   // Import controllers & models
   include(dirname(__FILE__)."/../../services/connection.php");
   include(dirname(__FILE__)."/../../controllers/user_controller.php");
@@ -54,8 +57,8 @@
     'ig' => 50,
     'wb' => 50
   );
-  //
-  // // Advice boxes
+
+  // Advice boxes
   $advice = array(
     'fb' => selectAdvice("", $score['fb'], $user, "fb"),
     'ig' => selectAdvice("", $score['ig'], $user, "insta"),
@@ -111,38 +114,46 @@
   }
 
   function change_tags($text) {
-      // Client name -> #{client}
-      if (strpos($text, '#{client}') !== false) {
-            $text = str_replace('#{client}', "Example client", $text);
-      }
+    // Client name -> #{client}
+    if (strpos($text, '#{client}') !== false) {
+      $text = str_replace('#{client}', "Example client", $text);
+    }
 
-      // Competitor name -> #{competitor}
-      if (strpos($text, '#{competitor}') !== false) {
-            $text = str_replace('#{competitor}', "Example competitor", $text);
-      }
+    // Competitor name -> #{competitor}
+    if (strpos($text, '#{competitor}') !== false) {
+      $text = str_replace('#{competitor}', "Example competitor", $text);
+    }
 
-      // Facebook score -> #{fb_score}
-      if (strpos($text, '#{fb_score}') !== false) {
-            $text = str_replace('#{fb_score}', "100", $text);
-      }
+    // Facebook score -> #{fb_score}
+    if (strpos($text, '#{fb_score}') !== false) {
+      $text = str_replace('#{fb_score}', "100", $text);
+    }
 
-      // Instagram score -> #{instagram_score}
-      if (strpos($text, '#{insta_score}') !== false) {
-            $text = str_replace('#{insta_score}', "90", $text);
-      }
+    // Instagram score -> #{instagram_score}
+    if (strpos($text, '#{insta_score}') !== false) {
+      $text = str_replace('#{insta_score}', "90", $text);
+    }
 
-      // Website score -> #{website_score}
-      if (strpos($text, '#{website_score}') !== false) {
-            $text = str_replace('#{website_score}', "80", $text);
-      }
+    // Website score -> #{website_score}
+    if (strpos($text, '#{website_score}') !== false) {
+      $text = str_replace('#{website_score}', "80", $text);
+    }
 
-      return $text;
+    return $text;
   }
 
-  // $video_nothing = ($audit->video_iframe == NULL) ? 'checked' : '';
-  // $video_iframe = ($audit->video_iframe != NULL) ? 'checked' : '';
-  // $display_nothing = ($audit->video_iframe == NULL) ? 'style="display:block;"' : 'style="display:none;"';
-  // $display_iframe = ($audit->video_iframe != NULL) ? 'style="display:block;"' : 'style="display:none;"';
+  $options = "";
+  foreach ($language as $key => $value) {
+    if ($user->language == $key) {
+      $options .= "<option value='". $key ."' selected >". $key ."</option>";           
+    } else {
+      $options .= "<option value='". $key ."' >". $key ."</option>";           
+    }
+  }
+
+  $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
+  $language = $language[$user->language];
+
   $company_name = get_user_meta($author_id, 'rcp_company', true );
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
@@ -151,6 +162,25 @@
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
+
+  $options = "";
+  foreach($language as $key => $value) {
+        if($user->language == NULL && $key == "Englisch") {
+            $options .= "<option value='". $key ."' selected>". $key ."</option>";    
+        } elseif($user->language == $key) {
+            $options .= "<option value='". $key ."' selected >". $key ."</option>";           
+        } else {
+             $options .= "<option value='". $key ."' >". $key ."</option>";           
+        }
+  }
+  
+  $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
+
+  if($user->language == NULL) {
+    $user->language = "Englisch";
+  }
+
+  $language = $language[$user->language];
 ?>
 <head>
   <title>Audit config</title>
@@ -173,106 +203,101 @@
         $('.mobile-hide').toggleClass('block');
       });
 
-
       // tutorial
       $('.yes-tut').click(function() {
-          $('.into-tutorial').css("display", "none");
-          $('.video-options').css({"z-index": "5555"});
-          $('.video-explenation').css({"display": "block"});
-          $('.video-button').css({"display": "block"});
+        $('.into-tutorial').css("display", "none");
+        $('.video-options').css({"z-index": "5555"});
+        $('.video-explenation').css({"display": "block"});
+        $('.video-button').css({"display": "block"});
       });
 
       $('.video-button').click(function() {
-          $('.video-options').css({"z-index": "5"});
-          $('.video-explenation').css({"display": "none"});
-          $('.video-button').css({"display": "none"});
-          $('.introtext-button').css({"display": "block"});
-          $('.audit-intro').css({"z-index": "5555", "position": "relative"});
-          $('html, body').animate({
-                scrollTop: $(".audit-intro-text").offset().top
-          }, 2000);
-          $('.intro-explenation').css({"display": "block"});
+        $('.video-options').css({"z-index": "5"});
+        $('.video-explenation').css({"display": "none"});
+        $('.video-button').css({"display": "none"});
+        $('.introtext-button').css({"display": "block"});
+        $('.audit-intro').css({"z-index": "5555", "position": "relative"});
+        $('html, body').animate({
+          scrollTop: $(".audit-intro-text").offset().top
+        }, 2000);
+        $('.intro-explenation').css({"display": "block"});
       });
 
       $('.introtext-button').click(function() {
-          $('.audit-intro').css({"z-index": "5"});
-          $('.audit-intro').css({"z-index": "5"});
-          $('.title-button').css({"display": "block"});
-          $('.video-button').css({"display": "none"});
-          $('.title-explenation').css({"display": "block"});
-          $('.intro-explenation').css({"display": "none"});
+        $('.audit-intro').css({"z-index": "5"});
+        $('.audit-intro').css({"z-index": "5"});
+        $('.title-button').css({"display": "block"});
+        $('.video-button').css({"display": "none"});
+        $('.title-explenation').css({"display": "block"});
+        $('.intro-explenation').css({"display": "none"});
 
-          $('.facebook-inf-title').css({"z-index": "5555", "position": "relative"});
-          $('.sub-title').css({"z-index": "5555", "position": "relative"});
+        $('.facebook-inf-title').css({"z-index": "5555", "position": "relative"});
+        $('.sub-title').css({"z-index": "5555", "position": "relative"});
 
-          $('html, body').animate({
-                scrollTop: $(".facebook-inf-title").offset().top
-          }, 2000);
+        $('html, body').animate({
+          scrollTop: $(".facebook-inf-title").offset().top
+        }, 2000);
       });
 
       $('.title-button').click(function() {
+        $('.facebook-inf-title').css({"z-index": "5", "position": "relative"});
+        $('.sub-title').css({"z-index": "5", "position": "relative"});
 
-          $('.facebook-inf-title').css({"z-index": "5", "position": "relative"});
-          $('.sub-title').css({"z-index": "5", "position": "relative"});
+        $('#facebook_vis_bit_icon').css({"z-index": "5555", "color": "#fff"});
 
-          $('#facebook_vis_bit_icon').css({"z-index": "5555", "color": "#fff"});
+        $('.title-button').css({"display": "none"});
+        $('.introtext-button').css({"display": "none"});
+        $('.visibility-button').css({"display": "block"});
 
-          $('.title-button').css({"display": "none"});
-          $('.introtext-button').css({"display": "none"});
-          $('.visibility-button').css({"display": "block"});
-
-          $('.title-explenation').css({"display": "none"});
-          $('.visibility-explenation').css({"display": "block"});
+        $('.title-explenation').css({"display": "none"});
+        $('.visibility-explenation').css({"display": "block"});
       });
 
       $('.visibility-button').click(function() {
-          $('#facebook_vis_bit_icon').css({"z-index": "5", "color": "#fff"});
-          $('.title-button').css({"display": "none"});
-          $('.visibility-button').css({"display": "none"});
-          $('.between-button').css({"display": "block"});
+        $('#facebook_vis_bit_icon').css({"z-index": "5", "color": "#fff"});
+        $('.title-button').css({"display": "none"});
+        $('.visibility-button').css({"display": "none"});
+        $('.between-button').css({"display": "block"});
 
-          $('.social-text-explenation').css({"display": "block"});
-          $('.visibility-explenation').css({"display": "none"});
+        $('.social-text-explenation').css({"display": "block"});
+        $('.visibility-explenation').css({"display": "none"});
 
-          $('.config-right').css({"z-index": "5555"});
+        $('.config-right').css({"z-index": "5555"});
 
-          $('html, body').animate({
-                scrollTop: $(".config-right").offset().top
-          }, 2000);
+        $('html, body').animate({
+              scrollTop: $(".config-right").offset().top
+        }, 2000);
       });
 
       $('.between-button').click(function() {
-          $('.between-button').css({"display": "none"});
-          $('.visibility-button').css({"display": "none"});
+        $('.between-button').css({"display": "none"});
+        $('.visibility-button').css({"display": "none"});
 
-          $('.social-text-explenation').css({"display": "none"});
-          $('.end-explenation').css({"display": "block"});
+        $('.social-text-explenation').css({"display": "none"});
+        $('.end-explenation').css({"display": "block"});
 
-          $('.config-right').css({"z-index": "5"});
+        $('.config-right').css({"z-index": "5"});
 
-          $('html, body').animate({
-                scrollTop: $(".config-right").offset().top
-          }, 2000);
+        $('html, body').animate({
+              scrollTop: $(".config-right").offset().top
+        }, 2000);
       });
 
       $('.no-tut').click(function() {
-          $('.tutorial-screen').css({"display": "none"});
+        $('.tutorial-screen').css({"display": "none"});
       });
 
       $('.no-end-tut').click(function() {
-          $('.tutorial-screen').css({"display": "none"});
+        $('.tutorial-screen').css({"display": "none"});
       });
 
       $('.yes-end-tut').click(function() {
-          $('.tutorial-screen').css({"display": "none"});
+        $('.tutorial-screen').css({"display": "none"});
       });
 
       $('#tutorial_link').click(function() {
-          console.log("Test");
-          $('.tutorial-screen').css({"display": "block"});
+        $('.tutorial-screen').css({"display": "block"});
       });
-
-
     });
   </script>
   <style>
@@ -304,17 +329,15 @@
             && $user->text_website_1 == "" && $user->text_website_2 == ""
             && $user->text_website_3 == "")) {
                 $display = "block";
-
     } else {
         $display = "none";
     }?>
-
       <div class='tutorial-screen' style="display: <?php echo $display; ?>;">
           <div class="into-tutorial vertical-align" style="text-align: center;">
               <div style="height: auto; width: 340px; margin: 0 auto;">
                   <h2 style="color: #6e9d9c;">Do you want to follow a tutorial?</h2>
-                  <p>We will walk you through all steps of the audit. You can start adding text right now as we go through the audit, this text will be shown as standard for every audit (but you can still change the individual text per audit of course).</p><br />
-                  <br />
+                  <p>We will walk you through all steps of the audit. You can start adding text right now as we go through the audit, this text will be shown as standard for every audit (but you can still change the individual text per audit of course).</p><br/>
+                  <br/>
                   <div class="create-audit-button yes-tut" style="cursor: pointer;">Yes, recommended!</div>
                   <div class="create-audit-button no-tut" style="color: #fff !important; cursor: pointer; background: #c0392b; margin-left: 20px;">No</div>
               </div>
@@ -400,7 +423,7 @@
   <div id="reloadModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
   <section class="content white custom-content min-height">
-    <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
+    <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?>/>
     <?php
     if ($user->std_iframe != NULL && $user->std_iframe != "") { ?>
       <div class="intro-video"><?php
@@ -458,14 +481,14 @@
   </div><?php
     if ($user->facebook_vis_bit || $edit_mode) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
-        <?php if($user->facebook_title != NULL) { $facebook_title = $user->facebook_title; } else { $facebook_title = 'Facebook stats:'; } ?>
-        <?php if($user->facebook_sub_title != NULL) { $facebook_sub_title = $user->facebook_sub_title; } else { $facebook_sub_title = 'Statistics of your Facebook page.'; } ?>
+        <?php if($user->facebook_title != NULL) { $facebook_title = $user->facebook_title; } else { $facebook_title = $language['fb_title'] . ":"; } ?>
+        <?php if($user->facebook_sub_title != NULL) { $facebook_sub_title = $user->facebook_sub_title; } else { $facebook_sub_title = $language['fb_subtitle']; } ?>
 
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp;
             <?php if(!$edit_mode) { ?>
                 <?php echo $facebook_title; ?>
             <?php } else { ?>
-                <input type="text" maxlength="40" name="facebook_title" id="facebook_title" value="<?php echo $facebook_title; ?>" />
+                <input type="text" maxlength="40" name="facebook_title" id="facebook_title" value="<?php echo $facebook_title; ?>"/>
             <?php } ?>
         </span>
 
@@ -473,7 +496,7 @@
             <?php if(!$edit_mode) { ?>
                 <?php echo $facebook_sub_title; ?>
             <?php } else { ?>
-                <input maxlength="40" type="text" name="facebook_sub_title" id="facebook_sub_title" value="<?php echo $facebook_sub_title; ?>" />
+                <input maxlength="40" type="text" name="facebook_sub_title" id="facebook_sub_title" value="<?php echo $facebook_sub_title; ?>"/>
             <?php } ?>
         </span>
         <?php
@@ -485,12 +508,12 @@
               if (show_block($edit_mode, $user->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6 col-md-12">
                   <div class="inner">
-                    <span class="title-box facebook"><?php echo $item["name"]; ?></span>
+                    <span class="title-box facebook"><?php echo $language[$item["name"]]; ?></span>
                     <span class="data_animation"><?php
                         echo printValue(0, $item['is_icon']);
                      ?>
                     </span>
-                    <span class="explenation"><?php echo $item["desc"]; ?></span><?php
+                    <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span><?php
                       visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
                   </div>
                 </div><?php
@@ -499,13 +522,13 @@
             foreach ($facebook_ad_blocks as $item) { ?>
                 <div class="stat-block col-lg-6" id="fb_ads">
                   <div class="inner">
-                    <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
+                    <span class="title-box facebook"><?php echo $language[$item["name"]]; ?></span><?php
                     // preview mode
                     if (!$edit_mode) {
                       $class = 0 ? "check" : "times";
                       $color = 0 ? "#27ae60" : "#c0392b"; ?>
 
-                      <span class="explenation">Is the page currently running ads</span>
+                      <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span>
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
@@ -534,7 +557,7 @@
           <div class="inner custom-inner">
             <div class="score col-lg-12">
               <div class="inner custom-text">
-                <span class="score-tag">Score</span><?php
+                <span class="score-tag"><?php echo $language['score']; ?></span><?php
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="facebook_value"></span>%</span>
                   <div class="slidecontainer">
@@ -544,7 +567,7 @@
                   <span class="score-text"><?php echo $score['fb']; ?>%</span><?php
                 } ?>
 
-                <span class="advice-title">Facebook advice</span><?php
+                <span class="advice-title"><?php echo $language['facebook_advice']; ?></span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                     <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo $advice['fb']; ?></textarea>
@@ -586,14 +609,14 @@
     }
     if ($user->instagram_vis_bit || $edit_mode) { ?>
       <div class="col-lg-12 facebook-info" id="instagram-info">
-        <?php if($user->instagram_title != NULL) { $instagram_title = $user->instagram_title; } else { $instagram_title = 'Instagram stats:'; } ?>
-        <?php if($user->instagram_sub_title != NULL) { $instagram_sub_title = $user->instagram_sub_title; } else { $instagram_sub_title = 'Statistics of your Instagram page.'; } ?>
+        <?php if($user->instagram_title != NULL) { $instagram_title = $user->instagram_title; } else { $instagram_title = $language['insta_title']; } ?>
+        <?php if($user->instagram_sub_title != NULL) { $instagram_sub_title = $user->instagram_sub_title; } else { $instagram_sub_title = $language['insta_subtitle']; } ?>
 
         <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp;
             <?php if(!$edit_mode) { ?>
                 <?php echo $instagram_title; ?>
             <?php } else { ?>
-                 <input type="text" maxlength="40" name="instagram_title" id="instagram_title" value="<?php echo $instagram_title; ?>" />
+                 <input type="text" maxlength="40" name="instagram_title" id="instagram_title" value="<?php echo $instagram_title; ?>"/>
             <?php } ?>
         </span>
 
@@ -601,7 +624,7 @@
             <?php if(!$edit_mode) { ?>
                 <?php echo $instagram_sub_title; ?>
             <?php } else { ?>
-                <input maxlength="40" type="text" name="instagram_sub_title" id="instagram_sub_title" value="<?php echo $instagram_sub_title; ?>" />
+                <input maxlength="40" type="text" name="instagram_sub_title" id="instagram_sub_title" value="<?php echo $instagram_sub_title; ?>"/>
             <?php } ?>
         </span>
 
@@ -615,8 +638,8 @@
               visibility_short_code($edit_mode, $user->insta_hashtag, 'insta_hashtag'); ?>
 
               <div class="chart-info">
-                <span class="stat-box-title">Hashtags used</span>
-                <span class="graph-procent" style="margin-top: 4px;">Most used 'example'</span>
+                <span class="stat-box-title"><?php echo $language['hastag_used']; ?></span>
+                <span class="graph-procent" style="margin-top: 4px;"><?php echo $language['hastag_most_used']; ?> 'example'</span>
               </div>
               <div class="inner custom-inner" style="padding: 0;">
                 <canvas id="hashtag-chart" class="chart-instagram"  style="height: 292px;"></canvas>
@@ -632,8 +655,8 @@
               visibility_short_code($edit_mode, $user->insta_lpd, 'insta_lpd'); ?>
 
               <div class="chart-info">
-                <span class="stat-box-title">Likes on your posts Instagram</span>
-                <span class="graph-procent" style="margin-top: 2px;">Average 50</span>
+                <span class="stat-box-title"><?php echo $language['likes_on_post']; ?></span>
+                <span class="graph-procent" style="margin-top: 2px;"><?php echo $language['average']; ?> 50</span>
                 <span class="graph-info">
 
                 </span>
@@ -654,13 +677,13 @@
         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" style="width: 100%; float:left;" method="post" enctype="multipart/form-data" id="manual-ig-form"><?php
 
 
-        function competitor_code($audit, $edit_mode, $item) {
+        function competitor_code($audit, $edit_mode, $item, $language) {
           // Preview mode hide description animation
             ?>
                 <span class="data_animation"><?php
                 echo 0; ?>
                 </span>
-                <span class="explenation"><?php echo $item["desc"]; ?></span>
+                <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span>
             <?php
         }
 
@@ -670,7 +693,7 @@
           $str = ($comp) ? "comp-" : "";
 
           if ($base->manual && $edit_mode) {?>
-            <input type="text" id="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>" /></span><?php
+            <input type="text" id="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value, 2); ?>"/></span><?php
           } else {
             echo round($value, 2);
           }
@@ -682,11 +705,11 @@
             <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
               <div class="inner">
                 <span class="title-box instagram"><?php
-                  echo $item["name"]; ?>
+                  echo $language[$item["name"]]; ?>
                 </span><?php
                 // Als preview mode laat description staan en hide client info
 
-                competitor_code($user, $edit_mode, $item);
+                competitor_code($user, $edit_mode, $item, $language);
                 // preview mode show visibility icon
                 visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
 
@@ -702,7 +725,7 @@
           if(!$edit_mode) { ?>
             <div class="col-lg-12 insta-score">
               <div class="col-lg-12 align">
-                <span class="score-tag insta-advice-tag">Score</span><?php
+                <span class="score-tag insta-advice-tag"><?php echo $language['score']; ?></span><?php
                 if ($edit_mode) { ?>
                   <span class="score-text"><span id="instagram_value"></span>%</span>
                   <div class="slidecontainer">
@@ -713,7 +736,7 @@
                 } ?>
               </div>
               <div class="col-lg-12 align" id="instagram-info">
-                <span class="advice-title">Instagram advice</span><?php
+                <span class="advice-title"><?php echo $language['instagram_advice']; ?></span><?php
                 if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo $advice['ig']; ?></textarea>
@@ -757,21 +780,21 @@
     if ($user->website_vis_bit || $edit_mode) { ?>
       <div class="col-lg-12 facebook-info website-info" id="website-info">
 
-          <?php if($user->website_title != NULL) { $website_title = $user->website_title; } else { $website_title = 'Website stats:'; } ?>
-          <?php if($user->website_sub_title != NULL) { $website_sub_title = $user->website_sub_title; } else { $website_sub_title = 'Statistics of your Website page.'; } ?>
+          <?php if($user->website_title != NULL) { $website_title = $user->website_title; } else { $website_title = $language['website_title']; } ?>
+          <?php if($user->website_sub_title != NULL) { $website_sub_title = $user->website_sub_title; } else { $website_sub_title = $language['website_subtitle']; } ?>
 
           <span class="facebook-inf-title"><span class="round website">W</span> &nbsp;
               <?php if(!$edit_mode) { ?>
                   <?php echo $website_title; ?>
               <?php } else { ?>
-                  <input type="text" maxlength="40" name="website_title" id="website_title" value="<?php echo $website_title; ?>" />
+                  <input type="text" maxlength="40" name="website_title" id="website_title" value="<?php echo $website_title; ?>"/>
               <?php } ?>
            </span>
            <span class="sub-title">
               <?php if(!$edit_mode) { ?>
                   <?php echo $website_sub_title; ?>
               <?php } else { ?>
-                  <input maxlength="40" type="text" name="website_sub_title" id="website_sub_title" value="<?php echo $website_sub_title; ?>" />
+                  <input maxlength="40" type="text" name="website_sub_title" id="website_sub_title" value="<?php echo $website_sub_title; ?>"/>
               <?php } ?>
           </span>
 
@@ -784,12 +807,12 @@
               if (show_block($edit_mode, $user->{$item["type"]})) { ?>
                 <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
                   <div class="inner">
-                    <span class="title-box website"><?php echo $item["name"]; ?></span>
+                    <span class="title-box website"><?php echo $language[$item["name"]]; ?></span>
                     <span class="data_animation"><?php
                       echo 0; ?>
                     </span><?php
                       visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
-                    <span class="explenation"><?php echo $item["desc"]; ?></span>
+                    <span class="explenation"><?php echo $language[$item["name"]]; ?></span>
                   </div>
                 </div><?php
               }
@@ -798,20 +821,20 @@
         </div>
         <?php if(!$edit_mode) { ?>
         <div class="col-lg-6 right instagram-right" style="padding: 20px 20px; margin-top: 35px !important;">
-              <span class="score-tag website-advice-tag">Score</span><?php
+              <span class="score-tag website-advice-tag"><?php echo $language['score']; ?></span><?php
               if ($edit_mode) { ?>
                 <span class="score-text"><span id="website_value"></span>%</span>
                 <div class="slidecontainer">
                   <input type="range" min="1" max="100" value="50" class="slider" id="website_score">
                 </div>
-                <span class="advice-title margin-advice-title">Website advice</span>
+                <span class="advice-title margin-advice-title"><?php echo $language['website_advice']; ?></span>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
 
                   <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo "<pre>" . change_tags($advice['wb']) . "</pre>"; ?></textarea>
                 </form><?php
               } else { ?>
                 <span class="score-text"><?php echo $score['wb']; ?>%</span>
-                <span class="advice-title margin-advice-title">Website advice</span>
+                <span class="advice-title margin-advice-title"><?php echo $language['website_advice']; ?></span>
                 <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo $advice['wb']; ?></p>
                 <?php
                 call_to_contact($phone, $author->user_email, $calendar_link);
@@ -850,8 +873,8 @@
         <?php visibility_short_code($edit_mode, $user->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
 
         <div class="left-conlusion col-lg-7">
-          <h3>Conclusion</h3>
-          <hr class="under-line" />
+          <h3><?php echo $language['conclusion']; ?></h3>
+          <hr class="under-line"/>
           <div style="clear:both"></div><?php
           if ($edit_mode) { ?>
             <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
@@ -869,10 +892,10 @@
   <?php } ?>
 
   <div class="footer">
-    <span class="phone-number">Phone number: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
-    <span class="mailadres">Email: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
+    <span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
+    <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
-      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
+      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo $language['make_appointment']; ?></a><?php
     } ?>
   </div>
 </body>
@@ -1088,12 +1111,14 @@
       var modalData = {
         text:`<span style="font-weight:bold; display:block; font-size: 18px; margin-bottom: 10px;">Configuration audit</span>`,
         subtext:`Do you want to sent this client automatic reminders?<br/>
-          <input type="checkbox" id="std_mail_bit" <?php echo $user->std_mail_bit ? 'checked': ''; ?>><br><br>
+          <input type="checkbox" id="std_mail_bit" <?php echo $user->std_mail_bit ? 'checked': ''; ?>><br/><br/>
           Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails
           <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a>.<br><br>
           Do you want a custom color for this audit?<br>
           Theme color: <input type="color" id="color" value="<?php echo $theme_color; ?>">
-          <i class="fas fa-undo" onclick="$('#color').val('#6e9d9c')" ></i>`,
+          <i class="fas fa-undo" onclick="$('#color').val('#6e9d9c')" ></i><br/><br/>
+          <span style="font-weight: 500;">Audit language:</span><br/>
+          <?php echo $language_options; ?>`,
         confirm: 'config_confirmed'
       }
 
@@ -1109,6 +1134,7 @@
           url: ajaxurl,
           data: {
             flag: 'audit',
+            language: $("#language :selected").val(),
             action: 'update_config', color: $('#color').val(),
             value: $("#std_mail_bit").is(':checked'), ...commonPost,
             user_id: <?php echo $user_id; ?>
@@ -1121,37 +1147,6 @@
             logError(send_error, 'page-templates/audit_page.php', 'mail_config_confirm');
             showModal(initiateModal('errorModal', 'error', {
               'text': "Can't update mail function",
-              'subtext': "Please try again later or notify an admin if the issue persists"
-            }));
-          }
-        });
-      });
-
-      // Delete Audit Modal
-      var modalData = {
-        'text': 'Sure you want to delete this Audit?',
-        'subtext': 'This action is irreversible',
-        'confirm': 'delete_confirmed'
-      }
-
-      var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
-      $('#delete-this-audit').click(function() {
-        showModal(deleteModal);
-      });
-
-      $('#delete_confirmed').click(function() {
-        $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: {'action': 'delete_page', ...commonPost},
-          success: function (response) {
-            window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
-          },
-          error: function (xhr, textStatus, errorThrownr) {
-             var send_error = error_func(xhr, textStatus, errorThrown, data);
-            logError(send_error, 'page-templates/audit_page.php', 'delete_audit_confirm');
-            showModal(initiateModal('errorModal', 'error', {
-              'text': "Can't delete this audit",
               'subtext': "Please try again later or notify an admin if the issue persists"
             }));
           }

@@ -60,7 +60,7 @@ class audit {
   public function request_website_meta($website_url, $competitor = 0) {
     $user_id = get_current_user_id();
     $key = md5("t harum quidem rerum facilis" . $this->id . "est et expedita distinctio.");
-    $post_url = htmlentities(base64_encode($website_url));
+    $post_url = urlencode($website_url);
 
     if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
       $ch = curl_init("https://crawl.socialaudify.com/api/$this->id/$competitor/$post_url/$key/$user_id");

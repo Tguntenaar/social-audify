@@ -71,7 +71,7 @@
       "desc" => "Average engagement."
     ],
     ["type" => "insta_nplm",
-      "name" => "Number of posts last month.",
+      "name" => "Number of posts last month",
       "ig_name" => "postsLM",
       "desc" => "Number of posts last month."
     ],
