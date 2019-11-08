@@ -1119,7 +1119,7 @@
         'confirm': ''
       }
 
-      var firstTimeModal = initiateModal('firstTimeModal', 'confirm', firstTimeModalData);
+      var firstTimeModal = initiateModal('firstTimeModal', 'error', firstTimeModalData);
 
       <?php if($user->first_time == 0) { ?>
            showModal(firstTimeModal);
