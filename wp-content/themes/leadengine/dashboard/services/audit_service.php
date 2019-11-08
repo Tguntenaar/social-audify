@@ -119,8 +119,8 @@ class audit_service extends connection {
 
   public function insert_template($id, $audit_id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "INSERT INTO Audit_template (audit_id, video_iframe) VALUES (%d,
-        (SELECT std_iframe FROM Configtext WHERE user_id = %d))", $audit_id, $id));
+      "INSERT INTO Audit_template (audit_id, video_iframe, language) 
+        SELECT %d, std_iframe, language FROM Configtext WHERE user_id = %d", $audit_id, $id));
   }
 
 

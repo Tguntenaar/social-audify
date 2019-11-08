@@ -140,7 +140,7 @@
 
   function call_to_contact($phone, $mail, $calendar_link) { ?>
     <div class="info">
-      <?php if(isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a><?php } ?>
+      <?php if (isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a><?php } ?>
       <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
       <?php
       if ($calendar_link != "") { ?>
@@ -150,49 +150,35 @@
   }
 
   function change_tags($text, $client, $audit) {
-      // Client name -> #{client}
-      if (strpos($text, '#{client}') !== false) {
-            $text = str_replace('#{client}', $client->name, $text);
-      }
+    // Client name -> #{client}
+    if (strpos($text, '#{client}') !== false) {
+      $text = str_replace('#{client}', $client->name, $text);
+    }
 
-      // Competitor name -> #{competitor}
-      if (strpos($text, '#{competitor}') !== false) {
-            $text = str_replace('#{competitor}', $audit->competitor_name, $text);
-      }
+    // Competitor name -> #{competitor}
+    if (strpos($text, '#{competitor}') !== false) {
+      $text = str_replace('#{competitor}', $audit->competitor_name, $text);
+    }
 
-      // Facebook score -> #{fb_score}
-      if (strpos($text, '#{fb_score}') !== false) {
-            if($audit->facebook_score == NULL)
-                $score = 50;
-            else
-                $score = $audit->facebook_score;
+    // Facebook score -> #{fb_score}
+    if (strpos($text, '#{fb_score}') !== false) {
+      $score = ($audit->facebook_score == NULL) ? 50 : $score = $audit->facebook_score;
+      $text = str_replace('#{fb_score}', $score, $text);
+    }
 
-            $text = str_replace('#{fb_score}', $score, $text);
-      }
+    // Instagram score -> #{instagram_score}
+    if (strpos($text, '#{insta_score}') !== false) {
+      $score = ($audit->instagram_score == NULL) ? 50 :$score = $audit->instagram_score;
+      $text = str_replace('#{insta_score}', $score, $text);
+    }
 
-      // Instagram score -> #{instagram_score}
-      if (strpos($text, '#{insta_score}') !== false) {
-            if($audit->instagram_score == NULL)
-                $score = 50;
-            else
-                $score = $audit->instagram_score;
-
-            $text = str_replace('#{insta_score}', $score, $text);
-      }
-
-      // Website score -> #{website_score}
-      if (strpos($text, '#{website_score}') !== false) {
-            if($audit->website_score == NULL)
-                $score = 50;
-            else
-                $score = $audit->website_score;
-
-            $text = str_replace('#{website_score}', $score, $text);
-      }
-
-      return $text;
+    // Website score -> #{website_score}
+    if (strpos($text, '#{website_score}') !== false) {
+      $score = ($audit->website_score == NULL) ? 50 : $audit->website_score;
+      $text = str_replace('#{website_score}', $score, $text);
+    }
+    return $text;
   }
-
 
   $video_nothing = ($audit->video_iframe == NULL && $user->std_iframe == NULL) ? 'checked' : '';
   $video_iframe = ($audit->video_iframe != NULL || $user->std_iframe != NULL) ? 'checked' : '';
@@ -209,27 +195,17 @@
   }
 
   $options = "";
-  foreach($language as $key => $value) {
-        if($audit->language == NULL && $user->language != NULL && $user->language == $key) {
-          $options .= "<option value='". $key ."' selected>". $key ."</option>";   
-        } else if($audit->language == NULL && $key == "Englisch") {
-            $options .= "<option value='". $key ."' selected>". $key ."</option>";    
-        } else if($audit->language == $key) {
-            $options .= "<option value='". $key ."' selected >". $key ."</option>";           
-        } else {
-             $options .= "<option value='". $key ."' >". $key ."</option>";           
-        }
+  foreach ($language as $key => $value) {
+    if ($audit->language == $key) {
+      $options .= "<option value='". $key ."' selected >". $key ."</option>";           
+    } else {
+      $options .= "<option value='". $key ."' >". $key ."</option>";           
+    }
   }
-  
+
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
-
-  if($audit->language == NULL && $user->language != NULL) {
-    $audit->language = $user->language;
-  } else if($audit->language == NULL) {
-    $audit->language = "Englisch";
-  }
-
   $language = $language[$audit->language];
+
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
@@ -313,7 +289,7 @@
   <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.</h3></div>
     <div class="sub-header col-lg-12" style="display: block !important;">
 
-    <?php if($user_id == $author_id) { ?>
+    <?php if ($user_id == $author_id) { ?>
 
       <!-- Animated CSS stuff -->
       <div id="nav-icon2">
@@ -324,7 +300,7 @@
 
     <?php } ?>
 
-    <?php if($user_id != $author_id) { ?>
+    <?php if ($user_id != $author_id) { ?>
         Audit: <?php echo $audit->name;
     } ?>
 
@@ -367,21 +343,21 @@
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
-    if(($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
+    if (($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
 
-    } else if(($audit->video_iframe == "" || $audit->video_iframe == "") && $edit_mode) {
+    } else if (($audit->video_iframe == "" || $audit->video_iframe == "") && $edit_mode) {
         ?><div class="intro-video"></div><?php
     } else if (($audit->video_iframe != "" && $audit->video_iframe != NULL) || $edit_mode) { ?>
          <div class="intro-video"><?php
               $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
 
-              if(strpos($video, 'height') !== false) {
+              if (strpos($video, 'height') !== false) {
                   echo "<iframe ". $video ."</iframe>";
               } ?>
             </div><?php
     }
 
-    if($audit->video_iframe != NULL && $audit->video_iframe != "") {
+    if ($audit->video_iframe != NULL && $audit->video_iframe != "") {
         $video_iframe_link = '<iframe '.stripslashes($audit->video_iframe).'</iframe>';
     } else {
         $video_iframe_link = '';
@@ -406,16 +382,16 @@
     <?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?>
 
     <div class="audit-intro<?php echo ($audit->video_iframe != NULL && $audit->video_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
-      <?php if($audit->picture_vis_bit == 1 || $edit_mode) { ?>
+      <?php if ($audit->picture_vis_bit == 1 || $edit_mode) { ?>
       <div class="client-profile-picture">
         <?php echo get_avatar($author_id, 32); ?>
         <?php visibility_short_code($edit_mode, $audit->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
       </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
+        <span class="audit-company-name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if ($company == "") { echo $author->display_name; } else { echo $company; }?></span><?php
       } else { echo '<div class="audit-intro-text">'; }
 
-      if($audit->introduction_vis_bit == 1 || $edit_mode) {
+      if ($audit->introduction_vis_bit == 1 || $edit_mode) {
         if ($edit_mode) { ?>
           <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
             <textarea maxlength="999" input="text"  name="introduction" id="introduction" style="background: #f5f6fa;"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
@@ -434,7 +410,7 @@
     if ($audit->facebook_bit == "1" && ($audit->facebook_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="facebook-info">
         <span class="facebook-inf-title"><span class="round facebook"><i class="fab fa-facebook-f"></i></span> &nbsp;
-            <?php if($user->facebook_title == "") { ?>
+            <?php if ($user->facebook_title == "") { ?>
                 <?php echo $language['fb_title']; ?>:
             <?php } else {
                 echo $user->facebook_title;
@@ -442,7 +418,7 @@
         </span>
 
         <span class="sub-title">
-            <?php if($user->facebook_sub_title == "") { ?>
+            <?php if ($user->facebook_sub_title == "") { ?>
                 <?php echo $language['fb_subtitle']; ?>
             <?php } else {
                 echo $user->facebook_sub_title;
@@ -781,7 +757,7 @@
     } ?>
   </section>
 
-  <?php if($audit->conclusion_vis_bit == 1 || $edit_mode) { ?>
+  <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?>
       <section class="audit-conclusion col-lg-12">
         <?php visibility_short_code($edit_mode, $audit->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?>
 
@@ -804,7 +780,7 @@
       </section>
   <?php } ?>
   <div class="footer">
-    <?php if(isset($phone) && $phone != "") { ?><span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span><?php } ?>
+    <?php if (isset($phone) && $phone != "") { ?><span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span><?php } ?>
     <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
       <div style="clear:both;"></div>
@@ -1022,7 +998,7 @@
               // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL,
               //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
               //  - daarbij zit er ook een php check op.
-              if(data.video_iframe.includes("src=") || data.video_iframe == "") {
+              if (data.video_iframe.includes("src=") || data.video_iframe == "") {
                 $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
 
               } else {
