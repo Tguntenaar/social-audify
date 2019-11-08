@@ -128,7 +128,7 @@
           ?>
       </a>
         <div class="person-info">
-          <span class="person-name block"><?php echo $wp_current_user->display_name; ?></span>
+          <span class="person-name block"><?php $company_name = get_user_meta(get_current_user_id(), 'rcp_company', true ); echo (isset($company_name) && $company_name != "") ? $company_name : $wp_current_user->display_name; ?></span>
         </div>
       </div>
       <div class="stats">

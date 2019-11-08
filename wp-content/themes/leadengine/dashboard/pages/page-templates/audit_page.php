@@ -363,6 +363,7 @@
   <div id="confirmModal" class="modal"></div>
   <div id="reloadModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
+  <div id="firstTimeModal" class="modal"></div>
   <section class="content white custom-content min-height">
     <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
@@ -1110,6 +1111,21 @@
       $('#delete-this-audit').click(function() {
         showModal(deleteModal);
       });
+
+            // Delete Audit Modal
+      var firstTimeModalData = {
+        'text': 'Please note',
+        'subtext': 'We do not send the first email about the audit at this time! Click on share and track to copy the link and email from your own email. Then select in configuration whether or not you would like us to start sending the follow ups.',
+        'confirm': ''
+      }
+
+      var firstTimeModal = initiateModal('firstTimeModal', 'confirm', firstTimeModalData);
+
+      <?php if($user->first_time == 0) { ?>
+           showModal(firstTimeModal);
+           <?php $user->update('User', 'first_time', 1); ?>
+      <?php } ?>
+
 
       $('#delete_confirmed').click(function() {
         $.ajax({
