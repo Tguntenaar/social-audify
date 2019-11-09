@@ -162,25 +162,6 @@
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
-
-  $options = "";
-  foreach($language as $key => $value) {
-        if($user->language == NULL && $key == "Englisch") {
-            $options .= "<option value='". $key ."' selected>". $key ."</option>";    
-        } elseif($user->language == $key) {
-            $options .= "<option value='". $key ."' selected >". $key ."</option>";           
-        } else {
-             $options .= "<option value='". $key ."' >". $key ."</option>";           
-        }
-  }
-  
-  $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
-
-  if($user->language == NULL) {
-    $user->language = "Englisch";
-  }
-
-  $language = $language[$user->language];
 ?>
 <head>
   <title>Audit config</title>
