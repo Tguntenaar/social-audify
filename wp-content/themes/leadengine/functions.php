@@ -774,7 +774,7 @@
     <p class="rcp_company_custom" style="">
         <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
             <label for="rcp_company"><?php _e( 'Your company name', 'rcp' ); ?></label>
-            <input name="rcp_company" id="rcp_company"  placeholder="Name will be shown on the audit/report page" type="text" value="<?php echo esc_attr( $company ); ?>"/>
+            <input name="rcp_company" id="rcp_company"  placeholder="Name will be shown on the audit/report page and e-mails." type="text" value="<?php echo esc_attr( $company ); ?>"/>
         <?php } ?>
     </p>
 

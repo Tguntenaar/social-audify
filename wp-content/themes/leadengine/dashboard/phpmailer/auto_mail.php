@@ -38,10 +38,10 @@ $client_control = new client_controller($connection);
 // HIER BEGINT DE CODE
 $users = get_users();
 
-foreach ($users as $user_id) {
+foreach( $users as $user_id ) {
     $audit_send_list = array();
 
-    if($user_id->ID == 1) {
+    if ($user_id->ID == 1) {
         continue;
     }
     // Get config from users
@@ -49,28 +49,28 @@ foreach ($users as $user_id) {
     $mail_data = $user_control->get($user_id->ID);
 
     // Check if it is a socialaudify user
-    if(isset($mail_data)) {
+    if (isset($mail_data)) {
 
         // Check if mail fields are set
-        if($mail_data->day_1 != 0 || $mail_data->day_2 != 0
+        if ($mail_data->day_1 != 0 || $mail_data->day_2 != 0
            || $mail_data->day_3 != 0) {
 
             $audits = $audit_control->get_all(NULL, $user_id->ID);
 
             $i = 0;
             foreach($audits as $audit) {
-                if($audit->mail_bit == 0) {
+                if ($audit->mail_bit == 0) {
                     continue;
                 }
 
                 $client = $client_control->get($audit->client_id);
-                $temp = array();
+                $company = get_user_meta($client->user_id, 'rcp_company', true );
                 $earlier = new DateTime($audit->create_date);
                 $later = new DateTime(date('Y-m-d H:i:s'));
                 $day_difference = $later->diff($earlier)->format("%a");
-
+                
                 // Check if audit is viewed and if we have to send a auto mail
-                if($audit->view_time == NULL && (($day_difference == $mail_data->day_1) ||
+                if ($audit->view_time == NULL && (($day_difference == $mail_data->day_1) ||
                                                   ($day_difference == $mail_data->day_2) ||
                                                   ($day_difference == $mail_data->day_3))) {
 
@@ -78,13 +78,15 @@ foreach ($users as $user_id) {
 
                     $i++;
                     // Create mail body
-                    if($day_difference == $mail_data->day_1) {
-                        $body_string = str_replace("#{name}", $client->name, $mail_data->mail_text);
-
-                    } else if($day_difference == $mail_data->day_2) {
-                        $body_string = str_replace("#{name}", $client->name, $mail_data->second_mail_text);
+                    if ($day_difference == $mail_data->day_1) {
+                        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $company);
+                        $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $company);
+                    } else if ($day_difference == $mail_data->day_2) {
+                        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $company);
+                        $body_string = replace_template_mail_fields($mail_data->second_mail_text, $client, $company);
                     } else {
-                        $body_string = str_replace("#{name}", $client->name, $mail_data->third_mail_text);
+                        $subject = replace_template_mail_fields($mail_data->subject_3, $client, $company);
+                        $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $company);
                     }
 
                     $body_string = str_replace("\n", "<br />", $body_string);
@@ -130,6 +132,14 @@ foreach ($users as $user_id) {
             }
         }
     }
+}
+
+function replace_template_mail_fields($string, $client, $company) {
+    $a = str_replace("#{name}", $client->name, $string);
+    $b = str_replace("#{company}", $company, $a);
+    // add more fields
+    // $c = str_replace("#{company}", $company, $b);
+    return $b;
 }
 
 ?>

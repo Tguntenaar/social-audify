@@ -4277,6 +4277,10 @@ tr input {
 	padding: 10px;
 }
 
+.subject-line {
+	width:50%!important;
+}
+
 .info-i {
 	position: absolute;
 	top: 10px;
