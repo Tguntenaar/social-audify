@@ -221,7 +221,7 @@
 
 
     if ($type == 'audit') {
-       $page->update('mail_bit', (($_POST['value'] == 'true') ? 2 : 0));
+       $page->update('mail_bit', (($_POST['value'] == 'true') ? 1 : 0));
     } else if($type == 'user') {
        $control->update($_POST['user_id'], 'std_mail_bit', $_POST['value'] == 'true', $table);
     }

@@ -89,12 +89,13 @@ foreach( $users as $user_id ) {
                         $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $company);
                     }
 
+                    $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
                     $body_string = str_replace("\n", "<br />", $body_string);
 
                     $body_string .= "<br /><br />";
                     $body_string .= "Audit: " . $audit->name . ".<br />";
                     $body_string .= 'Link: <a href='. $link .' title="Audit link">' . $audit->name . "</a>.<br /><br />";
-
+                    echo $body_string;
                     // Instantiation and passing `true` enables exceptions
                     $mail = new PHPMailer(true);
 
@@ -107,11 +108,12 @@ foreach( $users as $user_id ) {
                         $mail->Username   = 'socialaudify@vps.transip.email';       // SMTP username
                         $mail->Password   = 'XQhkUjNxqxBsaZrq';                     // SMTP password
                         $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-                        $mail->Port       = 465;                                    // TCP port to connect to
+                        $mail->Port       = 465;  
+                        $mail->CharSet    = 'UTF-8';                                  // TCP port to connect to
 
                         //Recipients  
                         $company = get_user_meta($user_id->ID, 'rcp_company', true );
-                        $name = isset($company) && $company !== "" ? $company : $user->display_name;
+                        $name = $company !== "" ? $company : $user->display_name;
 
                         $mail->setFrom('automail@socialaudify.com', $name);
                         $mail->addAddress($client->mail, $client->name);     // Add a recipient              // Name is optional
@@ -119,8 +121,9 @@ foreach( $users as $user_id ) {
 
                          // Content
                          $mail->isHTML(true);                                  // Set email format to HTML
-                         $mail->Subject = 'Hi, here is a reminder to open the audit we made for you!';
+                         $mail->Subject = $subject;
                          $mail->Body    = $body_string;
+                         
                          $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
                          $mail->send();
