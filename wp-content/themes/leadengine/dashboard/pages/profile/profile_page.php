@@ -125,8 +125,8 @@
           </div>
 
           <div id="account-settings">
-            <h3 class="h3-fix">Your data</h3>
-            <?php echo do_shortcode("[subscription_details]"); ?>
+            <h3 class="h3-fix">Your data</h3><?php
+            echo do_shortcode("[subscription_details]"); ?>
           </div>
         </div>
       </div>
@@ -174,7 +174,7 @@
     $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail')});
     $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail')});
 
-    function toggle(blocks, type, show) {
+    function toggle(blocks, show, type) {
       blocks.forEach(function (el) {
         if (el == show) {
           $(`#${el}-${type}-item`).addClass("active-menu-item");
