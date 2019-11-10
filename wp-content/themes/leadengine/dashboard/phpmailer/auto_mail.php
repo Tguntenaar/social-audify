@@ -68,7 +68,7 @@ foreach ($users as $user) {
     }
 
     $client = $client_control->get($audit->client_id);
-    $company = get_user_meta($client->user, 'rcp_company', true);
+    $company = get_user_meta($user->ID, 'rcp_company', true);
     $earlier = new DateTime($audit->create_date);
     $later = new DateTime(date('Y-m-d H:i:s'));
     $day_difference = $later->diff($earlier)->format("%a");
@@ -112,7 +112,8 @@ foreach ($users as $user) {
         $mail->Port       = 465;
         $mail->CharSet    = 'UTF-8';                                  // TCP port to connect to
 
-        //Recipients
+        //Recipients  
+        $company = get_user_meta($user->ID, 'rcp_company', true);
         $name = $company !== "" ? $company : $user->display_name;
 
         $mail->setFrom('automail@socialaudify.com', $name);
