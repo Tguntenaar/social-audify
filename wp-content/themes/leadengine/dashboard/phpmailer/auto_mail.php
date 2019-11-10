@@ -80,14 +80,14 @@ foreach ($users as $user) {
 
       // Create mail body
       if ($day_difference == $mail_data->day_1) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $company);
-        $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $company);
+        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
+        $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $audit->name, $link);
       } else if ($day_difference == $mail_data->day_2) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $company);
-        $body_string = replace_template_mail_fields($mail_data->second_mail_text, $client, $company);
+        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
+        $body_string = replace_template_mail_fields($mail_data->second_mail_text, $client, $audit->name, $link);
       } else {
-        $subject = replace_template_mail_fields($mail_data->subject_3, $client, $company);
-        $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $company);
+        $subject = replace_template_mail_fields($mail_data->subject_3, $client, $audit->name, $link);
+        $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $audit->name, $link);
       }
 
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
@@ -136,12 +136,13 @@ foreach ($users as $user) {
   }
 }
 
-function replace_template_mail_fields($string, $client, $company) {
+function replace_template_mail_fields($string, $client, $audit, $link) {
   $a = str_replace("#{name}", $client->name, $string);
-  $b = str_replace("#{company}", $company, $a);
+  $b = str_replace("#{audit}", $audit, $a);
+  $c = str_replace("#{auditlink}", "<a href='{$link}' title='Audit link'>{$audit}</a>", $b);
   // add more fields
-  // $c = str_replace("#{company}", $company, $b);
-  return $b;
+  // $d = str_replace("#{company}", $company, $c);
+  return $c;
 }
 
 ?>
