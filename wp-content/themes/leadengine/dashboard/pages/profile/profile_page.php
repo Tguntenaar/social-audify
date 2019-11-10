@@ -10,32 +10,7 @@
 <?php
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
-
-  include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
-  include(dirname(__FILE__)."/../../assets/php/report_blocks.php");
-
   $user = $user_control->get($user_id);
-  $audit_visibility = $user->get_visibility('audit');
-  $report_visibility = $user->get_visibility('report');
-
-  $ranges = (object) array(
-    ["name" => "facebook", "code" => "fb", "db" => "fb"],
-    ["name" => "instagram", "code" => "ig", "db" => "insta"],
-    ["name" => "website", "code" => "wb", "db" => "website"]
-  );
-
-  function print_list_checkboxes($blocks, $title, $visibility_list) {
-    echo "<h4>${title}</h4>";
-    foreach ($blocks as $block) {
-      $item = (object) $block;
-      $checked = $visibility_list[0]->{$item->type} ? 'checked' : '';
-      echo "<div class='form-check'>
-        <input type='hidden' name='check-$item->type' value='0'>
-        <input type='checkbox' name='check-$item->type' class='form-check-input' value='1' id='check-$item->type' $checked>
-        <label class='form-check-label' for='defaultCheck1'>$item->name</label>
-      </div>";
-    }
-  }
 ?>
 <head>
   <meta charset="utf-8">
@@ -48,11 +23,12 @@
       <div class="content-right y-scroll col-lg-9" style="padding-left: 25px;">
         <div class="acitivities col-lg-12">
           <ul class="sub-menu-profile">
-            <li id="profile-click">Profile settings</li>
+            <li id="member-click">Profile settings</li>
             <li id="avatar-click">Avatar settings</li>
             <li id="audit-click">Audit settings</li>
             <li id="report-click">Reports settings</li>
-            <li id="mail-click">Mail configuration</li> <?php
+            <li id="mail-click">Mail configuration</li>
+            <li id="account-click">Subscription Info</li><?php
             if ( 'active' == affwp_get_affiliate_status( affwp_get_affiliate_id() ) ) { ?>
               <li><a href="/affiliate-area/">Affiliate Area</a></li> <?php
             } ?>
@@ -75,88 +51,8 @@
 
           <div id="audit-settings">
             <h3 class="h3-fix">Audit Settings</h3>
-            <a href="/audit-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configurtion<span style="font-size: 10px;">(recommended)</span></a>
-            <span class="advanced-settings" id="advanced-audit-settings">Advanced settings</span>
+            <a href="/audit-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configuration</a>
             <div style="clear:both;"></div>
-
-            <div id="advanced-audit">
-                <ul>
-                  <li id="intro-audit-item" class="active-menu-item">Intro text</li>
-                  <li id="conclusion-audit-item">Conclusion text</li>
-                  <li id="fb-audit-item">Facebook text</li>
-                  <li id="ig-audit-item">Instagram text</li>
-                  <li id="wb-audit-item">Website text</li>
-                  <li id="visibility-audit-item">Visibility preference</li>
-                  <li id="color-audit-item">Audit Colors</li>
-                </ul>
-                <div style="clear:both;"></div>
-                <form action="/ppc?settings=audit" id="audit-form" method="post" enctype="multipart/form-data">
-                  <!-- intro -->
-                  <div class="intro-audit-block tab">
-                    <h4>Introduction Audit</h4>
-                    <textarea maxlength="999" input="text"  name="introduction-audit" id="introduction-audit"><?php
-                      echo trim($user->intro_audit);
-                    ?></textarea>
-                  </div>
-                  <!-- conclusion -->
-                  <div class="conclusion-audit-block tab">
-                    <h4>Conclusion Audit</h4>
-                    <textarea maxlength="999" input="text"  name="conclusion-audit" id="conclusion-audit"><?php
-                      echo trim($user->conclusion_audit);
-                      ?></textarea>
-                  </div>
-                  <?php
-                  // facebook instagram website blocks
-                  foreach ($ranges as $range) {
-                    $item = (object) $range; ?>
-                    <div class="<?php echo $item->code; ?>-audit-block tab">
-                        <h4><?php echo ucfirst($item->name); ?> Audit text</h4><?php
-                      for ($i = 1; $i <= 3; $i++) {
-                        if ($i < 3) { ?>
-                          <h6>Show this text up to the selected range, making it faster to create an audit</h6>
-                          <input maxlength="2" type="text" id="<?php echo "range_{$item->code}_$i";?>" name="<?php echo "range_{$item->code}_$i"; ?>" placeholder="<?php echo $i * 30; ?>"
-                          value="<?php echo $user->{"range_number_{$item->db}_$i"}; ?>"><?php
-                        } else { ?>
-                          <h6>The last range is less than or equal to 100 percent</h6><?php
-                        } ?>
-                        <textarea maxlength="999" input="text" name="<?php echo "$item->code-audit_$i"; ?>"><?php
-                          echo $user->{"text_{$item->db}_$i"}; ?></textarea><?php
-                        } ?>
-                    </div><?php
-                  } ?>
-                  <!-- visibility block -->
-                  <div class="visibility-audit-block tab" style="display:none">
-                    <h4>Audit visibility</h4>
-                    <ul>
-                      <li id="fb-audit-visibility-item" class="active-menu-item">Facebook</li>
-                      <li id="ig-audit-visibility-item">Instagram</li>
-                      <li id="wb-audit-visibility-item">Website</li>
-                    </ul>
-                    <div class="fb-audit-visibility-block tab"><?php
-                      print_list_checkboxes(array_merge($facebook_blocks, $facebook_ad_blocks), 'facebook', $audit_visibility); ?>
-                    </div>
-                    <div class="ig-audit-visibility-block tab" style='display:none'><?php
-                      print_list_checkboxes(array_merge($instagram_blocks, $instagram_graph_blocks), 'instagram', $audit_visibility); ?>
-                    </div>
-                    <div class="wb-audit-visibility-block tab" style='display:none'><?php
-                      print_list_checkboxes($website_blocks, 'website', $audit_visibility); ?>
-                    </div>
-                  </div>
-                  <!-- audit colors block -->
-                  <div class="color-audit-block tab" style="display:none;">
-                    <h4>Audit Colors</h4>
-                    <div>
-                        <input type="color" name="audit-color" value="<?php echo $user->color_audit?>">
-                        <i class="fas fa-undo" onclick="$('input[name=audit-color]').val(`#6e9d9c`)" ></i>
-                    </div>
-                  </div>
-
-                  <!-- error notify -->
-                  <div class="error-display-audit"></div>
-                  <input type="submit" value="Update" class="update-button" >
-                </form>
-            </div>
-
             <div class="profile-exp">
               <i id="audit-exp" class="info-i fas fa-info"></i>
             </div>
@@ -164,58 +60,8 @@
 
           <div id="report-settings">
             <h3 class="h3-fix">Report Settings</h3>
-            <a href="/report-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configurtion<span style="font-size: 10px;">(recommended)</span></a>
-            <span class="advanced-settings" id="advanced-report-settings">Advanced settings</span>
+            <a href="/report-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configuration</a>
             <div style="clear:both;"></div>
-
-            <div id="advanced-report">
-                <ul>
-                  <li id="intro-report-item" class="active-menu-item">Intro text</li>
-                  <li id="conclusion-report-item">Conclusion text</li>
-                  <li id="visibility-report-item">Visibility report</li>
-                  <li id="color-report-item">Report colors</li>
-                </ul>
-                <form action="/ppc?settings=report" id="report-form" method="post" enctype="multipart/form-data">
-                  <!-- intro report -->
-                  <div class="intro-report-block tab">
-                    <h4>Introduction Report</h4>
-                    <textarea maxlength="999" input="text"  name="introduction-report"><?php
-                      echo trim($user->intro_report);
-                    ?></textarea>
-                  </div>
-                  <!-- conclusion report -->
-                  <div class="conclusion-report-block tab">
-                    <h4>Conclusion Report</h4>
-                    <textarea maxlength="999" input="text"  name="conclusion-report"><?php
-                      echo trim($user->conclusion_report);
-                    ?></textarea>
-                  </div>
-                  <!-- Visibility Report -->
-                  <div class="visibility-report-block tab" style="display:none">
-                    <h4>Report visibility</h4>
-                    <ul>
-                      <li id="social-report-visibility-item" class="active-menu-item">Social</li>
-                      <li id="campaign-report-visibility-item">Campaign</li>
-                    </ul>
-                    <div class="social-report-visibility-block tab">
-                      <?php print_list_checkboxes($social_blocks, 'social', $report_visibility); ?>
-                    </div>
-                    <div class="campaign-report-visibility-block tab" style='display:none'>
-                      <?php print_list_checkboxes($campaign_blocks, 'campaign', $report_visibility); ?>
-                    </div>
-                  </div>
-                  <!-- Report colors -->
-                  <div class="color-report-block tab" style="display:none;">
-                    <h4>Report Colors</h4>
-                    <div>
-                        <input type="color" name="report-color" value="<?php echo $user->color_report; ?>">
-                        <i class="fas fa-undo" onclick="$('input[name=report-color]').val(`#6e9d9c`)" ></i>
-                    </div>
-                  </div>
-                  <div class="error-display-report"></div>
-                  <input type="submit" value="Update" class="update-button" >
-                </form>
-            </div>
             <div class="profile-exp">
               <i id="report-exp" class="info-i fas fa-info"></i>
             </div>
@@ -295,40 +141,6 @@
       $('#third-day-value').text($('#day_3').val());
     });
 
-    $("#audit-form").submit(function(e) {
-      e.preventDefault();
-      $('.error-display-audit').empty();
-
-      var location = $('#audit-form');
-
-      if (location.find("input[name='range_fb_1']").val() >= location.find("input[name='range_fb_2']").val()) {
-          $("#fb-audit-item").click();
-          $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
-          return;
-      }
-
-      if (location.find("input[name='range_ig_1']").val() >= location.find("input[name='range_ig_2']").val()) {
-          $("#ig-audit-item").click();
-          $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.</span>");
-          return;
-      }
-
-      if (location.find("input[name='range_wb_1']").val() >= location.find("input[name='range_wb_2']").val()) {
-          $("#wb-audit-item").click();
-          $('.error-display-audit').append("<span style='display: block; color: red; font-size: 14px;'>The first range number always has to be smaller than the second one.");
-          return;
-      }
-
-      this.submit();
-    });
-
-    $("#report-form").submit(function(e){
-      e.preventDefault();
-      $('.error-display-report').empty();
-
-      this.submit();
-    });
-
     /**
     * MAIL FORM
     */
@@ -344,7 +156,6 @@
         }
       });
 
-
       if (parseInt($("#day_1").val()) >= parseInt($("#day_2").val()) || parseInt($("#day_2").val()) >= parseInt($("#day_3").val())) {
         $("#when-mail-item").click();
         $('.error-display-mail').prepend("<span style='color: red; font-size: 14px;'>Day 1 has to be smaller than Day 2 and Day 2 smaller than Day 3.</span>");
@@ -354,63 +165,14 @@
       this.submit();
     });
 
+    var mailBlocks = ['when', 'content'];
+    $("#when-mail-item").click(function() { toggle(mailBlocks, 'when', 'mail') });
+    $("#content-mail-item").click(function() { toggle(mailBlocks, 'content', 'mail') });
 
-    $("#intro-audit-item").click(function() { togglePreferenceUI('intro', 'audit') });
-    $("#conclusion-audit-item").click(function() { togglePreferenceUI('conclusion', 'audit') });
-    $("#visibility-audit-item").click(function() { togglePreferenceUI('visibility', 'audit') });
-
-    $("#fb-audit-item").click(function() { togglePreferenceUI('fb', 'audit') });
-    $("#ig-audit-item").click(function() { togglePreferenceUI('ig', 'audit') });
-    $("#wb-audit-item").click(function() { togglePreferenceUI('wb', 'audit') });
-    $('#color-audit-item').click(function() { togglePreferenceUI('color', 'audit')});
-
-    $("#conclusion-report-item").click(function() { togglePreferenceUI('conclusion', 'report') });
-    $("#intro-report-item").click(function() { togglePreferenceUI('intro', 'report') });
-    $("#visibility-report-item").click(function() { togglePreferenceUI('visibility', 'report') });
-    $('#color-report-item').click(function() { togglePreferenceUI('color', 'report')});
-
-
-    $("#when-mail-item").click(function() { togglePreferenceUI('when', 'mail') });
-    $("#content-mail-item").click(function() { togglePreferenceUI('content', 'mail') });
-
-    $("#first-content-mail-item").click(function() { togglePreferenceUI('first', 'content-mail')});
-    $("#second-content-mail-item").click(function() { togglePreferenceUI('second', 'content-mail')});
-    $("#third-content-mail-item").click(function() { togglePreferenceUI('third', 'content-mail')});
-
-    $("#fb-audit-visibility-item").click(function() { togglePreferenceUI('fb', 'audit-visibility'); });
-    $("#ig-audit-visibility-item").click(function() { togglePreferenceUI('ig', 'audit-visibility'); });
-    $("#wb-audit-visibility-item").click(function() { togglePreferenceUI('wb', 'audit-visibility'); });
-
-    $("#social-report-visibility-item").click(function() { togglePreferenceUI('social', 'report-visibility'); });
-    $("#campaign-report-visibility-item").click(function() { togglePreferenceUI('campaign', 'report-visibility'); });
-
-    /**
-     * it = item zit in de lijst waarop je klikt
-     * bl = block zitten de inputs in
-     * type = type of menu
-     * show = item from blocks array to show
-     */
-    function togglePreferenceUI(show, type) {
-      var blocks, it, bl;
-
-      if (type == 'report') {
-        blocks = ["intro", "conclusion", "visibility", "color"];
-      } else if (type == 'audit') {
-        blocks = ["wb", "fb", "ig", "intro", "conclusion", "visibility", "color"];
-      } else if (type == 'mail') {
-        blocks = ['when', 'content'];
-      } else if (type == 'audit-visibility') {
-        blocks = ['fb', 'ig', 'wb'];
-      } else if (type == 'report-visibility') {
-        blocks = ['social', 'campaign'];
-      } else if (type == 'content-mail') {
-        blocks = ['first', 'second', 'third'];
-      } else {
-        console.log('menu type needs to be added');
-        return;
-      }
-      toggle(blocks, type, show);
-    }
+    var contentMailBlocks = ['first', 'second', 'third'];
+    $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail')});
+    $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail')});
+    $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail')});
 
     function toggle(blocks, type, show) {
       blocks.forEach(function (el) {
@@ -424,40 +186,16 @@
       });
     }
 
-    $("#phone-exp").on('click', function(event){
-      $("#phone-exp-text").toggle();
+    ["member", "avatar"].forEach(function(el) {
+      $(`#${el}-click`).on('click', function() {
+        $(`#profile-${el}`)[0].scrollIntoView(false);
+      });
     });
 
-    $("#advanced-audit-settings").on('click', function(event){
-      $("#advanced-audit").toggle();
-    });
-
-    $("#advanced-report-settings").on('click', function(event){
-      $("#advanced-report").toggle();
-    });
-
-    $("#mail-exp").on('click', function(event){
-      $("#mail-exp-text").toggle();
-    });
-
-    $("#avatar-exp").on('click', function(event){
-      $("#avatar-exp-text").toggle();
-    });
-
-    $("#avatar-click").on('click', function(event){
-      document.getElementById('profile-avatar').scrollIntoView(false);
-    });
-
-    $("#audit-click").on('click', function(event){
-      document.getElementById('audit-settings').scrollIntoView(false);
-    });
-
-    $("#report-click").on('click', function(event){
-      document.getElementById('report-settings').scrollIntoView(false);
-    });
-
-    $("#mail-click").on('click', function(event){
-      document.getElementById('mail-settings').scrollIntoView(false);
+    ["audit", "report", "mail", "account"].forEach(function(el) {
+      $(`#${el}-click`).on('click', function() {
+        $(`#${el}-settings`)[0].scrollIntoView(false);
+      });
     });
 
     var explanations = {
@@ -494,7 +232,7 @@
 
     [{type:'audit', url:'tutorial/#1488725417825-2758920e-e7ef'},
      {type:'report', url:'tutorial/#1489503964921-3acbdde1-0dcf'},
-     {type:'mail', url:'tutorial/#1489503963784-5b2be039-5cee'},].forEach(function(el) {
+     {type:'mail', url:'tutorial/#1489503963784-5b2be039-5cee'}].forEach(function(el) {
       $(`#${el.type}-exp`).on('click', function() {
 
         showModal(initiateModal('errorModal', 'link', {
