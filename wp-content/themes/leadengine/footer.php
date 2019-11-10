@@ -67,7 +67,7 @@
         <?php $bool = (is_user_logged_in() != True) ? "1" : "0"; ?>
 
         function nextPrev(n) {
-        //   $('html,body').scrollTop(0);
+          document.body.scrollTop = document.documentElement.scrollTop = 0;
           // This function will figure out which tab to display
           var tab = document.getElementsByClassName('tab');
 

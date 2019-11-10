@@ -204,6 +204,7 @@
     if($type == 'audit') {
         $table = 'Audit_template';
         $page->update('color', sanitize_hex_color($_POST['color']), $table);
+        $page->update('language', sanitize_text_field($_POST['language']), $table);
     } else if($type == 'report') {
         $table = 'Report_content';
         $page->update('color', sanitize_hex_color($_POST['color']), $table);
@@ -214,17 +215,18 @@
             $control->update($_POST['user_id'], 'color_report', sanitize_hex_color($_POST['color']), $table);
         } else {
             $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
+            $control->update($_POST['user_id'], 'language', sanitize_text_field($_POST['language']), $table);            
         }
     }
 
 
     if ($type == 'audit') {
-       $page->update('mail_bit', (($_POST['value'] == 'true') ? 2 : 0));
+       $page->update('mail_bit', (($_POST['value'] == 'true') ? 1 : 0));
     } else if($type == 'user') {
        $control->update($_POST['user_id'], 'std_mail_bit', $_POST['value'] == 'true', $table);
     }
 
-    wp_send_json(array('color' => $_POST['color']));
+    wp_send_json(array('color' => $_POST['language']));
     wp_die();
   }
 
@@ -765,14 +767,14 @@
     <p class="rcp_calendar_custom" style="">
       <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
           <label for="rcp_calendar"><?php _e( 'Your calendar link', 'rcp' ); ?></label>
-          <input name="rcp_calendar" id="rcp_calendar" type="url" value="<?php echo esc_attr( $calendar ); ?>"/>
+          <input name="rcp_calendar" id="rcp_calendar" type="url" placeholder="https://" value="<?php echo esc_attr( $calendar ); ?>"/>
       <?php } ?>
     </p>
 
     <p class="rcp_company_custom" style="">
         <?php if(!(get_post_field( 'post_name', get_post() ) == "register")) {?>
             <label for="rcp_company"><?php _e( 'Your company name', 'rcp' ); ?></label>
-            <input name="rcp_company" id="rcp_company"  placeholder="Name will be shown on the audit/report page" type="text" value="<?php echo esc_attr( $company ); ?>"/>
+            <input name="rcp_company" id="rcp_company"  placeholder="Name will be shown on the audit/report page and e-mails." type="text" value="<?php echo esc_attr( $company ); ?>"/>
         <?php } ?>
     </p>
 

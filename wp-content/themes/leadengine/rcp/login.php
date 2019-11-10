@@ -24,7 +24,7 @@ global $rcp_login_form_args; ?>
 
 		<fieldset class="rcp_login_data">
 			<p style="">
-				<label for="rcp_user_login"><?php _e( 'Username', 'rcp' ); ?></label>
+				<label for="rcp_user_login"><?php _e( 'E-mail', 'rcp' ); ?></label>
 				<input name="rcp_user_login" id="rcp_user_login" class="required" type="text"/>
 			</p>
 			<p style="">
