@@ -95,7 +95,8 @@
                 </ul>
                 <!-- mail 1 block -->
                 <p>Use #{name} to type the name of receiver in the subject/mail.</p>
-                <p>Use #{company} to type the name your company in the subject/mail.</p>
+                <p>Use #{audit} to type the name your audit in the subject/mail.</p>
+                <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
                 <div class="first-content-mail-block tab">
                   <input class="subject-line" type="text" name="mail_subject_1" id="mail_subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
                   <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
