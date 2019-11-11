@@ -24,9 +24,7 @@
   $author = get_userdata($author_id);
 
   // Mode check
-  $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
-                ($user_id == $author_id) : false;
-
+  $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True");
   // Import controllers & models
   include(dirname(__FILE__)."/../../controllers/user_controller.php");
   include(dirname(__FILE__)."/../../controllers/report_controller.php");
