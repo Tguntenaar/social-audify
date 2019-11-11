@@ -13,16 +13,15 @@
   $ErrorLogger = new Logger;
 
   $post_id = get_the_ID();
-  $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
   $env = getenv('HTTP_HOST');
   $slug = get_post_field("post_name", $post_id);
   $leadengine = get_template_directory_uri();
 
   // Get Author data
-  $phone =  get_user_meta($author_id, 'rcp_number', true);
-  $calendar_link =  get_user_meta($author_id, 'rcp_calendar', true);
-  $author = get_userdata($author_id);
+  $phone =  get_user_meta($user_id, 'rcp_number', true);
+  $calendar_link =  get_user_meta($user_id, 'rcp_calendar', true);
+  $author = get_userdata($user_id);
 
   // Mode check
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True");
@@ -46,7 +45,7 @@
 
 
   // Get audit by post_id
-  $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
+  $user = $user_control->get($user_id);
 
   $theme_color = $user->color_audit;
 
@@ -153,7 +152,7 @@
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
   $language = $language[$user->language];
 
-  $company_name = get_user_meta($author_id, 'rcp_company', true );
+  $company_name = get_user_meta($user_id, 'rcp_company', true );
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
   if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
@@ -390,10 +389,8 @@
         <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
         <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;"> <i class="fab fa-youtube"></i> Tutorial </button>
         <?php
-      } else {
-        if ($user_id == $author_id) {?>
-          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-        }
+      } else {?>
+        <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
       } ?>
     </div>
   </div>
@@ -438,11 +435,11 @@
     <div class="audit-intro<?php echo ($user->std_iframe != NULL && $user->std_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
      <?php if($user->picture_vis_bit == 1 || $edit_mode) { ?>
           <div class="client-profile-picture">
-            <?php echo get_avatar($author_id, 32); ?>
+            <?php echo get_avatar($user_id, 32); ?>
             <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
           </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
+        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $user->display_name; ?></span><?php
         } else { echo '<div class="audit-intro-text">'; }
 
         if($user->introduction_vis_bit == 1 || $edit_mode) {
