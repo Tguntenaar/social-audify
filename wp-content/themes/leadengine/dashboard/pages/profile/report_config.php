@@ -12,7 +12,6 @@
   $ErrorLogger = new Logger;
 
   $post_id = get_the_ID();
-  $author_id = (int)get_post_field('post_author', $post_id);
   $user_id = get_current_user_id();
   $env = getenv('HTTP_HOST');
   $slug = get_post_field("post_name", $post_id);
@@ -20,8 +19,8 @@
   $leadengine = get_template_directory_uri();
 
   // Get Author data
-  $phone =  get_user_meta($author_id, 'rcp_number', true);
-  $author = get_userdata($author_id);
+  $phone =  get_user_meta($user_id, 'rcp_number', true);
+  $author = get_userdata($user_id);
 
   // Mode check
   $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True");
@@ -43,12 +42,12 @@
   $user_control   = new user_controller($connection);
   $report_control = new report_controller($connection);
 
-  $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
+  $user = $user_control->get($user_id);
 
   $theme_color = $user->color_report;
 
   $post_names =  ['introduction', 'conclusion', 'social_advice', 'campaign_advice'];
-  $company_name = get_user_meta($author_id, 'rcp_company', true );
+  $company_name = get_user_meta($user_id, 'rcp_company', true );
 
   foreach ($post_names as $post_name) {
     if (isset($_POST[$post_name]) && $edit_mode) {
@@ -200,10 +199,8 @@
         if ($edit_mode) { ?>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
           <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
-        } else {
-          if ($user_id == $author_id) {?>
-            <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
-          }
+        } else {?>
+          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
         } ?>
         <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
           <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
@@ -221,7 +218,7 @@
     <div class="audit-intro report-variant-intro col-lg-10 col-lg-offset-2">
       <?php if($user->picture_vis_bit_report == 1 || $edit_mode) { ?>
           <div class="client-profile-picture">
-            <?php echo get_avatar($author_id, 32); ?>
+            <?php echo get_avatar($user_id, 32); ?>
             <?php visibility_short_code($edit_mode, $user->picture_vis_bit_report, 'picture_vis_bit_report', 'custom-visibility'); ?>
           </div>
       <div class="audit-intro-text">
