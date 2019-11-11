@@ -25,8 +25,7 @@
   $author = get_userdata($author_id);
 
   // Mode check
-  $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
-                ($user_id == $author_id || $user_id == 2) : false;
+  $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True");
 
   // Language file
   include(dirname(__FILE__)."/../../assets/languages/language_file.php");
