@@ -158,6 +158,11 @@
     return round((($new - $old) / max($old, 1)) * 100);
   }
 
+  $public = 0;
+  if(isset($_GET['view'])) {
+      $public = 1;
+  }
+
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
   // var_dump($report);
   // echo $report->id;
@@ -480,8 +485,29 @@
     var commonPost = {
       'report': '<?php echo $report->id; ?>',
       'type': 'report',
-    } <?php
-
+    } 
+    
+    <?php
+     if($public) { ?>
+      $(window).ready(function(){
+         $(this).one('mousemove', function() { 
+             // mouse move
+         }).one('scroll', function(){
+           $.ajax({
+             type: "POST",
+             url: ajaxurl,
+             data: { action: 'insert_view',  ...commonPost },
+             success: function (response) {
+                 console.log(response);
+             },
+             error: function (xhr, textStatus, errorThrown) {
+                 var send_error = error_func(xhr, textStatus, errorThrown, data);
+                 logError(send_error, 'page-templates/audit_page.php', 'insert_view');
+             },
+           });
+         });
+     });
+    <?php } 
     if ($report->graph_vis_bit == 1 || $edit_mode) { ?>
 
       $(function() {

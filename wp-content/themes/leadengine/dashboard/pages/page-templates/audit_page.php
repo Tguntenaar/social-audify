@@ -205,6 +205,10 @@
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
   $language = $language[$audit->language];
 
+  $public = 0;
+  if(isset($_GET['view'])) {
+      $public = 1;
+  }
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
@@ -796,6 +800,26 @@
   }
 
   <?php // Website Crawl
+    if($public) { ?>
+       $(window).ready(function(){
+          $(this).one('mousemove', function() { 
+              // mouse move
+          }).one('scroll', function(){
+            $.ajax({
+              type: "POST",
+              url: ajaxurl,
+              data: { action: 'insert_view',  ...commonPost },
+              success: function (response) {
+                  console.log(response);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                  var send_error = error_func(xhr, textStatus, errorThrown, data);
+                  logError(send_error, 'page-templates/audit_page.php', 'insert_view');
+              },
+            });
+          });
+      });
+  <?php }
   if ($audit->website_bit && !$audit->has_website) { ?>
 
     var modalData = {
@@ -813,7 +837,7 @@
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_competitor; ?>', ...commonPost },
+        data: { action: 'crawl_data_check', comp: '<?php echo 0; ?>', ...commonPost },
         success: function (response) {
           if (response == true) {
             showModal(reloadModal);
@@ -831,6 +855,7 @@
   } ?>
 
   <?php // Graph Generate
+  
   if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>
 
     // Line Chart values
