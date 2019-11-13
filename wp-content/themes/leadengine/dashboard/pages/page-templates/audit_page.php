@@ -52,6 +52,10 @@
   $client = $client_control->get($audit->client_id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
+  var_dump($audit->has_website);
+  echo "<br>";
+  var_dump($audit->website_size);
+
 
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
