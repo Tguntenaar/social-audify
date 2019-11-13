@@ -169,9 +169,11 @@
     $audit_control = new audit_controller($connection);
 
     $audit_id = $_POST['audit'];
-    $array = $audit_control->check_website($audit_id);
+    $has_competitor = $_POST['comp'];
 
-    wp_send_json($array);
+    $has_website = $audit_control->check_website($audit_id, $has_competitor);
+
+    wp_send_json($has_website);
     wp_die();
   }
 

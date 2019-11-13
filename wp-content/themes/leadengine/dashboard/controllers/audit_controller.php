@@ -110,8 +110,12 @@ class audit_controller {
     return $this->service->get_amount($user, $date)[0]->count;
   }
 
-  function check_website($id) {
-    return $this->service->check_website($id);
+  function check_website($id, $has_comp) {
+    $has_website = ($this->service->check_website($id, 0)[0] !== NULL);
+    if ($has_website && $has_comp == 1) {
+      $has_website = ($this->service->check_website($id, 1)[0] !== NULL);
+    }
+    return $has_website;
   }
 
   public function get_id($post_id) {
