@@ -126,6 +126,7 @@ function makeApiCalls(instance) {
 
   Promise.all(promisesArray).then(function (allResponses) {
 
+    console.log(JSON.stringify(allResponses));
     console.log(allResponses);
 
     instagram_data = handleResponseInsta(allResponses[0]);

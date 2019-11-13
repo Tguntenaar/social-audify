@@ -250,7 +250,7 @@
           name : $('#competitor-name').val(),
           facebook : $('#facebook_url').val(),
           instagram : $('#instagram_url').val(),
-          website : JSON.stringify($('#website_url').val().replace("https://", "").replace("http://", ""))
+          website : $('#website_url').val().replace("https://", "").replace("http://", "")
         });
         var name = (newCompare.data('compare').name !== "") ? newCompare.data('compare').name: 'empty';
         newCompare.html(`New Competitor <span style="color:grey;">(${name})</span>`);
