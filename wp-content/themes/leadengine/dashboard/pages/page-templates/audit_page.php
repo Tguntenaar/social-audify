@@ -802,7 +802,7 @@
 
   <?php // Website Crawl
   if ($audit->website_bit && !$audit->has_website &&
-    (!$audit->has_comp || $audit->competitor->has_webiste)) { ?>
+    (!$audit->has_comp || $audit->competitor->has_website)) { ?>
 
     var modalData = {
       'text': 'Website data available',
