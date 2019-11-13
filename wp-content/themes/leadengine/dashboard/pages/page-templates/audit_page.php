@@ -801,8 +801,7 @@
   }
 
   <?php // Website Crawl
-  if ($audit->website_bit && !$audit->has_website &&
-    (!$audit->has_comp || $audit->competitor->has_website)) { ?>
+  if ($audit->website_bit && !$audit->has_website) { ?>
 
     var modalData = {
       'text': 'Website data available',
@@ -819,9 +818,9 @@
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', ...commonPost },
+        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_competitor; ?>', ...commonPost },
         success: function (response) {
-          if (response.length !== 0) {
+          if (response == true) {
             showModal(reloadModal);
           } else {
             setTimeout(function() { crawlFinishedCheck(); }, 8000);

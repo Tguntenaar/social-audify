@@ -96,9 +96,9 @@ class audit_service extends connection {
   }
 
 
-  public function check_website($id) {
+  public function check_website($id, $comp) {
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "SELECT $this->crawl_fields FROM Audit_crawl WHERE audit_id = %d", $id));
+      "SELECT $this->crawl_fields FROM Audit_crawl WHERE audit_id = %d and competitor = %d", $id, $comp));
   }
 
 
