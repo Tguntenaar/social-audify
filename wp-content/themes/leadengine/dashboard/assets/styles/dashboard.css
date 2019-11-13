@@ -2507,20 +2507,30 @@ h3 {
 .client-profile-picture {
 		height: 200px;
     width: 200px;
-    background-color: #000;
     border-radius: 50%;
     overflow: hidden;
 		margin-top: 50px;
 		margin-left: 50px;
 		float:left;
+		position: relative;
 }
 
 .client-profile-picture img {
-    height: 100%;
+    /* height: 100%;
     min-height: 100%;
     min-width: 100%;
-    margin: 0 auto;
+	margin: 0 auto; */
+	height:100%;
+	width: auto;
+	margin: 0 auto;
+	position: relative; 
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	-ms-transform: translateX(-50%);
+
 }
+
 
 .audit-intro-text {
 		width: 60%;
