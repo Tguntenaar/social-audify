@@ -41,6 +41,7 @@ class audit {
     $result = $this->service->get_competitor($this->id);
     if ($this->has_comp = !empty($result)) {
       $this->competitor = $result[0];
+      $this->competitor->has_website = isset($this->competitor->website_size);
     }
   }
 

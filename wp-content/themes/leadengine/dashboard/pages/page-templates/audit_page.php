@@ -699,7 +699,7 @@
     }
     if ($audit->website_bit == "1" && ($audit->website_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info website-info" id="website-info"><?php
-        if (!$audit->has_website) { ?>
+        if (!$audit->has_website && (!$audit->has_comp || $audit->competitor->has_website)) { ?>
           <div class="wait-for-crawl"><p>Please wait a moment, the website data is being prepared.</p></div><?php
         } ?>
         <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; <?php echo $language['website_title']; ?>:</span>
@@ -797,7 +797,9 @@
   }
 
   <?php // Website Crawl
-  if ($audit->website_bit && !$audit->has_website) { ?>
+  if ($audit->website_bit && !$audit->has_website &&
+    (!$audit->has_comp || $audit->competitor->has_webiste)) { ?>
+    
     var modalData = {
       'text': 'Website data available',
       'subtext': 'Confirm to reload the page and view the crawled website data',
