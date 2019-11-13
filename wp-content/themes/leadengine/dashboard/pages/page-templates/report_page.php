@@ -258,7 +258,7 @@
     <div class="audit-intro report-variant-intro col-lg-10 col-lg-offset-2">
       <?php if($report->picture_vis_bit_report == 1 || $edit_mode) { ?>
           <div class="client-profile-picture">
-            <?php echo get_avatar($author_id, 32); ?>
+            <?php echo get_wp_user_avatar($author_id, "original"); ?>
             <?php visibility_short_code($edit_mode, $report->picture_vis_bit_report, 'picture_vis_bit_report', 'custom-visibility '); ?>
           </div>
       <div class="audit-intro-text">
