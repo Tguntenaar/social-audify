@@ -383,7 +383,7 @@
     <div class="audit-intro<?php echo ($audit->video_iframe != NULL && $audit->video_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
       <?php if ($audit->picture_vis_bit == 1 || $edit_mode) { ?>
       <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
+        <?php echo get_wp_user_avatar($user_id, "original"); ?>
         <?php visibility_short_code($edit_mode, $audit->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
       </div>
       <div class="audit-intro-text">

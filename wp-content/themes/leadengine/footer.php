@@ -78,33 +78,33 @@
                   var selectedCountry = e.options[e.selectedIndex].value;
 
                   if (selectedCountry == "NL") {
-                        document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
-                        document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
-                        document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
-                        document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
-                        document.getElementById("rcp_subscription_level_2").click();
+                        document.getElementsByClassName('rcp_subscription_level_9')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_7')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_8')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_10')[0].style.display = 'none';
+                        document.getElementById("rcp_subscription_level_7").click();
                   } else if(listAllCountries.includes(selectedCountry)) {
                       var btw_number = document.getElementById("rcp_btw_number").value;
 
                       if (btw_number == "") {
-                          document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'none';
-                          document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'block';
-                          document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'block';
-                          document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'none';
-                          document.getElementById("rcp_subscription_level_2").click();
+                        document.getElementsByClassName('rcp_subscription_level_9')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_7')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_8')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_10')[0].style.display = 'none';
+                          document.getElementById("rcp_subscription_level_7").click();
                       } else {
-                          document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
-                          document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
-                          document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'none';
-                          document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
-                          document.getElementById("rcp_subscription_level_1").click();
+                        document.getElementsByClassName('rcp_subscription_level_9')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_7')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_8')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_10')[0].style.display = 'block';
+                        document.getElementById("rcp_subscription_level_9").click();
                       }
                   } else {
-                      document.getElementsByClassName('rcp_subscription_level_1')[0].style.display = 'block';
-                      document.getElementsByClassName('rcp_subscription_level_2')[0].style.display = 'none';
-                      document.getElementsByClassName('rcp_subscription_level_3')[0].style.display = 'none';
-                      document.getElementsByClassName('rcp_subscription_level_4')[0].style.display = 'block';
-                      document.getElementById("rcp_subscription_level_1").click();
+                        document.getElementsByClassName('rcp_subscription_level_9')[0].style.display = 'block';
+                        document.getElementsByClassName('rcp_subscription_level_7')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_8')[0].style.display = 'none';
+                        document.getElementsByClassName('rcp_subscription_level_10')[0].style.display = 'block';
+                         document.getElementById("rcp_subscription_level_9").click();
                   }
               }
 
