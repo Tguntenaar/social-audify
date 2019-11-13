@@ -52,7 +52,6 @@
   $client = $client_control->get($audit->client_id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
-
   $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
   if ($audit->manual == 0) {
@@ -120,13 +119,13 @@
     return ($edit_mode || $visible);
   }
 
-  function printValue($value, $is_icon = false, $requires_reload = false) {
+  function printValue($value, $is_icon = false) {
     if ($is_icon) {
       return $value == 0 ?
       '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>' :
       '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
-    return $requires_reload ? '-' : $value;
+    return $value;
   }
 
   function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
@@ -384,7 +383,7 @@
     <div class="audit-intro<?php echo ($audit->video_iframe != NULL && $audit->video_iframe != "") ? " with-video" : ""; ?> col-lg-10 col-lg-offset-2">
       <?php if ($audit->picture_vis_bit == 1 || $edit_mode) { ?>
       <div class="client-profile-picture">
-        <?php echo get_avatar($author_id, 32); ?>
+        <?php echo get_wp_user_avatar($user_id, "original"); ?>
         <?php visibility_short_code($edit_mode, $audit->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
       </div>
       <div class="audit-intro-text">
@@ -699,7 +698,7 @@
     }
     if ($audit->website_bit == "1" && ($audit->website_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info website-info" id="website-info"><?php
-        if (!$audit->has_website) { ?>
+        if (!$audit->has_website && (!$audit->has_comp || $audit->competitor->has_website)) { ?>
           <div class="wait-for-crawl"><p>Please wait a moment, the website data is being prepared.</p></div><?php
         } ?>
         <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; <?php echo $language['website_title']; ?>:</span>
@@ -717,12 +716,12 @@
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
-                        </span><?php echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website); ?></span>
+                        </span><?php echo printValue($audit->{$item["db_name"]}, $item['is_icon']); ?></span>
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                        <?php echo printValue($audit->competitor->{$item["db_name"]}, $item['is_icon'], !$audit->has_website) ?></span><?php
+                        <?php echo printValue($audit->competitor->{$item["db_name"]}, $item['is_icon']) ?></span><?php
                     } else {
-                      echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website);
+                      echo printValue($audit->{$item["db_name"]}, $item['is_icon']);
                     } ?>
                     </span><?php
                       visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
@@ -798,6 +797,7 @@
 
   <?php // Website Crawl
   if ($audit->website_bit && !$audit->has_website) { ?>
+
     var modalData = {
       'text': 'Website data available',
       'subtext': 'Confirm to reload the page and view the crawled website data',
@@ -813,9 +813,9 @@
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', ...commonPost },
+        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_competitor; ?>', ...commonPost },
         success: function (response) {
-          if (response.length !== 0) {
+          if (response == true) {
             showModal(reloadModal);
           } else {
             setTimeout(function() { crawlFinishedCheck(); }, 8000);
