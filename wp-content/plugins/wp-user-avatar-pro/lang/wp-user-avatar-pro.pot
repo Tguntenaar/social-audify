@@ -1,0 +1,654 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: WP USER AVATAR PRO\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-30 18:24+0530\n"
+"PO-Revision-Date: 2016-04-03 17:35+0530\n"
+"Last-Translator: Flipper Code <hello@flippercode.com>\n"
+"Language-Team: Flipper Code <hello@flippercode.com>\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: esc_html__;esc_html_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.8.7.1\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: classes/class-abstract-wpua-storage.php:86
+msgid "Please set your storage meta properly"
+msgstr ""
+
+#: classes/class-abstract-wpua-storage.php:90
+msgid "User not found."
+msgstr ""
+
+#: classes/class-avatar.php:226 classes/class-avatar.php:317
+#: classes/class-wp-user-avatar-functions.php:935
+#: classes/class-wp-user-avatar-functions.php:1112
+#: classes/class-wp-user-avatar-functions.php:1335
+#: classes/wpua-functions.php:79 classes/wpua-functions.php:88
+#: classes/wpua-functions.php:93 classes/wpua-functions.php:152
+msgid "Avatar"
+msgstr ""
+
+#: classes/class-avatar.php:378
+msgid "Profile updated."
+msgstr ""
+
+#: classes/class-imgloader.php:23
+msgid "Invalid File Type or size."
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:15
+msgid "Insert"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:15
+msgid "[avatar_upload]"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:16
+#: modules/settings/model.settings.php:26 modules/settings/views/manage.php:203
+#: wp-user-avatar-pro.php:438 wp-user-avatar-pro.php:439
+msgid "WP User Avatar"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:85
+msgid "Title:"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:89
+msgid "Description:"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:94
+msgid "Automatically add paragraphs"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:99
+msgid "What to do :"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:102
+msgid "Upload Avatar"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:103
+msgid "Show Avatar(s)"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:109
+msgid "Show:"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:112
+msgid "Current User"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:113
+msgid "Latest Users"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:119
+msgid "How Many Avatars:"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:125
+msgid "Show Name"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:131
+msgid "Link to Profile"
+msgstr ""
+
+#: classes/class-wp-user-avatar-widget.php:138
+msgid "Show Bio"
+msgstr ""
+
+#: classes/storage/class.dropbox.php:148
+msgid "The folder has been deleted."
+msgstr ""
+
+#: classes/wpua-form.php:10
+msgid "Subscribe to our mailing list"
+msgstr ""
+
+#: classes/wpua-form.php:11
+msgid "Product Information"
+msgstr ""
+
+#: classes/wpua-form.php:12
+msgid ""
+"For our each product we have set up demo pages where you can see the plugin "
+"in working mode."
+msgstr ""
+
+#: classes/wpua-form.php:13
+msgid "Live Demos"
+msgstr ""
+
+#: classes/wpua-form.php:14
+msgid "Installed version :"
+msgstr ""
+
+#: classes/wpua-form.php:15
+msgid "Latest Version Available : "
+msgstr ""
+
+#: classes/wpua-form.php:16
+msgid "Update Available"
+msgstr ""
+
+#: classes/wpua-form.php:18
+msgid "Subscribe Now"
+msgstr ""
+
+#: classes/wpua-form.php:19
+msgid ""
+"Receive updates on our new product features and new products effortlessly."
+msgstr ""
+
+#: classes/wpua-form.php:20
+msgid "We will not share your email addresses in any case."
+msgstr ""
+
+#: classes/wpua-form.php:23
+msgid "Product Support"
+msgstr ""
+
+#: classes/wpua-form.php:24
+msgid ""
+"For our each product we have very well explained starting guide to get you "
+"started in matter of minutes."
+msgstr ""
+
+#: classes/wpua-form.php:25
+msgid " Click Here"
+msgstr ""
+
+#: classes/wpua-form.php:26
+msgid ""
+"For our each product we have set up demo pages where you can see the plugin "
+"in working mode. You can see a working demo before making a purchase."
+msgstr ""
+
+#: classes/wpua-form.php:29
+msgid "Get Refund"
+msgstr ""
+
+#: classes/wpua-form.php:30
+msgid "Please click on the below button to initiate the refund process."
+msgstr ""
+
+#: classes/wpua-form.php:31
+msgid "Request a Refund"
+msgstr ""
+
+#: classes/wpua-form.php:34
+msgid "Extended Technical Support"
+msgstr ""
+
+#: classes/wpua-form.php:35
+msgid ""
+"We provide technical support for all of our products. You can opt for 12 "
+"months support below."
+msgstr ""
+
+#: classes/wpua-form.php:36
+msgid "Extend support"
+msgstr ""
+
+#: classes/wpua-form.php:37
+msgid "Get Extended Licence"
+msgstr ""
+
+#: classes/wpua-form.php:44
+msgid "WP User Avatar Pro"
+msgstr ""
+
+#: classes/wpua-form.php:46
+msgid ""
+"WP User Avatar Pro - an excellent product that allows users to upload any "
+"custom user avatar even through web-cam with the facility of cropping and "
+"resizing avatar before saving"
+msgstr ""
+
+#: classes/wpua-functions.php:90 classes/wpua-functions.php:96
+#: classes/wpua-functions.php:155
+msgid "Image"
+msgstr ""
+
+#: classes/wpua-functions.php:190
+msgid "Do you like WP User Avatar?"
+msgstr ""
+
+#: classes/wpua-functions.php:190
+msgid "Try our Google Maps Plugin."
+msgstr ""
+
+#: modules/settings/model.settings.php:27
+msgid "Plugin Settings"
+msgstr ""
+
+#: modules/settings/model.settings.php:35 wp-user-avatar-pro.php:230
+msgid "Setting(s) saved successfully."
+msgstr ""
+
+#: modules/settings/views/manage.php:31
+msgid "General Settings"
+msgstr ""
+
+#: modules/settings/views/manage.php:34
+msgid "Display on Registration Page"
+msgstr ""
+
+#: modules/settings/views/manage.php:38
+msgid "Allow to upload Avatar at registration page"
+msgstr ""
+
+#: modules/settings/views/manage.php:42
+msgid "Hide on Woocommerce Edit Profile"
+msgstr ""
+
+#: modules/settings/views/manage.php:46
+msgid "Remove upload Avatar control from woocommerce edit profile page"
+msgstr ""
+
+#: modules/settings/views/manage.php:50
+msgid "Hide Webcam"
+msgstr ""
+
+#: modules/settings/views/manage.php:54
+msgid "Hide webcam option on upload avatar window"
+msgstr ""
+
+#: modules/settings/views/manage.php:57
+msgid "Hide Media"
+msgstr ""
+
+#: modules/settings/views/manage.php:61
+msgid "Hide media manager option on upload avatar window"
+msgstr ""
+
+#: modules/settings/views/manage.php:64
+msgid "Avatar Settings"
+msgstr ""
+
+#: modules/settings/views/manage.php:69 wp-user-avatar-pro.php:594
+msgid "Media Uploader"
+msgstr ""
+
+#: modules/settings/views/manage.php:70
+msgid "Custom Directory"
+msgstr ""
+
+#: modules/settings/views/manage.php:71
+msgid "Amazon S3 Storage"
+msgstr ""
+
+#: modules/settings/views/manage.php:72
+msgid "Dropbox Storage"
+msgstr ""
+
+#: modules/settings/views/manage.php:75
+msgid "Avatar Storage"
+msgstr ""
+
+#: modules/settings/views/manage.php:82
+msgid "Folder Path"
+msgstr ""
+
+#: modules/settings/views/manage.php:84
+msgid ""
+"Upload directory for Avatar. Default folder is wp-content/uploads/wp-user-"
+"avatar/ "
+msgstr ""
+
+#: modules/settings/views/manage.php:91
+msgid "Access Key"
+msgstr ""
+
+#: modules/settings/views/manage.php:93
+#, php-format
+msgid "Amazon Web Services Access Key. Follow instruction given %s "
+msgstr ""
+
+#: modules/settings/views/manage.php:93 modules/settings/views/manage.php:102
+msgid "here"
+msgstr ""
+
+#: modules/settings/views/manage.php:100
+msgid "Secret Key"
+msgstr ""
+
+#: modules/settings/views/manage.php:102
+#, php-format
+msgid "Amazon Web Services Secret Key. Follow instruction given %s"
+msgstr ""
+
+#: modules/settings/views/manage.php:109
+msgid "Bucket Name"
+msgstr ""
+
+#: modules/settings/views/manage.php:111
+msgid "Enter bucket name."
+msgstr ""
+
+#: modules/settings/views/manage.php:119
+#, php-format
+msgid "Step 1 : Create a dropbox application %s"
+msgstr ""
+
+#: modules/settings/views/manage.php:119
+msgid "Here"
+msgstr ""
+
+#: modules/settings/views/manage.php:120
+#, php-format
+msgid "Step 2 : Go to your %s"
+msgstr ""
+
+#: modules/settings/views/manage.php:120
+msgid "Application"
+msgstr ""
+
+#: modules/settings/views/manage.php:121
+msgid "Step 3 : Configure your application and get generated access token."
+msgstr ""
+
+#: modules/settings/views/manage.php:129
+msgid "Access Token"
+msgstr ""
+
+#: modules/settings/views/manage.php:131
+msgid "Dropbox app generated access token."
+msgstr ""
+
+#: modules/settings/views/manage.php:138
+msgid "Folder Name"
+msgstr ""
+
+#: modules/settings/views/manage.php:140
+msgid ""
+"Enter for folder name where to upload avatar. Leave empty to upload in app "
+"root."
+msgstr ""
+
+#: modules/settings/views/manage.php:147
+msgid "Upload File Size"
+msgstr ""
+
+#: modules/settings/views/manage.php:149
+#, php-format
+msgid "Maximum upload file size: %d%s."
+msgstr ""
+
+#: modules/settings/views/manage.php:153
+msgid "Upload File Width"
+msgstr ""
+
+#: modules/settings/views/manage.php:155
+msgid "Maximum upload file width. Leave it blank for no limit."
+msgstr ""
+
+#: modules/settings/views/manage.php:158
+msgid "Upload File Height"
+msgstr ""
+
+#: modules/settings/views/manage.php:160
+msgid "Maximum upload file height. Leave it blank for no limit."
+msgstr ""
+
+#: modules/settings/views/manage.php:164
+msgid "Avatar Width"
+msgstr ""
+
+#: modules/settings/views/manage.php:166
+msgid "Avatar width in pixels."
+msgstr ""
+
+#: modules/settings/views/manage.php:170
+msgid "Avatar Height"
+msgstr ""
+
+#: modules/settings/views/manage.php:172
+msgid "Avatar height in pixels."
+msgstr ""
+
+#: modules/settings/views/manage.php:177
+msgid "Resize avatars on upload"
+msgstr ""
+
+#: modules/settings/views/manage.php:181
+msgid "Check if resize your cropped image to fit the above width and height."
+msgstr ""
+
+#: modules/settings/views/manage.php:184
+msgid "Show Avatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:188
+msgid "Uncheck to hide the avatar."
+msgstr ""
+
+#: modules/settings/views/manage.php:203
+msgid "Choose Image: Default Avatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:203 modules/settings/views/manage.php:236
+msgid "Choose Image"
+msgstr ""
+
+#: modules/settings/views/manage.php:205
+msgid "Mystery Man"
+msgstr ""
+
+#: modules/settings/views/manage.php:206
+msgid "Blank"
+msgstr ""
+
+#: modules/settings/views/manage.php:207
+msgid "Gravatar Logo"
+msgstr ""
+
+#: modules/settings/views/manage.php:209
+msgid "Identicon"
+msgstr ""
+
+#: modules/settings/views/manage.php:210
+msgid "Wavatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:211
+msgid "MonsterID"
+msgstr ""
+
+#: modules/settings/views/manage.php:212
+msgid "Retro"
+msgstr ""
+
+#: modules/settings/views/manage.php:213
+msgid "First Letter Avatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:216
+msgid "Default Avatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:236
+msgid "Choose Image: Role Avatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:241
+msgid "Role Based Avatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:247
+msgid "Gravatar Setting"
+msgstr ""
+
+#: modules/settings/views/manage.php:252
+msgid "Disable Gravatar"
+msgstr ""
+
+#: modules/settings/views/manage.php:256
+msgid "Disable Gravatar and use only local avatars"
+msgstr ""
+
+#: modules/settings/views/manage.php:259
+msgid "G — Suitable for all audiences"
+msgstr ""
+
+#: modules/settings/views/manage.php:260
+msgid "PG — Possibly offensive, usually for audiences 13 and above"
+msgstr ""
+
+#: modules/settings/views/manage.php:261
+msgid "R — Intended for adult audiences above 17"
+msgstr ""
+
+#: modules/settings/views/manage.php:262
+msgid "X — Even more mature than above"
+msgstr ""
+
+#: modules/settings/views/manage.php:265
+msgid "Maximum Rating"
+msgstr ""
+
+#: modules/settings/views/manage.php:273
+msgid "Apperance Settings"
+msgstr ""
+
+#: modules/settings/views/manage.php:278
+msgid "Editor Theme"
+msgstr ""
+
+#: modules/settings/views/manage.php:281
+msgid "Choose color for the icons and modal window."
+msgstr ""
+
+#: modules/settings/views/manage.php:287
+msgid "Use Predefined Color Schema"
+msgstr ""
+
+#: modules/settings/views/manage.php:290
+msgid "Use predefined color schema."
+msgstr ""
+
+#: modules/settings/views/manage.php:312
+msgid "Choose Color Schema"
+msgstr ""
+
+#: modules/settings/views/manage.php:320
+msgid "Custom CSS"
+msgstr ""
+
+#: modules/settings/views/manage.php:323
+msgid "Custom css for modals and avatar image."
+msgstr ""
+
+#: modules/settings/views/manage.php:327
+msgid "Advanced Settings"
+msgstr ""
+
+#: modules/settings/views/manage.php:333
+msgid "Add Link to Profile Image"
+msgstr ""
+
+#: modules/settings/views/manage.php:336
+msgid "Add a link to user profile."
+msgstr ""
+
+#: modules/settings/views/manage.php:341
+msgid "Profile Link"
+msgstr ""
+
+#: modules/settings/views/manage.php:344
+msgid "Use {website_url} or custom link eg. http://www.flippercode.com"
+msgstr ""
+
+#: modules/settings/views/manage.php:350
+msgid "Save Setting"
+msgstr ""
+
+#: wp-user-avatar-pro.php:514
+msgid "Hide"
+msgstr ""
+
+#: wp-user-avatar-pro.php:534
+msgid "Are you sure to delete item?"
+msgstr ""
+
+#: wp-user-avatar-pro.php:574
+#, php-format
+msgid "File uploading limits:  Size %s"
+msgstr ""
+
+#: wp-user-avatar-pro.php:576
+#, php-format
+msgid "Width %d px"
+msgstr ""
+
+#: wp-user-avatar-pro.php:579
+#, php-format
+msgid "Height: %d px"
+msgstr ""
+
+#: wp-user-avatar-pro.php:587
+msgid "File Type is not valid."
+msgstr ""
+
+#: wp-user-avatar-pro.php:588
+msgid "Valid File Type is jpeg, png and gif."
+msgstr ""
+
+#: wp-user-avatar-pro.php:589
+msgid "File Size is too big"
+msgstr ""
+
+#: wp-user-avatar-pro.php:591
+msgid "Oops! Seems you didn't select any image."
+msgstr ""
+
+#: wp-user-avatar-pro.php:592
+msgid "It's easy. Click within dotted area."
+msgstr ""
+
+#: wp-user-avatar-pro.php:593
+msgid "Upload Image"
+msgstr ""
+
+#: wp-user-avatar-pro.php:595
+msgid "Drop image here or click to upload."
+msgstr ""
+
+#: wp-user-avatar-pro.php:596
+msgid "Select your image, crop and save it."
+msgstr ""
+
+#: wp-user-avatar-pro.php:598
+msgid "Close"
+msgstr ""
+
+#: wp-user-avatar-pro.php:599
+msgid "Save Image"
+msgstr ""
+
+#: wp-user-avatar-pro.php:600
+msgid "Capture Image"
+msgstr ""
+
+#: wp-user-avatar-pro.php:601
+msgid "Use Camera"
+msgstr ""
+
+#: wp-user-avatar-pro.php:602
+msgid "Media Manager is turned ON."
+msgstr ""
+
+#: wp-user-avatar-pro.php:603
+msgid "Click within dotted area to choose image from media manager"
+msgstr ""
