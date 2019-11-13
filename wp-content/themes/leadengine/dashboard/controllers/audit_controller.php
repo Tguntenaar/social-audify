@@ -111,9 +111,9 @@ class audit_controller {
   }
 
   function check_website($id, $has_comp) {
-    $has_website = ($this->service->check_website($id, 0) === NULL);
+    $has_website = ($this->service->check_website($id, 0)[0] !== NULL);
     if ($has_website && $has_comp == 1) {
-      $has_website = ($this->service->check_website($id, 1) === NULL);
+      $has_website = ($this->service->check_website($id, 1)[0] !== NULL);
     }
     return $has_website;
   }
