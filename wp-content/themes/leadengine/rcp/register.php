@@ -127,10 +127,10 @@ rcp_show_error_messages( 'register' ); ?>
 				// levels 3 & 4 zijn 47 & 470 euro
 				if ($country == "NL") {
 					// NL 57
-					array_push($printLevels, $levels[4], $levels[6]);
+					array_push($printLevels, $levels[0], $levels[2]);
 				} else if (array_key_exists($country, $eu_countries) && $vat_number == "") {
 					// EU zonder btw 57
-					array_push($printLevels, $levels[4], $levels[6]);
+					array_push($printLevels, $levels[0], $levels[2]);
 				} else if (array_key_exists($country, $eu_countries)) {
 					// controleer btw
 					$contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
@@ -140,15 +140,15 @@ rcp_show_error_messages( 'register' ); ?>
 						$res = json_decode($contents);
 						if ($res->valid) {
 							// EU met btw nummer 47
-							array_push($printLevels, $levels[5], $levels[7]);
+							array_push($printLevels, $levels[1], $levels[3]);
 						} else {
 							// EU zonder btw 57
-							array_push($printLevels, $levels[4], $levels[6]);
+							array_push($printLevels, $levels[0], $levels[2]);
 						}
 					}
 				} else {
 					// rest 47
-					array_push($printLevels, $levels[5], $levels[7]);
+					array_push($printLevels, $levels[1], $levels[3]);
 				}
 			} else {
 				$printLevels = $levels;
