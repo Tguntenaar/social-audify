@@ -120,13 +120,13 @@
     return ($edit_mode || $visible);
   }
 
-  function printValue($value, $is_icon = false, $requires_reload = false) {
+  function printValue($value, $is_icon = false) {
     if ($is_icon) {
       return $value == 0 ?
       '<i class="fas fa-times" style="color: #c0392b; display: inline"></i>' :
       '<i class="fas fa-check" style="color: #27ae60; display: inline"></i>';
     }
-    return $requires_reload ? '-' : $value;
+    return $value;
   }
 
   function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
@@ -717,12 +717,12 @@
                     <span class="data_animation"><?php
                     if ($audit->has_comp) { ?>
                       <span class="data-view"><span class="comp-label">You: <br />
-                        </span><?php echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website); ?></span>
+                        </span><?php echo printValue($audit->{$item["db_name"]}, $item['is_icon']); ?></span>
                       <span class="vertical-line"></span>
                       <span class="competitor-stats"><span class="comp-label"><?php echo ucfirst($audit->competitor_name); ?>: <br /></span>
-                        <?php echo printValue($audit->competitor->{$item["db_name"]}, $item['is_icon'], !$audit->has_website) ?></span><?php
+                        <?php echo printValue($audit->competitor->{$item["db_name"]}, $item['is_icon']) ?></span><?php
                     } else {
-                      echo printValue($audit->{$item["db_name"]}, $item['is_icon'], !$audit->has_website);
+                      echo printValue($audit->{$item["db_name"]}, $item['is_icon']);
                     } ?>
                     </span><?php
                       visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
@@ -799,7 +799,7 @@
   <?php // Website Crawl
   if ($audit->website_bit && !$audit->has_website &&
     (!$audit->has_comp || $audit->competitor->has_webiste)) { ?>
-    
+
     var modalData = {
       'text': 'Website data available',
       'subtext': 'Confirm to reload the page and view the crawled website data',
