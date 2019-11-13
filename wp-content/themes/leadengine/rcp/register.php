@@ -127,10 +127,10 @@ rcp_show_error_messages( 'register' ); ?>
 				// levels 3 & 4 zijn 47 & 470 euro
 				if ($country == "NL") {
 					// NL 57
-					array_push($printLevels, $levels[0], $levels[2]);
+					array_push($printLevels, $levels[4], $levels[6]);
 				} else if (array_key_exists($country, $eu_countries) && $vat_number == "") {
 					// EU zonder btw 57
-					array_push($printLevels, $levels[0], $levels[2]);
+					array_push($printLevels, $levels[4], $levels[6]);
 				} else if (array_key_exists($country, $eu_countries)) {
 					// controleer btw
 					$contents = @file_get_contents('https://controleerbtwnummer.eu/api/validate/'.$vat_number.'.json');
@@ -140,15 +140,15 @@ rcp_show_error_messages( 'register' ); ?>
 						$res = json_decode($contents);
 						if ($res->valid) {
 							// EU met btw nummer 47
-							array_push($printLevels, $levels[1], $levels[3]);
+							array_push($printLevels, $levels[5], $levels[7]);
 						} else {
 							// EU zonder btw 57
-							array_push($printLevels, $levels[0], $levels[2]);
+							array_push($printLevels, $levels[4], $levels[6]);
 						}
 					}
 				} else {
 					// rest 47
-					array_push($printLevels, $levels[1], $levels[3]);
+					array_push($printLevels, $levels[5], $levels[7]);
 				}
 			} else {
 				$printLevels = $levels;
@@ -171,14 +171,14 @@ rcp_show_error_messages( 'register' ); ?>
 						<div class="rcp_level_description"> <?php echo rcp_get_subscription_description( $level->id ); ?></div>
 						<ul>
 							<li>14 days free trial!</li>
-							<?php if( $level->id == 2) { ?>
-										 <li>From 77$ to 47$</li>
-						    <?php } else if( $level->id == 3) { ?>
-										<li>From 770$ to 470$</li>
-							<?php } else if( $level->id == 1) { ?>
-										<li>From 67$ to 39$</li>
-							<?php } else if( $level->id == 4) { ?>
-										<li>From 670$ to 390$</li>
+							<?php if( $level->id == 7) { ?>
+										 <li>From 77$ to 57$</li>
+						    <?php } else if( $level->id == 8) { ?>
+										<li>From 770$ to 570$</li>
+							<?php } else if( $level->id == 9) { ?>
+										<li>From 67$ to 47$</li>
+							<?php } else if( $level->id == 10) { ?>
+										<li>From 670$ to 470$</li>
 							<?php } ?>
 							<li>Create audits</li>
 							<li>Create reports</li>
