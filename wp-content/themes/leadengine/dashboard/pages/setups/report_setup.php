@@ -355,6 +355,8 @@
       return data;
     }
 
+
+    // TODO: vervang deze functie met calculateAvgObject
     function calculateAverageObject(data) {
       var avg = {};
       // dit kan dus een stuk dynamischer
@@ -379,6 +381,48 @@
       }
       return avg;
     }
+
+    // TODO: vervang calculateAverageObject met deze functie
+    function calculateAvgObject(data) {
+      var sum = {};
+      if (data.length == 1) {
+        return data[0];
+      }
+
+      data.forEach(function(object, index) {
+        for (var key in object) {
+          // Couldn't parse to float
+          var value = parseFloat(object[key])
+          if (Number.isNaN(value)) {
+            // check if start date is earlier than current
+            if (key == date_start && (!(date_start in sum) 
+            || isEarlier(object.date_start, sum.date_start))
+            || (key == date_stop && (!(date_stop in sum) 
+            || isLater(object.date_start, sum.date_stop)))) {
+              sum[key] = object[key];
+            }
+          } else {
+            sum[key] = (key in sum) ? sum[key] + value : value;
+          }
+        }
+      });
+      
+      for (key in sum) {
+        if (typeof sum[key] == 'number') {
+          sum[key] /= data.length;
+        }
+      }
+      
+      return avg;
+    }
+
+    function isEarlier(d1, d2) {
+      return (new Date(d1).getTime() < new Date(d2).getTime());
+    }
+    function isLater(d1, d2) {
+      return (new Date(d1).getTime() > new Date(d2).getTime());
+    }
+
 
     $(function() {
       <?php

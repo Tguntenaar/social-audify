@@ -873,7 +873,7 @@
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', comp: '<?php echo 0; ?>', ...commonPost },
+        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost },
         success: function (response) {
           if (response == true) {
             showModal(reloadModal);
