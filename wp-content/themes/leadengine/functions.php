@@ -483,6 +483,61 @@
      wp_die();
   }
 
+  add_action( 'wp_ajax_export_viewed', 'export_viewed');
+  add_action( 'wp_ajax_nopriv_export_viewed', 'not_logged_in');
+
+  function export_viewed() {
+    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+    require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+    require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
+    
+    // require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
+    
+    $connect = new connection;
+    $audit_service = new audit_service($connect);
+    $report_service = new report_service($connect);
+
+    // $report_controller = new report_controller($connect);
+
+    $type = $_POST['type'];
+    $id = (int) $_POST['user_id'];
+
+    $return_array = array();
+
+    if($type == 'audit') {
+        $audits = $audit_service->get_all($id, date('Y-m-1', strtotime("-2 month")));
+        
+        $later = new DateTime(date('Y-m-d H:i:s'));
+
+
+        array_push($return_array, array("Audit name", "Client name", "Client email", "Client Facebook", "Client Instagram", "Client Website", "Days viewed"));
+        foreach($audits as $audit) {
+            if($audit->view_time != NULL) {
+              $earlier = new DateTime($audit->view_time);
+              $day_difference = $later->diff($earlier)->format("%a");
+
+              array_push($return_array, array($audit->name, $audit->client_name, $audit->client_mail,
+                                              $audit->client_facebook, $audit->client_instagram, $audit->client_website, $day_difference . " days"));
+            }
+        }
+    } else if($type = 'report') {
+        $reports = $report_service->get_all($id, date('Y-m-1', strtotime("-2 month")));
+        
+        array_push($return_array, array("Report name", "Report email", "Client email", "Client Facebook", "Client Instagram", "Client Website", "Days viewed"));
+        foreach($reports as $report) {
+            if($report->view_time != NULL) {
+              $earlier = new DateTime($report->view_time);
+              $day_difference = $later->diff($earlier)->format("%a");
+              array_push($return_array, array($report->name, $report->client_name, $report->client_mail, 
+                                              $report->client_facebook, $report->client_instagram, $report->client_website, $day_difference));
+            }
+        }
+    }
+
+    wp_send_json(json_encode($return_array));
+    wp_die();
+  }
+
 
   require_once(get_template_directory() . '/core/init.php');
   function get_country() {

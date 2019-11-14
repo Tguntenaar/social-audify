@@ -26,7 +26,6 @@
     // Audit variables
     $month_audits = $audit_control->get_all(0);
     $year_audits = $audit_control->get_all(12);
-
     // Counter for audits
     $audit_values = calculate_monthly_amount($year_audits);
     $audit_daily_values = calculate_daily_amount($month_audits);
@@ -117,6 +116,10 @@
     <?php } ?>
 
     <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
+      <div class="download-viewed">
+          <span id="download-audit-viewed" onclick="export_viewed('audit')">Export viewed audits</span>
+          <span id="download-report-viewed" onclick="export_viewed('report')">Export viewed reports</span> 
+      </div>
       <h4 style="padding-left: 15px;">Status recent sent Reports and Audits</h4>
       <hr style="margin-left: 15px;" class="under-line" />
         <div class="overflow-x">
@@ -215,6 +218,34 @@
   </section>
 
 	<script charset="utf-8">
+    function export_viewed(type) {
+      $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: {
+            action: 'export_viewed',
+            type: type,
+            user_id: <?php echo $user_id; ?>
+          },
+          success: function(response) {
+            response = JSON.parse(response);
+            console.log(response);
+            let csvContent = "data:text/csv;charset=utf-8," 
+                              + response.map(e => e.join(",")).join("\n");
+
+            var encodedUri = encodeURI(csvContent);
+            window.open(encodedUri);
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'mail_config_confirm');
+            showModal(initiateModal('errorModal', 'error', {
+              'text': "Can't update mail function",
+              'subtext': "Please try again later or notify an admin if the issue persists"
+            }));
+          }
+        });
+    }
 
     function showOpenedAudits() {
       var openedAudits = <?php echo json_encode($viewed_audits); ?>;
