@@ -98,24 +98,21 @@ function makeFbPromise(client, competitor = 0) {
  */
 function makeApiCalls(instance) {
   const {client, competitor, page, options, currency, ...iba_id} = instance;
+  var igPromise, igPromiseComp, fbPromise, fbPromiseComp, facebook_data, instagram_data, coverPhotoSize, fbPageData;
 
-  var emptyPromise = Promise.resolve('This option is disabled');
-
-  var igPromise = igPromiseComp = fbPromise = fbPromiseComp = emptyPromise;
-
-  var facebook_data, instagram_data, coverPhotoSize, fbPageData;
+  igPromise = igPromiseComp = fbPromise = fbPromiseComp = Promise.resolve('This option is disabled');
 
   var promisesArray = [];
 
 
   if (options.instagram_checkbox) {
     igPromise = makeIGpromise(iba_id, client);
-    if (competitor && page.type === 'audit') { igPromiseComp = makeIGpromise(iba_id, competitor, 1) }
+    if (competitor && page.type === 'audit') { igPromiseComp = makeIGpromise(iba_id, competitor, 1); }
   }
 
   if (options.facebook_checkbox) {
     fbPromise = makeFbPromise(client);
-    if (competitor && page.type === 'audit') { fbPromiseComp = makeFbPromise(competitor, 1) }
+    if (competitor && page.type === 'audit') { fbPromiseComp = makeFbPromise(competitor, 1); }
   }
 
   // push them on the array
