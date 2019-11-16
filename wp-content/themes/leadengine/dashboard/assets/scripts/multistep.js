@@ -30,7 +30,7 @@ function checkLoginState(showError = true) {
         'subtext': `In order to create ${type} you have to log in to facebook.`
       }));
     }
-  }, true);
+  });
 
   return false;
 }
