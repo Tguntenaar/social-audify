@@ -7,9 +7,9 @@
 <html lang='en'>
 <head>
   <title>Create Audit</title>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js" charset="utf-8" defer></script>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js" charset="utf-8" defer></script>
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css" type="text/css" />
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css<?php echo $cache_version; ?>" type="text/css" />
 </head>
   <?php
     // Header
