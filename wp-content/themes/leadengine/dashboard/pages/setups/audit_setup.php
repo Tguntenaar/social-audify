@@ -27,7 +27,7 @@
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding" style="padding-bottom: 25px;">
 
   <!-- back button -->
-  <div class="content-title col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div style="display: none;" class="content-title col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <span class="back" onclick="showIntro(true)">
       <i class="fas fa-chevron-left"></i> Back</span>
     <div class="audit_count"><?php
@@ -38,7 +38,7 @@
   </div>
 
   <!-- Initial block -->
-  <div class="create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="new-create-style create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <?php
     if ($audits_made >= $max_audits) { ?>
       <div class="max-audits"> Max of <?php echo $max_audits; ?> audits reached.

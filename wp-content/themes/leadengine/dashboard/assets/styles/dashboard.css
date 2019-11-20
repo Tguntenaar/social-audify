@@ -840,7 +840,10 @@ nav ul a li {
     height: auto;
     float: left;
 	text-align: center;
+	
 }
+
+
 
 .create-block-box h3 {
 		color: #6e9d9c;
@@ -1088,6 +1091,19 @@ nav ul a li {
 	position: relative;
 }
 
+.overview-audit-report .left {
+	border: 1px solid #eff0f2;
+	border-radius: 3px;
+}
+
+.overview-audit-report {
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	float: left;
+}
+
 .dot-nav {
 	position: absolute;
 	bottom: 20px;
@@ -1184,9 +1200,10 @@ nav ul a li {
 }
 #client-list .audit-row ,
 #compare-list .audit-row {
-	height: 50px;
-	line-height: 50px;
+	height: 70px;
+	line-height: 70px;
 	padding-left: 15px;
+	background: #fff !important;
 }
 
 #ad-account-list {
