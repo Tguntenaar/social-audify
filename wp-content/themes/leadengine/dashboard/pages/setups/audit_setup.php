@@ -5,19 +5,22 @@
 ?>
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-  <title>Create Audit</title>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css<?php echo $cache_version; ?>" type="text/css" />
-</head>
+  <head>
+    <!-- TODO: kan niet naar beneden dan overschrijft ie dashboard css maar hier kan geen cache version achter -->
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css" type="text/css" />
+  </head>
   <?php
     // Header
     include(dirname(__FILE__)."/../header/dashboard_header.php");
-
+    
     $user = $user_control->get($user_id);
     $clients = $client_control->get_all();
   ?>
+  <head>
+    <title>Create Audit</title>
+    <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+    <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+  </head>
 
   <div id="competitorModal" class="modal"></div>
 
