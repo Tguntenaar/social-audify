@@ -1050,6 +1050,7 @@ nav ul a li {
 }
 
 .intro-video {
+  position: relative;
 	width: 100% !important;
 	height: 500px;
 	top: 0; left: 0;
