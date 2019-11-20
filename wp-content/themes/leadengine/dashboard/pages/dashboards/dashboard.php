@@ -144,7 +144,11 @@
         </div>
       </div>
         <div class="report-dash-stat col-xs-12 col-ms-12 col-ld-12 col-lg-6">
-          <h4>Statistics for <?php echo date('F Y'); ?></h4>
+          <!-- <select> TODO:
+            <option><?php //echo date('Y'); ?></option>
+            <option><?php //echo date('F Y'); ?></option>
+          </select> -->
+          <h4>Statistics for <?php echo date('Y'); ?></h4>
           <hr class="under-line" />
           <div style="clear:both"></div>
 
