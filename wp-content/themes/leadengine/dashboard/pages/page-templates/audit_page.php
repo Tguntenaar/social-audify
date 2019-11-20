@@ -137,17 +137,6 @@
     }
   }
 
-  function call_to_contact($phone, $mail, $calendar_link) { ?>
-    <div class="info">
-      <?php if (isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a><?php } ?>
-      <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
-      <?php
-      if ($calendar_link != "") { ?>
-        <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>Make appointment</a><?php
-      } ?>
-    </div><?php
-  }
-
   function change_tags($text, $client, $audit) {
     // Client name -> #{client}
     if (strpos($text, '#{client}') !== false) {
@@ -204,7 +193,28 @@
 
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
   $language = $language[$audit->language];
+  
+  function call_to_contact($phone, $mail, $calendar_link, $language, $user) { ?>
+    <div class="info">
+      <?php if (isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone;?>"><i class="fas fa-phone"></i><?php echo $phone; ?></a><?php } ?>
+      <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
+      <?php
+      if ($calendar_link != "") { ?>
+        <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>
+        <?php if ($user->appointment_text == "") { ?>
+              <?php echo $language['make_appointment']; ?>
+            <?php } else {
+                echo $user->appointment_text;
+            } ?>
+        </a><?php
+      } ?>
+    </div><?php
+  }
 
+  $public = 0;
+  if(isset($_GET['view'])) {
+      $public = 1;
+  }
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
@@ -510,7 +520,7 @@
                   </form><?php
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['fb'], $client, $audit) . "</pre>"; ?><?php
-                  call_to_contact($phone, $author->user_email, $calendar_link);
+                  call_to_contact($phone, $author->user_email, $calendar_link, $language, $user);
                 } ?>
               </div>
             </div>
@@ -520,8 +530,21 @@
     }
     if ($audit->instagram_bit == "1" && ($audit->instagram_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info" id="instagram-info">
-        <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; <?php echo $language['insta_title']; ?>:</span>
-        <span class="sub-title"><?php echo $language['insta_subtitle']; ?></span><?php
+        <span class="facebook-inf-title"><span class="round instagram"><i class="fab fa-instagram"></i></span> &nbsp; 
+            <?php if ($user->instagram_title == "") { ?>
+                <?php echo $language['insta_title']; ?>:
+            <?php } else {
+                echo $user->instagram_title;
+            } ?>
+        </span>
+        </span>
+        <span class="sub-title">
+           <?php if ($user->instagram_sub_title == "") { ?>
+              <?php echo $language['insta_subtitle']; ?>
+            <?php } else {
+                echo $user->instagram_sub_title;
+            } ?>
+        </span><?php
         visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level');
 
         if ($audit->manual && $edit_mode) { ?>
@@ -688,7 +711,7 @@
                 } else { ?>
                   <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['ig'], $client, $audit) . "</pre>"; ?> </p>
                   <?php
-                  call_to_contact($phone, $author->user_email, $calendar_link);
+                  call_to_contact($phone, $author->user_email, $calendar_link, $language, $user);
                 } ?>
             </div>
           </div>
@@ -698,11 +721,23 @@
     }
     if ($audit->website_bit == "1" && ($audit->website_vis_bit || $edit_mode)) { ?>
       <div class="col-lg-12 facebook-info website-info" id="website-info"><?php
-        if (!$audit->has_website && (!$audit->has_comp || $audit->competitor->has_website)) { ?>
+        if (!$audit_control->check_website($audit->id, $audit->has_comp)) { ?>
           <div class="wait-for-crawl"><p>Please wait a moment, the website data is being prepared.</p></div><?php
         } ?>
-        <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; <?php echo $language['website_title']; ?>:</span>
-        <span class="sub-title"><?php echo $language['website_subtitle']; ?></span><?php
+        <span class="facebook-inf-title"><span class="round website">W</span> &nbsp; 
+        <?php if ($user->website_title == "") { ?>
+                <?php echo $language['website_title']; ?>:
+            <?php } else {
+                echo $user->website_title;
+            } ?>
+        </span>
+        <span class="sub-title">
+            <?php if ($user->website_sub_title == "") { ?>
+              <?php echo $language['website_subtitle']; ?>
+            <?php } else {
+                echo $user->website_sub_title;
+            } ?>
+          </span><?php
         visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?>
 
         <div class="col-lg-6 left" style="background: transparent; border: 0; margin-top: 0;">
@@ -749,7 +784,7 @@
             <span class="advice-title margin-advice-title"><?php echo $language['website_advice']; ?></span>
             <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php echo "<pre>" . change_tags($advice['wb'], $client, $audit) . "</pre>"; ?></p>
             <?php
-            call_to_contact($phone, $author->user_email, $calendar_link);
+              call_to_contact($phone, $author->user_email, $calendar_link, $language, $user);
           } ?>
         </div>
       </div><?php
@@ -781,11 +816,16 @@
   <div class="footer">
     <?php if (isset($phone) && $phone != "") { ?><span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span><?php } ?>
     <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
-    if ($calendar_link != "") { ?>
-      <div style="clear:both;"></div>
-      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo $language['make_appointment']; ?></a><?php
-    } ?>
-  </div>
+         if ($calendar_link != "") { ?>
+          <div class='footer-calendar'></div>
+          <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>
+          <?php if ($user->appointment_text == "") { ?>
+                <?php echo $language['make_appointment']; ?>
+              <?php } else {
+                  echo $user->appointment_text;
+              } ?>
+          </a><?php
+        } ?>
 </body>
 </html>
 
@@ -796,6 +836,26 @@
   }
 
   <?php // Website Crawl
+    if($public) { ?>
+       $(window).ready(function(){
+          $(this).one('mousemove', function() { 
+              // mouse move
+          }).one('scroll', function(){
+            $.ajax({
+              type: "POST",
+              url: ajaxurl,
+              data: { action: 'insert_view',  ...commonPost },
+              success: function (response) {
+                  console.log(response);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                  var send_error = error_func(xhr, textStatus, errorThrown, data);
+                  logError(send_error, 'page-templates/audit_page.php', 'insert_view');
+              },
+            });
+          });
+      });
+  <?php }
   if ($audit->website_bit && !$audit->has_website) { ?>
 
     var modalData = {
@@ -813,7 +873,7 @@
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_competitor; ?>', ...commonPost },
+        data: { action: 'crawl_data_check', comp: '<?php echo 0; ?>', ...commonPost },
         success: function (response) {
           if (response == true) {
             showModal(reloadModal);
@@ -831,6 +891,7 @@
   } ?>
 
   <?php // Graph Generate
+  
   if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>
 
     // Line Chart values
