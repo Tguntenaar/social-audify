@@ -32,7 +32,7 @@
       <i class="fas fa-chevron-left"></i> Back</span>
     <div class="audit_count"><?php
       $max_audits = 20;
-      $audits_made = $audit_control->get_amount($date = date('Y-m-d'));
+      $audits_made = $audit_control->get_amount(date('Y-m-d'));
       $audits = $audit_control->get_all($user_id);
       echo $audits_made.'/'.$max_audits.' audits today'; ?>
     </div>
@@ -80,7 +80,6 @@
 
           <!-- One "tab" for each step in the form: -->
           <form id="regForm" style="margin-bottom: 20px;" class="submit-audit">
-
             <!-- Facebook tab -->
             <div class="tab tab-setup">
               <span class="login-title">Login to retrieve the data of Facebook that is needed to create an Audit.</span>
@@ -107,39 +106,24 @@
               <input type="text" name="search" class="setup-input" id="search-input" placeholder="Search..." valid/>
               <div class="inner-scroll" style="height: 335px;" id="client-list"><?php 
                 if($clients != NULL) {
-                    foreach($clients as $client) {
-                        $audit_send = False;
-                      
-                        foreach($audits as $audit) {
-                              if ( $audit->client_id == $client->id ) {
-                                  $audit_send = True;
-                                  break;
-                              }
-                    
-                        }
+                  foreach($clients as $client) {
 
-                    
-                      $data = ["id"=> $client->id, "name"=>$client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
-                      <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
-                        data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; 
-                        if($audit_send) { ?>
-                            <div class="client-status converted">Audit send</div>
-                        <?php } else { ?>
-                              <div class="client-status no_reply">Not send</div>
-                        <?php } ?> 
-                      </a><?php
-                    }
+                    $data = ["id"=> $client->id, "name"=>$client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
+                    <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
+                      data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php
+                      echo "$client->name".($client->audit_count > 0 ? 
+                        "<div class='client-status converted'>Audit sents</div>" :
+                        "<div class='client-status no_reply'>Not sent</div>"); ?>
+                    </a><?php
+                  }
                 } else { ?>
-                    <a href="/client-dashboard">Create a client first.</a>
-                <?php }?>
+                  <a href="/client-dashboard">Create a client first.</a><?php
+                } ?>
               </div>
             </div>
 
             <!-- Chosing an competitor -->
             <div class="tab tab-setup" >
-              <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                <!-- <span class="selected-client">Selected client = <</span> -->
-              <!-- </div> -->
               <span style="display: none;" class="temp-show-comp"></span>
               <div style="border: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
                 <div style="font-weight:100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Want to compare <span style="font-weight: 100; color: #000;" class="show-client"></span> to a Competitor?<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
@@ -161,7 +145,6 @@
 
             <!-- Audit name and options -->
             <div class="tab tab-setup">
-
               <div class="custom-label">
                 <span style="font-weight: 100;" class="name-label">Fill in your audit name</span>
                 <input type="text" id="name-input" name="audit_name" class="setup-input name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
@@ -182,23 +165,12 @@
                   <span class="checkmark"><i class="fas fa-globe"></i></span>
                 </label>
               </div>
-              <!-- <div class="custom-label" > -->
-                <div style="clear: both;"></div>
-                <span style="font-weight: 100;" class="name-label" style="margin-top: -20px; float: left;">Selected contacts:</span>
-                <div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span> <span class="has_comp"></span><span style="font-weight: 600;" class="show-compare"></span></div>
-                <!-- <div class="selected-holder"></div> -->
-                <!-- if(Instance.competitor == undefined || Instance.competitor == '') {
-                  $('.selected-holder').html('<div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span></div>');
-                } else {
-                  $('.selected-holder').html('<div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span> report is going to be compared to <span style="font-weight: 600;" class="show-compare"></span></div>');
-                } -->
-                <!-- <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                  <span class="selected-client">Selected client = </span>
-                </div>
-                <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                  <span class="selected-client">Selected competitor = </span>
-                </div> -->
-              <!-- </div> -->
+              <div style="clear: both;"></div>
+              <span style="font-weight: 100;" class="name-label" style="margin-top: -20px; float: left;">Selected contacts:</span>
+              <div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;">
+                <span style="font-weight: 600;" class="show-client"></span>
+                <span class="has_comp"></span><span style="font-weight: 600;" class="show-compare"></span>
+              </div>
             </div>
             <div>
               <div class="nav-buttons">
@@ -228,7 +200,10 @@
         manual: 0,
         competitor_manual: 0,
       },
-      iba_id : <?php echo (isset($user->instagram_business_account_id) && $user->instagram_business_account_id) ? json_encode($user->instagram_business_account_id) : 'null'; ?>,
+      iba_id : <?php 
+        echo (isset($user->instagram_business_account_id) && $user->instagram_business_account_id) ?
+          json_encode($user->instagram_business_account_id) : 'null'; 
+      ?>,
     }
 
     $("body").on('DOMSubtreeModified', ".show-compare", function() {

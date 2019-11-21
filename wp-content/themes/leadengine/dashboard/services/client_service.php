@@ -27,18 +27,21 @@ class client_service extends connection {
 
 
   public function get_all($user_id) {
-      return $this->dbwp->get_results($this->dbwp->prepare(
-        "SELECT * FROM Client WHERE user_id = %d ORDER BY create_date", $user_id));
+    return $this->dbwp->get_results($this->dbwp->prepare(
+      "SELECT client.*, COUNT(distinct a.id) as audit_count, COUNT(distinct r.id) as report_count from Client
+        left join Audit a on a.client_id = client.id 
+        left join Report r on r.client_id = client.id
+      WHERE client.user_id = %d GROUP BY client.create_date", $user_id));
   }
 
 
   public function get_amount($user_id, $date) {
     if (!isset($date)) {
       return $this->dbwp->get_results($this->dbwp->prepare(
-          "SELECT COUNT(id) AS count FROM Client WHERE user_id = %d", $user_id));
+        "SELECT COUNT(id) AS count FROM Client WHERE user_id = %d", $user_id));
     }
     return $this->dbwp->get_results($this->dbwp->prepare(
-        "SELECT COUNT(id) AS count FROM Client WHERE user_id = %d AND create_date >= %s", $user_id, $date));
+      "SELECT COUNT(id) AS count FROM Client WHERE user_id = %d AND create_date >= %s", $user_id, $date));
   }
 
 
@@ -70,7 +73,7 @@ class client_service extends connection {
       "DELETE FROM Client WHERE user_id = $id AND id IN ($client_ids)");
   }
 
-
+  private $client_fields = "id, user_id, name, facebook, instagram, website, mail, create_date, ad_id";
   private $common_fields = "user_id, name, facebook, instagram, website, mail, create_date";
 }
 ?>
