@@ -193,7 +193,7 @@ function askToContinue(client, page, options, competitor, manualType) {
 
   showModal(initiateModal('instagramErrorModal', 'confirm', {
     text: `Couldn\'t gather instagram data for ${str}`,
-    subtext: "The most common reasons are:<br /><br /><span style='font-weight:bold;'>1.</span> The username you specified is not a business instagram<br /><br /><span style='font-weight:bold;'>2.</span> It is an invalid username.<br /><br /><span style='font-weight:bold;'>3.</span> Your Facebook page isn't connected to a Instagram business account, tutorial <a href='https://www.socialaudify.com/tutorial/#1570981334488-8c04a1f8-cd30' target='_blank' rel='noreferrer'>[here]</a>.<br /><br />Would you like to continue to the audit and fill in the blanks manually?",
+    subtext: "The most common reasons are:<br /><br /><span style='font-weight:bold;'>1.</span> The username you specified is not a business instagram<br /><br /><span style='font-weight:bold;'>2.</span> It is an invalid username.<br /><br /><span style='font-weight:bold;'>3.</span> Your Facebook page isn't connected to a Instagram business account, tutorial <a href='https://www.socialaudify.com/tutorial/#1570981334488-8c04a1f8-cd30' target='_blank' rel='noreferrer'>[here]</a>.<br /><br /><span style='font-weight:bold;'>4.</span> You are logged into the wrong facebook. Log into the Facebook that is managing the page that is connected to your business Instagram. <br /><br />Would you like to continue to the audit and fill in the blanks manually?",
     confirm: 'continue-to-audit',
     cancel: 'cancel-making-audit',
   }));

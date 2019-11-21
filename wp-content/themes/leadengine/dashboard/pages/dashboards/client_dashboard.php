@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Client dashboard
+ * Template Name: Client dashboard v1
  */
 ?>
 

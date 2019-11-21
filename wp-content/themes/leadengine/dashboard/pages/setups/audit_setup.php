@@ -33,6 +33,7 @@
     <div class="audit_count"><?php
       $max_audits = 20;
       $audits_made = $audit_control->get_amount($date = date('Y-m-d'));
+      $audits = $audit_control->get_all($user_id);
       echo $audits_made.'/'.$max_audits.' audits today'; ?>
     </div>
   </div>
@@ -73,6 +74,9 @@
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
         <div class="inner height-auto">
           <span class="title title-audit-page">Create an Audit</span>
+          <div class="audit_count"><?php
+            echo $audits_made.'/'.$max_audits.' audits today'; ?>
+          </div>
 
           <!-- One "tab" for each step in the form: -->
           <form id="regForm" style="margin-bottom: 20px;" class="submit-audit">
@@ -97,29 +101,50 @@
 
             <!-- Choose a client -->
             <div class="tab tab-setup">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Contact</div>
+              <div style="border: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
+                <div style="font-weight: 100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Select a contact</div>
               </div>
-              <input type="text" name="search" id="search-input" placeholder="Search..." valid/>
-              <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
-                foreach($clients as $client) {
-                  $data = ["id"=> $client->id, "name"=>$client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
-                  <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
-                    data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; ?>
-                  </a><?php
-                } ?>
+              <input type="text" name="search" class="setup-input" id="search-input" placeholder="Search..." valid/>
+              <div class="inner-scroll" style="height: 335px;" id="client-list"><?php 
+                if($clients != NULL) {
+                    foreach($clients as $client) {
+                        $audit_send = False;
+                      
+                        foreach($audits as $audit) {
+                              if ( $audit->client_id == $client->id ) {
+                                  $audit_send = True;
+                                  break;
+                              }
+                    
+                        }
+
+                    
+                      $data = ["id"=> $client->id, "name"=>$client->name, "facebook"=> $client->facebook, "instagram"=> $client->instagram, "website"=> $client->website]; ?>
+                      <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
+                        data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php echo $client->name; 
+                        if($audit_send) { ?>
+                            <div class="client-status converted">Audit send</div>
+                        <?php } else { ?>
+                              <div class="client-status no_reply">Not send</div>
+                        <?php } ?> 
+                      </a><?php
+                    }
+                } else { ?>
+                    <a href="/client-dashboard">Create a client first.</a>
+                <?php }?>
               </div>
             </div>
 
             <!-- Chosing an competitor -->
             <div class="tab tab-setup" >
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+              <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
+                <!-- <span class="selected-client">Selected client = <</span> -->
+              <!-- </div> -->
+              <span style="display: none;" class="temp-show-comp"></span>
+              <div style="border: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
+                <div style="font-weight:100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Want to compare <span style="font-weight: 100; color: #000;" class="show-client"></span> to a Competitor?<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
               </div>
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Competitor<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
-              </div>
-              <input type="text" name="search" id="search-input-compare" placeholder="Search..." valid/>
+              <input type="text" name="search" class="setup-input" id="search-input-compare" placeholder="Search..." valid/>
               <div class="inner-scroll" style="height: 335px;" id="compare-list">
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client selected" name="-" data-compare=''>No competitor...</a>
                 <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row new-compare" name="+"
@@ -138,11 +163,11 @@
             <div class="tab tab-setup">
 
               <div class="custom-label">
-                <span class="name-label">Audit Name</span>
-                <input type="text" name="audit_name" class="name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
+                <span style="font-weight: 100;" class="name-label">Fill in your audit name</span>
+                <input type="text" id="name-input" name="audit_name" class="setup-input name-input" placeholder="Audit name.." title="Only letters and numbers are allowed." maxlength="25" required>
               </div>
               <div class="custom-label">
-                <span class="name-label" style="margin-top: -15px;">Audit options:</span>
+                <span style="font-weight: 100;" class="name-label" style="margin-top: -15px;">Audit options:</span>
                 <span class="notice"><p>All the options are selected to include the data of the following platforms, you can deselect it by clicking on the icons.</p></span>
                 <label class="c_container">
                   <input type="checkbox" name="facebook_checkbox" id="facebook_checkbox" value="facebook_checkbox" checked><br />
@@ -157,16 +182,23 @@
                   <span class="checkmark"><i class="fas fa-globe"></i></span>
                 </label>
               </div>
-              <div class="custom-label" >
+              <!-- <div class="custom-label" > -->
                 <div style="clear: both;"></div>
-                <span class="name-label" style="margin-top: -20px; float: left;">Selected:</span>
-                <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                  <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
+                <span style="font-weight: 100;" class="name-label" style="margin-top: -20px; float: left;">Selected contacts:</span>
+                <div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span> <span class="has_comp"></span><span style="font-weight: 600;" class="show-compare"></span></div>
+                <!-- <div class="selected-holder"></div> -->
+                <!-- if(Instance.competitor == undefined || Instance.competitor == '') {
+                  $('.selected-holder').html('<div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span></div>');
+                } else {
+                  $('.selected-holder').html('<div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span> report is going to be compared to <span style="font-weight: 600;" class="show-compare"></span></div>');
+                } -->
+                <!-- <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
+                  <span class="selected-client">Selected client = </span>
                 </div>
                 <div style="margin-left:5px;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title-style title-green no-padding">
-                  <span class="selected-client">Selected competitor = <strong class="show-compare"></strong></span>
-                </div>
-              </div>
+                  <span class="selected-client">Selected competitor = </span>
+                </div> -->
+              <!-- </div> -->
             </div>
             <div>
               <div class="nav-buttons">
@@ -198,6 +230,10 @@
       },
       iba_id : <?php echo (isset($user->instagram_business_account_id) && $user->instagram_business_account_id) ? json_encode($user->instagram_business_account_id) : 'null'; ?>,
     }
+
+    $("body").on('DOMSubtreeModified', ".show-compare", function() {
+        $('.has_comp').html(" is going to be compared to ");
+    });
 
     // Selectable list - TODO : kan wss naar dashboard-header
     $('.audit-row.client').on('click', function() {
