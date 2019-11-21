@@ -112,8 +112,8 @@
                     <a class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row client campaign-row" name="<?php echo $client->name; ?>" id="client-<?php echo $client->id;?>"
                       data-client='<?php echo htmlentities(json_encode($data)); ?>'><?php
                       echo "$client->name".($client->audit_count > 0 ? 
-                        "<div class='client-status converted'>Audit sents</div>" :
-                        "<div class='client-status no_reply'>Not sent</div>"); ?>
+                        "<div class='client-status converted'>Audit sent</div>" :
+                        "<div class='client-status no_reply'>New</div>"); ?>
                     </a><?php
                   }
                 } else { ?>

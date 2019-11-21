@@ -92,8 +92,8 @@
         <div class="client-overview-row" data-name="<?php echo $client->name; ?>">
           <div class="client-overview-row-inner" data-id="<?php echo $client->id; ?>" data-client="<?php echo htmlentities(json_encode($data)); ?>"><?php
             echo $client->audit_count > 0 ? 
-              "<div class='client-status converted'>{$client->audit_count} Audit sent".($client->audit_count > 1 ? 's' : '')."</div>" :
-              "<div class='client-status no_reply'>Not sent</div>"; ?>
+              "<div class='client-status converted'>{$client->audit_count} Audit".($client->audit_count > 1 ? 's' : '')."</div>" :
+              "<div class='client-status no_reply'>New</div>"; ?>
 
             <div class="details">
               <span class="client-name-n"><?php echo $client->name; ?></span><?php
@@ -109,7 +109,8 @@
                 </a><?php
               } 
               if($client->website != NULL) { ?>
-                <a class="social-icon web-social" target="_blank" rel="norefferer" href="<?php echo $client->website; ?>">
+                <a class="social-icon web-social" target="_blank" rel="norefferer" href="<?php
+                  echo (substr($client->website, 0, 4) === "http" ? "" : "http://").$client->website; ?>">
                   <i class="fas fa-globe"></i>
                 </a><?php
               } 
