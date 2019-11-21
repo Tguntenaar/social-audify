@@ -157,7 +157,7 @@
       var selectedList = [];
 
       elems.find('.audit-row-style').on('click', function() {
-        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"), 1);
+        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"));
       });
 
       $('#delete_button_client').click(function() { deleteClients([$('#client_id').val()]); });
