@@ -1149,7 +1149,7 @@
         showModal(deleteModal);
       });
 
-            // Delete Audit Modal
+      // Delete Audit Modal
       var firstTimeModalData = {
         'text': 'Please note',
         'subtext': 'We do not send the first email about the audit at this time! Click on share and track to copy the link and email from your own email. Then select in configuration whether or not you would like us to start sending the follow ups.',
@@ -1204,11 +1204,12 @@
       }
 
       $('input:radio[name=ads]').change(function () {
-        update_ads(this.value, competitor = false);
+        update_ads(this.value, false);
       });
 
       $('input:radio[name=ads_c]').change(function () {
-        update_ads(this.value, competitor = true);
+        
+        update_ads(this.value, true);
       });
     });
 

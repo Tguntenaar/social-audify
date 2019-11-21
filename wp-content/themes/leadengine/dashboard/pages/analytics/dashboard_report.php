@@ -7,6 +7,7 @@
 ?>
 <html>
 <head>
+  <title>Admin Dashboard</title>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/dashboard.css" type="text/css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -25,6 +26,18 @@
       $users = $user_control->get_all(); 
       $all_audits = array();
       $all_reports = array(); ?>
+      <div>
+        <?php 
+        // TODO: maybe not a button the makkelijk om het perongeluk aan te klikken
+        // if (isset($_POST['newupdate'])) {
+        //   // echo "<script>alert(1);</script>";
+        //   $user_control->update_all("new_update", 1,"User");
+        // }?>
+        <!-- <form action="" method="POST">
+          <input type="hidden" name="newupdate" value="1">
+          <input type="submit" style="width:10%" value="Show New Update">
+        </form> -->
+      </div>
       <div class="inner no-scroll client-dashboard">
         <span class="title"><span class="title-background" style="width:200px">User Overview</span>
           <span class="count" id="counterSpanUser"><?php echo sizeof($users); ?></span>

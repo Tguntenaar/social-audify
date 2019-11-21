@@ -16,10 +16,12 @@
 
     // Weergave intro - Eerste login
     $intro_bit = 0;
+    $user = $user_control->get($user_id);
 
     // Dit moet ergens in de code waar een user word aangemaakt in de wpdb.
-    if($user_control->get($user_id) == NULL) {
+    if($user == NULL) {
         $user_control->create($user_id, $current_user->user_login, $current_user->user_email);
+        $user = $user_control->get($user_id);
         $intro_bit = 1;
     }
 
@@ -94,7 +96,7 @@
   ?>
 
   <!-- $intro_bit -->
-    <?php if ($intro_bit) { ?>
+    <?php if ($intro_bit): ?>
 
       <div class="intro-overlay">
         <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
@@ -113,7 +115,45 @@
       <script>
         FB.AppEvents.logEvent(FB.AppEvents.EventNames.COMPLETED_REGISTRATION);
       </script>
-    <?php } ?>
+    <?php endif; ?>
+
+    <!-- new Update -->
+    <?php if ($user->new_update == 1): $user->update('User', 'new_update', 0); ?>
+        <div class="intro-overlay">
+        <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
+          <h1>New Updates!</h1>
+
+            <span class="feature-title">Feature 1</span>
+            <p>
+            The tool for generating more sales and automating your reporting process! <br />
+            In order to make your audits and reports as efficient as possible, we advise you to take a few minutes to configure your <br />
+            account to make sure you get the most out of this software.<br />
+            Within the settings you can configure your automatic emails / follow ups you want us to send, you can <br />
+            add your phone number so your leads can call you after watching your audit, and you can add a little avatar to add to<br />
+             every audit and other features.
+            </p>
+            <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Checkout this feature<span style="position: relative; left: 5px; font-size: 9px;">small</span></a>
+            <div style="clear: both; height: 20px;"></div>
+            <span class="feature-title">Feature 2</span>
+            <p>
+             This feature let's you do even more work with less time!<br />
+            </p>
+            <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Checkout the update<span style="position: relative; left: 5px; font-size: 9px;">small</span></a>
+            <div style="clear: both; height: 20px;"></div>
+            <span class="feature-title">Bug fixes:</span>
+            <p>
+              <ul>
+                <li>Mails subjects</li>
+                <li>Emoji's</li>
+                <li>Audits that where openend by mail clients (frustrating)</li>
+              </ul>
+            </p>
+          </ul>
+          <div style="clear: both; height: 20px;"></div>
+          <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 45px;">Configure profile</a>
+        </div>
+      </div>
+    <?php endif; ?>
 
     <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
       <div class="download-viewed">
