@@ -1149,7 +1149,7 @@
         showModal(deleteModal);
       });
 
-            // Delete Audit Modal
+      // Delete Audit Modal
       var firstTimeModalData = {
         'text': 'Please note',
         'subtext': 'We do not send the first email about the audit at this time! Click on share and track to copy the link and email from your own email. Then select in configuration whether or not you would like us to start sending the follow ups.',
