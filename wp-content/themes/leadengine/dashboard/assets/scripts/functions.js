@@ -71,25 +71,20 @@ function filterSearch(value, links, counterSpan = null, isDiv = false) {
   }
 }
 
-function toggleSelected(element, selectedList, triggerButton = null, dashboardList = 0) {
-  if(dashboardList == 1) {
-      if (element.attr('class').endsWith('selected-dashboards')) {
-        element.removeClass('selected-dashboards');
-        selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+function toggleSelected(element, selectedList, triggerButton = null, postIds = null) {
+  if (element.attr('class').endsWith(`selected`)) {
+    element.removeClass(`selected`);
+    selectedList.splice(selectedList.indexOf(element.data('id')), 1);
+    if (postIds) {
+      postIds.splice(postIds.indexOf(element.data('post')), 1);
+    }
 
-      } else {
-        element.addClass('selected-dashboards');
-        selectedList = [...selectedList, element.data('id')];
-      }
   } else {
-      if (element.attr('class').endsWith('selected')) {
-        element.removeClass('selected');
-        selectedList.splice(selectedList.indexOf(element.data('id')), 1);
-
-      } else {
-        element.addClass('selected');
-        selectedList = [...selectedList, element.data('id')];
-      }
+    element.addClass(`selected`);
+    selectedList = [...selectedList, element.data('id')];
+    if (postIds) {
+      postIds = [...postIds, element.data('post')];
+    }
   }
 
   if (triggerButton) {
@@ -99,7 +94,7 @@ function toggleSelected(element, selectedList, triggerButton = null, dashboardLi
       triggerButton.show(1000);
     }
   }
-  return selectedList;
+  return postIds ? {selectedList, postIds} : selectedList;
 }
 
 function generateChart(canvas, datalist, labels = null, axes = [false, false]) {

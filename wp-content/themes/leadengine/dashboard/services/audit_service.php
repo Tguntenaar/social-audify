@@ -78,8 +78,8 @@ class audit_service extends connection {
         $user_id));
     }
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "SELECT Audit.*, Client.name as client_name, Client.mail as client_mail, Client.facebook as client_facebook, Client.instagram as client_instagram, Client.website as client_website FROM Audit INNER JOIN (Select * from Client where user_id = %d)
-        AS Client ON Audit.client_id = Client.id AND Audit.create_date >= %s
+      "SELECT Audit.*, Client.name as client_name, Client.mail as client_mail, Client.facebook as client_facebook, Client.instagram as client_instagram, Client.website as client_website FROM Audit
+        INNER JOIN (Select * from Client where user_id = %d) AS Client ON Audit.client_id = Client.id AND Audit.create_date >= %s
       ORDER BY Audit.create_date", $user_id, (string)$date));
   }
 

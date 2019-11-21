@@ -846,7 +846,10 @@ nav ul a li {
     height: auto;
     float: left;
 	text-align: center;
+	
 }
+
+
 
 .create-block-box h3 {
 		color: #6e9d9c;
@@ -1094,6 +1097,19 @@ nav ul a li {
 	position: relative;
 }
 
+.overview-audit-report .left {
+	border: 1px solid #eff0f2;
+	border-radius: 3px;
+}
+
+.overview-audit-report {
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+	float: left;
+}
+
 .dot-nav {
 	position: absolute;
 	bottom: 20px;
@@ -1190,9 +1206,103 @@ nav ul a li {
 }
 #client-list .audit-row ,
 #compare-list .audit-row {
-	height: 50px;
-	line-height: 50px;
+	position: relative;
+	height: 70px;
+	line-height: 70px;
 	padding-left: 15px;
+	background: #fff !important;
+	border-bottom: 1px solid #eff0f2;
+	font-weight: 400;
+}
+
+#client-list .audit-row:hover,
+#compare-list .audit-row:hover {
+	border-left: 1px solid #487dd7;
+	padding-left: 14px;
+	font-weight: 600;
+	opacity: 0.8;
+}
+
+#client-list:hover::-webkit-input-placeholder{
+	transition: opacity 0.45s ease; 
+	  opacity: 0;
+}
+#client-list:hover::-moz-placeholder {
+	transition: opacity 0.45s ease; 
+	  opacity: 0;
+}
+#client-list:hover:-ms-placeholder {
+   transition: opacity 0.45s ease; 
+	 opacity: 0;
+}  
+
+.client-status {
+	width: 100px;
+	height:30px;
+	border-radius: 15px;
+	background: #c6f6d5;
+	text-align: center;
+	color: #000;
+	text-align: center;
+	line-height: 30px;
+	font-size: 12px;
+	font-weight: 600;
+	top: 25px;
+	right: 20px;
+	position: absolute;
+}
+
+.setup-input,
+#search-input-compare,
+.name-input {
+	border-radius: 1px;
+	border: 1px solid #bdc3c7;
+	box-shadow: none !important;
+	outline: none !important;
+	margin-bottom: 5px;
+}
+
+.setup-input:focus,
+#search-input-compare:focus,
+#name-input:focus {
+	border: 1px solid #487dd7;
+	border-radius: 3px;
+    transition: 0.35s ease;
+	color: #000;
+}
+
+.setup-input:focus::-webkit-input-placeholder,
+#search-input-compare:focus::-webkit-input-placeholder,
+#name-input:focus::-webkit-input-placeholder {
+    transition: opacity 0.45s ease; 
+  	opacity: 0;
+}
+
+.setup-input:focus::-moz-placeholder,
+#search-input-compare:focus::-moz-placeholder,
+#name-input:focus::-moz-placeholder {
+    transition: opacity 0.45s ease; 
+  	opacity: 0;
+}
+
+.setup-input:focus:-ms-placeholder,
+#search-input-compare:focus:-ms-placeholder,
+#name-input:focus::-moz-placeholder {
+    transition: opacity 0.45s ease; 
+	opacity: 0;
+}    
+
+
+.converted {
+	background: #c6f6d5;
+}
+
+.in_progress {
+	background: #feebc8;
+}
+
+.no_reply {
+	background: #dbe7fd;
 }
 
 #ad-account-list {
@@ -1539,7 +1649,11 @@ nav ul a li {
 }
 
 .selected {
-	background:lightblue !important;
+	border-left: 1px solid #487dd7;
+	padding-left: 14px;
+	font-weight: 600 !important;
+	opacity: 0.8;
+	/* background:lightblue !important; */
 }
 
 .overview-audit-report .right .inner .audit-row-style,
@@ -3348,6 +3462,24 @@ label {
 	color: #6e9d9c;
 }
 
+.new-create-style {
+	top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.new-create-style-report {
+	top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+.active {
+	background-color: #dbe7fd;
+}
+
 .new-competitor input {
 	width: 70%;
 	margin-top: 5px;
@@ -3718,7 +3850,7 @@ input[type="submit"] {
 #regForm {
 	width: 100%;
 	padding: 0;
-	margin-top: 10px;
+	margin-top: 6px;
 }
 
 .steps {
@@ -4600,6 +4732,10 @@ h4 {
 }
 
 @media only screen and (max-width: 992px) {
+	.create-report-h1 {
+		margin-top: 120px;
+	}
+	
 	.intro-overlay iframe {
 		width: 80%;
 	}
@@ -4861,9 +4997,11 @@ h4 {
 
 	.create-audit-button {
 		margin: 0 auto;
+		margin-top: -5px;
+		margin-bottom: 10px;
 		float: none;
 		display: block;
-		width: 147px;
+		width: 149px;
 	}
 
 	.sidebar {
@@ -4942,6 +5080,14 @@ h4 {
 }
 
 @media only screen and (max-width: 768px) {
+	.graph-box {
+		margin-top: 60px;
+	}
+
+	.create-report-h1 {
+		margin-top: 170px;
+	}
+
 	.footer-calendar {
 		clear: both;
 		position: static;
@@ -5084,6 +5230,13 @@ h4 {
 
 
 @media only screen and (max-width: 620px) {
+	.graph-box {
+		margin-top: 190px;
+	}
+	
+	.create-report-h1 {
+		margin-top: 260px;
+	}
 	.graph-procent {
 		font-size: 24px;
 	}

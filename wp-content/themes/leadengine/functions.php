@@ -481,11 +481,25 @@
         wp_die();
     }
 
-    if (isset($_POST['ids'])) {
-      $rows = $control->delete_multiple(get_current_user_id(), $_POST['ids']);
-      wp_send_json(array("Succes"=>"deleted: ".$rows));
+    $user_id = get_current_user_id();
+    $results = [];
+
+    if (isset($_POST['posts'])) {
+      $deletions = 0;
+      foreach ($_POST['posts'] as $post_id) {
+        if (get_post_field('post_author', $post_id) == $user_id) {
+          wp_delete_post($post_id);
+          $deletions++;
+        }
+      }
+      $results["posts-deleted"] = $deletions;
     }
 
+    if (isset($_POST['ids'])) {
+      $results["audits-deleted"] =  $control->delete_multiple($user_id, $_POST['ids']);
+    }
+
+    wp_send_json($results);
     wp_die();
   }
 

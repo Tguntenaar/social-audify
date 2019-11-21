@@ -67,7 +67,7 @@
               $slug = strtolower('/audit-'.str_replace(" ", "-", $audit->name).'-'.$audit->id.'/');
               $audit->viewed = $audit->view_time !== NULL ? get_time_dif_days($audit->view_time) : "not yet"; ?>
 
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" data-id="<?php echo $audit->id; ?>" data-name="<?php echo $audit->name; ?>">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" data-id="<?php echo $audit->id; ?>" data-post="<?php echo $audit->post_id; ?>" data-name="<?php echo $audit->name; ?>">
                 <div class="col-12 col-sm-5 col-md-5 col-lg-5 audit-row-style"><a href="<?php echo $slug; ?>"><?php echo $audit->name; ?></a></div>
                 <div class="col remove-on-mobile col-sm-5 col-md-5 col-lg-5 audit-row-style"><?php echo $audit->client_name; ?></div>
                 <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 audit-row-style"><?php echo $audit->viewed ?></div>
@@ -86,9 +86,12 @@
 
       var elems = $('#audit-results .audit-row');
       var selectedList = [];
+      var postIds = [];
 
       elems.on('click', function() {
-        selectedList = toggleSelected($(this), selectedList, $(".selectDelete"), 1);
+        const results = toggleSelected($(this), selectedList, $(".selectDelete"), postIds);
+        selectedList = results.selectedList;
+        postIds = results.postIds;
       });
 
       $(".selectDelete").click(function() {
@@ -103,7 +106,7 @@
           $.ajax({
             type: "POST",
             url: ajaxurl,
-            data: {action: 'delete_multiple', ids: selectedList, type: 'audit'},
+            data: {action: 'delete_multiple', ids: selectedList, posts: postIds, type: 'audit'},
             success: function(response) { location.reload(); },
             error: function (xhr, textStatus, errorThrown) {
               var send_error = error_func(xhr, textStatus, errorThrown, selectedList);
