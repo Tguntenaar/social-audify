@@ -503,7 +503,12 @@ header {
     background: #f7f7f7;
     overflow-y: scroll;
 	overflow-x: hidden;
-	position:relative;
+	/* position:relative; */
+}
+
+.feature-title {
+	color: #2980b9;
+	font-weight: bold;
 }
 
 .block {
