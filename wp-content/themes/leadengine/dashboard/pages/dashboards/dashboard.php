@@ -122,8 +122,8 @@
         <div class="intro-overlay">
         <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
           <h1>New Updates!</h1>
-          <ul>
-            <li>feature 1</li>
+
+            <span class="feature-title">Feature 1</span>
             <p>
             The tool for generating more sales and automating your reporting process! <br />
             In order to make your audits and reports as efficient as possible, we advise you to take a few minutes to configure your <br />
@@ -134,19 +134,18 @@
             </p>
             <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Checkout this feature<span style="position: relative; left: 5px; font-size: 9px;">small</span></a>
             <div style="clear: both; height: 20px;"></div>
-            <li>feature 2</li>
+            <span class="feature-title">Feature 2</span>
             <p>
              This feature let's you do even more work with less time!<br />
             </p>
             <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Checkout the update<span style="position: relative; left: 5px; font-size: 9px;">small</span></a>
             <div style="clear: both; height: 20px;"></div>
-            <li>Bug fixes:</li>
+            <span class="feature-title">Bug fixes:</span>
             <p>
-             
               <ul>
-                <li>mails subjects</li>
-                <li>emoji's</li>
-                <li>audits that where openend by mail clients (frustrating)</li>
+                <li>Mails subjects</li>
+                <li>Emoji's</li>
+                <li>Audits that where openend by mail clients (frustrating)</li>
               </ul>
             </p>
           </ul>

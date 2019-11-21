@@ -98,6 +98,7 @@
     });
   </script>
 
+  
   <!-- Global popup modals -->
   <div id="errorModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
