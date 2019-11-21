@@ -118,7 +118,7 @@
     <?php endif; ?>
 
     <!-- new Update -->
-    <?php if ($user->new_update == 0): $user->update('User', 'new_update', 0); ?>
+    <?php if ($user->new_update == 1): $user->update('User', 'new_update', 0); ?>
         <div class="intro-overlay">
         <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
           <h1>New Updates!</h1>

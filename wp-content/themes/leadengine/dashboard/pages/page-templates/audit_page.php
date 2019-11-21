@@ -1204,11 +1204,12 @@
       }
 
       $('input:radio[name=ads]').change(function () {
-        update_ads(this.value, competitor = false);
+        update_ads(this.value, false);
       });
 
       $('input:radio[name=ads_c]').change(function () {
-        update_ads(this.value, competitor = true);
+        
+        update_ads(this.value, true);
       });
     });
 

@@ -29,6 +29,10 @@ class user_controller {
     return $this->service->update($id, $field_name, $field_value, $table);
   }
 
+  public function update_all($field_name, $field_value, $table) {
+    return $this->service->update_all($field_name, $field_value, $table);
+  }
+
   function get_all() {
     $sql_users = $this->service->get_all();
 

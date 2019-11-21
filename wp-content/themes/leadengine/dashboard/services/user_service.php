@@ -94,6 +94,10 @@ class user_service extends connection {
       array($field_name => $field_value), array($id_field => $id));
   }
 
+  public function update_all($field_name, $field_value, $table) {
+    return $this->dbwp->update($table, array($field_name => $field_value), 1);
+  }
+
   public function update_list($id, $list_values, $table) {
     $id_field = $table === 'User' ? 'id':'user_id';
     return $this->dbwp->update($table, $list_values, array($id_field => $id));

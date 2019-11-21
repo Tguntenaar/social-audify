@@ -98,22 +98,28 @@
 
   function edit_ads_audit() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
-    require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
+    require_once(dirname(__FILE__)."/dashboard/models/audit.php");
 
     $connection = new connection;
-    $audit_service = new audit_service($connection);
+    $audit_control = new audit_controller($connection);
 
     $audit_id = $_POST['audit'];
-    $data = $_POST['ads'];
-    $competitor = ($_POST['competitor'] == 'false') ? 0 : 1;
+    $running = ($_POST['ads'] == "yes") ? 1 : 0;
+    $competitor = ($_POST['competitor'] == 'true') ? 1 : 0;
 
-    $audit_data = $audit_service->get($audit_id);
-    $audit_data_facebook = json_decode($audit_data[0]->facebook_data);
-    $audit_data_facebook->runningAdds = ($data == 'yes') ? 1 : 0;
+    $audit = $audit_control->get($audit_id);
+    if ($competitor) {
+      $audit->competitor->facebook_data->runningAdds = $running;
+      $fb_data = $audit->competitor->facebook_data;
+    } else {
+      $audit->facebook_data->runningAdds = $running;
+      $fb_data = $audit->facebook_data;
+    }
+    
+    $audit_control->update($audit_id, "facebook_data", json_encode($fb_data), "Audit_data",  $competitor);
 
-    $audit_service->update($audit_id, "Audit_data", "facebook_data", json_encode($audit_data_facebook), $competitor);
-
-    wp_send_json(array('audit_data'=>$audit_data_facebook, 'competitor'=>$competitor, 'data'=>$data));
+    wp_send_json(array('audit'=>$audit, "runningAds"=>$fb_data));
     wp_die();
   }
 
