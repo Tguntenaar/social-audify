@@ -28,10 +28,10 @@ class client_service extends connection {
 
   public function get_all($user_id) {
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "SELECT client.*, COUNT(distinct a.id) as audit_count, COUNT(distinct r.id) as report_count from Client
-        left join Audit a on a.client_id = client.id 
-        left join Report r on r.client_id = client.id
-      WHERE client.user_id = %d GROUP BY client.create_date", $user_id));
+      "SELECT Client.*, COUNT(distinct a.id) as audit_count, COUNT(distinct r.id) as report_count from Client
+        left join Audit a on a.client_id = Client.id 
+        left join Report r on r.client_id = Client.id
+      WHERE Client.user_id = %d GROUP BY Client.create_date", $user_id));
   }
 
 
