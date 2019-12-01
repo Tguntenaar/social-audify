@@ -195,23 +195,23 @@ rcp_show_error_messages( 'register' ); ?>
 	<?php endif; ?>
 	</fieldset>
 
-	<?php if( rcp_has_discounts() ) : ?>
-	<fieldset class="rcp_discounts_fieldset">
-		<p id="rcp_discount_code_wrap">
-			<label for="rcp_discount_code" style="margin-bottom: 38px;">
-				<?php _e( 'Discount Code', 'rcp' ); ?>
-				<span class="rcp_discount_valid" style="display: none;"> - <?php _e( 'Valid', 'rcp' ); ?></span>
-				<span class="rcp_discount_invalid" style="display: none;"> - <?php _e( 'Invalid', 'rcp' ); ?></span>
-			</label>
-			<span class="rcp_discount_code_field_wrap">
-				<input style="margin-bottom: 8px;" type="text" id="rcp_discount_code" name="rcp_discount" class="rcp_discount_code" value="<?php echo esc_attr( $discount ); ?>"/>
-				<button style="color: #fff; background: #27ae60; border: 0;" class="rcp_button" id="rcp_apply_discount"><?php _e( 'Apply', 'rcp' ); ?></button>
-			</span>
-		</p>
-	</fieldset>
-	<?php endif; ?>
-
 	<div class="tab" style="display:none;">
+	
+		<?php if( rcp_has_discounts() ) : ?>
+		<fieldset class="rcp_discounts_fieldset">
+			<p id="rcp_discount_code_wrap">
+				<label for="rcp_discount_code" style="margin-bottom: 38px;">
+					<?php _e( 'Discount Code', 'rcp' ); ?>
+					<span class="rcp_discount_valid" style="display: none;"> - <?php _e( 'Valid', 'rcp' ); ?></span>
+					<span class="rcp_discount_invalid" style="display: none;"> - <?php _e( 'Invalid', 'rcp' ); ?></span>
+				</label>
+				<span class="rcp_discount_code_field_wrap">
+					<input style="margin-bottom: 8px;" type="text" id="rcp_discount_code" name="rcp_discount" class="rcp_discount_code" value="<?php echo esc_attr( $discount ); ?>"/>
+					<button style="color: #fff; background: #27ae60; border: 0;" class="rcp_button" id="rcp_apply_discount"><?php _e( 'Apply', 'rcp' ); ?></button>
+				</span>
+			</p>
+		</fieldset>
+		<?php endif; ?>
 
 		<?php do_action( 'rcp_after_register_form_fields', $levels ); ?>
 
