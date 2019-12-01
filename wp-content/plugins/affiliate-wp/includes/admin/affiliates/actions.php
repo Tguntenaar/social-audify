@@ -18,12 +18,14 @@ function affwp_process_add_affiliate( $data ) {
 		return false;
 	}
 
+	$data = array_map( 'trim', $data );
+
 	if ( ! current_user_can( 'manage_affiliates' ) ) {
 		wp_die( __( 'You do not have permission to manage affiliates', 'affiliate-wp' ), __( 'Error', 'affiliate-wp' ), array( 'response' => 403 ) );
 	}
 
 	if ( ! username_exists( $data['user_name'] ) && is_numeric( $data['user_name'] ) ) {
-		$errors[ 'invalid_username_numeric' ] = __( 'Invalid user login name. User login name must include at least one letter', 'affiliate_wp' );
+		$errors[ 'invalid_username_numeric' ] = __( 'Invalid user login name. User login name must include at least one letter', 'affiliate-wp' );
 	}
 
 	if ( ! username_exists( $data['user_name'] ) && mb_strlen( $data['user_name'] ) < 4 || mb_strlen( $data['user_name'] ) > 60 ) {

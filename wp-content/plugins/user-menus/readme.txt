@@ -1,27 +1,27 @@
 === User Menus - Nav Menu Visibility ===
-Contributors: jungleplugins, danieliser
-Author URI:  https://jungleplugins.com/
+Contributors: codeatlantic, danieliser
+Author URI:  https://code-atlantic.com/
 Plugin URI:  https://wordpress.org/plugins/user-menus/
-Donate link: https://jungleplugins.com/donate/
+Donate link: https://code-atlantic.com/donate/
 Tags: menu, menus, user-menu, logout, nav-menu, nav-menus, user, user-role, user-roles
-Requires at least: 3.6
-Tested up to: 5.1
-Stable tag: 1.1.3
+Requires at least: 4.6
+Tested up to: 5.2.5
+Stable tag: 1.2.1
 Requires PHP: 5.3
-License: GNU Version 3 or Any Later Version
+License: GPLv3 or Any Later Version
 
 Show/hide menu items to logged in users, logged out users or specific user roles. Display logged in user details in menu. Add a logout link to menu.
 
 
 == Description ==
 
-User Menus by [Jungle Plugins][jungleplugins] is the perfect plugin for websites which have logged in users.
+User Menus is the perfect plugin for websites which have logged in users.
 
 The plugin gives you more control over your nav menu by allowing you to apply visibility controls to menu items e.g who can see each menu item (everyone, logged out users, logged in users, specific user roles).
 
 It also enables you to display logged in user information in the navigation menu e.g “Hello, John Doe”.
 
-Lastly, the plugin allows you to add a login and logout link to your menu.
+Lastly, the plugin allows you to add login, register, and logout links to your menu.
 
 = Full Feature List =
 
@@ -30,7 +30,7 @@ User Menus allows you to do the following:
 * Display menu items to everyone
 * Display menu items to only logged out users
 * Display menu items to only logged in users
-* Display menu item to specific user roles
+* Display menu item to users with or without a specific user role.
 * Show a logged in user’s {avatar} in a menu item with custom size option.
 * Show a logged in user’s {username} in a menu item
 * Show a logged in user’s {first_name} in a menu item
@@ -39,30 +39,30 @@ User Menus allows you to do the following:
 * Show a logged in user’s nickname} in a menu item
 * Show a logged in user’s {email} in a menu item
 * Add a logout link to menu (optional redirect settings)
+* Add a register link to menu (optional redirect settings)
 * Add a login link to menu (optional redirect settings)
 
 ** Includes a custom Menu Importer that will allow migrating User Menus data with the normal menu export/import.
 
-= Created by Jungle Plugins =
+= Created by Code Atlantic =
 
-User Menus is built by the [Jungle Plugins][jungleplugins] team. Our mission is to make building membership & community websites easy with WordPress.
+User Menus is built by the [Code Atlantic][codeatlantic] team. We create high-quality WordPress plugins that help you grow your WordPress sites.
 
-Whilst User Menus is currently our only plugin, we will be releasing several free & paid plugins over the coming months which will provide the following functionality:
+Check out some of our most popular plugins:
 
-* Forums
-* Front-end Posting
-* User Role Creation and Editing
-* Content Restriction
-
-If you’d like to get updates on our plugin development work you can [subscribe to our mailing list][jungleplugins subscribe] and/or follow us on [Twitter][jungleplugins twitter].
+* [Popup Maker][popupmaker] - #1 Popup & Marketing Plugin for WordPress
+* [Ahoy][ahoy] - Automated Marketing Messages for WordPress
+* [Content Control][contentcontrol] - Restrict Access to Pages and Posts
 
 **Requires WordPress 3.6 and PHP 5.3**
 
-[jungleplugins]: https://jungleplugins.com/ "Jungle Plugins - WordPress User Communities Made Easy"
+[codeatlantic]: https://code-atlantic.com "Code Atlantic - High Quality WordPress Plugins"
 
-[jungleplugins subscribe]: https://jungleplugins.com/subscribe/ "Jungle Plugins Newsletter"
+[popupmaker]: https://wppopupmaker.com "#1 Popup & Marketing Plugin for WordPress"
 
-[jungleplugins twitter]: https://twitter.com/jungleplugins/ "Jungle Plugins on Twitter"
+[ahoy]: https://useahoy.com "Automated Marketing Messages for WordPress"
+
+[contentcontrol]: https://wordpress.org/plugins/content-control/ "Control Who Can Access Content"
 
 == Installation ==
 
@@ -114,6 +114,17 @@ Bugs can be reported either in our support forum or preferably on the [User Menu
 
 
 == Changelog ==
+
+= v1.2.1 - 10/20/2019 =
+* Fix: Bug in some sites where Menu Editor Description field was not shown.
+
+= v1.2.0 - 10/10/2019 =
+* Feature: Added option to *show* or *hide* the menu item for chosen roles.
+* Feature: Added Register user link navigation menu type with optional redirect.
+* Improvement: Added Freemius integration to allow for future premium offerings
+* Tweak: Updates brand from Jungle Plugins to Code Atlantic (nothing has changed, just the name).
+* Tweak: Minor text and design changes.
+* Fix: Bug where missing data in menu items caused an error to be thrown in edge cases.
 
 = v1.1.3 =
 * Improvement: Corrected usage of get_avatar to ensure compatibility with 3rd party avatar plugins.

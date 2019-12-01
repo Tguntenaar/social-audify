@@ -880,13 +880,18 @@ class Affiliate_WP_Tracking {
 	 */
 	public function get_ip() {
 		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) ) {
-			//check ip from share internet
-			$ip = $_SERVER['HTTP_CLIENT_IP'];
+			// check ip from share internet.
+			$ip = filter_var( wp_unslash( $_SERVER['HTTP_CLIENT_IP'] ), FILTER_VALIDATE_IP );
 		} elseif ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-			//to check ip is pass from proxy
-			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+			// to check ip is pass from proxy.
+			$ips = explode( ',', wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ) );
+			if ( is_array( $ips ) ) {
+				$ip = filter_var( $ips[0], FILTER_VALIDATE_IP );
+			} else {
+				$ip = filter_var( wp_unslash( $_SERVER['HTTP_X_FORWARDED_FOR'] ), FILTER_VALIDATE_IP );
+			}
 		} else {
-			$ip = $_SERVER['REMOTE_ADDR'];
+			$ip = filter_var( wp_unslash( $_SERVER['REMOTE_ADDR'] ), FILTER_VALIDATE_IP );
 		}
 		return apply_filters( 'affwp_get_ip', $ip );
 	}

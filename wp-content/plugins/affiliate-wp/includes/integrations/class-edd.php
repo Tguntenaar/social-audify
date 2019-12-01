@@ -46,6 +46,9 @@ class Affiliate_WP_EDD extends Affiliate_WP_Base {
 		add_action( 'download_category_edit_form_fields', array( $this, 'edit_download_category_rate' ), 10 );
 		add_action( 'edited_download_category', array( $this, 'save_download_category_rate' ) );  
 		add_action( 'create_download_category', array( $this, 'save_download_category_rate' ) );
+
+		// Downloads archive
+		add_action( 'init', array( $this, 'downloads_page_rewrites' ) );
 	}
 
 	/**
@@ -899,6 +902,28 @@ class Affiliate_WP_EDD extends Affiliate_WP_Base {
 
 	}
 
+	/**
+	 * Sets up rewrites for the downloads post type archive page as core's rule is a bit too greedy.
+	 *
+	 * @since 2.4.2
+	 */
+	public function downloads_page_rewrites() {
+		$download_pt = get_post_type_object( 'download' );
+
+		if ( null === $download_pt ) {
+			return;
+		}
+
+		if ( ! empty( $download_pt->rewrite['slug'] ) ) {
+			$slug = $download_pt->rewrite['slug'];
+		} else {
+			$slug = 'downloads';
+		}
+
+		$ref = affiliate_wp()->tracking->get_referral_var();
+
+		add_rewrite_rule( $slug . '/' . $ref . '(/(.*))?/?$', 'index.php?post_type=download&' . $ref . '=$matches[2]', 'top' );
+	}
 }
 
 if ( class_exists( 'Easy_Digital_Downloads' ) ) {

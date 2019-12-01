@@ -2,8 +2,8 @@
 Contributors: fahadmahmood
 Tags: wp speedup, css speedup, js speedup, css minify, js minify, css compress, js compress, website speedup
 Requires at least: 3.0.1
-Tested up to: 5.0
-Stable tag: 1.4.3
+Tested up to: 5.3
+Stable tag: 1.4.4
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 A great plugin which helps you to speedup your WordPress website from all aspects.
@@ -96,6 +96,8 @@ It's better to post on support forum but if you need it be fixed on urgent basis
 10. Images Optimized
 
 == Changelog ==
+= 1.4.4 =
+* Reviewed.
 = 1.4.3 =
 * Languages added. [Thanks to Abu Usman]
 = 1.4.1 =
@@ -120,8 +122,10 @@ It's better to post on support forum but if you need it be fixed on urgent basis
 * Initial Commit
 
 == Upgrade Notice ==
+= 1.4.4 =
+Reviewed.
 = 1.4.3 =
-* Languages added.
+Languages added.
 = 1.4.1 =
 Sanitized input and fixed direct file access issues.
 = 1.3.0 =

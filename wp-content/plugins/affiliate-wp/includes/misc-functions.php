@@ -375,8 +375,8 @@ add_filter( 'affwp_decimal_count', 'affwp_currency_decimal_filter' );
  *
  * @since 1.0
  *
- * @param unknown $data
- * @return array
+ * @param array|object $data Object or array to process.
+ * @return array Array.
  */
 function affwp_object_to_array( $data ) {
 	if ( is_array( $data ) || is_object( $data ) ) {
@@ -1090,7 +1090,7 @@ function affwp_get_affiliate_import_fields() {
 		'rate'            => __( 'Rate', 'affiliate-wp' ),
 		'rate_type'       => __( 'Rate Type', 'affiliate-wp' ),
 		'flat_rate_basis' => __( 'Flat Rate Basis', 'affiliate-wp' ),
-		'earnings'        => __( 'Earnings', 'afiliate-wp' ),
+		'earnings'        => __( 'Earnings', 'affiliate-wp' ),
 		'unpaid_earnings' => __( 'Unpaid Earnings', 'affiliate-wp' ),
 		'referrals'       => __( 'Referral Count', 'affiliate-wp' ),
 		'visits'          => __( 'Visit Count', 'affiliate-wp' ),
@@ -1250,4 +1250,80 @@ function affwp_get_current_page_number() {
 	}
 
 	return max( $page, 1 );
+}
+
+/**
+ * Get SEPA countries
+ *
+ * @since 2.4
+ * @return array $sepa_countries A list of SEPA countries.
+ */
+function affwp_get_sepa_countries() {
+
+	$sepa_countries = array(
+		'AT' => __( 'Austria', 'affiliate-wp' ),
+		'BE' => __( 'Belgium', 'affiliate-wp' ),
+		'DK' => __( 'Denmark', 'affiliate-wp' ),
+		'FI' => __( 'Finland', 'affiliate-wp' ),
+		'FR' => __( 'France', 'affiliate-wp' ),
+		'DE' => __( 'Germany', 'affiliate-wp' ),
+		'IE' => __( 'Ireland', 'affiliate-wp' ),
+		'IT' => __( 'Italy', 'affiliate-wp' ),
+		'LU' => __( 'Luxembourg', 'affiliate-wp' ),
+		'NL' => __( 'Netherlands', 'affiliate-wp' ),
+		'NO' => __( 'Norway', 'affiliate-wp' ),
+		'PT' => __( 'Portugal', 'affiliate-wp' ),
+		'ES' => __( 'Spain', 'affiliate-wp' ),
+		'SE' => __( 'Sweden', 'affiliate-wp' ),
+		'CH' => __( 'Switzerland', 'affiliate-wp' ),
+		'GB' => __( 'United Kingdom', 'affiliate-wp' ),
+	);
+
+	return $sepa_countries;
+}
+
+/**
+ * Get Payouts Service Country List
+ *
+ * @since 2.4
+ * @return array $countries A list of the countries support by the payouts service.
+ */
+function affwp_get_payouts_service_country_list() {
+
+	$countries = array(
+		'US' => __( 'United States', 'affiliate-wp' ),
+		'CA' => __( 'Canada', 'affiliate-wp' ),
+		'GB' => __( 'United Kingdom', 'affiliate-wp' ),
+		'AU' => __( 'Australia', 'affiliate-wp' ),
+		'AT' => __( 'Austria', 'affiliate-wp' ),
+		'BE' => __( 'Belgium', 'affiliate-wp' ),
+		'DK' => __( 'Denmark', 'affiliate-wp' ),
+		'EE' => __( 'Estonia', 'affiliate-wp' ),
+		'FI' => __( 'Finland', 'affiliate-wp' ),
+		'FR' => __( 'France', 'affiliate-wp' ),
+		'DE' => __( 'Germany', 'affiliate-wp' ),
+		'GR' => __( 'Greece', 'affiliate-wp' ),
+		'HK' => __( 'Hong Kong', 'affiliate-wp' ),
+		'JP' => __( 'Japan', 'affiliate-wp' ),
+		'IE' => __( 'Ireland', 'affiliate-wp' ),
+		'IT' => __( 'Italy', 'affiliate-wp' ),
+		'LV' => __( 'Latvia', 'affiliate-wp' ),
+		'LT' => __( 'Lithuania', 'affiliate-wp' ),
+		'LU' => __( 'Luxembourg', 'affiliate-wp' ),
+		'MY' => __( 'Malaysia', 'affiliate-wp' ),
+		'NL' => __( 'Netherlands', 'affiliate-wp' ),
+		'NZ' => __( 'New Zealand', 'affiliate-wp' ),
+		'NO' => __( 'Norway', 'affiliate-wp' ),
+		'PL' => __( 'Poland', 'affiliate-wp' ),
+		'PT' => __( 'Portugal', 'affiliate-wp' ),
+		'SG' => __( 'Singapore', 'affiliate-wp' ),
+		'SK' => __( 'Slovakia', 'affiliate-wp' ),
+		'SI' => __( 'Slovenia', 'affiliate-wp' ),
+		'ES' => __( 'Spain', 'affiliate-wp' ),
+		'SE' => __( 'Sweden', 'affiliate-wp' ),
+		'CH' => __( 'Switzerland', 'affiliate-wp' ),
+	);
+
+	return $countries;
+
 }

@@ -3,7 +3,7 @@
 Plugin Name: WP SpeedUp
 Plugin URI: http://androidbubble.com/blog/wordpress/plugins/wp-speedup
 Description: WP SpeedUp is a great plugin to speedup your WordPress website with a simple installation.
-Version: 1.4.3
+Version: 1.4.4
 Author: Fahad Mahmood 
 Author URI: http://www.androidbubbles.com
 Text Domain: wp-speedup

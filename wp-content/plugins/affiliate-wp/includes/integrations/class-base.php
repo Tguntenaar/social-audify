@@ -550,10 +550,14 @@ abstract class Affiliate_WP_Base {
 	 * Writes a log message.
 	 *
 	 * @since 1.8
+	 *
+	 * @param string      $message Message to write to the debug log.
+	 * @param array|mixed $data    Optional. Array of data or other output to send to the log.
+	 *                             Default empty array.
 	 */
-	public function log( $message = '' ) {
+	public function log( $message, $data = array() ) {
 
-		affiliate_wp()->utils->log( $message );
+		affiliate_wp()->utils->log( $message, $data );
 
 	}
 

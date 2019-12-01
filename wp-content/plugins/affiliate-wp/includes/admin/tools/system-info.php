@@ -22,10 +22,12 @@ function affwp_tools_system_info_report() {
 	$return .= 'Home URL:                 ' . home_url() . "\n";
 	$return .= 'Multisite:                ' . ( is_multisite() ? 'Yes' : 'No' ) . "\n";
 
+	$locale = get_locale();
+
 	// WordPress configuration
 	$return .= "\n" . '-- WordPress Configuration' . "\n\n";
 	$return .= 'Version:                  ' . get_bloginfo( 'version' ) . "\n";
-	$return .= 'Language:                 ' . ( defined( 'WPLANG' ) && WPLANG ? WPLANG : 'en_US' ) . "\n";
+	$return .= 'Language:                 ' . ( empty( $locale ) ? 'en_US' : $locale ) . "\n";
 	$return .= 'Permalink Structure:      ' . ( get_option( 'permalink_structure' ) ? get_option( 'permalink_structure' ) : 'Default' ) . "\n";
 	$return .= 'Active Theme:             ' . $theme . "\n";
 	$return .= 'Show On Front:            ' . get_option( 'show_on_front' ) . "\n";
@@ -183,6 +185,7 @@ function affwp_tools_system_info_report() {
 	$return .= 'PHP Version:              ' . PHP_VERSION . "\n";
 	$return .= 'MySQL Version:            ' . $wpdb->db_version() . "\n";
 	$return .= 'Webserver Info:           ' . $_SERVER['SERVER_SOFTWARE'] . "\n";
+	$return .= 'SSL Configured:           ' . ( is_ssl() ? 'Yes' : 'No' ) . "\n";
 
 	// PHP configuration
 	$return .= "\n" . '-- PHP Configuration' . "\n\n";

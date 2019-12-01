@@ -1789,7 +1789,7 @@ function affwp_get_affiliate_payouts( $affiliate = 0 ) {
 	}
 
 	$payouts = affiliate_wp()->affiliates->payouts->get_payouts( array(
-		'affilate_id' => $affiliate->ID,
+		'affiliate_id' => $affiliate->ID,
 	) );
 
 	/**
@@ -1801,4 +1801,128 @@ function affwp_get_affiliate_payouts( $affiliate = 0 ) {
 	 * @param int   $affiliate_id Affiliate ID.
 	 */
 	return apply_filters( 'affwp_get_affiliate_payouts', $payouts, $affiliate->ID );
+}
+
+/**
+ * Get the account ID of the affiliate on the Payouts Service.
+ * Also checks if the account ID is valid on the Payouts Service.
+ *
+ * @since 2.4
+ *
+ * @param  int $affiliate_id Affiliate ID.
+ * @return array Payout service account details for the given affiliate.
+ */
+function affwp_get_payouts_service_account( $affiliate_id = 0 ) {
+
+	if ( ! $affiliate = affwp_get_affiliate( $affiliate_id ) ) {
+		$account_details = array(
+			'status' => 'invalid_account',
+			'valid'  => false,
+		);
+
+		return $account_details;
+	}
+
+	if ( ! $affiliate->user ) {
+		$account_details = array(
+			'status' => 'user_account_deleted',
+			'valid'  => false,
+		);
+
+		return $account_details;
+	}
+
+	$payout_service_account_meta = affwp_get_affiliate_meta( $affiliate->affiliate_id, 'payouts_service_account', true );
+
+	if ( ! $payout_service_account_meta || empty( $payout_service_account_meta['account_id'] ) ) {
+		$account_details = array(
+			'status' => 'no_ps_account',
+			'valid'  => false,
+		);
+
+		return $account_details;
+	}
+
+	$vendor_id  = affiliate_wp()->settings->get( 'payouts_service_vendor_id', 0 );
+	$access_key = affiliate_wp()->settings->get( 'payouts_service_access_key', '' );
+
+	$headers = array(
+		'Authorization' => 'Basic ' . base64_encode( $vendor_id . ':' . $access_key ),
+	);
+
+	$api_params = array(
+		'account_id'    => $payout_service_account_meta['account_id'],
+		'affwp_version' => AFFILIATEWP_VERSION,
+	);
+
+	$args = array(
+		'body'      => $api_params,
+		'headers'   => $headers,
+		'timeout'   => 60,
+		'sslverify' => false,
+	);
+
+	$request = wp_remote_get( AFFILIATEWP_PAYOUTS_SERVICE_URL . '/wp-json/payouts/v1/account/validate-account', $args );
+
+	if ( is_wp_error( $request ) ) {
+
+		$account_details = array(
+			'status' => 'unable_to_retrieve_ps_account',
+			'valid'  => false,
+		);
+
+	} else {
+
+		$response      = json_decode( wp_remote_retrieve_body( $request ) );
+		$response_code = wp_remote_retrieve_response_code( $request );
+
+		if ( 200 === (int) $response_code ) {
+
+			if ( $response->status ) {
+
+				switch ( $payout_service_account_meta['status'] ) {
+
+					case 'payout_method_added':
+						$account_details = array(
+							'account_id' => $payout_service_account_meta['account_id'],
+							'valid'      => true,
+						);
+
+						break;
+
+					case 'account_created':
+						$account_details = array(
+							'status' => 'no_ps_payout_method',
+							'valid'  => false,
+						);
+
+						break;
+
+					default:
+						$account_details = array(
+							'status' => 'unable_to_retrieve_ps_account',
+							'valid'  => false,
+						);
+
+						break;
+				}
+			} else {
+
+				$account_details = array(
+					'status' => $response->reason,
+					'valid'  => false,
+				);
+
+			}
+		} else {
+
+			$account_details = array(
+				'status' => 'unable_to_retrieve_ps_account',
+				'valid'  => false,
+			);
+
+		}
+	}
+
+	return $account_details;
 }

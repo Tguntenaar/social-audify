@@ -39,7 +39,7 @@ class Affiliate_WP_WPForms extends Affiliate_WP_Base {
 			'settings',
 			'affwp_allow_referrals',
 			$instance->form_data,
-			__( 'Allow referrals', 'wpforms' )
+			__( 'Allow referrals', 'affiliate-wp' )
 		);
 
 		wpforms_panel_field(
@@ -47,7 +47,7 @@ class Affiliate_WP_WPForms extends Affiliate_WP_Base {
 			'settings',
 			'affwp_referral_type',
 			$instance->form_data,
-			__( 'Referral type', 'wpforms' ),
+			__( 'Referral type', 'affiliate-wp' ),
 			array(
 				'options' => $options
 			)

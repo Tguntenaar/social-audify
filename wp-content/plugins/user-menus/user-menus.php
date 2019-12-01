@@ -3,9 +3,9 @@
  * Plugin Name:  User Menus
  * Plugin URI:   https://wordpress.org/plugins/user-menus/
  * Description:  Quickly customize your menus with a user's name & avatar, or show items based on user role.
- * Version:      1.1.3
- * Author:       Jungle Plugins
- * Author URI:   https://jungleplugins.com/
+ * Version:      1.2.1
+ * Author:       Code Atlantic
+ * Author URI:   https://code-atlantic.com/
  * License:      GPL2 or later
  * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:  user-menus
@@ -15,7 +15,6 @@
  *
  * @author      Daniel Iser
  * @copyright   Copyright (c) 2019, Code Atlantic LLC
- * @since       1.0.0
  *
  * Prior Work Credits. Big thanks to the following:
  * - No Conflict Nav Menu Walker (Modified) - Nav Menu Roles @helgatheviking
@@ -24,6 +23,42 @@
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
+
+if ( ! function_exists( 'um_fs' ) ) {
+    // Create a helper function for easy SDK access.
+    function um_fs() {
+        global $um_fs;
+
+        if ( ! isset( $um_fs ) ) {
+            // Include Freemius SDK.
+            require_once dirname(__FILE__) . '/freemius/start.php';
+
+            $um_fs = fs_dynamic_init( array(
+                'id'                  => '3637',
+                'slug'                => 'user-menus',
+                'type'                => 'plugin',
+                'public_key'          => 'pk_367ac2d0a38c35ef2a78d161fed88',
+                'is_premium'          => false,
+                'has_addons'          => false,
+                'has_paid_plans'      => false,
+                'menu'                => array(
+                    'first-path'     => 'plugins.php',
+                    'account'        => false,
+                    'contact'        => false,
+                    'support'        => false,
+                ),
+            ) );
+        }
+
+        return $um_fs;
+    }
+
+    // Init Freemius.
+    um_fs();
+
+    // Signal that SDK was initiated.
+    do_action( 'um_fs_loaded' );
 }
 
 /**
@@ -39,7 +74,7 @@ class JP_User_Menus {
 	/**
 	 * @var string
 	 */
-	public static $VER = '1.1.3';
+	public static $VER = '1.2.1';
 
 	/**
 	 * @var string

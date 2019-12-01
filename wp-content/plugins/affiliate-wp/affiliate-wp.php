@@ -5,7 +5,7 @@
  * Description: Affiliate Plugin for WordPress
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
- * Version: 2.3.3
+ * Version: 2.4.1
  * Text Domain: affiliate-wp
  * Domain Path: languages
  * GitHub Plugin URI: affiliatewp/affiliatewp
@@ -25,7 +25,7 @@
  * @package AffiliateWP
  * @category Core
  * @author Pippin Williamson
- * @version 2.3.3
+ * @version 2.4.2
  */
 
 // Exit if accessed directly
@@ -57,7 +57,7 @@ final class Affiliate_WP {
 	 * @since  1.0
 	 * @var    string
 	 */
-	private $version = '2.3.3';
+	private $version = '2.4.2';
 
 	/**
 	 * The affiliates DB instance variable.
@@ -103,6 +103,14 @@ final class Affiliate_WP {
 	 * @var    Affiliate_WP_Referrals_DB
 	 */
 	public $referrals;
+
+	/**
+	 * References the referral meta DB instance.
+	 *
+	 * @since 2.4
+	 * @var   Affiliate_WP_Referral_Meta_DB
+	 */
+	public $referral_meta;
 
 	/**
 	 * The campaigns instance variable.
@@ -360,6 +368,11 @@ final class Affiliate_WP {
 		if ( ! defined( 'CAL_GREGORIAN' ) ) {
 			define( 'CAL_GREGORIAN', 1 );
 		}
+
+		// Make sure AFFILIATEWP_PAYOUTS_SERVICE_URL is defined.
+		if ( ! defined( 'AFFILIATEWP_PAYOUTS_SERVICE_URL' ) ) {
+			define( 'AFFILIATEWP_PAYOUTS_SERVICE_URL', 'https://payouts.sandhillsdev.com' );
+		}
 	}
 
 	/**
@@ -383,6 +396,7 @@ final class Affiliate_WP {
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/abstracts/class-affwp-registry.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/settings/class-settings.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/abstracts/class-db.php';
+		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/abstracts/class-meta-db.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-affiliates-db.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-payouts-db.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-capabilities.php';
@@ -400,6 +414,7 @@ final class Affiliate_WP {
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/class-addon-updater.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/class-menu.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/affiliates/affiliates.php';
+			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/class-notices-registry.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/class-notices.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/dashboard-widgets.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/creatives/actions.php';
@@ -408,7 +423,9 @@ final class Affiliate_WP {
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/overview/overview.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/referrals/actions.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/referrals/referrals.php';
+			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/payouts/actions.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/payouts/payouts.php';
+			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/payouts/class-payouts-service.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/reports/reports.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/settings/display-settings.php';
 			require_once AFFILIATEWP_PLUGIN_DIR . 'includes/admin/visits/visits.php';
@@ -433,6 +450,7 @@ final class Affiliate_WP {
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-integrations.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-login.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-referrals-db.php';
+		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-referral-meta-db.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-referral-type-registry.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-register.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/class-templates.php';
@@ -452,6 +470,7 @@ final class Affiliate_WP {
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/misc-functions.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/payout-functions.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/referral-functions.php';
+		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/referral-meta-functions.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/visit-functions.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/customer-functions.php';
 		require_once AFFILIATEWP_PLUGIN_DIR . 'includes/creative-functions.php';
@@ -507,6 +526,7 @@ final class Affiliate_WP {
 		self::$instance->affiliates     = new Affiliate_WP_DB_Affiliates;
 		self::$instance->affiliate_meta = new Affiliate_WP_Affiliate_Meta_DB;
 		self::$instance->referrals      = new Affiliate_WP_Referrals_DB;
+		self::$instance->referral_meta  = new Affiliate_WP_Referral_Meta_DB;
 		self::$instance->visits         = new Affiliate_WP_Visits_DB;
 		self::$instance->customers      = new Affiliate_WP_Customers_DB;
 		self::$instance->customer_meta  = new Affiliate_WP_Customer_Meta_DB;

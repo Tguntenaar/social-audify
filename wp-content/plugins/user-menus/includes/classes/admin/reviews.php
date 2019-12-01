@@ -34,7 +34,7 @@ class Reviews {
 	 * Hook into relevant WP actions.
 	 */
 	public static function hooks() {
-		if ( is_admin() && current_user_can( 'edit_posts' ) ) {
+		if ( is_admin() && current_user_can( 'edit_theme_options' ) ) {
 			self::installed_on();
 			add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
 			add_action( 'network_admin_notices', array( __CLASS__, 'admin_notices' ) );
@@ -376,18 +376,7 @@ class Reviews {
 				<strong>
 					<?php echo $trigger['message']; ?>
 					<br />
-					<?php
-
-					$names = array(
-						'<a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>',
-						'<a target="_blank" href="https://twitter.com/calumallison" title="Follow Calum on Twitter">@calumallison</a>',
-					);
-
-					shuffle( $names );
-
-					echo '~ ' . implode( ' & ', $names );
-
-					?>
+					~<a target="_blank" href="https://twitter.com/danieliser" title="Follow Daniel on Twitter">@danieliser</a>
 				</strong>
 			</p>
 			<ul>
