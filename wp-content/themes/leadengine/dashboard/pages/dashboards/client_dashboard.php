@@ -23,7 +23,6 @@
 </head>
 <body>
   <div id="adAccountModal" class="modal"></div>
-  <!-- <div id="confirmAddAdAccountModal" class="modal"></div> -->
   <div id="confirmDeleteModal" class="modal"></div>
 
   <!-- Edit client Modal TODO: dit moet in een modal-->

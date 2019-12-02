@@ -92,7 +92,6 @@
 
     // Graph variable
     $graph_values = [$audit_daily_values, $report_daily_values];
-
   ?>
 
   <!-- $intro_bit -->
@@ -296,19 +295,26 @@
       var list = openedAudits.map( audit => `<a href="${audit.slug}" class="viewed-list">${audit.name}</a>`);
       showModal(initiateModal('confirmModal', 'select', {
         'text': `Audits opened this month: ${openedAudits.length}`,
-        'subtext': `<div class="viewed-height">${list.join("")}</div>`,
+        'subtext': `<div class="scrollable">${list.join("")}</div>`,
         'confirmtext': `Close`
       }));
     }
 
-		$(function() {
+		$(function() {<?php
+      if (true): ?>
+        showModal(initiateModal('updateModal', 'error', {
+          'text': "Updates!",
+          'subtext': `
+            <div class="scrollable">
+            </div>`
+        }));<?php
+      endif; ?>
+
 			var data = <?php echo json_encode($graph_values); ?>;
 
       generateChart('chart-audit', [data[0]]);
       generateChart('chart-report', [data[1]]);
-
-
-		});
+    });
 	</script>
 </body>
 </html>
