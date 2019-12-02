@@ -32,10 +32,10 @@ function showBounceBall(display = true, text = "") {
  */
 function toggleUpdate(show) {
   if (show) {
-    $("#universal-update").show(600);
+    $("#universal-update").slideDown(300);
     window.onbeforeunload = () => true;
   } else {
-    $("#universal-update").hide(300);
+    $("#universal-update").slideUp(300);
     window.onbeforeunload = undefined;
   }
 }
@@ -89,9 +89,9 @@ function toggleSelected(element, selectedList, triggerButton = null, postIds = n
 
   if (triggerButton) {
     if (selectedList.length == 0) {
-      triggerButton.hide(1000);
+      triggerButton.slideUp(500);
     } else {
-      triggerButton.show(1000);
+      triggerButton.slideDown(500);
     }
   }
   return postIds ? {selectedList, postIds} : selectedList;

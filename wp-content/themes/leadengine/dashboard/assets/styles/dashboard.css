@@ -424,6 +424,7 @@ header {
 
 .intro-overlay p {
 	font-weight: 100;
+	/* text-align: left; */
 }
 
 .intro-overlay .advice-button:hover {
@@ -3236,10 +3237,8 @@ h4 {
 	text-align: left;
 }
 
-
 /* The Close Button */
 .modal .close {
-	color: #fff;
 	float: right;
 	font-size: 36px;
 	font-weight: bold;
@@ -3248,7 +3247,8 @@ h4 {
 	right: 10px;
 }
 
-.modal .close:hover, .modal .close:focus {
+.modal .close:hover,
+.modal .close:focus {
 	color: #000;
 	text-decoration: none;
 	cursor: pointer;
@@ -3276,6 +3276,7 @@ h4 {
 	margin-bottom: -6px;
 	display: inline-block;
 }
+/* End Modal */
 
 .edit {
 	background: none;
