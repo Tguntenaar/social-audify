@@ -77,11 +77,11 @@
 
   <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
     <div class="sub-nav-client">
-          <h1 class="create-report-h1-client">Create and manage contacts.</h1>
-        <div class="center-buttons">
-          <a href='/client-setup/' class="create-button-client" style="margin-left: 15px;">Create client</a>
-          <a href='/client-import/' class="create-button-client">Mass import client</a>
-        </div>
+      <h1 class="create-report-h1-client">Create and manage contacts.</h1>
+      <div class="center-buttons">
+        <a href='/client-setup/' class="create-button-client" style="margin-left: 15px;">Create client</a>
+        <a href='/client-import/' class="create-button-client">Mass import client</a>
+      </div>
     </div>
     <input type="text" name="search" id="search-input" placeholder="Search..."/>
     <div class="client-overview" id="client-results"><?php
