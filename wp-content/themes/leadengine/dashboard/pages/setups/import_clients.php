@@ -227,11 +227,11 @@
         clientList.map(e => e.join(",")).join("\n");
 
       var encodedUri = encodeURI(csvContent);
-      window.open(encodedUri);
-      // link = document.createElement('a');
-      // link.setAttribute('href', csvContent);
-      // link.setAttribute('download', "filename");
-      // link.click();
+      // window.open(encodedUri);
+      link = document.createElement('a');
+      link.setAttribute('href', csvContent);
+      link.setAttribute('download', "filename");
+      link.click();
     }
 
     // Valid client check
