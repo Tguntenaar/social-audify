@@ -10,6 +10,12 @@
 <?php
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
+  $clients = $client_control->get_all();
+  $jsclients = array();
+  foreach($clients as $c) {
+    $c = array($c->name, $c->facebook, $c->instagram, $c->website, $c->mail);
+    array_push($jsclients, $c);
+  }
 ?>
 
 <head>
@@ -28,6 +34,9 @@
             <label class="create-audit-button client-button" style="border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
               <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
               Choose csv file
+            </label>
+            <label class="create-audit-button client-button" style="border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
+              <div class="" onclick="exportClients()">Export</div>
             </label>
           </div>
         </div>
@@ -209,6 +218,20 @@
           'subtext': `Please make sure you provide at least their name and email.`,
         }));
       }
+    }
+
+    function exportClients() {
+      var clientList = <?php echo json_encode($jsclients); ?>;
+      let csvContent = "data:text/csv;charset=utf-8," +
+        "Name,Facebook,Instagram,Website,Email\n" +
+        clientList.map(e => e.join(",")).join("\n");
+
+      var encodedUri = encodeURI(csvContent);
+      // window.open(encodedUri);
+      link = document.createElement('a');
+      link.setAttribute('href', csvContent);
+      link.setAttribute('download', "filename");
+      link.click();
     }
 
     // Valid client check
