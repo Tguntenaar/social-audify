@@ -282,9 +282,9 @@
           },
           error: function (xhr, textStatus, errorThrown) {
             var send_error = error_func(xhr, textStatus, errorThrown, data);
-            logError(send_error, 'page-templates/audit_page.php', 'mail_config_confirm');
+            logError(send_error, 'dashboards/dashboard.php', 'export_viewed');
             showModal(initiateModal('errorModal', 'error', {
-              'text': "Can't update mail function",
+              'text': `Can't export ${type}s`,
               'subtext': "Please try again later or notify an admin if the issue persists"
             }));
           }
