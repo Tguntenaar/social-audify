@@ -1428,7 +1428,7 @@ nav ul a li {
     height: 400px;
 	padding: 0px;
 	padding-bottom: 10px;
-	overflow-y: scroll;
+	/* overflow-y: scroll; */
 	border-radius: 3px;
 }
 .create_client_form button {
@@ -1636,10 +1636,10 @@ nav ul a li {
 
 .overview-audit-report .right .inner .audit-row,
 .overview-audit-report .left .inner .audit-row {
-    float: left;
-    height: 60px;
-    padding: 0;
-    display: block;
+	float: left;
+	height: 60px;
+	padding: 0;
+	display: block;
 	padding-left: 5px;
 	overflow: hidden;
 	line-height: 60px;
