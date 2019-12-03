@@ -147,7 +147,7 @@
       <h4 style="padding-left: 15px;">Status recent sent Reports and Audits</h4>
       <hr style="margin-left: 15px;" class="under-line" />
         <div class="overflow-x">
-        <div class="acitivities">
+        <div class="activities">
           <div class="recent-send"><?php
             // Recently send Audits and Reports
             $recent_items = $connection->get_all_recent($user_id, 15);

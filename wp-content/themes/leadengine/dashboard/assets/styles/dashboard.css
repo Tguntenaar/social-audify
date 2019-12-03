@@ -2701,7 +2701,7 @@ h4 {
     display: none;
 }
 
-.acitivities {
+.activities {
 		margin-top: -15px;
 		float:left;
 		width: 2000px;
@@ -4105,6 +4105,7 @@ tr input {
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
 }
+
 .lds-dual-ring:after {
   content: " ";
   display: block;
@@ -4116,6 +4117,7 @@ tr input {
   border-color: #6e9d9c transparent #6e9d9c transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
@@ -4170,21 +4172,13 @@ tr input {
 	right: 10px;
 	bottom: -10px;
 }
+
 .calendar:hover {
 	text-decoration: none;
 	border: 1px solid #2980b9;
 	color: #2980b9;
 	background: #fff;
 }
-
-
-
-
-/* .audit-results .audit-row:nth-of-type(odd) {
-		background: #fff;
-} */
-
-
 
 .audit-results h2,
 .report-results h2 {
@@ -4201,13 +4195,8 @@ tr input {
 		height: auto;
 		float: left;
 }
-/* Profile page */
 
-.profile-line {
-	/* margin-left: -15px; */
-	margin-top: 30px;
-	margin-bottom: 25px;
-}
+/* ******************* Profile page ******************* */
 
 #profile-member {
 	width: 100%;
@@ -4232,10 +4221,6 @@ tr input {
 	position: relative;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
-}
-
-.title-exp {
-	font-weight: bold;
 }
 
 #profile-member .rcp_form label {
@@ -4267,8 +4252,8 @@ tr input {
 	float: left;
 }
 
-.acitivities button,
- .acitivities input[type="submit"]{
+.activities button,
+ .activities input[type="submit"]{
 	background: #487dd7 !important;
 	color: #fff !important;
 	border: 0;
@@ -4347,49 +4332,8 @@ tr input {
   padding: 8px;
 }
 
-.call-to-action-container {
-	width: 50px;
-	height: 100px;
-	position: fixed;
-	right: -25px;
-	top: 50%;
-	z-index: 50;
-	transform: translate(-50%, 0%);
-	display: none;
-}
-
 .red {
 	color: #c0392b;
-}
-
-.call-to-action-container a {
-	display: block;
-}
-.call-to-call {
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
-	background: #2980b9;
-	cursor: pointer;
-	text-align: center;
-	color: #fff;
-	font-size: 22px;
-}
-
-.call-to-mail {
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
-	background: #6e9d9c;
-	cursor: pointer;
-	text-align: center;
-	color: #fff;
-	font-size: 22px;
-}
-
-.call-to-call i,
-.call-to-mail i {
-	margin-top: 13px;
 }
 
 #audit-settings,
@@ -4505,7 +4449,6 @@ h4 {
 	margin-top: 100px;
 	border-left: 1px solid #2980b9;
 	margin-top: 30px;
-	/* margin-bottom: 70px; */
 }
 
 .profile-page i {
@@ -4541,14 +4484,8 @@ h4 {
 	opacity: 0.7;
 }
 
-.fb-audit-block,
-.ig-audit-block,
-.wb-audit-block,
-.conclusion-audit-block,
-.conclusion-report-block,
 .responsive-item,
-.responsive-label-ad,
-.client-form .c_container {
+.responsive-label-ad {
 	display: none;
 }
 
@@ -4562,30 +4499,13 @@ h4 {
 	display: none;
 }
 
-.fb-audit-block,
-.ig-audit-block,
-.wb-audit-block,
-.conclusion-audit-block,
-.intro-audit-block {
-	padding-left: 25px;
-}
-
 #universal-update {
 	width: 200px;
 	text-align: center;
 }
 
-.conclusion-report-block,
-.intro-report-block {
-	padding-left: 25px;
-}
-
 .active-menu-item {
 	color: #6e9d9c;
-}
-
-.padding-25 {
-	padding-left: 25px !important;
 }
 
 #account-settings th {

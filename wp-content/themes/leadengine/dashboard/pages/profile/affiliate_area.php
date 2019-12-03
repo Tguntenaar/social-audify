@@ -18,7 +18,7 @@
 </head>
   <body>
     <div class="content-right y-scroll col-lg-9" style="padding-left: 25px;">
-      <div class="acitivities col-lg-12">
+      <div class="activities col-lg-12">
         <div id="profile-member">
           <h3 class="h3-fix">Affiliate Area</h3>
           <?php echo do_shortcode("[affiliate_area]"); ?>
