@@ -2463,25 +2463,6 @@ h3 {
 	display: none;
 }
 
-.agree,
-.deny {
-	margin-left: 0px;
-	margin-top: 15px;
-	width: 110px;
-	height: 40px;
-	background: #2980b9;
-	color: #fff;
-	text-align: center;
-	line-height: 30px;
-	border: 0;
-	margin: 20px auto;
-}
-
-.deny {
-	background: #c0392b;
-	margin-top: 0px;
-}
-
 .score {
 	height: auto;
 }
@@ -3176,17 +3157,6 @@ h4 {
 	font-weight: 100 !important;
 }
 
-.modal .advice-button {
-	margin: 0 auto;
-	float: none;
-	margin-top: 20px;
-}
-
-.modal .advice-button:hover {
-	opacity: 0.8;
-	cursor: pointer;
-}
-
 .modal p {
 	width: 80%;
 	margin: 0 auto;
@@ -3257,23 +3227,6 @@ h4 {
 	text-align: left;
 }
 
-/* The Close Button */
-.modal .close {
-	float: right;
-	font-size: 36px;
-	font-weight: bold;
-	position: absolute;
-	top: 10px;
-	right: 10px;
-}
-
-.modal .close:hover,
-.modal .close:focus {
-	color: #000;
-	text-decoration: none;
-	cursor: pointer;
-}
-
 .modal .public-link {
 	margin-top: 10px;
 	margin-bottom: 10px;
@@ -3295,6 +3248,68 @@ h4 {
 	margin-right: 5px;
 	margin-bottom: -6px;
 	display: inline-block;
+}
+
+/* Modal buttons */
+.modal .advice-button {
+	margin: 0 auto;
+	float: none;
+	margin-top: 20px;
+	color: #fff;
+	background: #487dd7;
+	border-radius:2px;
+}
+
+.modal .advice-button:hover {
+	opacity: 0.8;
+	cursor: pointer;
+}
+
+/* The Close Button */
+.modal .close {
+	float: right;
+	font-size: 36px;
+	font-weight: bold;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+}
+
+.modal .close:hover,
+.modal .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+/* Modal agree & deny Buttons */
+.modal .agree,
+.modal .deny {
+	margin-left: 0px;
+	margin-top: 15px;
+	width: 110px;
+	height: 40px;
+	text-align: center;
+	line-height: 30px;
+	border: 0;
+	margin: 20px auto;
+	border-radius:2px;
+}
+
+.modal .agree:hover,
+.modal .deny:hover {
+	opacity: 0.8;
+}
+
+.modal .agree {
+	color: #fff;
+	background: #487dd7;
+}
+
+
+.modal .deny {
+	color: #487dd7;
+	margin-top: 0px;
 }
 /* End Modal */
 
