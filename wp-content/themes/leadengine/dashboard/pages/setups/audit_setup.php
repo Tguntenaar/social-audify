@@ -166,7 +166,7 @@
                 </label>
               </div>
               <div style="clear: both;"></div>
-              <span style="font-weight: 100;" class="name-label" style="margin-top: -20px; float: left;">Selected contacts:</span>
+              <span style="font-weight: 100;" class="name-label" style="margin-top: -20px; float: left;">Selected contact:</span>
               <div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;">
                 <span style="font-weight: 600;" class="show-client"></span>
                 <span class="has_comp"></span><span style="font-weight: 600;" class="show-compare"></span>
