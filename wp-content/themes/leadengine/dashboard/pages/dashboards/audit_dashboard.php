@@ -107,9 +107,7 @@
             type: "POST",
             url: ajaxurl,
             data: {action: 'delete_multiple', ids: selectedList, posts: postIds, type: 'audit'},
-            success: function(response) { 
-              location.reload(); 
-              },
+            success: function(response) { location.reload(); },
             error: function (xhr, textStatus, errorThrown) {
               var send_error = error_func(xhr, textStatus, errorThrown, selectedList);
               logError(send_error, 'setups/delete_audits.php', 'submit');
