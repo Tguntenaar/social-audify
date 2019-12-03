@@ -3091,6 +3091,10 @@ h4 {
 	display: inline-block;
 }
 
+.copy-link:hover {
+	opacity: 0.5;
+}
+
 #delete-this-audit {
 	height: 60px;
 	width: 60px;

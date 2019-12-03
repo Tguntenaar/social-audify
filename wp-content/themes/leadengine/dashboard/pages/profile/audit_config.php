@@ -384,11 +384,10 @@
       Audit config
 
       <?php if ($edit_mode) { ?>
-
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-        <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
-        <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;"> <i class="fab fa-youtube"></i> Tutorial </button>
-        <?php
+        <a href="?preview_mode=True"; class="preview" style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+        <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;">
+          <i class="fab fa-youtube"></i> Tutorial </button><?php
       } else {?>
         <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
       } ?>

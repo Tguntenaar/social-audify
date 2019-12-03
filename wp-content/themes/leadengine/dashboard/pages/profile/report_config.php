@@ -198,13 +198,13 @@
 
         if ($edit_mode) { ?>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+          <a href="?preview_mode=True"; class="preview" style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+          <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right; margin-right:15px; margin-bottom: 10px;">
+            <i class="fab fa-youtube"></i> Tutorial </a><?php
         } else {?>
           <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
         } ?>
-        <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
-          <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
-        </a>
+
     </div>
   </div>
 
