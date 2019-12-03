@@ -3830,15 +3830,15 @@ input[type="submit"] {
 	border: 0;
 	width: auto;
 	padding: 7px 14px;
-	background: #487dd7;
+  background: #487dd7;
+  border-radius: 2px;
 }
 
 #prevBtn {
-	color: #fff;
+	color: #487dd7;
 	border: 0;
 	width: auto;
 	padding: 7px 14px;
-	background: #c0392b;
 }
 
 #nextBtn:hover,
