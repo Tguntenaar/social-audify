@@ -5,7 +5,7 @@
  * Description: Instantly pay your affiliates via PayPal
  * Author: Pippin Williamson and Andrew Munro
  * Author URI: http://affiliatewp.com
- * Version: 1.2
+ * Version: 1.2.1
  * Text Domain: affwp-paypal-payouts
  * Domain Path: languages
  *
@@ -24,7 +24,7 @@
  * @package AffiliateWP PayPal Payouts
  * @category Core
  * @author Pippin Williamson
- * @version 1.2
+ * @version 1.2.1
  */
 
 // Exit if accessed directly
@@ -61,7 +61,7 @@ final class AffiliateWP_PayPal_Payouts {
 
 			self::$plugin_dir = plugin_dir_path( __FILE__ );
 			self::$plugin_url = plugin_dir_url( __FILE__ );
-			self::$version    = '1.2';
+			self::$version    = '1.2.1';
 
 			self::$instance->load_textdomain();
 			self::$instance->includes();
@@ -144,9 +144,9 @@ final class AffiliateWP_PayPal_Payouts {
 
 			require_once self::$plugin_dir . 'admin/class-paypal-api.php';
 			require_once self::$plugin_dir . 'admin/class-paypal-masspay.php';
+			require_once self::$plugin_dir . 'admin/payouts.php';
 			require_once self::$plugin_dir . 'admin/referrals.php';
 			require_once self::$plugin_dir . 'admin/settings.php';
-			require_once self::$plugin_dir . 'admin/payouts.php';
 
 		}
 
@@ -243,6 +243,24 @@ final class AffiliateWP_PayPal_Payouts {
 	}
 
 	/**
+	 * Determines if the user has at least version 2.4 of AffiliateWP.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return bool True if AffiliateWP v2.4 or newer, false otherwise.
+	 */
+	public function has_2_4() {
+
+		$met = false;
+
+		if ( version_compare( AFFILIATEWP_VERSION, '2.3.5', '>' ) ) {
+			$met = true;
+		}
+
+		return $met;
+	}
+
+	/**
 	 * Determines if we are in test mode
 	 *
 	 * @access public
@@ -292,7 +310,7 @@ final class AffiliateWP_PayPal_Payouts {
  * Example: <?php $AffiliateWP_PayPal_Payouts = affiliate_wp_paypal(; ?>
  *
  * @since 1.0
- * @return object The one true AffiliateWP_PayPal_Payouts Instance
+ * @return \AffiliateWP_PayPal_Payouts The one true AffiliateWP_PayPal_Payouts Instance
  */
 function affiliate_wp_paypal() {
 
