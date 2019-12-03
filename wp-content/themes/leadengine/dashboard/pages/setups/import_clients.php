@@ -27,25 +27,22 @@ foreach ($clients as $c) {
 
 <body>
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
-    <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12" style="top: auto !important; transform: none !important;">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-height mobile-margin" style="height: 350px; text-align: center;">
-        <div class="center-center">
-          <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Mass import all your contacts.</h1>
-          <div class="file-upload">
+
+          <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 100px;">Mass import all your contacts.</h1>
+          <div class="file-upload" style="margin-bottom: 30px;">
             <div class="file-upload-button">
               <label class="create-audit-button client-button" style="border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
                 <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
                 Choose csv file
               </label>
-              <label class="create-audit-button client-button" style="border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
-                <div class="" onclick="exportClients()">Export</div>
-              </label>
             </div>
           </div>
-        </div>
+ 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12  right float-right no-margin" style="margin-top: 150px;">
           <div class="inner no-scroll client-dashboard">
-            <span class="title"><span class="title-background" style="width:220px;">Contacts to be added</span>
+            <span class="title"><span class="title-background" style="width:220px; float:left;">Contacts to be added</span>
               <span class="count" id="counterSpan">0</span>
             </span>
             <input type="text" name="search" id="search-input" placeholder="Search..." />

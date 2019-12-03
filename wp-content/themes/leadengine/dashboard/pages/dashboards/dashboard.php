@@ -111,7 +111,7 @@
     <?php endif; ?>
 
     <!-- new Update -->
-    <div class="intro-overlay" style="display:none" id="update-overlay">
+    <div class="intro-overlay update-overlay" style="display:none" id="update-overlay">
       <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
         <h1>New Updates!</h1>
         <span class="feature-title">Feature 1</span>
@@ -244,7 +244,7 @@
           <canvas id="chart-report"></canvas>
         </div>
       </div>
-      <button onclick="$('#update-overlay').slideDown()">View Recent Updates!</button>
+      <!-- <button onclick="$('#update-overlay').slideDown()">View Recent Updates!</button> -->
     </div>
   </section>
 

@@ -244,7 +244,7 @@
           <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
           <button id="copy_link" class="copy-link" style="margin-right: 15px;"><i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+          <a href="?preview_mode=True" class="preview" style="float:right; margin-right: 5px;"><i class="far fa-eye"></i> Preview </a><?php
         } else {
           if ($user_id == $author_id) {?>
             <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php

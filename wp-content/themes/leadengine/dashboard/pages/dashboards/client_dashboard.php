@@ -13,6 +13,11 @@
 
   // Get all the clients
   $clients = $client_control->get_all();
+  $jsclients = array();
+  foreach ($clients as $c) {
+    $c = array($c->name, $c->facebook, $c->instagram, $c->website, $c->mail);
+    array_push($jsclients, $c);
+  }
 ?>
 
 <head>
@@ -82,7 +87,8 @@
         <a href='/client-import/' class="create-button-client">Mass import client</a>
       </div>
     </div>
-    <input type="text" name="search" id="search-input" placeholder="Search..."/>
+    <a class="export-clients" onclick="exportClients()">Export clients</a>
+    <input type="text" name="search" class="search-client" id="search-input" placeholder="Search..."/>
     <div class="client-overview" id="client-results"><?php
       foreach($clients as $client) { 
         $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
@@ -232,6 +238,30 @@
         changeClientInputFields(this);
       });
     });
+
+    function exportClients() {
+          var clientList = <?php echo json_encode($jsclients); ?>;
+          let csvContent = "data:text/csv;charset=utf-8," +
+            "Name,Facebook,Instagram,Website,Email\n" +
+            clientList.map(e => e.join(",")).join("\n");
+
+          var encodedUri = encodeURI(csvContent);
+          window.open(encodedUri);
+        }
+
+    function exportClients() {
+      var clientList = <?php echo json_encode($jsclients); ?>;
+      let csvContent = "data:text/csv;charset=utf-8," +
+        "Name,Facebook,Instagram,Website,Email\n" +
+        clientList.map(e => e.join(",")).join("\n");
+
+      var encodedUri = encodeURI(csvContent);
+      // window.open(encodedUri);
+      link = document.createElement('a');
+      link.setAttribute('href', csvContent);
+      link.setAttribute('download', "filename");
+      link.click();
+    }
 	</script>
 </body>
 </html>
