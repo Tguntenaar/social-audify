@@ -21,7 +21,7 @@
 
   <div class="profile-page">
       <div class="content-right y-scroll col-lg-9" style="padding-left: 25px;">
-        <div class="acitivities col-lg-12">
+        <div class="activities col-lg-12">
           <ul class="sub-menu-profile">
             <li id="member-click">Profile settings</li>
             <li id="avatar-click">Avatar settings</li>

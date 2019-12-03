@@ -770,10 +770,10 @@ nav ul a:hover {
 }
 
 .stats {
-    width: 100%;
-    height: 100px;
-    margin: 20px 0 0px 0;
-    float: left;
+	width: 100%;
+	height: 100px;
+	margin: 20px 0 0 0;
+	float: left;
 }
 
 .stat-block {
@@ -1781,22 +1781,10 @@ nav ul a li {
 	color: #000;
 }
 
-.viewed-height a:hover {
-	text-decoration: none !important;
-	color: #000;
-	opacity: 0.5;
-}
-
 .viewed-list:nth-child(odd) {
 	background: #f7f7f7;
 }
 
-.viewed-height {
-	width: 100%;
-	height: 200px;
-	overflow-x: hidden;
-	/* overflow-y: scroll; */
-}
 
 .left li {
     font-size: 18px;
@@ -2370,10 +2358,6 @@ textarea {
 	margin-top: 0;
 }
 
-#hastag-chart {
-	margin-top: 65px;
-}
-
 .chart-instagram {
 	 margin-top: 145px !important;
 }
@@ -2395,10 +2379,6 @@ textarea {
 
 .custom-stat {
 	margin-top: 55px;
-}
-
-#canvas-holder {
-	padding-top: 4%;
 }
 
 .create_client_form input[type="submit"] {
@@ -2572,10 +2552,6 @@ h3 {
 	border: 0;
 }
 
-#facebook-info .edite-button {
-	padding: 8px 25px;
-}
-
 .insta-score {
 	height: auto;
 	float:left;
@@ -2724,7 +2700,7 @@ h4 {
     display: none;
 }
 
-.acitivities {
+.activities {
 		margin-top: -15px;
 		float:left;
 		width: 2000px;
@@ -3128,23 +3104,21 @@ h4 {
 
 /* The Modal (background) */
 .modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    /* z-index: 55555555 !important; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0,0,0); /* Fallback color */
+	background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
 /* Modal Content */
 .modal-content {
-    /* margin: 0 auto; */
-    width: 600px !important;
+	/* margin: 0 auto; */
+	width: 600px !important;
 	background: #fff !important;
 	border: 0 !important;
 	height: auto;
@@ -3162,18 +3136,35 @@ h4 {
 	font-weight: 100;
 }
 
-.modal input[type="checkbox"] {
-	margin: 0 auto;
-	margin-right: auto;
-	margin-top: 10px;
+.modal-title {
+	font-size: 22px;
+	margin-bottom: 20px !important;
+	margin-top: -20px;
 }
 
-#color {
-	margin: 0 auto;
-	margin-top: 10px;
+.modal .scrollable {
+	width: 100%;
+	max-height: 500px;
+	overflow-x: hidden;
+	/* overflow-y: scroll; */
 }
 
-#confirmAddAdAccountModal {z-index:5555555555555 !important;}
+
+.modal .subtext {
+	margin-top: 15px !important;
+	font-weight: 100 !important;
+}
+
+.modal .advice-button {
+	margin: 0 auto;
+	float: none;
+	margin-top: 20px;
+}
+
+.modal .advice-button:hover {
+	opacity: 0.8;
+	cursor: pointer;
+}
 
 .modal p {
 	width: 80%;
@@ -3183,9 +3174,21 @@ h4 {
 	font-weight: 500;
 }
 
-.subtext {
-	margin-top: 15px !important;
-	font-weight: 100 !important;
+.modal a:hover {
+	text-decoration: none !important;
+	color: #000;
+	opacity: 0.5;
+}
+
+.modal input[type="color"] {
+	margin: 0 auto;
+	margin-top: 10px;
+}
+
+.modal input[type="checkbox"] {
+	margin: 0 auto;
+	margin-right: auto;
+	margin-top: 10px;
 }
 
 .client_modal input[type="text"],
@@ -3211,9 +3214,10 @@ h4 {
 	border-radius: 4px;
 	font-weight: 400;
 	margin-bottom: 15px;
+	width: 100%;
 }
 
-.input-tag {
+.client_modal .input-tag {
 	margin-right: 10px;
 	font-weight: 100;
 	width: 100%;
@@ -3232,49 +3236,31 @@ h4 {
 	text-align: left;
 }
 
-.modal-title {
-	font-size: 22px;
-	margin-bottom: 20px !important;
-	margin-top: -20px;
-}
 
 /* The Close Button */
-.close {
-    color: #fff;
-    float: right;
-    font-size: 36px;
-    font-weight: bold;
-		position: absolute;
-		top: 10px;
-		right: 10px;
+.modal .close {
+	color: #fff;
+	float: right;
+	font-size: 36px;
+	font-weight: bold;
+	position: absolute;
+	top: 10px;
+	right: 10px;
 }
 
-.close:hover,
-.close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
+.modal .close:hover, .modal .close:focus {
+	color: #000;
+	text-decoration: none;
+	cursor: pointer;
 }
 
-.public-link {
+.modal .public-link {
 	margin-top: 10px;
 	margin-bottom: 10px;
 	color: #2980b9;
 }
 
-.modal .advice-button {
-	margin: 0 auto;
-	float: none;
-	margin-top: 20px;
-}
-
-.modal .advice-button:hover {
-	opacity: 0.8;
-	cursor: pointer;
-}
-
-
-.preview {
+.modal .preview {
 	background: none;
 	border: 0;
 	color: #fff;
@@ -3284,13 +3270,12 @@ h4 {
 	margin-right: 10px;
 }
 
-.preview i {
+.modal .preview i {
 	font-size: 21px;
 	margin-right: 5px;
 	margin-bottom: -6px;
 	display: inline-block;
 }
-
 
 .edit {
 	background: none;
@@ -3307,25 +3292,6 @@ h4 {
 	margin-right: 5px;
 	margin-bottom: -6px;
 	display: inline-block;
-}
-
-
-#view_form {
-	width: auto;
-	height: 60px;
-	float: right;
-}
-
-#view_form i {
-	font-size: 21px;
-	margin-right: 5px;
-	margin-bottom: -6px;
-	display: inline-block;
-}
-
-#view_form input[type=submit] {
-	width: auto;
-	height: 70px;
 }
 
 .data-view {
@@ -4138,6 +4104,7 @@ tr input {
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
 }
+
 .lds-dual-ring:after {
   content: " ";
   display: block;
@@ -4149,6 +4116,7 @@ tr input {
   border-color: #6e9d9c transparent #6e9d9c transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
@@ -4203,21 +4171,13 @@ tr input {
 	right: 10px;
 	bottom: -10px;
 }
+
 .calendar:hover {
 	text-decoration: none;
 	border: 1px solid #2980b9;
 	color: #2980b9;
 	background: #fff;
 }
-
-
-
-
-/* .audit-results .audit-row:nth-of-type(odd) {
-		background: #fff;
-} */
-
-
 
 .audit-results h2,
 .report-results h2 {
@@ -4234,13 +4194,8 @@ tr input {
 		height: auto;
 		float: left;
 }
-/* Profile page */
 
-.profile-line {
-	/* margin-left: -15px; */
-	margin-top: 30px;
-	margin-bottom: 25px;
-}
+/* ******************* Profile page ******************* */
 
 #profile-member {
 	width: 100%;
@@ -4265,10 +4220,6 @@ tr input {
 	position: relative;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
-}
-
-.title-exp {
-	font-weight: bold;
 }
 
 #profile-member .rcp_form label {
@@ -4300,8 +4251,8 @@ tr input {
 	float: left;
 }
 
-.acitivities button,
- .acitivities input[type="submit"]{
+.activities button,
+ .activities input[type="submit"]{
 	background: #487dd7 !important;
 	color: #fff !important;
 	border: 0;
@@ -4380,49 +4331,8 @@ tr input {
   padding: 8px;
 }
 
-.call-to-action-container {
-	width: 50px;
-	height: 100px;
-	position: fixed;
-	right: -25px;
-	top: 50%;
-	z-index: 50;
-	transform: translate(-50%, 0%);
-	display: none;
-}
-
 .red {
 	color: #c0392b;
-}
-
-.call-to-action-container a {
-	display: block;
-}
-.call-to-call {
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
-	background: #2980b9;
-	cursor: pointer;
-	text-align: center;
-	color: #fff;
-	font-size: 22px;
-}
-
-.call-to-mail {
-	width: 50px;
-	height: 50px;
-	line-height: 50px;
-	background: #6e9d9c;
-	cursor: pointer;
-	text-align: center;
-	color: #fff;
-	font-size: 22px;
-}
-
-.call-to-call i,
-.call-to-mail i {
-	margin-top: 13px;
 }
 
 #audit-settings,
@@ -4538,7 +4448,6 @@ h4 {
 	margin-top: 100px;
 	border-left: 1px solid #2980b9;
 	margin-top: 30px;
-	/* margin-bottom: 70px; */
 }
 
 .profile-page i {
@@ -4574,14 +4483,8 @@ h4 {
 	opacity: 0.7;
 }
 
-.fb-audit-block,
-.ig-audit-block,
-.wb-audit-block,
-.conclusion-audit-block,
-.conclusion-report-block,
 .responsive-item,
-.responsive-label-ad,
-.client-form .c_container {
+.responsive-label-ad {
 	display: none;
 }
 
@@ -4595,30 +4498,13 @@ h4 {
 	display: none;
 }
 
-.fb-audit-block,
-.ig-audit-block,
-.wb-audit-block,
-.conclusion-audit-block,
-.intro-audit-block {
-	padding-left: 25px;
-}
-
 #universal-update {
 	width: 200px;
 	text-align: center;
 }
 
-.conclusion-report-block,
-.intro-report-block {
-	padding-left: 25px;
-}
-
 .active-menu-item {
 	color: #6e9d9c;
-}
-
-.padding-25 {
-	padding-left: 25px !important;
 }
 
 #account-settings th {
@@ -5225,7 +5111,6 @@ h4 {
 	.modal-content {
 		width: 85% !important
 	}
-
 }
 
 
@@ -5326,10 +5211,6 @@ h4 {
 
 	.edit-client-left {
 		display: none;
-	}
-
-	.client_modal input[type="text"], .client_modal input[type="email"] {
-		width: 100%;
 	}
 
 	.responsive-label-ad {

@@ -102,6 +102,7 @@
   <!-- Global popup modals -->
   <div id="errorModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
+  <div id="updateModal" class="modal"></div>
 
   <div id="instagramErrorModal" class="modal"></div>
   <div id="adAccountModal" class="modal"></div>
