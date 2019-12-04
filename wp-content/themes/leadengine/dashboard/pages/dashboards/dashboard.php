@@ -114,24 +114,20 @@
     <div class="intro-overlay update-overlay" style="display:none" id="update-overlay">
       <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
         <h1>New Updates!</h1>
-        <span class="feature-title">Feature 1</span>
+        <span class="feature-title"> Language support </span>
         <p>
-          The tool for generating more sales and automating your reporting process! <br />
-          In order to make your audits and reports as efficient as possible, we advise you to take a few minutes to configure your <br />
-          account to make sure you get the most out of this software.<br />
-          Within the settings you can configure your automatic emails / follow ups you want us to send, you can <br />
-          add your phone number so your leads can call you after watching your audit, and you can add a little avatar to add to<br />
-          every audit and other features.
+          You're now able to choose a language per audit! You can also set a default language in your config page, all new audits you make will then be set to this language.
+          <br/><br/>If your language is not included yet, send us a message on facebook!
         </p>
-        <span class="feature-title">Feature 2</span>
+        <span class="feature-title">Export functionality</span>
         <p>
-          This feature let's you do even more work with less time!<br />
+          On the new client dashboard you can export your client list to a csv file.<br />
         </p>
         <span class="feature-title">Bug fixes:</span>
         <p>
           <ul>
             <li>Mails subjects</li>
-            <li>Emoji's</li>
+            <li>Emoji's in the mail fields</li>
             <li>Audits that where openend by mail clients (frustrating)</li>
           </ul>
         </p>
@@ -179,7 +175,7 @@
 
         <!-- AUDIT STATS -->
         <div class="stat-box" style="border-top: 2px solid #16a085;">
-          <span class="stat-box-title">Audits sent</span>
+          <span class="stat-box-title">Audits made</span>
           <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
           <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
         </div>
@@ -200,7 +196,7 @@
 
         <!-- REPORT STATS -->
         <div class="stat-box" style="border-top: 2px solid #2980b9;">
-          <span class="stat-box-title">Reports sent</span>
+          <span class="stat-box-title">Reports made</span>
           <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
           <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
         </div>
