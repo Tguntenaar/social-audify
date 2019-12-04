@@ -59,14 +59,18 @@ class Affiliate_WP_Settings {
 		// Only allow non-empty values, otherwise fallback to the default
 		$value = ! empty( $this->options[ $key ] ) ? $this->options[ $key ] : $default;
 
+		$zero_values_allowed = array( 'referral_rate', 'payouts_service_vendor_id' );
+
 		/**
-		 * Allow certain settings to accept 0 as a valid value without
+		 * Filters settings allowed to accept 0 as a valid value without
 		 * falling back to the default.
 		 *
-		 * @since  1.7
-		 * @param  array
+		 * @since 1.7
+		 * @since 2.4 Added support for the 'payouts_service_vendor_id' setting
+		 *
+		 * @param array $zero_values_allowed Array of setting IDs.
 		 */
-		$zero_values_allowed = (array) apply_filters( 'affwp_settings_zero_values_allowed', array( 'referral_rate' ) );
+		$zero_values_allowed = (array) apply_filters( 'affwp_settings_zero_values_allowed', $zero_values_allowed );
 
 		// Allow 0 values for specified keys only
 		if ( in_array( $key, $zero_values_allowed ) ) {
@@ -890,7 +894,44 @@ class Affiliate_WP_Settings {
 						'type' => 'checkbox'
 					)
 				)
-			)
+			),
+
+			/**
+			 * Filters the default "Payouts Service" settings.
+			 *
+			 * @since 2.4
+			 *
+			 * @param array $settings Array of settings.
+			 */
+			'payouts_service' => apply_filters( 'affwp_settings_payouts_service',
+				array(
+					'payouts_service_about' => array(
+						'name' => '<strong>' . __( 'Payouts Service', 'affiliate-wp' ) . '</strong>',
+						'desc' => $this->payouts_service_about(),
+						'type' => 'descriptive_text',
+					),
+					'payouts_service_button' => array(
+						'name' => __( 'Connection Status', 'affiliate-wp' ),
+						'desc' => $this->payouts_service_connection_status(),
+						'type' => 'descriptive_text',
+					),
+					'enable_payouts_service' => array(
+						'name' => __( 'Enable Payouts Service', 'affiliate-wp' ),
+						'desc' => __( 'Enable the AffiliateWP Payouts Service.', 'affiliate-wp' ),
+						'type' => 'checkbox',
+					),
+					'payouts_service_description' => array(
+						'name' => __( 'Registration Form Description', 'affiliate-wp' ),
+						'desc' => __( 'This will be displayed above the Payouts Service registration form fields. Here you can explain to your affiliates how/why to register for the Payouts Service.', 'affiliate-wp' ),
+						'type' => 'textarea',
+					),
+					'payouts_service_notice' => array(
+						'name' => __( 'Payouts Service Notice', 'affiliate-wp' ),
+						'desc' => __( 'This will be displayed at the top of each tab of the Affiliate Area for affiliates that have not registered their payout account.', 'affiliate-wp' ),
+						'type' => 'textarea',
+					),
+				)
+			),
 		);
 
 		/**
@@ -1379,6 +1420,80 @@ class Affiliate_WP_Settings {
 		$html .= '<p class="description"> '  . $args['desc'] . '</p>';
 
 		echo $html;
+	}
+
+	/**
+	 * Descriptive text callback.
+	 *
+	 * Renders descriptive text onto the settings field.
+	 *
+	 * @since 2.4
+	 * @param array $args Arguments passed by the setting
+	 * @return void
+	 */
+	function descriptive_text_callback( $args ) {
+		$html = wp_kses_post( $args['desc'] );
+
+		echo $html;
+	}
+
+	/**
+	 * Retrieves the payouts service about text.
+	 *
+	 * @since 2.4
+	 *
+	 * @return string Text about the service.
+	 */
+	function payouts_service_about() {
+
+		$payouts_service_about = '<p>' . __( 'Payouts by Sandhills Development allows you, as the site owner, to pay your affiliates directly from a credit or debit card and the funds for each recipient will be automatically deposited into their bank accounts. To use this service, connect your site to the service below. You will log into the service using your username and password from AffiliateWP.com.', 'affiliate-wp' ) . '</p>';
+		/* translators: 1: Payouts Service URL */
+		$payouts_service_about .= '<p>' . sprintf( __( '<a href="%s" target="_blank">Learn more and view pricing.</a>', 'affiliate-wp' ), 'https://payouts.sandhillsdev.com' ) . '</p>';
+
+
+		return $payouts_service_about;
+	}
+
+	/**
+	 * Retrieves the payouts service connection status and connection link.
+	 *
+	 * @since 2.4
+	 *
+	 * @return string Payouts service connection status markup.
+	 */
+	function payouts_service_connection_status() {
+
+		$connection_status = affiliate_wp()->settings->get( 'payouts_service_connection_status', '' );
+
+		if ( 'active' === $connection_status ) {
+
+			$payouts_service_disconnect_url = wp_nonce_url( add_query_arg( array( 'affwp_action' => 'payouts_service_disconnect' ) ), 'payouts_service_disconnect', 'payouts_service_disconnect_nonce' );
+
+			$payouts_service_connection_status = '<p>' . __( 'Your website is connected to the AffiliateWP Payouts Service', 'affiliate-wp' ) . '</p>';
+			$payouts_service_connection_status .= '<a href="'. esc_url( $payouts_service_disconnect_url ) .'" class="affwp-payouts-service-disconnect"><span>' . __( 'Disconnect from the AffiliateWP Payouts Service', 'affiliate-wp' ) . '</span></a>';
+
+		} elseif ( 'inactive' === $connection_status ) {
+
+			$payouts_service_reconnect_url = wp_nonce_url( add_query_arg( array( 'affwp_action' => 'payouts_service_reconnect' ) ), 'payouts_service_reconnect', 'payouts_service_reconnect_nonce' );
+
+			$payouts_service_connection_status = '<a href="'. esc_url( $payouts_service_reconnect_url ) .'" class="affwp-payouts-service-disconnect"><span>' . __( 'Reconnect to the AffiliateWP Payouts Service', 'affiliate-wp' ) . '</span></a>';
+			$payouts_service_connection_status .= '<p>' . sprintf( __( 'Have questions about connecting with the AffiliateWP Payouts Service? See the <a href="%s" target="_blank" rel="noopener noreferrer">documentation</a>.', 'affiliate-wp' ), 'https://docs.affiliatewp.com/article/2111-affiliatewp-payouts-service' ) . '</p>';
+
+		} else {
+
+			$payouts_service_connect_url = add_query_arg( array(
+				'affwp_version' => AFFILIATEWP_VERSION,
+				'site_url'      => home_url(),
+				'redirect_url'  => urlencode( affwp_admin_url( 'settings', array( 'tab' => 'payouts_service' ) ) ),
+				'token'         => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 100, wp_rand(), STR_PAD_BOTH ),
+			), AFFILIATEWP_PAYOUTS_SERVICE_URL . '/connect-site' );
+
+			$payouts_service_connection_status = '<a href="' . esc_url( $payouts_service_connect_url ) . '" class="affwp-payouts-service-connect"><span>' . __( 'Connect to the AffiliateWP Payouts Service', 'affiliate-wp' ) . '</span></a>';
+			$payouts_service_connection_status .= '<p>' . sprintf( __( 'Have questions about connecting with the AffiliateWP Payouts Service? See the <a href="%s" target="_blank" rel="noopener noreferrer">documentation</a>.', 'affiliate-wp' ), 'https://docs.affiliatewp.com/article/2111-affiliatewp-payouts-service' ) . '</p>';
+
+		}
+
+		return $payouts_service_connection_status;
 	}
 
 	/**

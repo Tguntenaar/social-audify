@@ -10,12 +10,9 @@
  -->
 <!DOCTYPE html>
 <html lang='en'>
-<head>
-  <title>Create Report</title>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
-  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
-  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css<?php echo $cache_version; ?>" type="text/css" />
-</head>
+  <head>
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/multistep.css" type="text/css" />
+  </head>
   <?php
     include(dirname(__FILE__)."/../header/dashboard_header.php");
 
@@ -29,16 +26,20 @@
     $clients = $client_control->get_all();
     $reports = $report_control->get_all();
   ?>
-
+<head>
+  <title>Create Report</title>
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/multistep.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+</head>
   <!-- back button -->
-  <div class="content-title col-xs-9 col-sm-9 col-md-9 col-lg-9">
+  <div style="display: none;" class="content-title col-xs-9 col-sm-9 col-md-9 col-lg-9">
     <span class="back" onclick="showIntro(true)">
     <i class="fas fa-chevron-left"></i> Back</span>
   </div>
 
   <!-- Initial block -->
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding-report" style="padding-bottom: 100px;">
-  <div class="create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9 responsive-padding-report" style="padding-bottom: 100px; height: 100vh;">
+  <div class="new-create-style create-block-box col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <h3>Existing or New contact?</h3>
     <p>
       Here you can choose to select a contact you made previously or simply make a completely new contact.
@@ -62,7 +63,7 @@
     </div>
   </div>
   <!-- Containers for multistep form -->
-  <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="new-create-style-report overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
       <div class="inner height-auto">
         <span class="title title-audit-page">Create a report</span>
@@ -91,7 +92,7 @@
           <!-- Choose a client -->
           <div class="tab tab-setup">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Contact</div>
+              <div style="font-weight: 100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Select a contact</div>
             </div>
             <input type="text" name="search" id="search-input" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="client-list"><?php
@@ -114,11 +115,11 @@
 
           <!-- Compare report tab -->
           <div class="tab tab-setup">
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
-                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
-            </div>
+            <!-- <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                <span class="selected-client"></span>
+            </div> -->
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Compare Reports<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
+              <div style="font-weight: 100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style no-padding title-green">Want to compare <span style="font-weight: 100; color: #000 !important;" class="show-client"></span> to an older compare report?<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
             </div>
             <input type="text" name="search" id="search-input-compare" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="compare-list">
@@ -135,12 +136,6 @@
 
           <!-- Report name and options -->
           <div class="tab tab-setup">
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
-                <span class="selected-client">Selected client = <strong class="show-client"></strong></span>
-            </div>
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
-            <span class="selected-client">Selected report to compare = <strong class="show-compare"></strong></span>
-            </div>
             <label class="custom-label">
               <span class="name-label" style="margin-left: 20px;">Report Name</span>
               <input type="text" name="report_name" class="name-input" title="Only letters and numbers are allowed." placeholder="Report name.." maxlength="25" required>
@@ -157,6 +152,9 @@
                 <span class="checkmark"><i class="fab fa-instagram"></i></span>
               </label>
             </label>
+            
+            <span class="name-label" style="margin-top: -50px;">Selected:</span>
+            <div style="font-size: 14px !important; position: absolute; left: 20px; margin-top: 5px; float: left;"><span style="font-weight: 600;" class="show-client"></span> <span class="has_comp"></span> <span style="font-weight: 600;" class="show-compare"></span></div>
           </div>
 
           <!-- Choose campaign/ad level tab -->
@@ -206,6 +204,11 @@
       iba_id : <?php echo (isset($iba_id) && $iba_id) ? json_encode($iba_id) : 'null'; ?>,
       adAccounts : [],
     };
+
+
+    $("body").on('DOMSubtreeModified', ".show-compare", function() {
+        $('.has_comp').html(" report is going to be compared to ");
+    });
 
     // Selectable list - TODO : kan sws naar dashboard-header
     $('#client-list .audit-row').on('click', function() {
@@ -355,6 +358,8 @@
       return data;
     }
 
+
+    // TODO: vervang deze functie met calculateAvgObject
     function calculateAverageObject(data) {
       var avg = {};
       // dit kan dus een stuk dynamischer
@@ -379,6 +384,48 @@
       }
       return avg;
     }
+
+    // TODO: vervang calculateAverageObject met deze functie
+    function calculateAvgObject(data) {
+      var sum = {};
+      if (data.length == 1) {
+        return data[0];
+      }
+
+      data.forEach(function(object, index) {
+        for (var key in object) {
+          // Couldn't parse to float
+          var value = parseFloat(object[key])
+          if (Number.isNaN(value)) {
+            // check if start date is earlier than current
+            if (key == date_start && (!(date_start in sum) 
+            || isEarlier(object.date_start, sum.date_start))
+            || (key == date_stop && (!(date_stop in sum) 
+            || isLater(object.date_start, sum.date_stop)))) {
+              sum[key] = object[key];
+            }
+          } else {
+            sum[key] = (key in sum) ? sum[key] + value : value;
+          }
+        }
+      });
+      
+      for (key in sum) {
+        if (typeof sum[key] == 'number') {
+          sum[key] /= data.length;
+        }
+      }
+      
+      return avg;
+    }
+
+    function isEarlier(d1, d2) {
+      return (new Date(d1).getTime() < new Date(d2).getTime());
+    }
+    function isLater(d1, d2) {
+      return (new Date(d1).getTime() > new Date(d2).getTime());
+    }
+
 
     $(function() {
       <?php

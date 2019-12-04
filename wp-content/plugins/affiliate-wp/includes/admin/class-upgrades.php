@@ -167,6 +167,14 @@ class Affiliate_WP_Upgrades {
 			$this->v23_upgrade();
 		}
 
+		if ( version_compare( $this->version, '2.4', '<' ) ) {
+			$this->v24_upgrade();
+		}
+
+		if ( version_compare( $this->version, '2.4.2', '<' ) ) {
+			$this->v242_upgrade();
+		}
+
 		// Inconsistency between current and saved version.
 		if ( version_compare( $this->version, AFFILIATEWP_VERSION, '<>' ) ) {
 			$this->upgraded = true;
@@ -892,11 +900,44 @@ class Affiliate_WP_Upgrades {
 	}
 
 	/**
+	 * Performs database upgrades for version 2.4.
+	 *
+	 * @since 2.4
+	 */
+	private function v24_upgrade() {
+		// New 'service_account, service_id, service_invoice_link and description' columns for payouts.
+		affiliate_wp()->affiliates->payouts->create_table();
+		@affiliate_wp()->utils->log( 'Upgrade: The service_account, service_id, service_invoice_link and description columns have been added to the Payouts table.' );
+
+		wp_cache_set( 'last_changed', microtime(), 'payouts' );
+		@affiliate_wp()->utils->log( 'Upgrade: The Payouts cache has been invalidated following the 2.4 upgrade.' );
+
+		// Adds the referral meta table.
+		affiliate_wp()->referral_meta->create_table();
+		@affiliate_wp()->utils->log( 'Upgrade: The referral meta table has been created.' );
+
+		$this->upgraded = true;
+	}
+
+	/**
+	 * Performs database upgrades for version 2.4.2.
+	 *
+	 * @since 2.4.2
+	 */
+	private function v242_upgrade() {
+		// Flush rewrites for the benefit of the EDD integration.
+		flush_rewrite_rules();
+		@affiliate_wp()->utils->log( 'Upgrade: Rewrite rules flushed.' );
+
+		$this->upgraded = true;
+	}
+
+	/**
 	 * Retrieves the site IDs array.
 	 *
 	 * Most commonly used for db schema changes in networks (but also works for single site).
 	 *
-	 * @return array Site IDs in the netework (single or multisite).
+	 * @return array Site IDs in the network (single or multisite).
 	 */
 	private function get_sites_for_upgrade() {
 		if ( is_multisite() ) {

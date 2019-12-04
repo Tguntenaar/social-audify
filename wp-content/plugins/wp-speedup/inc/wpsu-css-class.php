@@ -775,7 +775,7 @@ class WPSUCSS {
 								array(
 										'parent' => '',
 										'id' => 'delete-css-cache',
-										'title' => __( 'Delete CSS Cache', 'wp-speedup'), self::nspace ,
+										'title' => __( 'Delete CSS Cache', 'wp-speedup'),
 										'meta' => array( 'title' => __( 'Remove CSS Cache', 'wp-speedup'), self::nspace  ),
 										'href' => wp_nonce_url( admin_url( 'index.php?action=deletecsscache&path=' . urlencode( $_SERVER[ 'REQUEST_URI' ] ) ), 'delete-css-cache' )
 										) 

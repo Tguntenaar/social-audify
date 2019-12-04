@@ -51,7 +51,7 @@ class report_service extends connection {
         $user_id));
     }
     return $this->dbwp->get_results($this->dbwp->prepare(
-      "SELECT Report.*, Client.name as client_name FROM Report INNER JOIN (Select * from Client where user_id = %d)
+      "SELECT Report.*, Client.name as client_name, Client.mail as client_mail, Client.facebook as client_facebook, Client.instagram as client_instagram, Client.website as client_website FROM Report INNER JOIN (Select * from Client where user_id = %d)
         AS Client ON Report.client_id = Client.id AND Report.create_date >= %s
       ORDER BY Report.create_date", $user_id, (string)$date));
   }

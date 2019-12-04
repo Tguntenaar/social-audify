@@ -489,9 +489,13 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 	 * @return int Derived reference or 0.
 	 */
 	public function parse_reference( $reference ) {
-		$order = wc_get_order( $reference );
 
-		$reference = is_a( $order, 'WC_Order' ) ? $order->get_order_number() : $reference;
+		if ( function_exists( 'wc_get_order' ) ) {
+			$order = wc_get_order( $reference );
+
+			$reference = is_a( $order, 'WC_Order' ) ? $order->get_order_number() : $reference;
+
+		}
 
 		return $reference;
 	}
@@ -1268,7 +1272,7 @@ class Affiliate_WP_WooCommerce extends Affiliate_WP_Base {
 		if( $referral ) {
 
 			$referral_html = '<div class="wc-order-preview-affwp-referral">';
-			$referral_html .= '<strong>'. __( 'Affiliate Referral', 'affiliate_wp' ) . '</strong>';
+			$referral_html .= '<strong>'. __( 'Affiliate Referral', 'affiliate-wp' ) . '</strong>';
 			$referral_html .= '<a href="' . affwp_admin_url( 'referrals', array( 'referral_id' => $referral->referral_id, 'action' => 'edit_referral' ) ) . '">#' . $referral->referral_id . '</a>';
 			$referral_html .= '</div>';
 

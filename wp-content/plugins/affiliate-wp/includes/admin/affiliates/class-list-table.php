@@ -170,12 +170,17 @@ class AffWP_Affiliates_Table extends List_Table {
 			'username'        => __( 'Username', 'affiliate-wp' ),
 			'earnings'        => __( 'Paid Earnings', 'affiliate-wp' ),
 			'unpaid_earnings' => __( 'Unpaid Earnings', 'affiliate-wp' ),
-			'rate'     	      => __( 'Rate', 'affiliate-wp' ),
+			'rate'            => __( 'Rate', 'affiliate-wp' ),
 			'unpaid'          => __( 'Unpaid Referrals', 'affiliate-wp' ),
 			'referrals'       => __( 'Paid Referrals', 'affiliate-wp' ),
 			'visits'          => __( 'Visits', 'affiliate-wp' ),
+			'kyc_status'      => __( 'Identity Verification', 'affiliate-wp' ),
 			'status'          => __( 'Status', 'affiliate-wp' ),
 		);
+
+		if ( ! affiliate_wp()->settings->get( 'enable_payouts_service' ) ) {
+			unset( $columns['kyc_status'] );
+		}
 
 		/**
 		 * Filters the affiliate list table columns.
@@ -571,6 +576,34 @@ class AffWP_Affiliates_Table extends List_Table {
 		 * @param \AffWP\Affiliate $affiliate The current affiliate object.
 		 */
 		return apply_filters( 'affwp_affiliate_table_visits', $value, $affiliate );
+	}
+
+	/**
+	 * Renders the identity verification column in the affiliates list table.
+	 *
+	 * @since 2.4
+	 *
+	 * @param \AffWP\Affiliate $affiliate The current affiliate object.
+	 * @return string Visits link.
+	 */
+	public function column_kyc_status( $affiliate ) {
+
+		$value = '';
+		$payouts_service_account_meta = affwp_get_affiliate_meta( $affiliate->ID, 'payouts_service_account', true );
+
+		if ( $payouts_service_account_meta && isset( $payouts_service_account_meta['kyc_status'] ) ) {
+			$value = $payouts_service_account_meta['kyc_status'];
+		}
+
+		/**
+		 * Filters the identity verification data for the affiliates list table.
+		 *
+		 * @since 2.4
+		 *
+		 * @param string           $value     Data shown in the Visits column.
+		 * @param \AffWP\Affiliate $affiliate The current affiliate object.
+		 */
+		return apply_filters( 'affwp_affiliate_table_kyc_status', $value, $affiliate );
 	}
 
 	/**

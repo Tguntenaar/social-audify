@@ -13,17 +13,21 @@
 
   // Get all the clients
   $clients = $client_control->get_all();
+  $jsclients = array();
+  foreach ($clients as $c) {
+    $c = array($c->name, $c->facebook, $c->instagram, $c->website, $c->mail);
+    array_push($jsclients, $c);
+  }
 ?>
 
 <head>
   <meta charset="utf-8">
   <title>Contact Dashboard</title>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js" charset="utf-8" defer></script>
-
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/client_dashboard.css<?php echo $cache_version; ?>" type="text/css" />
 </head>
 <body>
   <div id="adAccountModal" class="modal"></div>
-  <!-- <div id="confirmAddAdAccountModal" class="modal"></div> -->
   <div id="confirmDeleteModal" class="modal"></div>
 
   <!-- Edit client Modal TODO: dit moet in een modal-->
@@ -75,43 +79,56 @@
     </div>
   </div>
 
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
-  <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 screen-height mobile-margin" style="height: 350px; text-align: center;">
-      <div class="center-center">
-        <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 20px;">Create a contact in a few steps.</h1>
-        <a class="create-audit-button client-button" href="/client-setup/">Create Contact</a>
-        <a class="create-audit-button client-button" href="/client-import/">Mass import</a>
+  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
+    <div class="sub-nav-client">
+      <h1 class="create-report-h1-client">Create and manage contacts.</h1>
+      <div class="center-buttons">
+        <a href='/client-setup/' class="create-button-client" style="margin-left: 15px;">Create client</a>
+        <a href='/client-import/' class="create-button-client">Mass import client</a>
       </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12  right float-right no-margin" style="margin-top: 150px;">
-      <div class="inner no-scroll client-dashboard">
-        <span class="title"><span class="title-background">Contacts</span>
-          <span class="count" id="counterSpan"><?php echo $number_of_clients; ?></span>
-          <span class="selectDelete" style="color:black; display:none"><i class="fas fa-trash"></i></span>
-        </span>
-        <input type="text" name="search" id="search-input" placeholder="Search..."/>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
-          <div class="col-12 col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Name</div>
-          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Facebook</div>
-          <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Instagram</div>
-          <div class="col remove-on-mobile col-sm-2 col-md-2 col-lg-2 row-title-style" style="padding:0;">Website</div>
-        </div>
-        <div class="inner-scroll client-dashboard" id="client-results"><?php
-          foreach ($clients as $client) {
-            $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
-              "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
+    <a class="export-clients" onclick="exportClients()">Export clients</a>
+    <input type="text" name="search" class="search-client" id="search-input" placeholder="Search..."/>
+    <div class="client-overview" id="client-results"><?php
+      foreach($clients as $client) { 
+        $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
+          "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
 
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row" data-id="<?php echo $client->id; ?>" data-client="<?php echo htmlentities(json_encode($data)); ?>">
-              <div class="col-12 col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->name; ?></div>
-              <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->facebook; ?></div>
-              <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->instagram; ?></div>
-              <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 audit-row-style"><?php echo $client->website; ?></div>
-              <i class="fas fa-ellipsis-v delete-this-audit client-edit" style="color:grey; cursor:pointer;" onclick="editClient(this)"></i>
-            </div><?php
-          } ?>
-        </div>
-      </div>
+        <div class="client-overview-row" data-name="<?php echo $client->name; ?>">
+          <div class="client-overview-row-inner" data-id="<?php echo $client->id; ?>" data-client="<?php echo htmlentities(json_encode($data)); ?>"><?php
+            echo $client->audit_count > 0 ? 
+              "<div class='client-status converted'>{$client->audit_count} Audit".($client->audit_count > 1 ? 's' : '')."</div>" :
+              "<div class='client-status no_reply'>New</div>"; ?>
+
+            <div class="details">
+              <span class="client-name-n"><?php echo $client->name; ?></span><?php
+
+              if($client->facebook != NULL) { ?>
+                <a class="social-icon" target="_blank" rel="norefferer" href="https://www.facebook.com/<?php echo $client->facebook; ?>">
+                  <i class="fab fa-facebook-f"></i>
+                </a><?php
+              }
+              if($client->instagram != NULL) { ?>
+                <a class="social-icon instagram-social mail-social" target="_blank" rel="norefferer" href="https://www.instagram.com/<?php echo $client->instagram; ?>">
+                  <i class="fab fa-instagram"></i>
+                </a><?php
+              } 
+              if($client->website != NULL) { ?>
+                <a class="social-icon web-social" target="_blank" rel="norefferer" href="<?php
+                  echo (substr($client->website, 0, 4) === "http" ? "" : "http://").$client->website; ?>">
+                  <i class="fas fa-globe"></i>
+                </a><?php
+              } 
+              if($client->mail != NULL) { ?>
+                <a class="social-icon instagram-social mail-social" href="mailto: <?php echo $client->mail; ?>">
+                  <i class="far fa-envelope"></i>
+                </a><?php
+              } ?>
+            </div>
+            <i class="fas fa-ellipsis-v edit-client" style="cursor:pointer;" onclick="editClient(this)"></i>
+          </div>
+        </div><?php
+      } ?>
     </div>
   </div>
 
@@ -142,11 +159,11 @@
     }
 
     $(function() {
-      var elems = $("#client-results .audit-row");
+      var elems = $("#client-results .client-overview-row");
       var selectedList = [];
 
       elems.find('.audit-row-style').on('click', function() {
-        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"), 1);
+        selectedList = toggleSelected($(this).parent(), selectedList, $(".selectDelete"));
       });
 
       $('#delete_button_client').click(function() { deleteClients([$('#client_id').val()]); });
@@ -214,13 +231,37 @@
       // Search function
       var counterSpan = $('#counterSpan');
       $(document).on('keyup', 'input#search-input', function() {
-        filterSearch($(this).val(), elems, counterSpan);
+        filterSearch($(this).val(), elems, counterSpan, true);
       });
 
       $('#facebook_url, #instagram_url, #website_url').focusout(function() {
         changeClientInputFields(this);
       });
     });
+
+    function exportClients() {
+          var clientList = <?php echo json_encode($jsclients); ?>;
+          let csvContent = "data:text/csv;charset=utf-8," +
+            "Name,Facebook,Instagram,Website,Email\n" +
+            clientList.map(e => e.join(",")).join("\n");
+
+          var encodedUri = encodeURI(csvContent);
+          window.open(encodedUri);
+        }
+
+    function exportClients() {
+      var clientList = <?php echo json_encode($jsclients); ?>;
+      let csvContent = "data:text/csv;charset=utf-8," +
+        "Name,Facebook,Instagram,Website,Email\n" +
+        clientList.map(e => e.join(",")).join("\n");
+
+      var encodedUri = encodeURI(csvContent);
+      // window.open(encodedUri);
+      link = document.createElement('a');
+      link.setAttribute('href', csvContent);
+      link.setAttribute('download', "filename");
+      link.click();
+    }
 	</script>
 </body>
 </html>

@@ -193,28 +193,29 @@ rcp_show_error_messages( 'register' ); ?>
 	<?php else : ?>
 		<p><strong><?php _e( 'You have not created any membership levels yet', 'rcp' ); ?></strong></p>
 	<?php endif; ?>
-	</fieldset>
+  </fieldset>
+  
+  <div class="tab" style="display:none;">
 
-	<div class="tab" style="display:none;">
-	
-		<?php if( rcp_has_discounts() ) : ?>
-		<fieldset class="rcp_discounts_fieldset">
-			<p id="rcp_discount_code_wrap">
-				<label for="rcp_discount_code" style="margin-bottom: 38px;">
-					<?php _e( 'Discount Code', 'rcp' ); ?>
-					<span class="rcp_discount_valid" style="display: none;"> - <?php _e( 'Valid', 'rcp' ); ?></span>
-					<span class="rcp_discount_invalid" style="display: none;"> - <?php _e( 'Invalid', 'rcp' ); ?></span>
-				</label>
-				<span class="rcp_discount_code_field_wrap">
-					<input style="margin-bottom: 8px;" type="text" id="rcp_discount_code" name="rcp_discount" class="rcp_discount_code" value="<?php echo esc_attr( $discount ); ?>"/>
-					<button style="color: #fff; background: #27ae60; border: 0;" class="rcp_button" id="rcp_apply_discount"><?php _e( 'Apply', 'rcp' ); ?></button>
-				</span>
-			</p>
-		</fieldset>
-		<?php endif; ?>
+    <?php if( rcp_has_discounts() ) : ?>
+    <fieldset class="rcp_discounts_fieldset">
+      <p id="rcp_discount_code_wrap">
+        <label for="rcp_discount_code" style="margin-bottom: 38px;">
+          <?php _e( 'Discount Code', 'rcp' ); ?>
+          <span class="rcp_discount_valid" style="display: none;"> - <?php _e( 'Valid', 'rcp' ); ?></span>
+          <span class="rcp_discount_invalid" style="display: none;"> - <?php _e( 'Invalid', 'rcp' ); ?></span>
+        </label>
+        <span class="rcp_discount_code_field_wrap">
+          <input style="margin-bottom: 8px;" type="text" id="rcp_discount_code" name="rcp_discount" class="rcp_discount_code" value="<?php echo esc_attr( $discount ); ?>"/>
+          <button style="color: #fff; background: #27ae60; border: 0;" class="rcp_button" id="rcp_apply_discount"><?php _e( 'Apply', 'rcp' ); ?></button>
+        </span>
+      </p>
+    </fieldset>
+    <?php endif; ?>
 
 		<?php do_action( 'rcp_after_register_form_fields', $levels ); ?>
 
+    <!-- PAYMENTS GATEWAYS -->
 		<div class="rcp_gateway_fields">
 			<?php
 			$gateways = rcp_get_enabled_payment_gateways();
@@ -246,7 +247,8 @@ rcp_show_error_messages( 'register' ); ?>
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</div>
-
+    
+    <!-- TERMS -->
 		<?php if ( ! empty( $rcp_options['enable_terms'] ) ) : ?>
 			<fieldset class="rcp_agree_to_terms_fieldset">
 				<p id="rcp_agree_to_terms_wrap">
@@ -272,6 +274,7 @@ rcp_show_error_messages( 'register' ); ?>
 			</fieldset>
 		<?php endif; ?>
 
+    <!-- PRIVACY -->
 		<?php if ( ! empty( $rcp_options['enable_privacy_policy'] ) ) : ?>
 			<fieldset class="rcp_agree_to_privacy_policy_fieldset">
 				<p id="rcp_agree_to_privacy_policy_wrap">

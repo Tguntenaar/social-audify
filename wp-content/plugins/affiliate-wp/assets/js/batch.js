@@ -46,6 +46,12 @@ jQuery(document).ready(function($) {
 						form: $( this ).serializeAssoc(),
 					};
 
+					if ( 'generate-payouts' === data.batch_id ) {
+						var cancelButton = $( '#cancel-new-payout');
+						cancelButton.remove();
+						submitButton.remove();
+					}
+
 					// Disable the button.
 					submitButton.addClass( 'button-disabled' );
 

@@ -1,4 +1,4 @@
-<?php echo defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+<?php defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 	if ( !current_user_can( 'install_plugins' ) ) {
 		wp_die( __( 'You do not have sufficient permissions to access this page.', 'wp-speedup') );
 	}
@@ -9,7 +9,8 @@
 	if(!empty($_POST) && isset($_POST['wpsu_options'])){
 		if ( 
 			! isset( $_POST['wpsu_nonce_action4_field'] ) 
-			|| ! wp_verify_nonce( $_POST['wpsu_nonce_action4_field'], 'wpsu_nonce_action4' ) 
+			|| 
+			! wp_verify_nonce( $_POST['wpsu_nonce_action4_field'], 'wpsu_nonce_action4' ) 
 		) {
 		
 		   print __('Sorry, your nonce did not verify.', 'wp-speedup');

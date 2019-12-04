@@ -28,18 +28,18 @@
 
     preg_match($pattern, $type_name_id, $match);
     $id = (int)$match[3];
-    if ($match[1] == 'report') {
-      if ($report = $report_controller->get($id)) { // TODO: report service get is nog niet goed 
-        $report->update('view_time', date('Y-m-d'));
-      }
-    } else if ($match[1] == 'audit') {
-      if ($audit = $audit_controller->get($id)) {
-        $audit->update('view_time', date('Y-m-d'));
-      }
-    } 
+    // if ($match[1] == 'report') {
+    //   if ($report = $report_controller->get($id)) { // TODO: report service get is nog niet goed 
+    //     $report->update('view_time', date('Y-m-d'));
+    //   }
+    // } else if ($match[1] == 'audit') {
+    //   if ($audit = $audit_controller->get($id)) {
+    //     $audit->update('view_time', date('Y-m-d'));
+    //   }
+    // } 
     $slug = strtolower('https://'.getenv("HTTP_HOST").'/'.$match[0]);
 
-    header('Location:'.$slug, true, 303);
+    header('Location:'.$slug."/?view", true, 303);
   } else {
     header('Location: /404', true, 404);
   }

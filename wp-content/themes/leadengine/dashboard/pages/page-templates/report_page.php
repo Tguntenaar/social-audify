@@ -158,6 +158,11 @@
     return round((($new - $old) / max($old, 1)) * 100);
   }
 
+  $public = 0;
+  if(isset($_GET['view'])) {
+      $public = 1;
+  }
+
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
   // var_dump($report);
   // echo $report->id;
@@ -239,7 +244,7 @@
           <div id="delete-this-audit"><i class="fas fa-trash"></i></div>
           <button id="copy_link" class="copy-link" style="margin-right: 15px;"><i class="fas fa-share-alt-square"></i> Share & Track </button>
           <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-          <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a><?php
+          <a href="?preview_mode=True" class="preview" style="float:right; margin-right: 5px;"><i class="far fa-eye"></i> Preview </a><?php
         } else {
           if ($user_id == $author_id) {?>
             <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
@@ -480,8 +485,29 @@
     var commonPost = {
       'report': '<?php echo $report->id; ?>',
       'type': 'report',
-    } <?php
-
+    } 
+    
+    <?php
+     if($public) { ?>
+      $(window).ready(function(){
+         $(this).one('mousemove', function() { 
+             // mouse move
+         }).one('scroll', function(){
+           $.ajax({
+             type: "POST",
+             url: ajaxurl,
+             data: { action: 'insert_view',  ...commonPost },
+             success: function (response) {
+                 console.log(response);
+             },
+             error: function (xhr, textStatus, errorThrown) {
+                 var send_error = error_func(xhr, textStatus, errorThrown, data);
+                 logError(send_error, 'page-templates/audit_page.php', 'insert_view');
+             },
+           });
+         });
+     });
+    <?php } 
     if ($report->graph_vis_bit == 1 || $edit_mode) { ?>
 
       $(function() {

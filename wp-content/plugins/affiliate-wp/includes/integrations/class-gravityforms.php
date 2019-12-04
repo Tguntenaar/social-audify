@@ -303,6 +303,32 @@ class Affiliate_WP_Gravity_Forms extends Affiliate_WP_Base {
 	}
 
 	/**
+	 * Get all names from form.
+	 *
+	 * @since 2.4.2
+	 * @access public
+	 *
+	 * @param array $entry The Gravity Forms entry.
+	 * @param array $form  The Gravity Forms form.
+	 * @return array $names all names submitted via names fields.
+	 */
+	public function get_names( $entry, $form ) {
+
+		$names = array();
+
+		foreach ( $form['fields'] as $field ) {
+			if ( $field->type == 'name' || $field->inputType == 'name' ) {
+				$names[] = array(
+					'first_name' => rgar( $entry, $field->id . '.3' ),
+					'last_name'  => rgar( $entry, $field->id . '.6' ),
+				);
+			}
+		}
+
+		return $names;
+	}
+
+	/**
 	 * Register the form-specific settings
 	 *
 	 * @since  1.7
@@ -438,9 +464,13 @@ class Affiliate_WP_Gravity_Forms extends Affiliate_WP_Base {
 			$entry  = GFFormsModel::get_lead( $entry_id );
 			$form   = GFAPI::get_form( $entry['form_id'] );
 			$emails = $this->get_emails( $entry, $form );
+			$names  = $this->get_names( $entry, $form );
 
 			$customer = array(
-				'email' => current( $emails )
+				'first_name' => isset( current( $names )['first_name'] ) ? current( $names )['first_name'] : '',
+				'last_name'  => isset( current( $names )['last_name'] ) ? current( $names )['last_name'] : '',
+				'email'      => current( $emails ),
+				'ip'         => affiliate_wp()->tracking->get_ip(),
 			);
 
 		}

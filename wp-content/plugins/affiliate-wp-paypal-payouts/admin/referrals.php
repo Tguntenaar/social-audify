@@ -36,18 +36,53 @@ class AffiliateWP_PayPal_Payouts_Referrals_Admin {
 
 		$this->api->credentials = affiliate_wp_paypal()->get_api_credentials();
 
-		add_filter( 'affwp_referral_action_links', array( $this, 'action_links' ), 10, 2 );
-		add_filter( 'affwp_referrals_bulk_actions', array( $this, 'bulk_actions' ), 10, 2 );
+		if ( $this->should_display_pay_now_links() ) {
+			add_filter( 'affwp_referral_action_links', array( $this, 'action_links' ), 10, 2 );
+			add_filter( 'affwp_referrals_bulk_actions', array( $this, 'bulk_actions' ), 10, 2 );
 
-		add_action( 'affwp_pay_now', array( $this, 'process_pay_now' ) );
-		add_action( 'affwp_referrals_do_bulk_action_pay_now', array( $this, 'process_bulk_action_pay_now' ) );
+			add_action( 'affwp_pay_now', array( $this, 'process_pay_now' ) );
+			add_action( 'affwp_referrals_do_bulk_action_pay_now', array( $this, 'process_bulk_action_pay_now' ) );
+		}
+
 		add_action( 'admin_notices', array( $this, 'admin_notices' ) );
 
-		if ( version_compare( AFFILIATEWP_VERSION, '2.4', '<' ) ) {
+		if ( ! affiliate_wp_paypal()->has_2_4() ) {
 			add_action( 'affwp_referrals_page_buttons', array( $this, 'bulk_pay_form' ) );
 			add_action( 'affwp_process_bulk_paypal_payout', array( $this, 'process_bulk_paypal_payout' ) );
 		}
 
+	}
+
+	/**
+	 * Determines whether to display Pay Now action links.
+	 *
+	 * This check is based on the logic that initiating a payment "now" should only
+	 * be possible if 'paypal' is the only enabled payout method other than 'manual' (if set).
+	 *
+	 * @since 1.2.1
+	 *
+	 * @return bool True if the Pay Now links should be displayed, otherwise false.
+	 */
+	public function should_display_pay_now_links() {
+
+		// Compat for pre-AffiliateWP 2.4.
+		if ( ! affiliate_wp_paypal()->has_2_4() ) {
+			return true;
+		}
+
+		$enabled_payout_methods = affwp_get_enabled_payout_methods();
+
+		if ( in_array( 'manual', $enabled_payout_methods ) ) {
+			$difference = array_diff( $enabled_payout_methods, array( 'manual', 'paypal' ) );
+		} else {
+			$difference = array_diff( $enabled_payout_methods, array( 'paypal' ) );
+		}
+
+		if ( empty( $difference ) ) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**

@@ -18,7 +18,7 @@ class AffiliateWP_PayPal_Payouts_Payouts_Admin {
 	 */
 	public function __construct() {
 
-		if ( version_compare( AFFILIATEWP_VERSION, '2.4', '<' ) ) {
+		if ( ! affiliate_wp_paypal()->has_2_4() ) {
 			return;
 		}
 
@@ -42,6 +42,8 @@ class AffiliateWP_PayPal_Payouts_Payouts_Admin {
 		$this->api->credentials = affiliate_wp_paypal()->get_api_credentials();
 
 		add_filter( 'affwp_payout_methods', array( $this, 'add_payout_method' ) );
+		add_filter( 'affwp_is_payout_method_enabled', array( $this, 'is_paypal_enabled' ), 10, 2 );
+
 		add_action( 'affwp_preview_payout_note_paypal', array( $this, 'preview_payout_note' ) );
 		add_filter( 'affwp_preview_payout_invalid_affiliates_paypal', array( $this, 'preview_payout_invalid_affiliates' ), 10, 2 );
 		add_action( 'affwp_process_payout_paypal', array( $this, 'process_bulk_paypal_payout' ), 10, 5 );
@@ -58,13 +60,32 @@ class AffiliateWP_PayPal_Payouts_Payouts_Admin {
 	public function add_payout_method( $payout_methods ) {
 
 		if ( ! affiliate_wp_paypal()->has_api_credentials() ) {
-			return $payout_methods;
+			/* translators: 1: PayPal settings link */
+			$payout_methods['paypal'] = sprintf( __( 'PayPal - <a href="%s">Provide</a> your PayPal credentials to enable this payout method', 'affwp-paypal-payouts' ), affwp_admin_url( 'settings', array( 'tab' => 'paypal' ) ) );
+		} else {
+			$payout_methods['paypal'] = __( 'PayPal', 'affwp-paypal-payouts' );
 		}
-
-		$payout_methods['paypal'] = __( 'PayPal', 'affwp-paypal-payouts' );
 
 		return $payout_methods;
 
+	}
+
+	/**
+	 * Check if 'PayPal' payout method is enabled.
+	 *
+	 * @since 1.2.1
+	 *
+	 * @param bool   $enabled       True if the payout method is enabled. False otherwise.
+	 * @param string $payout_method Payout method.
+	 * @return bool True if the payout method is enabled. False otherwise.
+	 */
+	public function is_paypal_enabled( $enabled, $payout_method ) {
+
+		if ( 'paypal' === $payout_method && ! affiliate_wp_paypal()->has_api_credentials() ) {
+			$enabled = false;
+		}
+
+		return $enabled;
 	}
 
 	/**

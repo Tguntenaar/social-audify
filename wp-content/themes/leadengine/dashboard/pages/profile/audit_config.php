@@ -384,11 +384,10 @@
       Audit config
 
       <?php if ($edit_mode) { ?>
-
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-        <a href="?preview_mode=True"; class="preview"><i class="far fa-eye"></i> Preview </a>
-        <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;"> <i class="fab fa-youtube"></i> Tutorial </button>
-        <?php
+        <a href="?preview_mode=True"; class="preview" style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+        <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;">
+          <i class="fab fa-youtube"></i> Tutorial </button><?php
       } else {?>
         <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
       } ?>
@@ -867,12 +866,16 @@
         </div>
       </section>
   <?php } ?>
-
+  
   <div class="footer">
     <span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
     if ($calendar_link != "") { ?>
-      <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo $language['make_appointment']; ?></a><?php
+        <?php if(!$edit_mode) { ?>
+             <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?></a>
+        <?php } else { ?>
+       <i class="fas fa-calendar" style="margin-left: 20px; margin-right: 5px;"></i><input type="text" maxlength="25" name="appointment_text" id="appointment_text" value="<?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>">
+        <?php }
     } ?>
   </div>
 </body>
@@ -883,7 +886,6 @@
     'type': 'user',
     'user': '<?php echo $user_id; ?>',
   }
-
 
     // Line Chart values
     var data_array = [[131,80,74,32,32,78,49,37,53,93,54,86,50,153,77,104,92,104,44,123,74,54,78,52,69]];

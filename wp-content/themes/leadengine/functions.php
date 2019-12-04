@@ -14,6 +14,25 @@
     }
   }
 
+  function modify_search_filter($query) {
+    if ($query->is_search && ! is_admin() ) {
+      $query->set('post_type', 'post');
+    }
+    return $query;
+  }
+  
+  add_filter('pre_get_posts','modify_search_filter');
+
+
+  function custom_login_logo() {
+    echo '<style type="text/css">
+        #wp-submit {background-color:#6e9d9a !important;border-color: #6e9d9a !important; text-shadow: 0px 0px 0px #6e9d9a !important;}
+        h1 a { background-image:url('.get_bloginfo('template_directory').'/core/assets/images/logo_socialaudify.png) !important; }
+    </style>';
+  }
+
+  add_action('login_head', 'custom_login_logo'); 
+
   function not_logged_in() {
     wp_send_json_error($errormsg = array('message'=>'you are not logged in.'));
     wp_die();
@@ -253,9 +272,13 @@
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
 
+    // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
     $iba_id = $_POST['iba_id'];
+    // TODO: thomas
+    // $iba_name = $_POST['iba_name'];
 
     $value = $user->update('User', 'instagram_business_account_id', $iba_id);
+    // $status = $user->update_list('User', array('instagram_business_account_id'=>$iba_id,'instagram_business_name'=>$iba_name));
 
     wp_send_json(array('instagram_business_account updated succes if 0'=>$value));
     wp_die();
@@ -458,11 +481,104 @@
         wp_die();
     }
 
-    if (isset($_POST['ids'])) {
-      $rows = $control->delete_multiple(get_current_user_id(), $_POST['ids']);
-      wp_send_json(array("Succes"=>"deleted: ".$rows));
+    $user_id = get_current_user_id();
+    $results = [];
+
+    if (isset($_POST['posts'])) {
+      $deletions = 0;
+      foreach ($_POST['posts'] as $post_id) {
+        if (get_post_field('post_author', $post_id) == $user_id) {
+          wp_delete_post($post_id);
+          $deletions++;
+        }
+      }
+      $results["posts-deleted"] = $deletions;
     }
 
+    if (isset($_POST['ids'])) {
+      $results["audits-deleted"] =  $control->delete_multiple($user_id, $_POST['ids']);
+    }
+
+    wp_send_json($results);
+    wp_die();
+  }
+
+  add_action( 'wp_ajax_insert_view', 'insert_view');
+  add_action( 'wp_ajax_nopriv_insert_view', 'not_logged_in');
+
+  function insert_view() {
+    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
+    
+    $connect = new connection;
+    $audit_controller = new audit_controller($connect);
+    $report_controller = new report_controller($connect);
+
+    $type = $_POST['type'];
+    $id = $_POST[$type];
+
+    if ($type == 'report') {
+       $report_controller->update($id, 'view_time', date('Y-m-d'), 'Report', NULL);
+    } else if ($type == 'audit') {
+       $audit_controller->update($id, 'view_time', date('Y-m-d'), 'Audit', NULL);
+    } 
+
+     wp_die();
+  }
+
+  add_action( 'wp_ajax_export_viewed', 'export_viewed');
+  add_action( 'wp_ajax_nopriv_export_viewed', 'not_logged_in');
+
+  function export_viewed() {
+    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+    require_once(dirname(__FILE__)."/dashboard/services/audit_service.php");
+    require_once(dirname(__FILE__)."/dashboard/services/report_service.php");
+    
+    // require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
+    
+    $connect = new connection;
+    $audit_service = new audit_service($connect);
+    $report_service = new report_service($connect);
+
+    // $report_controller = new report_controller($connect);
+
+    $type = $_POST['type'];
+    $id = (int) $_POST['user_id'];
+
+    $return_array = array();
+
+    if($type == 'audit') {
+        $audits = $audit_service->get_all($id, date('Y-m-1', strtotime("-2 month")));
+        
+        $later = new DateTime(date('Y-m-d H:i:s'));
+
+
+        array_push($return_array, array("Audit name", "Client name", "Client email", "Client Facebook", "Client Instagram", "Client Website", "Days viewed"));
+        foreach($audits as $audit) {
+            if($audit->view_time != NULL) {
+              $earlier = new DateTime($audit->view_time);
+              $day_difference = $later->diff($earlier)->format("%a");
+
+              array_push($return_array, array($audit->name, $audit->client_name, $audit->client_mail,
+                                              $audit->client_facebook, $audit->client_instagram, $audit->client_website, $day_difference . " days"));
+            }
+        }
+    } else if($type = 'report') {
+        $reports = $report_service->get_all($id, date('Y-m-1', strtotime("-2 month")));
+        
+        array_push($return_array, array("Report name", "Report email", "Client email", "Client Facebook", "Client Instagram", "Client Website", "Days viewed"));
+        foreach($reports as $report) {
+            if($report->view_time != NULL) {
+              $earlier = new DateTime($report->view_time);
+              $day_difference = $later->diff($earlier)->format("%a");
+              array_push($return_array, array($report->name, $report->client_name, $report->client_mail, 
+                                              $report->client_facebook, $report->client_instagram, $report->client_website, $day_difference));
+            }
+        }
+    }
+
+    wp_send_json(json_encode($return_array));
     wp_die();
   }
 

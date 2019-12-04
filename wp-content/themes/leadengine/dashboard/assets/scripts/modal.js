@@ -11,13 +11,23 @@ function initiateModal(id, type, data) {
 
   var zIndex = type == "error" ? '1250' : type == "confirm" ? '1150' : '1050';
 
-  var buttons = type == "confirm" ?
-    "<button class='agree' id='" + confirmName + "'>"+confirmText+"</button>" +
-    "<button class='deny' id='" + cancelName + "'>Cancel</button>" :
-    "<button class='agree' id='" + confirmName + "'>"+confirmText+"</button>";
-  var buttons =  type == "link" ? 
-    `<a href="${link}"><button class='agree' id="${confirmName}">${confirmText}</button></a>`: buttons;
-
+  var buttons = '';
+  switch (type) {
+    case "confirm":
+      buttons = `<button class='agree' id='${confirmName}'>${confirmText}</button>\
+        <button class='deny' id='${cancelName}'>Cancel</button>`;
+      break;
+    case "link":
+      buttons = `<a href="${link}"><button class='agree' id="${confirmName}">${confirmText}</button></a>`;
+      break;
+    case "select":
+      buttons = `<a class="agree" style="display:none"></a>`;
+      break;
+    default:
+      buttons = `<button class='agree' id='${confirmName}'>Understood</button>`;
+      break;
+  }
+  
   element.setAttribute('style', 'z-index: ' + zIndex);
   element.innerHTML =
     `<div class="modal-content ${type}">\

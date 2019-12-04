@@ -19,17 +19,17 @@ endif ?>
 
 		<p>
 			<label for="affwp-opt-in-name"><?php _e( 'First Name', 'affiliate-wp' ); ?></label>
-			<input id="affwp-opt-in-name" class="required" type="text" name="affwp_first_name" title="<?php esc_attr_e( 'First Name', 'affiliate-wp' ); ?>" value="<?php esc_attr_e( $first_name ); ?>"/>
+			<input id="affwp-opt-in-name" class="required" type="text" name="affwp_first_name" title="<?php esc_attr_e( 'First Name', 'affiliate-wp' ); ?>" value="<?php echo esc_attr( $first_name ); ?>"/>
 		</p>
 
 		<p>
 			<label for="affwp-opt-in-name"><?php _e( 'Last Name', 'affiliate-wp' ); ?></label>
-			<input id="affwp-opt-in-name" class="required" type="text" name="affwp_last_name" title="<?php esc_attr_e( 'Last Name', 'affiliate-wp' ); ?>" value="<?php esc_attr_e( $last_name ); ?>"/>
+			<input id="affwp-opt-in-name" class="required" type="text" name="affwp_last_name" title="<?php esc_attr_e( 'Last Name', 'affiliate-wp' ); ?>" value="<?php echo esc_attr( $last_name ); ?>"/>
 		</p>
 
 		<p>
 			<label for="affwp-opt-in-email"><?php _e( 'Email Address', 'affiliate-wp' ); ?></label>
-			<input id="affwp-opt-in-email" class="required" type="text" name="affwp_email" title="<?php esc_attr_e( 'Email Address', 'affiliate-wp' ); ?>" value="<?php esc_attr_e( $email ); ?>"/>
+			<input id="affwp-opt-in-email" class="required" type="text" name="affwp_email" title="<?php esc_attr_e( 'Email Address', 'affiliate-wp' ); ?>" value="<?php echo esc_attr( $email ); ?>"/>
 		</p>
 
 		<p>

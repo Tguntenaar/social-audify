@@ -63,7 +63,7 @@ class Opt_In {
 		ob_start();
 
 		if( empty( $this->platform ) ) {
-			return '<p class="affwp-error">' . __( 'No opt-in platform has been configured. Please configure a platform in settings.', 'affiliate_wp' ) . '</p>';
+			return '<p class="affwp-error">' . __( 'No opt-in platform has been configured. Please configure a platform in settings.', 'affiliate-wp' ) . '</p>';
 		}
 
 		affiliate_wp()->templates->get_template_part( 'opt-in' );
@@ -88,7 +88,7 @@ class Opt_In {
 		do_action( 'affwp_pre_process_opt_in_form', $this );
 
 		if( empty( $this->platform ) ) {
-			$this->add_error( 'no_opt_in_platform', __( 'No opt-in platform has been configured. Please configure a platform in settings.', 'affiliate_wp' ) );
+			$this->add_error( 'no_opt_in_platform', __( 'No opt-in platform has been configured. Please configure a platform in settings.', 'affiliate-wp' ) );
 		}
 
 		if ( empty( $data['affwp_first_name'] ) ) {
