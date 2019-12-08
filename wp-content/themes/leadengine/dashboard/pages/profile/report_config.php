@@ -267,7 +267,7 @@
               <div class="inner">
                 <span class="title-box facebook"><?php echo $item["name"]; ?></span>
 
-                  <span class="explenation"><?php echo $item["desc"]; ?></span>
+                  <span class="explanation"><?php echo $item["desc"]; ?></span>
                   <span class="data_animation"><?php
                     echo 0; ?>
                   </span>

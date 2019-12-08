@@ -46,7 +46,7 @@
       </div>
     </div>
 
-    <div class="col-lg-6 client_right client-form">
+    <div class="col-lg-6 client_right">
       <div class="col-lg-12">
         <div class="content-title col-lg-9">
           <span class="title">Fill in the form.</span>

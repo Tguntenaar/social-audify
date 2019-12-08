@@ -666,12 +666,6 @@ pre {
 	margin-bottom: 15px;
 }
 
-.person-info {
-    width: 100%;
-    height: auto;
-    float: left;
-}
-
 .center {
     margin: 0 auto;
 }
@@ -693,20 +687,14 @@ pre {
 }
 
 .person-info {
-    width: 100%;
-    height: auto;
-    float: left;
-    text-align: center;
-}
-
-.block {
-    display: block;
+  text-align: center;
 }
 
 .person-name {
     font-size: 18px;
     color: #fff;
     margin-top: 5px;
+    display: block;
 }
 
 .person-title {
@@ -740,7 +728,6 @@ nav ul a {
     color: #fff;
     font-size: 20px;
     font-weight: 100;
-
 }
 
 nav ul li:hover {
@@ -773,28 +760,20 @@ nav ul a:hover {
 .stats {
 	width: 100%;
 	height: 100px;
-	margin: 20px 0 0 0;
-	float: left;
+	margin: 40px 0 0 0;
 }
 
-.stat-block {
-    height:60px;
-    float: left;
-    text-align: center;
-    margin-top: 20px;
-	padding: 0 10px;
+.nav-stats {
+  float:left;
+  text-align: center;
 }
 
-.stat-block i {
-	font-size: 46px;
-	margin-top: 84px;
-	display: block;
+.nav-stats .title {
+  font-weight: 300;
 }
 
-.stat-block .title {
-    font-size: 16px;
-    font-weight: 300;
-    display: block;
+.nav-stats .data {
+  font-weight: 100;
 }
 
 .beta {
@@ -821,12 +800,6 @@ nav ul a li {
 	line-height: 40px;
 	text-align: center;
 	font-weight: 100;
-}
-
-.stat-block .data {
-    font-size: 16px;
-    font-weight: 100;
-    display: block;
 }
 
 .content-title {
@@ -1113,11 +1086,11 @@ nav ul a li {
 
 .dot-nav {
 	position: absolute;
-	bottom: 20px;
-	position: absolute;
+	bottom: 10px;
 	left: 50%;
-	transform: translate(-50%, 0);
+  transform: translate(-50%, 0);
 }
+
 .overview-audit-report .client-id {
 		margin-left: 0px !important;
 		text-align: left;
@@ -1430,11 +1403,12 @@ nav ul a li {
 	margin-top: 30px;
 }
 
+/* setups */
 .overview-audit-report .right .inner,
 .overview-audit-report .left .inner {
-    width: 100%;
-    background: #fff;
-    height: 400px;
+  width: 100%;
+  background: #fff;
+  height: auto;
 	padding: 0px;
 	padding-bottom: 10px;
 	border-radius: 3px;
@@ -1471,7 +1445,7 @@ nav ul a li {
 }
 
 .overview-audit-report .right .inner .title,
-.overview-audit-report .left .inner .title{
+.overview-audit-report .left .inner .title {
     display: block;
     width: 100%;
     height: 60px;
@@ -1496,7 +1470,7 @@ nav ul a li {
 }
 
 .overview-audit-report .right .inner .title .count,
-.overview-audit-report .left .inner .title .count{
+.overview-audit-report .left .inner .title .count {
     float: right;
     color: #000;
     font-weight: 300;
@@ -1756,9 +1730,8 @@ nav ul a li {
 }
 
 .client_right {
-    height: 585px;
-    float: left;
-		display: none;
+  height: 585px;
+  float: left;
 }
 
 .audit-setup {
@@ -1963,7 +1936,17 @@ nav ul a li {
 	height: 215px;
 	float: left;
 	perspective: 1000px;
-	background-color: transparent;
+  background-color: transparent;
+  text-align: center;
+  margin-top: 20px;
+	padding: 0 10px;
+}
+
+/* eye */
+.stat-block i {
+	font-size: 46px;
+	margin-top: 84px;
+	display: block;
 }
 
 .stat-block .inner {
@@ -2004,7 +1987,7 @@ nav ul a li {
 	display: block;
 }
 
-.explenation {
+.explanation {
 	display: none;
 	font-size: 12px;
 	position:absolute;
@@ -2019,7 +2002,7 @@ nav ul a li {
 	transform: translateY(-50%);
 }
 
-.stat-block:hover .explenation {
+.stat-block:hover .explanation {
 	/* animation: fadeout 2s ease-in-out;
 	-moz-animation: fadeout 2s ease-in-out;
 	-webkit-animation: fadeout 2s ease-out-in;
@@ -2108,13 +2091,7 @@ nav ul a li {
 } */
 
 
-/* .stat-block-custom:hover .inner {
-  transform: none !important;
-	background: transparent !important;
-	border: 1px solid grey !important;
-} */
-
-.explenation-ads {
+.explanation-ads {
 	font-size: 10px;
 	width: 100%;
 	position: absolute;
@@ -2338,13 +2315,6 @@ textarea {
 	 margin-top: 145px !important;
 }
 
-.container-chart {
-	width: auto;
-	height: auto;
-	float:left;
-	position: relative;
-}
-
 .chart-info {
 	position: absolute;
 	top: 85px;
@@ -2353,17 +2323,10 @@ textarea {
 	text-align: center;
 }
 
-.custom-stat {
-	margin-top: 55px;
-}
-
 .create_client_form input[type="submit"] {
 	margin-left: 0px !important;
 }
 
-.top-box {
-		margin-bottom: 20px;
-}
 .inner-chart {
 	background: #fff;
 	height: 400px;
@@ -2866,10 +2829,6 @@ h4 {
 .float-right {
 	display: right;
 }
-
-#chart-2 {height: 111px !important;}
-#chart-3 {height: 111px !important;}
-
 
 .create-report-h1 {
 	font-size: 54px;
@@ -3713,12 +3672,12 @@ label {
 	margin-bottom: 20px;
 }
 
-.video-explenation,
-.intro-explenation,
-.title-explenation,
-.visibility-explenation,
-.social-text-explenation,
-.end-explenation {
+.video-explanation,
+.intro-explanation,
+.title-explanation,
+.visibility-explanation,
+.social-text-explanation,
+.end-explanation {
 	display: none;
 	width: 400px;
 	height: auto;
@@ -3744,7 +3703,7 @@ label {
 }
 
 .tutorial-screen,
-.end-explenation p {
+.end-explanation p {
 	color: #fff;
 	font-size: 16px;
 	font-weight: 100;
@@ -3789,39 +3748,19 @@ input[type="submit"] {
 	padding-top: 25px;
 }
 
-.client-form {
-	display: block !important;
-}
-
-.custom-height {
-	height: 50px !important;
-}
-
+/* fb button */
 .fb_iframe_widget {
 	position: absolute !important;
 	right: 20px;
 	top: 10px;
 }
 
-.height-auto {
-	height: auto !important;
-}
-
-.audit-setup-box {
-	min-height: 600px;
-}
-
-#regForm {
+.setup-form {
 	width: 100%;
 	padding: 0;
-	margin-top: 6px;
-}
-
-.steps {
-	bottom: 10px;
-	position: absolute;
-	left: 50%;
-	transform: translate(-50%, 0);
+  margin: 6px auto 20px auto;
+  background-color: #ffffff;
+  min-width: 300px;
 }
 
 #nextBtn {
@@ -4901,11 +4840,6 @@ h4 {
 		margin-left: 10px;
 	}
 
-	.person-name {
-		margin-top: 20px;
-		margin-left: 20px;
-	}
-
 	.person-title {
 		margin-left: 20px;
 		font-weight: 100;
@@ -4994,11 +4928,7 @@ h4 {
 		display: none;
 	}
 
-	.steps {
-		display: none !important;
-	}
-
-	.dot-nav {
+  .dot-nav {
 		display: none !important;
 	}
 
@@ -5026,8 +4956,10 @@ h4 {
 
 	.responsive-height {
 		overflow-y: visible;
-	}
-	.overview-audit-report .right .inner, .overview-audit-report .left .inner {
+  }
+  
+  .overview-audit-report .right .inner, 
+  .overview-audit-report .left .inner {
 		overflow: hidden;
 	}
 
@@ -5090,8 +5022,8 @@ h4 {
 	.nav-buttons {
 		position: relative;
 		height: auto;
-	    width: auto;
-	    float: left;
+    width: auto;
+    float: left;
 	}
 
 	.create-block-box p {

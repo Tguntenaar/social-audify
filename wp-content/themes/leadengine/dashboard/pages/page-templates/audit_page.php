@@ -455,7 +455,7 @@
                       echo printValue(round($audit->facebook_data->{$item["fb_name"]}, 2), $item['is_icon']);
                     } ?>
                     </span>
-                    <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span><?php
+                    <span class="explanation"><?php echo $language[$item["name"] . " exp"]; ?></span><?php
                       visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                   </div>
                 </div><?php
@@ -472,7 +472,7 @@
                       $class = $path->facebook_data->runningAdds ? "check" : "times";
                       $color = $path->facebook_data->runningAdds ? "#27ae60" : "#c0392b"; ?>
 
-                      <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span>
+                      <span class="explanation"><?php echo $language[$item["name"] . " exp"]; ?></span>
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
@@ -487,7 +487,7 @@
                           <span class="label_ads">No</span>
                       </form><?php
                         visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                      <span class="explenation-ads">
+                      <span class="explanation-ads">
                         <a target="_blank" rel="noreferrer" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
                         </a>
@@ -649,7 +649,7 @@
           // Preview mode hide description animation
           if (!$audit->manual) { ?>
             </span>
-            <span class="explenation"><?php echo $language[$item['name'] . " exp"]; ?></span><?php
+            <span class="explanation"><?php echo $language[$item['name'] . " exp"]; ?></span><?php
           }
         }
 
@@ -760,7 +760,7 @@
                     } ?>
                     </span><?php
                       visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                    <span class="explenation"><?php echo $language[$item["name"] . " exp"] ?></span>
+                    <span class="explanation"><?php echo $language[$item["name"] . " exp"] ?></span>
                   </div>
                 </div><?php
               }

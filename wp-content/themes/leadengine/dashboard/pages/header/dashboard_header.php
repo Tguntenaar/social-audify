@@ -134,19 +134,19 @@
           ?>
       </a>
         <div class="person-info">
-          <span class="person-name block"><?php $company_name = get_user_meta(get_current_user_id(), 'rcp_company', true ); echo $company_name != "" ? $company_name : $wp_current_user->display_name; ?></span>
+          <span class="person-name"><?php $company_name = get_user_meta(get_current_user_id(), 'rcp_company', true ); echo $company_name != "" ? $company_name : $wp_current_user->display_name; ?></span>
         </div>
       </div>
       <div class="stats">
-        <div class="stat-block custom-height col-lg-4">
+        <div class="nav-stats col-lg-4">
           <span class="title">Contacts</span>
           <span class="data"><?php echo $number_of_clients; ?></span>
         </div>
-        <div class="stat-block custom-height col-lg-4">
+        <div class="nav-stats col-lg-4">
           <span class="title">Audits</span>
           <span class="data"><?php echo $number_of_audits; ?></span>
         </div>
-        <div class="stat-block custom-height col-lg-4">
+        <div class="nav-stats col-lg-4">
           <span class="title">Reports</span>
           <span class="data"><?php echo $number_of_reports; ?></span>
         </div>
