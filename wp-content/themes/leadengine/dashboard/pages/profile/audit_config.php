@@ -438,7 +438,7 @@
             <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
           </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $user->display_name; ?></span><?php
+        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
         } else { echo '<div class="audit-intro-text">'; }
 
         if($user->introduction_vis_bit == 1 || $edit_mode) {
