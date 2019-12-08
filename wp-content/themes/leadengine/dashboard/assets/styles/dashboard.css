@@ -169,11 +169,6 @@ label.myLabel input[type="file"] {
 	float: right;
 }
 
-.download-viewed span:hover {
-	cursor: pointer;
-	opacity: 0.7;
-}
-
 .description-tags {
 	width: 90%;
 	height: 50px;
@@ -1737,7 +1732,7 @@ nav ul a li {
 
 .clickable:hover {
 	cursor: pointer;
-	opcatity
+	opacity: 0.7;
 }
 
 
@@ -2631,7 +2626,6 @@ h4 {
 }
 
 .recent-send-box:hover {
-	opacity: 0.7;
 	text-decoration: none;
 }
 
@@ -2709,6 +2703,15 @@ h4 {
 	box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;
+}
+
+
+.stat-box.audit {
+	border-top: 2px solid #16a085;
+}
+
+.stat-box.report {
+	border-top: 2px solid #2980b9;
 }
 
 .stat-box i {
@@ -2805,14 +2808,6 @@ h4 {
 	position: relative;
 	z-index: 50;
 	margin-top: 3px;
-}
-
-.border-box-audit {
-	border-top: 2px solid #16a085;
-}
-
-.border-box-report {
-	border-top: 2px solid #2980b9;
 }
 
 #chart-audit,
