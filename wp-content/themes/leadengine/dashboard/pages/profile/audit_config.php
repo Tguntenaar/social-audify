@@ -870,12 +870,16 @@
   <div class="footer">
     <span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
-    if ($calendar_link != "") { ?>
-        <?php if(!$edit_mode) { ?>
-             <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?></a>
-        <?php } else { ?>
-       <i class="fas fa-calendar" style="margin-left: 20px; margin-right: 5px;"></i><input type="text" maxlength="25" name="appointment_text" id="appointment_text" value="<?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>">
-        <?php }
+      if ($calendar_link != "") {
+        if(!$edit_mode) { ?>
+          <a class="calendar" href="<?php echo $calendar_link; ?>">
+            <i class="fas fa-calendar"></i><?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>
+          </a><?php
+        } else { ?>
+          <i class="fas fa-calendar" style="margin-left: 20px; margin-right: 5px;"></i>
+          <input type="text" maxlength="25" name="appointment_text" id="appointment_text" 
+            value="<?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>"><?php
+        }
     } ?>
   </div>
 </body>

@@ -164,21 +164,14 @@ label.myLabel input[type="file"] {
 }
 
 .download-viewed {
-	width: auto;
-	height: 50px;
-	position: absolute;
-	right: 40px; top: 32px;
 	font-size: 12px;
 	color: #487dd7;
+	float: right;
 }
 
-#download-audit-viewed {
-	margin-right: 14px;
+.download-viewed span:hover {
 	cursor: pointer;
-}
-
-#download-report-viewed  {
-	cursor: pointer;
+	opacity: 0.7;
 }
 
 .description-tags {
@@ -207,7 +200,7 @@ label.myLabel input[type="file"] {
 
 .easy-config-button:hover {
 	text-decoration: none;
-	opacity: 0.8;
+	opacity: 0.7;
 	color: #fff;
 }
 
@@ -497,12 +490,12 @@ header {
 
 }
 .content {
-    width: 100%;
-    height: auto;
+	width: 100%;
+	height: auto;
 	/* max-height: 761px; */
-    float: left;
-    background: #f7f7f7;
-    overflow-y: scroll;
+	float: left;
+	background: #f7f7f7;
+    /* overflow-y: scroll; */
 	overflow-x: hidden;
 	/* position:relative; */
 }
@@ -523,9 +516,8 @@ header {
 
 .content-right {
 	float: left;
-	margin-top: 10px;
 	/* height: 730px; */
-	padding-top: 20px;
+	padding-top: 30px;
 	height: 92vh;
 
 }
@@ -617,7 +609,7 @@ pre {
 
 #picture_vis_bit_icon:hover  .client-profile-picture img,
 #picture_vis_bit_report_icon:hover  .client-profile-picture img {
-	opacity: 0.6;
+	opacity: 0.7;
 }
 
 .visibility-first-level i {
@@ -866,7 +858,7 @@ nav ul a li {
 }
 
 .audit-option:hover {
-		opacity: 0.6;
+	opacity: 0.7;
 }
 
 .max-audits {
@@ -1068,9 +1060,6 @@ nav ul a li {
     border: 1px solid #007bff;
     color: #007bff;
 }
-.overview-audit-report {
-	position: relative;
-}
 
 .overview-audit-report .left {
 	border: 1px solid #eff0f2;
@@ -1078,11 +1067,12 @@ nav ul a li {
 }
 
 .overview-audit-report {
-	top: 50%;
+	/* top: 50%;
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
 	float: left;
+	position: relative; */
 }
 
 .dot-nav {
@@ -1195,7 +1185,7 @@ nav ul a li {
 	border-left: 1px solid #487dd7;
 	padding-left: 14px;
 	font-weight: 600;
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 #client-list:hover::-webkit-input-placeholder{
@@ -1385,7 +1375,7 @@ nav ul a li {
 }
 
 .overlay-ad-account p:hover {
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 .login-center {
@@ -1423,7 +1413,7 @@ nav ul a li {
 }
 
 .create_client_form button:hover {
-		opacity: 0.8;
+		opacity: 0.7;
 }
 
 .toggleClient {
@@ -1491,7 +1481,7 @@ nav ul a li {
 }
 
 .selected-dashboards {
-	opacity: 0.5;
+	opacity: 0.7;
 }
 
 .audit-row-style a {
@@ -1630,7 +1620,7 @@ nav ul a li {
 	border-left: 1px solid #487dd7;
 	padding-left: 14px;
 	font-weight: 600 !important;
-	opacity: 0.8;
+	opacity: 0.7;
 	/* background:lightblue !important; */
 }
 
@@ -1736,18 +1726,20 @@ nav ul a li {
 }
 
 .audit-setup {
-    height: 585px;
-    float: left;
+	height: 585px;
+	float: left;
 }
 
 .scroll {
-    overflow-y: scroll;
-    overflow-x: hidden;
+	overflow-y: scroll;
+	overflow-x: hidden;
 }
 
-.clickable {
+.clickable:hover {
 	cursor: pointer;
+	opcatity
 }
+
 
 .viewed-list {
 	width: 100%;
@@ -2610,11 +2602,9 @@ h4 {
 
 .overflow-x {
 	width: 100%;
-	height: 60px;
 	float:left;
 	overflow-x: scroll;
 	overflow-y: hidden;
-	padding-left: 20px;
 }
 
 .overflow-x::-webkit-scrollbar {
@@ -2622,29 +2612,27 @@ h4 {
 }
 
 .activities {
-		margin-top: -15px;
-		float:left;
-		width: 2000px;
-		padding-top: 10px;
-		overflow: hidden;
+	float:left;
+	width: 2000px;
+	overflow: hidden;
 }
 
 .recent-send {
 	width: 150%;
-	height: 75px;
 	float:left;
 	overflow: hidden;
-	margin-top: -15px;
 }
 
 .recent-send-box {
 	width: auto;
 	float: left;
-	height: 76px;
-	padding: 5px 15px;
-	margin-right: 10px;
-	margin-top: 15px;
-	padding-left: 0;
+	margin: 0 10px;
+	padding-right: 5px;
+}
+
+.recent-send-box:hover {
+	opacity: 0.7;
+	text-decoration: none;
 }
 
 .recent-send-box i {
@@ -2727,6 +2715,7 @@ h4 {
 	position: absolute;
 	top: 30px; left: 15px;
 }
+
 
 .stat-box-title {
 	font-size: 13px;
@@ -2816,6 +2805,14 @@ h4 {
 	position: relative;
 	z-index: 50;
 	margin-top: 3px;
+}
+
+.border-box-audit {
+	border-top: 2px solid #16a085;
+}
+
+.border-box-report {
+	border-top: 2px solid #2980b9;
 }
 
 #chart-audit,
@@ -2999,7 +2996,7 @@ h4 {
 }
 
 .copy-link:hover {
-	opacity: 0.5;
+	opacity: 0.7;
 }
 
 #delete-this-audit {
@@ -3094,7 +3091,7 @@ h4 {
 .modal a:hover {
 	text-decoration: none !important;
 	color: #000;
-	opacity: 0.5;
+	opacity: 0.7;
 }
 
 .modal input[type="color"] {
@@ -3187,7 +3184,7 @@ h4 {
 }
 
 .modal .advice-button:hover {
-	opacity: 0.8;
+	opacity: 0.7;
 	cursor: pointer;
 }
 
@@ -3224,7 +3221,7 @@ h4 {
 
 .modal .agree:hover,
 .modal .deny:hover {
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 .modal .agree {
@@ -3782,7 +3779,7 @@ input[type="submit"] {
 
 #nextBtn:hover,
 #prevBtn:hover {
-	opacity: 0.8;
+	opacity: 0.7;
 }
 
 .center-horizontal {
@@ -4540,10 +4537,6 @@ h4 {
 
 		.report-dash-stat {
 			width: 100% !important;
-		}
-
-		.recent-send {
-			overflow-x: scroll;
 		}
 
 		.fontsize {

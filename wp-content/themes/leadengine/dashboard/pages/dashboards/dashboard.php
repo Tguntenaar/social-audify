@@ -95,54 +95,59 @@
   ?>
 
   <!-- $intro_bit -->
-    <?php if ($intro_bit): ?>
-      <div class="intro-overlay">
-        <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
-          <h1>Welcome to Social Audify!</h1>
-          <iframe style="display: block; margin: 0 auto; margin-bottom: 20px;" width="560" height="315" src="https://www.youtube.com/embed/O_JeCXnd3k0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-          <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Full tutorial<span style="position: relative; left: 5px; font-size: 9px;">(Recommended)</span></a>
-          <div style="clear: both; height: 20px;"></div>
-          <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 45px;">Configure profile</a>
-        </div>
-      </div>
-      <script>
-        FB.AppEvents.logEvent(FB.AppEvents.EventNames.COMPLETED_REGISTRATION);
-      </script>
-    <?php endif; ?>
-
-    <!-- new Update -->
-    <div class="intro-overlay update-overlay" style="display:none" id="update-overlay">
+  <?php if ($intro_bit): ?>
+    <div class="intro-overlay">
       <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
-        <h1>New Updates!</h1>
-        <span class="feature-title"> Language support </span>
-        <p>
-          You're now able to choose a language per audit! You can also set a default language in your config page, all new audits you make will then be set to this language.
-          <br/><br/>If your language is not included yet, send us a message on facebook!
-        </p>
-        <span class="feature-title">Export functionality</span>
-        <p>
-          On the new client dashboard you can export your client list to a csv file.<br />
-        </p>
-        <span class="feature-title">Bug fixes:</span>
-        <p>
-          <ul>
-            <li>Mails subjects</li>
-            <li>Emoji's in the mail fields</li>
-            <li>Audits that where openend by mail clients (frustrating)</li>
-          </ul>
-        </p>
-        <button onclick="$('#update-overlay').slideUp()" class="advice-button">Understood</button>
+        <h1>Welcome to Social Audify!</h1>
+        <iframe style="display: block; margin: 0 auto; margin-bottom: 20px;" width="560" height="315" src="https://www.youtube.com/embed/O_JeCXnd3k0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <a href="/tutorial/#1566310210069-10357311-75eb" target="_blank" rel="norefferer" class="advice-button" style="background: #27ae60; padding: 12px 20px; font-weight: 100; margin: 0 25px;">Full tutorial<span style="position: relative; left: 5px; font-size: 9px;">(Recommended)</span></a>
+        <div style="clear: both; height: 20px;"></div>
+        <a href="/profile-page" class="advice-button" style="padding: 12px 20px; font-weight: 100; margin-top: 45px;">Configure profile</a>
       </div>
     </div>
+    <script>
+      FB.AppEvents.logEvent(FB.AppEvents.EventNames.COMPLETED_REGISTRATION);
+    </script>
+  <?php endif; ?>
 
-    <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
+  <!-- new Update -->
+  <div class="intro-overlay update-overlay" style="display:none" id="update-overlay">
+    <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
+      <h1>New Updates!</h1>
+      <span class="feature-title">Feature 1</span>
+      <p>
+        The tool for generating more sales and automating your reporting process! <br />
+        In order to make your audits and reports as efficient as possible, we advise you to take a few minutes to configure your <br />
+        account to make sure you get the most out of this software.<br />
+        Within the settings you can configure your automatic emails / follow ups you want us to send, you can <br />
+        add your phone number so your leads can call you after watching your audit, and you can add a little avatar to add to<br />
+        every audit and other features.
+      </p>
+      <span class="feature-title">Feature 2</span>
+      <p>
+        This feature let's you do even more work with less time!<br />
+      </p>
+      <span class="feature-title">Bug fixes:</span>
+      <p>
+        <ul>
+          <li>Mails subjects</li>
+          <li>Emoji's</li>
+          <li>Audits that where openend by mail clients (frustrating)</li>
+        </ul>
+      </p>
+      <button onclick="$('#update-overlay').slideUp()" class="advice-button">Understood</button>
+    </div>
+  </div>
+
+  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
+    <div class="col-lg-12">
       <div class="download-viewed">
-        <span id="download-audit-viewed" onclick="export_viewed('audit')">Export viewed audits</span>
+        <span id="download-audit-viewed" onclick="export_viewed('audit')" style="margin-right:15px;">Export viewed audits</span>
         <span id="download-report-viewed" onclick="export_viewed('report')">Export viewed reports</span> 
       </div>
-      <h4 style="padding-left: 15px;">Status recent sent Reports and Audits</h4>
-      <hr style="margin-left: 15px;" class="under-line" />
-        <div class="overflow-x">
+      <h4>Status recent sent Reports and Audits</h4>
+      <hr class="under-line" />
+      <div class="overflow-x">
         <div class="activities">
           <div class="recent-send"><?php
             // Recently send Audits and Reports
@@ -151,127 +156,125 @@
               $slug = make_slug($item->type, $item->name, $item->id);
               $name = strlen($item->name) <= 15 ? $item->name : substr($item->name, 0, 15).'...'; ?>
 
-              <a href="<?php echo $slug; ?>" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 audit-row">
-                <div class="recent-send-box">
+              <a href="<?php echo $slug; ?>" class="recent-send-box">
                   <i class='fas fa-envelope<?php echo $item->view_time === NULL ? "" : "-open"; ?>'
                     style='color: <?php echo $item->type == 'audit' ? '#16a085' : '#2980b9'; ?>'></i>
                   <span class="report-audit-name"><?php echo $name; ?></span><br/>
                   <span class="report-audit-name-client"><?php echo $item->client_name; ?></span>
-                </div>
               </a><?php
             } ?>
           </div>
         </div>
       </div>
-
-      <div class="report-dash-stat col-xs-12 col-ms-12 col-ld-12 col-lg-6">
-        <!-- <select> TODO:
-          <option><?php //echo date('Y'); ?></option>
-          <option><?php //echo date('F Y'); ?></option>
-        </select> -->
-        <h4>Statistics for <?php echo date('Y'); ?></h4>
-        <hr class="under-line" />
-        <div style="clear:both"></div>
-
-        <!-- AUDIT STATS -->
-        <div class="stat-box" style="border-top: 2px solid #16a085;">
-          <span class="stat-box-title">Audits made</span>
-          <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
-          <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
-        </div>
-        <div class="stat-box clickable" onclick="showOpenedAudits()" style="border-top: 2px solid #16a085;">
-          <span class="stat-box-title">Audits opened</span>
-          <span class="stat-box-data"> <?php echo $viewed_audit; ?> </span>
-          <span class="stat-box-procent ">
-            <?php echo percent_diff($viewed_audit_month, $viewed_audit - $viewed_audit_month, true); ?>
-          </span>
-        </div>
-        <div class="stat-box clickable" onclick="showOpenedAudits()" style="border-top: 2px solid #16a085;">
-          <span class="stat-box-title">Open rate</span>
-          <span class="stat-box-data"><?php echo percent_print($open_rate_audit); ?></span>
-          <span class="stat-box-procent ">
-            <?php echo percent_diff($prev_open_rate_audit, $open_rate_audit, true); ?>
-          </span>
-        </div>
-
-        <!-- REPORT STATS -->
-        <div class="stat-box" style="border-top: 2px solid #2980b9;">
-          <span class="stat-box-title">Reports made</span>
-          <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
-          <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
-        </div>
-        <div class="stat-box" style="border-top: 2px solid #2980b9;">
-          <span class="stat-box-title">Reports opened</span>
-          <span class="stat-box-data"> <?php echo $viewed_report; ?> </span>
-          <span class="stat-box-procent ">
-            <?php echo percent_diff($viewed_report_month, $viewed_report - $viewed_report_month, true); ?>
-          </span>
-        </div>
-        <div class="stat-box" style="border-top: 2px solid #2980b9;">
-          <span class="stat-box-title">Open rate</span>
-          <span class="stat-box-data" ><?php echo percent_print($open_rate_report); ?></span>
-          <span class="stat-box-procent ">
-            <?php echo percent_diff($prev_open_rate_report, $open_rate_report, true); ?>
-          </span>
-        </div>
-      </div>
-
-
-      <!-- COMPARISON WITH LAST MONTH -->
-      <div class="report-compared-last-month col-xs-12 col-sm-12 col-md-12 col-lg-6">
-        <h4>Compared to previous Months</h4>
-        <hr class="under-line" />
-        <div class="graph-box" style="border-top: 2px solid #16a085;">
-          <span class="stat-box-title">% increase in number of audits this month</span>
-          <span class="graph-procent"><?php echo percent_print($yearly_increase_audit, $alter_percent_audit); ?></span>
-          <span class="graph-info">
-            <?php echo percent_print($month_increase_audit, $alter_percent_audit); ?> compared to last month<br />
-            (<?php echo $audit_values[11]." Audits in ".date("F Y"); ?>)
-          </span>
-          <canvas id="chart-audit"></canvas>
-        </div>
-        <div class="graph-box" style="border-top: 2px solid #2980b9;">
-          <span class="stat-box-title">% increase in number of reports this month</span>
-          <span class="graph-procent"><?php echo percent_print($yearly_increase_report, $alter_percent_report); ?></span>
-          <span class="graph-info">
-            <?php echo percent_print($month_increase_report, $alter_percent_report); ?> compared to last month<br />
-            (<?php echo $report_values[11]." Reports in ".date("F Y"); ?>)
-          </span>
-          <canvas id="chart-report"></canvas>
-        </div>
-      </div>
-      <!-- <button onclick="$('#update-overlay').slideDown()">View Recent Updates!</button> -->
     </div>
+
+    <div class="report-dash-stat col-xs-12 col-ms-12 col-ld-12 col-lg-6">
+      <!-- <select> TODO:
+        <option><?php //echo date('Y'); ?></option>
+        <option><?php //echo date('F Y'); ?></option>
+      </select> -->
+      <h4>Statistics for <?php echo date('Y'); ?></h4>
+      <hr class="under-line" />
+      <div style="clear:both"></div>
+
+      <!-- AUDIT STATS -->
+      <div class="stat-box border-box-audit">
+        <span class="stat-box-title">Audits sent</span>
+        <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
+        <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
+      </div>
+      <div class="stat-box border-box-audit clickable" onclick="showOpenedAudits()">
+        <span class="stat-box-title">Audits opened</span>
+        <span class="stat-box-data"> <?php echo $viewed_audit; ?> </span>
+        <span class="stat-box-procent ">
+          <?php echo percent_diff($viewed_audit_month, $viewed_audit - $viewed_audit_month, true); ?>
+        </span>
+      </div>
+      <div class="stat-box border-box-audit clickable" onclick="showOpenedAudits()">
+        <span class="stat-box-title">Open rate</span>
+        <span class="stat-box-data"><?php echo percent_print($open_rate_audit); ?></span>
+        <span class="stat-box-procent ">
+          <?php echo percent_diff($prev_open_rate_audit, $open_rate_audit, true); ?>
+        </span>
+      </div>
+
+      <!-- REPORT STATS -->
+      <div class="stat-box border-box-report">
+        <span class="stat-box-title">Reports sent</span>
+        <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
+        <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
+      </div>
+      <div class="stat-box border-box-report">
+        <span class="stat-box-title">Reports opened</span>
+        <span class="stat-box-data"> <?php echo $viewed_report; ?> </span>
+        <span class="stat-box-procent ">
+          <?php echo percent_diff($viewed_report_month, $viewed_report - $viewed_report_month, true); ?>
+        </span>
+      </div>
+      <div class="stat-box border-box-report">
+        <span class="stat-box-title">Open rate</span>
+        <span class="stat-box-data" ><?php echo percent_print($open_rate_report); ?></span>
+        <span class="stat-box-procent ">
+          <?php echo percent_diff($prev_open_rate_report, $open_rate_report, true); ?>
+        </span>
+      </div>
+    </div>
+
+    <!-- COMPARISON WITH LAST MONTH -->
+    <div class="report-compared-last-month col-xs-12 col-sm-12 col-md-12 col-lg-6">
+      <h4>Compared to previous Months</h4>
+      <hr class="under-line" />
+      <div class="graph-box">
+        <span class="stat-box-title">% increase in number of audits this month</span>
+        <span class="graph-procent"><?php echo percent_print($yearly_increase_audit, $alter_percent_audit); ?></span>
+        <span class="graph-info">
+          <?php echo percent_print($month_increase_audit, $alter_percent_audit); ?> compared to last month<br />
+          (<?php echo $audit_values[11]." Audits in ".date("F Y"); ?>)
+        </span>
+        <canvas id="chart-audit"></canvas>
+      </div>
+      <div class="graph-box">
+        <span class="stat-box-title">% increase in number of reports this month</span>
+        <span class="graph-procent"><?php echo percent_print($yearly_increase_report, $alter_percent_report); ?></span>
+        <span class="graph-info">
+          <?php echo percent_print($month_increase_report, $alter_percent_report); ?> compared to last month<br />
+          (<?php echo $report_values[11]." Reports in ".date("F Y"); ?>)
+        </span>
+        <canvas id="chart-report"></canvas>
+      </div>
+    </div>
+      <!-- <button onclick="$('#update-overlay').slideDown()">View Recent Updates!</button> -->
+  </div>
   </section>
 
 	<script charset="utf-8">
     function export_viewed(type) {
       $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data: {
-            action: 'export_viewed',
-            type: type,
-            user_id: <?php echo $user_id; ?>
-          },
-          success: function(response) {
-            response = JSON.parse(response);
-            console.log(response);
-            let csvContent = "data:text/csv;charset=utf-8," 
-                              + response.map(e => e.join(",")).join("\n");
+        type: "POST",
+        url: ajaxurl,
+        data: {
+          action: 'export_viewed',
+          type: type,
+          user_id: <?php echo $user_id; ?>
+        },
+        success: function(response) {
+          response = JSON.parse(response);
+          console.log(response);
+          let csvContent = "data:text/csv;charset=utf-8," 
+                            + response.map(e => e.join(",")).join("\n");
 
-            var encodedUri = encodeURI(csvContent);
-            window.open(encodedUri);
-          },
-          error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
-            logError(send_error, 'dashboards/dashboard.php', 'export_viewed');
-            showModal(initiateModal('errorModal', 'error', {
-              'text': `Can't export ${type}s`,
-              'subtext': "Please try again later or notify an admin if the issue persists"
-            }));
-          }
-        });
+          var encodedUri = encodeURI(csvContent);
+          window.open(encodedUri);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          var send_error = error_func(xhr, textStatus, errorThrown, data);
+          logError(send_error, 'dashboards/dashboard.php', 'export_viewed');
+          showModal(initiateModal('errorModal', 'error', {
+            'text': `Can't export ${type}s`,
+            'subtext': "Please try again later or notify an admin if the issue persists"
+          }));
+        }
+      });
     }
 
     function showOpenedAudits() {
@@ -292,8 +295,8 @@
 
 			var data = <?php echo json_encode($graph_values); ?>;
 
-      generateChart('chart-audit', [data[0]]);
-      generateChart('chart-report', [data[1]]);
+      generateChart('chart-audit', [data[0]], null, [false, false], "22,160,133");
+      generateChart('chart-report', [data[1]], null, [false, false], "41,128,185");
     });
 	</script>
 </body>

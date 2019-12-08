@@ -97,12 +97,17 @@ function toggleSelected(element, selectedList, triggerButton = null, postIds = n
   return postIds ? {selectedList, postIds} : selectedList;
 }
 
-function generateChart(canvas, datalist, labels = null, axes = [false, false]) {
+function generateChart(canvas, datalist, labels = null, axes = [false, false], primaryColor = "") {
   if (!$(`#${canvas}`).is('canvas'))
     return;
 
-  const backgroundColors = ["rgba(72, 125, 215, 0.1)", "rgba(238, 82, 83, 0.1)"];
-  const borderColors = ["#487dd7", "#ee5253"];
+  var borderColors = ["rgba(72, 125, 215)", "rgba(238, 82, 83)"];
+  var backgroundColors = ["rgba(72, 125, 215, 0.1)", "rgba(238, 82, 83, 0.1)"];
+
+  if (primaryColor != "") {
+    borderColors[0] = `rgb(${primaryColor})`;
+    backgroundColors[0] = `rgba(${primaryColor}, 0.1)`;
+  }
 
   var sets = new Array();
   for (var i = 0; i < datalist.length; i++) {
