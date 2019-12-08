@@ -82,7 +82,7 @@
 
 	<script charset='utf-8'>
     $(function() {
-      generateChart('chart-report', [<?php echo json_encode($daily_values); ?>]);
+      generateChart('chart-report', [<?php echo json_encode($daily_values); ?>], null, [false, false], "41,128,185");
 
       var elems = $("#report-results .audit-row");
       var selectedList = [];
