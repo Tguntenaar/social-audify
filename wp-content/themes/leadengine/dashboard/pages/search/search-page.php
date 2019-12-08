@@ -31,7 +31,7 @@
       <input type="text" name="search" id="search-input" placeholder="Type audit/report name here...">
     </div>
     <div class="result-container">
-      <div class="audit-results">
+      <div class="search-results">
         <span class="title"><span class="title-background">Audits</span>
           <span class="count" id="counterSpanAudit" style="float:right; color:#000;"><?php echo $number_of_audits; ?></span>
         </span>
@@ -41,7 +41,7 @@
           <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2">Viewed</div>
         </div>
         <div class="overflow-y">
-          <div class="audit-result-box" id="audit-results">
+          <div class="result-box" id="audit-results">
             <?php
               foreach ($audits as $audit) {
                 $slug = strtolower("/audit-".str_replace(' ', '-', $audit->name).'-'.$audit->id."/");
@@ -56,7 +56,7 @@
           </div>
         </div>
       </div>
-      <div class="report-results" style="margin-bottom: 0;">
+      <div class="search-results" style="margin-bottom: 0;">
         <span class="title"><span class="title-background">Reports</span>
           <span class="count" id="counterSpanReport" style="float:right; color:#000;"><?php echo $number_of_reports; ?></span>
         </span>
@@ -66,7 +66,7 @@
           <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2">Viewed</div>
         </div>
         <div class="overflow-y">
-          <div class="report-result-box" id="report-results">
+          <div class="result-box" id="report-results">
             <?php
               foreach ($reports as $report) {
   							$slug = strtolower('/report-'.str_replace(' ', '-', $report->name).'-'.$report->id.'/');

@@ -597,7 +597,7 @@
                   } ?>
                 </span>
               </div>
-              <div class="inner custom-inner" style="">
+              <div class="inner custom-inner">
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
