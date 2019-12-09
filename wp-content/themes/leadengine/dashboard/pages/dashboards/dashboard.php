@@ -142,8 +142,8 @@
   <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
     <div class="col-lg-12">
       <div class="download-viewed">
-        <span id="download-audit-viewed" onclick="export_viewed('audit')" style="margin-right:15px;">Export viewed audits</span>
-        <span id="download-report-viewed" onclick="export_viewed('report')">Export viewed reports</span> 
+        <span class="clickable" onclick="export_viewed('audit')" style="margin-right:15px;">Export viewed audits</span>
+        <span class="clickable" onclick="export_viewed('report')">Export viewed reports</span> 
       </div>
       <h4>Status recent sent Reports and Audits</h4>
       <hr class="under-line" />
@@ -156,7 +156,7 @@
               $slug = make_slug($item->type, $item->name, $item->id);
               $name = strlen($item->name) <= 15 ? $item->name : substr($item->name, 0, 15).'...'; ?>
 
-              <a href="<?php echo $slug; ?>" class="recent-send-box">
+              <a href="<?php echo $slug; ?>" class="recent-send-box clickable">
                   <i class='fas fa-envelope<?php echo $item->view_time === NULL ? "" : "-open"; ?>'
                     style='color: <?php echo $item->type == 'audit' ? '#16a085' : '#2980b9'; ?>'></i>
                   <span class="report-audit-name"><?php echo $name; ?></span><br/>
@@ -178,19 +178,19 @@
       <div style="clear:both"></div>
 
       <!-- AUDIT STATS -->
-      <div class="stat-box border-box-audit">
+      <div class="stat-box audit">
         <span class="stat-box-title">Audits sent</span>
         <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
         <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
       </div>
-      <div class="stat-box border-box-audit clickable" onclick="showOpenedAudits()">
+      <div class="stat-box audit clickable" onclick="showOpenedAudits()">
         <span class="stat-box-title">Audits opened</span>
         <span class="stat-box-data"> <?php echo $viewed_audit; ?> </span>
         <span class="stat-box-procent ">
           <?php echo percent_diff($viewed_audit_month, $viewed_audit - $viewed_audit_month, true); ?>
         </span>
       </div>
-      <div class="stat-box border-box-audit clickable" onclick="showOpenedAudits()">
+      <div class="stat-box audit clickable" onclick="showOpenedAudits()">
         <span class="stat-box-title">Open rate</span>
         <span class="stat-box-data"><?php echo percent_print($open_rate_audit); ?></span>
         <span class="stat-box-procent ">
@@ -199,19 +199,19 @@
       </div>
 
       <!-- REPORT STATS -->
-      <div class="stat-box border-box-report">
+      <div class="stat-box report">
         <span class="stat-box-title">Reports sent</span>
         <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
         <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
       </div>
-      <div class="stat-box border-box-report">
+      <div class="stat-box report">
         <span class="stat-box-title">Reports opened</span>
         <span class="stat-box-data"> <?php echo $viewed_report; ?> </span>
         <span class="stat-box-procent ">
           <?php echo percent_diff($viewed_report_month, $viewed_report - $viewed_report_month, true); ?>
         </span>
       </div>
-      <div class="stat-box border-box-report">
+      <div class="stat-box report">
         <span class="stat-box-title">Open rate</span>
         <span class="stat-box-data" ><?php echo percent_print($open_rate_report); ?></span>
         <span class="stat-box-procent ">
