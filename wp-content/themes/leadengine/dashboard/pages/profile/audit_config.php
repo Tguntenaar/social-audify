@@ -162,7 +162,7 @@
   }
 ?>
 <head>
-  <title>Audit config</title>
+  <title>Configuration audit</title>
   <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -438,7 +438,7 @@
             <?php visibility_short_code($edit_mode, $user->picture_vis_bit, 'picture_vis_bit', 'custom-visibility'); ?>
           </div>
       <div class="audit-intro-text">
-        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $user->display_name; ?></span><?php
+        <span class="audit-company-name"><?php echo ($company_name != "") ? $company_name : $author->display_name; ?></span><?php
         } else { echo '<div class="audit-intro-text">'; }
 
         if($user->introduction_vis_bit == 1 || $edit_mode) {
