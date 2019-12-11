@@ -125,6 +125,28 @@
             </div>
           </div>
 
+          <div class="profile-page-blocks">
+            <h3 class="h3-fix">Mail signature</h3>
+            
+            <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
+              Your Photo: <br/>
+              <?php 
+                // $wordpress_upload_dir = wp_upload_dir();
+                // var_dump($wordpress_upload_dir);
+                // $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
+                // var_dump($signature_directory);
+                // $filename = get_current_user_id() . "_signature"; // TODO: file extension?
+                // $files = scandir($signature_directory);
+                // $matches = preg_grep($filename, $files);
+                // var_dump($matches);
+              ?>
+              <img src="https://dev.localhost/wp-content/uploads/signatures/2_signature.png" alt="Signature" width="250">
+              <br/>
+              <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" />
+              <input type="submit" name="submit" value="Submit" />
+            </form>
+          </div>
+
           <div id="account-settings">
             <h3 class="h3-fix">Your data</h3><?php
             echo do_shortcode("[subscription_details]"); ?>

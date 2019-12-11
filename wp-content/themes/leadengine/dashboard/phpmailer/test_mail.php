@@ -1,11 +1,8 @@
 <?php
 
-/**
- * Template Name: Auto mailer
- */
-?>
-
-<?php
+class mail_controller {
+  
+}
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -37,69 +34,38 @@ $report_control = new report_controller($connection);
 $client_control = new client_controller($connection);
 
 // HIER BEGINT DE CODE
-$wp_users = get_users();
+$wp_user = get_current_user();
 
-foreach ($wp_users as $wp_user) {
+// Get config from users
+$user = $user_control->get($wp_user->ID);
+$company = get_user_meta($wp_user->ID, 'rcp_company', true);
+$name = $company !== "" ? $company : $wp_user->display_name;
 
-  if ($wp_user->ID == 1) {
-    continue;
-  }
-  
-  // Get config from users
-  $mail_data = $user_control->get($wp_user->ID);
-  $company = get_user_meta($wp_user->ID, 'rcp_company', true);
-  $name = $company !== "" ? $company : $wp_user->display_name;
+$audit_name = "<example audit name>";
+$client = "<example client name>";
 
-  // Check if it is a socialaudify user
-  if (!isset($mail_data)) {
-    continue;
-  }
+$link = "https://www.socialaudify.com/public/audit-config";
 
-  // Check if mail fields are set
-  if ($mail_data->day_1 == 0 && $mail_data->day_2 == 0 && $mail_data->day_3 == 0) {
-    continue;
-  }
-
-  // get all audits from past 4 months (day_3 max value is 90 days anyways)
-  $audits = $audit_control->get_all(4, $wp_user->ID);
-
-  foreach ($audits as $audit) {
-    if ($audit->mail_bit == 0) {
-      continue;
-    }
-
-    $client = $client_control->get($audit->client_id);
-    
-    $earlier = new DateTime($audit->create_date);
-    $later = new DateTime(date('Y-m-d H:i:s'));
-    $day_difference = $later->diff($earlier)->format("%a");
-
-    // Check if audit is viewed and if we have to send a auto mail
-    if ($audit->view_time == NULL && (($day_difference == $mail_data->day_1) || ($day_difference == $mail_data->day_2) || ($day_difference == $mail_data->day_3))) {
-
-      $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
-
-      // Create mail body
-      if ($day_difference == $mail_data->day_1) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $audit->name, $link);
-      } else if ($day_difference == $mail_data->day_2) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->second_mail_text, $client, $audit->name, $link);
-      } else {
-        $subject = replace_template_mail_fields($mail_data->subject_3, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $audit->name, $link);
-      }
-
-      $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
-      $body_string = str_replace("\n", "<br />", $body_string);
-
-      $body_string .= '<br /><br />Link: <a href=' . $link . ' title="Audit link">' . $audit->name . "</a>.<br /><br />";
-
-      send_mail($name, $wp_user->user_email, $client->name, $client->mail, $subject, $body_string);
-    }
-  }
+// Create mail body
+if ($send_mail == 1) {
+  $subject = replace_template_mail_fields($user->subject_1, $client, $audit_name, $link);
+  $body_string = replace_template_mail_fields($user->mail_text, $client, $audit_name, $link);
+} else if ($send_mail == 2) {
+  $subject = replace_template_mail_fields($user->subject_1, $client, $audit_name, $link);
+  $body_string = replace_template_mail_fields($user->second_mail_text, $client, $audit_name, $link);
+} else {
+  $subject = replace_template_mail_fields($user->subject_3, $client, $audit_name, $link);
+  $body_string = replace_template_mail_fields($user->third_mail_text, $client, $audit_name, $link);
 }
+
+$subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
+$body_string = str_replace("\n", "<br />", $body_string);
+
+$body_string .= '<br /><br />Link: <a href=' . $link . ' title="Audit link">' . $audit->name . "</a>.<br /><br />";
+
+send_mail($name, $wp_user->user_email, $client, $wp_user->user_email, $subject, $body_string);
+
+
 
 function send_mail($sender_name, $sender_email, $recipient_name, $recipient_email, $subject, $body) {
   // Instantiation and passing `true` enables exceptions
@@ -135,7 +101,7 @@ function send_mail($sender_name, $sender_email, $recipient_name, $recipient_emai
 }
 
 function replace_template_mail_fields($string, $client, $audit, $link) {
-  $a = str_replace("#{name}", $client->name, $string);
+  $a = str_replace("#{name}", $client, $string);
   $b = str_replace("#{audit}", $audit, $a);
   $str =  "<a href='{$link}' title='Audit link'>{$audit}</a>";
   $c = str_replace("#{auditlink}", $str, $b);

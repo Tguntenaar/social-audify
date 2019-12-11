@@ -215,7 +215,6 @@
   if(isset($_GET['view'])) {
       $public = 1;
   }
-  // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -251,7 +250,7 @@
         crossDomain: true,
         success: function(data) {
           const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
-          const downloadLink = document.getElementById("testje");
+          const downloadLink = document.getElementById("download-link");
           const fileName = "<?php echo $audit->name; ?>";
 
           downloadLink.href = linkSource;
@@ -333,7 +332,7 @@
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="preview" style="float: right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
         <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a>
-        <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
+        <a id="download-link"  class="copy-link" style="display:none;" download="file.pdf"></a>
         <?php
       } else {
         if ($user_id == $author_id) {?>

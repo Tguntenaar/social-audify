@@ -17,7 +17,6 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
-  <script>var testing_git = 'thomas git test';</script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
