@@ -4,7 +4,14 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-class mail_controller {
+// TODO:
+/**  
+ * Load Composer's autoloader
+ * require 'vendor/autoload.php';
+ * include dirname(__FILE__) . '/../../../../../wp-load.php';
+ */
+
+ class mail_controller {
   
   public function __construct() {
     // Instantiation and passing `true` enables exceptions
