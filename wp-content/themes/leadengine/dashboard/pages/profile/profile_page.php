@@ -11,6 +11,25 @@
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
   $user = $user_control->get($user_id);
+
+  // TODO:
+  $attachments = get_posts(
+    $defaults = array(
+      'numberposts'      => -1, // all
+      'category'         => 0,
+      'orderby'          => 'date',
+      'order'            => 'DESC',
+      'include'          => array(),
+      'exclude'          => array(),
+      'meta_key'         => '',
+      'meta_value'       => '',
+      'post_type'        => 'attachment',
+      'suppress_filters' => true,
+    )
+  );
+  // TODO:
+  // var_dump($attachments);
+
 ?>
 <head>
   <meta charset="utf-8">
@@ -92,6 +111,7 @@
                   <li id="first-content-mail-item" class="active-menu-item">Mail 1</li>
                   <li id="second-content-mail-item">Mail 2</li>
                   <li id="third-content-mail-item">Mail 3</li>
+                  <li id="test-content-mail-item">Test</li>
                 </ul>
                 <!-- mail 1 block -->
                 <p>Use #{name} to type the name of receiver in the subject/mail.</p>
@@ -117,6 +137,11 @@
                     echo trim($user->third_mail_text);
                   ?></textarea>
                 </div>
+                <!-- mail test block -->
+                <div class="test-content-mail-block tab" style="display:none">
+                  <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" value="<?php echo $user->mail?>">
+                  <button class="create-button-client">Send test mail</button>
+                </div>
               </div>
               <input type="submit" value="Update" class="update-button" >
             </form>
@@ -131,20 +156,18 @@
             <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
               Your Photo: <br/>
               <?php 
-                // $wordpress_upload_dir = wp_upload_dir();
-                // var_dump($wordpress_upload_dir);
-                // $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
-                // var_dump($signature_directory);
-                // $filename = get_current_user_id() . "_signature"; // TODO: file extension?
-                // $files = scandir($signature_directory);
-                // $matches = preg_grep($filename, $files);
-                // var_dump($matches);
+                $wordpress_upload_dir = wp_upload_dir();
+                $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
+                $upload_id = $user->signature;
+                $signature_url = wp_get_attachment_url($upload_id);
               ?>
-              <img src="https://dev.localhost/wp-content/uploads/signatures/2_signature.png" alt="Signature" width="250">
+              <img src=<?php echo $signature_url; ?> alt="Signature" width="250">
               <br/>
               <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" />
               <input type="submit" name="submit" value="Submit" />
             </form>
+
+            <button id="delete-signature">Delete</button>
           </div>
 
           <div id="account-settings">
@@ -158,6 +181,26 @@
 </body>
 <script>
   $(function() {
+    $('#delete-signature').click(function() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: { 'action': "delete_signature" },
+        success: logResponse,
+        error: logResponse,
+      });
+    });
+
+    $('#send-mail').click(function() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: { 'action': "test_mail" },
+        success: logResponse,
+        error: logResponse,
+      });
+    });
+
     $('#day_1, #day_2, #day_3').change(function() {
       $('#first-day-value').text($('#day_1').val());
       $('#second-day-value').text($('#day_2').val());
@@ -196,6 +239,7 @@
     $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail')});
     $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail')});
     $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail')});
+    $("#test-content-mail-item").click(function() { toggle(contentMailBlocks, 'test', 'content-mail')});
 
     function toggle(blocks, show, type) {
       blocks.forEach(function (el) {

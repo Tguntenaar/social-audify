@@ -42,7 +42,7 @@
   add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
 
   function log_js_error() {
-    require_once(dirname(_FILE_)."/dashboard/controllers/log_controller.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/log_controller.php");
     $errorLogger = new Logger;
 
     $message = isset($_POST['message']) ? $_POST['message'] : "";
@@ -525,6 +525,53 @@
     } 
 
      wp_die();
+  }
+
+  add_action( 'wp_ajax_test_mail', 'send_test_mail');
+  add_action( 'wp_ajax_nopriv_test_mail', 'not_logged_in');
+
+  // TODO:
+  function send_test_mail() {
+    // include(dirname(__FILE__)."/dashboard/phpmailer/mail_controller.php");
+    // $mail_control = new user_controller();
+    // $mail_control->send();
+  }
+
+  add_action( 'wp_ajax_delete_signature', 'signature_delete');
+  add_action( 'wp_ajax_nopriv_delete_signature', 'not_logged_in');
+
+  function signature_delete() {
+    include(dirname(__FILE__)."/dashboard/services/connection.php");
+    include(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
+    include(dirname(__FILE__)."/dashboard/models/user.php");
+
+    $user_id = get_current_user_id();
+    $connection = new connection;
+    $user_control = new user_controller($connection);
+    $user =  $user_control->get($user_id);
+
+    $upload_id = $user->signature; 
+
+    if ($upload_id != 0) {
+      $attachments = get_posts(
+        array(
+            'post_type'      => 'attachment',
+            'numberposts'    => -1,
+            'post_status'    => 'inherit',
+            'post_parent'    => $upload_id,
+        )
+      );
+      $counter = 0;
+      foreach ( $attachments as $attachment ) {
+        $counter += 1;
+        $force_delete = true;
+        wp_delete_attachment( $attachment->ID, $force_delete );
+      }
+      wp_send_json(array('status'=> "succes", "counter"=> $counter));
+      wp_die();
+    }
+    wp_send_json(array('status'=> "no signature"));
+    wp_die();
   }
 
   add_action( 'wp_ajax_export_viewed', 'export_viewed');
