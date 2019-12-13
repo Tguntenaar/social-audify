@@ -140,10 +140,10 @@
                 <!-- mail test block -->
                 <div class="test-content-mail-block tab" style="display:none">
                   <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" value="<?php echo $user->mail?>">
-                  <button class="create-button-client">Send test mail</button>
+                  <button class="create-button-client clickable">Send test mail</button>
                 </div>
               </div>
-              <input type="submit" value="Update" class="update-button" >
+              <input type="submit" value="Update" class="update-button clickable" >
             </form>
             <div class="profile-exp">
               <i id="mail-exp" class="info-i fas fa-info"></i>
@@ -154,20 +154,18 @@
             <h3 class="h3-fix">Mail signature</h3>
             
             <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
-              Your Photo: <br/>
-              <?php 
+              Your Photo: <br/><?php 
                 $wordpress_upload_dir = wp_upload_dir();
                 $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
                 $upload_id = $user->signature;
-                $signature_url = wp_get_attachment_url($upload_id);
-              ?>
+                $signature_url = wp_get_attachment_url($upload_id);?>
               <img src=<?php echo $signature_url; ?> alt="Signature" width="250">
               <br/>
               <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" />
-              <input type="submit" name="submit" value="Submit" />
+              <input class="clickable" type="submit" name="submit" value="Submit" />
             </form>
 
-            <button id="delete-signature">Delete</button>
+            <button id="delete-signature" class="clickable">Delete</button>
           </div>
 
           <div id="account-settings">
@@ -235,7 +233,7 @@
     $("#when-mail-item").click(function() { toggle(mailBlocks, 'when', 'mail') });
     $("#content-mail-item").click(function() { toggle(mailBlocks, 'content', 'mail') });
 
-    var contentMailBlocks = ['first', 'second', 'third'];
+    var contentMailBlocks = ['first', 'second', 'third', 'test'];
     $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail')});
     $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail')});
     $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail')});
