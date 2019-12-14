@@ -58,9 +58,9 @@ use PHPMailer\PHPMailer\Exception;
       // $mail->Body = 'Embedded Image: <img alt="PHPMailer" src="cid:my-attach"> Here is an image!';
 
       $this->mailer->send();
-      echo 'Message has been sent';
+      return 1;
     } catch (Exception $e) {
-      echo "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
+      return "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
     }
   }
 

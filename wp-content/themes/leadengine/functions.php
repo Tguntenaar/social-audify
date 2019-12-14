@@ -83,10 +83,8 @@
         $user_id = $_POST['user'];
         $type_table = $_POST['type_table'];
 
-        $testje = $user_service->toggle_config_visibility($user_id, $field, $type_table);
+        $user_service->toggle_config_visibility($user_id, $field, $type_table);
       }
-
-      // wp_send_json(array('test'=>$testje));
 
       wp_send_json(array('TABLE'=>$type_table, 'USER'=>$user_id, 'FIELD'=>$field));
 
@@ -530,7 +528,6 @@
   add_action( 'wp_ajax_test_mail', 'send_test_mail');
   add_action( 'wp_ajax_nopriv_test_mail', 'not_logged_in');
 
-  // TODO: test
   function send_test_mail() {
 
     include(dirname(__FILE__)."/dashboard/services/connection.php");
@@ -548,12 +545,17 @@
     $recipient_email = sanitize_email($_POST['mail']);
     $subject = $user->{'subject_'.$_POST['mailcount']};
     $body = $user->{'mail_text_'.$_POST['mailcount']};
-    $audit_name = "test";
+    $audit_name = "<Audit Name>";
     $audit_link = "https://www.socialaudify.com/audit-config";
 
-    $mail_control->send($user->name, $user->email, $user->name, $recipient_email, $subject, $body, $audit_name, $audit_link);
+    $succes = $mail_control->send($user->name, $user->email, $user->name, 
+      $recipient_email, $subject, $body, $audit_name, $audit_link);
     
-    wp_send_json(array("status"=>"succes"));
+    if ($succes === 1) {
+      wp_send_json(array("status"=>"succes"));
+    } else {
+      wp_send_json_error($succes);
+    }
     wp_die();
   }
 
