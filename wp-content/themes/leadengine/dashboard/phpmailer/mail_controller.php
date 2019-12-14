@@ -16,12 +16,13 @@ use PHPMailer\PHPMailer\Exception;
   
   public function __construct() {
     // Instantiation and passing `true` enables exceptions
-    $this->mail = new PHPMailer(true);
+    $this->mail = NULL;
   }
 
   function send($sender_name, $sender_email, $recipient_name, $recipient_email, $subject, $body, $audit_name = "", $audit_link = "") {
     try {
       require 'vendor/autoload.php';
+      $this->mail = new PHPMailer(true);
 
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
 
