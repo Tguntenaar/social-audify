@@ -82,13 +82,13 @@ foreach ($wp_users as $wp_user) {
       // Create mail body
       if ($day_difference == $mail_data->day_1) {
         $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $audit->name, $link);
+        $body_string = replace_template_mail_fields($mail_data->mail_text_1, $client, $audit->name, $link);
       } else if ($day_difference == $mail_data->day_2) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->second_mail_text, $client, $audit->name, $link);
+        $subject = replace_template_mail_fields($mail_data->subject_2, $client, $audit->name, $link);
+        $body_string = replace_template_mail_fields($mail_data->mail_text_2, $client, $audit->name, $link);
       } else {
         $subject = replace_template_mail_fields($mail_data->subject_3, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $audit->name, $link);
+        $body_string = replace_template_mail_fields($mail_data->mail_text_3, $client, $audit->name, $link);
       }
 
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;

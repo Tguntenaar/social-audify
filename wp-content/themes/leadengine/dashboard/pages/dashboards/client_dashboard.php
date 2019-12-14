@@ -240,16 +240,6 @@
     });
 
     function exportClients() {
-          var clientList = <?php echo json_encode($jsclients); ?>;
-          let csvContent = "data:text/csv;charset=utf-8," +
-            "Name,Facebook,Instagram,Website,Email\n" +
-            clientList.map(e => e.join(",")).join("\n");
-
-          var encodedUri = encodeURI(csvContent);
-          window.open(encodedUri);
-        }
-
-    function exportClients() {
       var clientList = <?php echo json_encode($jsclients); ?>;
       let csvContent = "data:text/csv;charset=utf-8," +
         "Name,Facebook,Instagram,Website,Email\n" +
@@ -258,8 +248,8 @@
       var encodedUri = encodeURI(csvContent);
       // window.open(encodedUri);
       link = document.createElement('a');
-      link.setAttribute('href', csvContent);
-      link.setAttribute('download', "filename");
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', "socialaudify_client.csv");
       link.click();
     }
 	</script>

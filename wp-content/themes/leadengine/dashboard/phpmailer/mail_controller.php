@@ -1,4 +1,6 @@
 <?php
+
+require 'vendor/autoload.php';
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -16,7 +18,7 @@ use PHPMailer\PHPMailer\Exception;
   public function __construct() {
     // Instantiation and passing `true` enables exceptions
     $this->mail = new PHPMailer(true);
-   }
+  }
 
   function send($sender_name, $sender_email, $recipient_name, $recipient_email, $subject, $body, $audit_name = "", $audit_link = "") {
     try {
@@ -48,6 +50,12 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->Subject = $subject;
       $this->mailer->Body    = $body_html;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
+
+      // TODO: https://stackoverflow.com/questions/3708153/send-email-with-phpmailer-embed-image-in-body
+      // $mail->AddEmbeddedImage(filename, cid, name);
+      // $mail->AddEmbeddedImage('my-photo.jpg', 'my-photo', 'my-photo.jpg ');
+      // $mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png");
+      // $mail->Body = 'Embedded Image: <img alt="PHPMailer" src="cid:my-attach"> Here is an image!';
 
       $this->mailer->send();
       echo 'Message has been sent';

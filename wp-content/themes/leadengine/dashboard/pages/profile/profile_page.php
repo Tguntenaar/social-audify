@@ -113,37 +113,49 @@
                   <li id="third-content-mail-item">Mail 3</li>
                   <li id="test-content-mail-item">Test</li>
                 </ul>
+                <div class="mail-components">
+                  <p>Use #{name} to type the name of receiver in the subject/mail.</p>
+                  <p>Use #{audit} to type the name your audit in the subject/mail.</p>
+                  <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
+                </div>
                 <!-- mail 1 block -->
-                <p>Use #{name} to type the name of receiver in the subject/mail.</p>
-                <p>Use #{audit} to type the name your audit in the subject/mail.</p>
-                <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
                 <div class="first-content-mail-block tab">
                   <input class="subject-line" type="text" name="mail_subject_1" id="mail_subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
-                  <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
-                    echo trim($user->mail_text);
+                  <textarea maxlength="1999" input="text" name="mail_text_1" id="mail_text"><?php
+                    echo trim($user->mail_text_1);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
                 <div class="second-content-mail-block tab" style="display:none">
                   <input class="subject-line" type="text" name="mail_subject_2" id="mail_subject_2" placeholder="Subject" value="<?php echo $user->subject_2?>">
-                  <textarea maxlength="1999" input="text" name="second_mail_text" id="mail_text2"><?php
-                    echo trim($user->second_mail_text);
+                  <textarea maxlength="1999" input="text" name="mail_text_2" id="mail_text2"><?php
+                    echo trim($user->mail_text_2);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
                 <div class="third-content-mail-block tab" style="display:none">
                   <input class="subject-line" type="text" name="mail_subject_3" id="mail_subject_3" placeholder="Subject" value="<?php echo $user->subject_3?>">
-                  <textarea maxlength="1999" input="text" name="third_mail_text" id="mail_text3"><?php
-                    echo trim($user->third_mail_text);
+                  <textarea maxlength="1999" input="text" name="mail_text_3" id="mail_text3"><?php
+                    echo trim($user->mail_text_3);
                   ?></textarea>
                 </div>
                 <!-- mail test block -->
                 <div class="test-content-mail-block tab" style="display:none">
-                  <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" value="<?php echo $user->mail?>">
-                  <button class="create-button-client">Send test mail</button>
+                  <div style="width:75px;">
+                    <input type="radio" name="mail" value="1" checked>
+                      <span class="radio-label">mail 1</span>
+                    <input type="radio" name="mail" value="2">
+                      <span class="radio-label">mail 2</span>
+                    <input type="radio" name="mail" value="3">
+                    <span class="radio-label">mail 3</span>
+                  </div>
+                  <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" id="recipient_email" value="<?php echo $user->email?>" style="margin-top:10px;">
+                  <button type="button" class="create-button-client" id="send-mail">Send test mail</button>
                 </div>
               </div>
-              <input type="submit" value="Update" class="update-button" >
+              <div class="mail-components">
+                <input type="submit" value="Update" class="update-button" >
+              </div>
             </form>
             <div class="profile-exp">
               <i id="mail-exp" class="info-i fas fa-info"></i>
@@ -195,7 +207,9 @@
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { 'action': "test_mail" },
+        data: { 'action': "test_mail",
+                "mail": $("#recipient_email").val(),
+                "mailcount": $("input[name=mail]:checked").val() },
         success: logResponse,
         error: logResponse,
       });
@@ -235,11 +249,23 @@
     $("#when-mail-item").click(function() { toggle(mailBlocks, 'when', 'mail') });
     $("#content-mail-item").click(function() { toggle(mailBlocks, 'content', 'mail') });
 
-    var contentMailBlocks = ['first', 'second', 'third'];
-    $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail')});
-    $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail')});
-    $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail')});
-    $("#test-content-mail-item").click(function() { toggle(contentMailBlocks, 'test', 'content-mail')});
+    var contentMailBlocks = ['first', 'second', 'third', 'test'];
+    $("#first-content-mail-item").click(function() { 
+      toggle(contentMailBlocks, 'first', 'content-mail');
+      $('.mail-components').show();
+    });
+    $("#second-content-mail-item").click(function() { 
+      toggle(contentMailBlocks, 'second', 'content-mail');
+      $('.mail-components').show();
+    });
+    $("#third-content-mail-item").click(function() { 
+      toggle(contentMailBlocks, 'third', 'content-mail');
+      $('.mail-components').show();
+    });
+    $("#test-content-mail-item").click(function() { 
+      toggle(contentMailBlocks, 'test', 'content-mail');
+      $('.mail-components').hide();
+    });
 
     function toggle(blocks, show, type) {
       blocks.forEach(function (el) {
