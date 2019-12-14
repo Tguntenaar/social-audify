@@ -1,6 +1,5 @@
 <?php
 
-require 'vendor/autoload.php';
 // Import PHPMailer classes into the global namespace
 // These must be at the top of your script, not inside a function
 use PHPMailer\PHPMailer\PHPMailer;
@@ -22,6 +21,8 @@ use PHPMailer\PHPMailer\Exception;
 
   function send($sender_name, $sender_email, $recipient_name, $recipient_email, $subject, $body, $audit_name = "", $audit_link = "") {
     try {
+      require 'vendor/autoload.php';
+
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
 
       $body_html = str_replace("\n", "<br />", $body);
