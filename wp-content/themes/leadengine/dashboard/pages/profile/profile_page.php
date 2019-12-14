@@ -173,7 +173,7 @@
                 $upload_id = $user->signature;
                 $signature_url = wp_get_attachment_url($upload_id);
               ?>
-              <img src=<?php echo $signature_url; ?> alt="Signature" width="250">
+              <img src=<?php echo $signature_url ? $signature_url: ""; ?> alt="Signature" width="250">
               <br/>
               <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" />
               <input type="submit" name="submit" value="Submit" />
