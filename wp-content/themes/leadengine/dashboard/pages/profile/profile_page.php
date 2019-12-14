@@ -166,19 +166,21 @@
             <h3 class="h3-fix">Mail signature</h3>
             
             <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
-              Your Photo: <br/>
               <?php 
                 $wordpress_upload_dir = wp_upload_dir();
                 $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
                 $upload_id = $user->signature;
                 $signature_url = wp_get_attachment_url($upload_id);
+                if ($signature_url):
               ?>
-              <img src=<?php echo $signature_url ? $signature_url: ""; ?> alt="Signature" width="250">
+              Your Photo: <br/>
+              <img src=<?php echo $signature_url ?> alt="Signature" width="250">
               <br/>
+              <?php endif; ?>
               <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" />
               <input type="submit" name="submit" value="Submit" />
             </form>
-
+            <br/>
             <button id="delete-signature">Delete</button>
           </div>
 
