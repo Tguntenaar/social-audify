@@ -87,6 +87,11 @@ label.myLabel input[type="file"] {
 	position: absolute;
 }
 
+.rcp-table {
+	width: 100%;
+	margin-bottom: 20px;
+}
+
 .content-right #rcp_country_text {
 	width: 50% !important;
 	margin-top: 20px !important;
