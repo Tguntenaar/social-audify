@@ -27,11 +27,11 @@ use PHPMailer\PHPMailer\Exception;
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
 
       $body_html = str_replace("\n", "<br />", $body);
-      $body_html .= '<br /><br />Link: <a href='. $audit_link .' title="Audit link">'. $audit_name ."</a>.<br /><br />";
+      $body_html .= "<br /><br />Link: <a href='{$audit_link}' title='Audit link'>{$audit_name}</a><br /><br />";
 
-      $this->replace_template_fields($subject, $recipient_name, $audit_name, $audit_link);
-      $this->replace_template_fields($body_html, $recipient_name, $audit_name, $audit_link);
-      $this->replace_template_fields($body, $recipient_name, $audit_name, $audit_link, false);
+      $subject = $this->replace_template_fields($subject, $recipient_name, $audit_name, $audit_link);
+      $body_html = $this->replace_template_fields($body_html, $recipient_name, $audit_name, $audit_link);
+      $body = $this->replace_template_fields($body, $recipient_name, $audit_name, $audit_link, false);
 
       //Server settings
       $this->mailer->SMTPDebug = 0;                                       // Enable verbose debug output
@@ -53,14 +53,14 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->Body    = $body_html;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
-      // Signature
+      // Signature & Send
       $this->add_signature($signature);
-
       $this->mailer->send();
-      return 1;
+      
     } catch (Exception $e) {
       return "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
     }
+    return 1;
   }
 
   function replace_template_fields($string, $client_name, $audit_name, $audit_link, $isHtml = true) {
@@ -86,7 +86,7 @@ use PHPMailer\PHPMailer\Exception;
 
     if ($signature) {
       $body = $this->mailer->Body;
-      $new_body = str_replace("#{signature}", "<img alt='Signature' src='{$signature}'>", $body);
+      $new_body = str_replace("#{signature}", "<img alt='Signature' src='{$signature}'/>", $body);
       $this->mailer->Body = $new_body;
     }
   }
