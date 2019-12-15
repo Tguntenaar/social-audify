@@ -541,6 +541,7 @@ function send_test_mail()
   $recipient_email = sanitize_email($_POST['mail']);
   $subject = $user->{'subject_' . $_POST['mailcount']};
   $body = $user->{'mail_text_' . $_POST['mailcount']};
+  $signature = wp_get_attachment_url($user->signature);
   $audit_name = "<Audit Name>";
   $audit_link = "https://www.socialaudify.com/audit-config";
 
@@ -551,6 +552,7 @@ function send_test_mail()
     $recipient_email,
     $subject,
     $body,
+    $signature,
     $audit_name,
     $audit_link
   );

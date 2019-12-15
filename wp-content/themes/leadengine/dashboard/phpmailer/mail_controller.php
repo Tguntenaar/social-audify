@@ -20,7 +20,9 @@ use PHPMailer\PHPMailer\Exception;
     $this->mailer = new PHPMailer(true);
   }
 
-  function send($sender_name, $sender_email, $recipient_name, $recipient_email, $subject, $body, $audit_name = "", $audit_link = "") {
+  function send($sender_name, $sender_email, $recipient_name, $recipient_email, 
+    $subject, $body, $signature = false, $audit_name = "", $audit_link = "") {
+
     try {
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
 
@@ -51,11 +53,9 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->Body    = $body_html;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
-      // TODO: https://stackoverflow.com/questions/3708153/send-email-with-phpmailer-embed-image-in-body
-      // $mail->AddEmbeddedImage(filename, cid, name);
-      // $mail->AddEmbeddedImage('my-photo.jpg', 'my-photo', 'my-photo.jpg ');
-      // $mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png");
-      // $mail->Body = 'Embedded Image: <img alt="Signature" src="https://www.socialaudify.com/wp-content/uploads/signatures/3_signature.jpg"> Here is an image!';
+      // Signature
+      add_signature($signature);
+
 
       $this->mailer->send();
       return 1;
@@ -64,23 +64,32 @@ use PHPMailer\PHPMailer\Exception;
     }
   }
 
-  function replace_template_fields($string, $client_name, $audit_name, $audit_link, $imgurl, $isHtml = true) {
+  function replace_template_fields($string, $client_name, $audit_name, $audit_link, $isHtml = true) {
     $a = str_replace("#{name}", $client_name, $string);
     $b = str_replace("#{audit}", $audit_name, $a);
 
     $link_tag = "<a href='{$audit_link}' title='Audit link'>{$audit_name}</a>";
-    if ($isHtml) {
-      $c = str_replace("#{auditlink}", $isHtml ? $link_tag : $audit_link, $b);
-      $d = str_replace("#{signature}", "img", $c);
-    } else {
-      $c = str_replace("#{auditlink}", $isHtml ? $link_tag : $audit_link, $b);
-      $d = str_replace("#{signature}", '<img alt="Signature" src="'.$imgurl.'">', $c);
-    }
-    
+    $c = str_replace("#{auditlink}", $isHtml ? $link_tag : $audit_link, $b);
 
     // add more fields
     // $d = str_replace("#{company}", $company, $c);
+
     return $c;
+  }
+  
+  function add_signature($signature) {
+    
+    // TODO: maybe..? : https://stackoverflow.com/questions/3708153/send-email-with-phpmailer-embed-image-in-body
+    // $mail->AddEmbeddedImage(filename, cid, name);
+    // $mail->AddEmbeddedImage('my-photo.jpg', 'my-photo', 'my-photo.jpg ');
+    // $mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png");
+    // $mail->Body = 'Embedded Image: <img alt="Signature" src="https://www.socialaudify.com/wp-content/uploads/signatures/3_signature.jpg"> Here is an image!';
+
+    if ($signature) {
+      $temp_body = $this->mailer->Body;
+      str_replace("#{signature}", "<img alt='Signature' src='{$signature}'>", $temp_body);
+      $this->mailer->Body = $temp_body;
+    }
   }
 }
 ?>
