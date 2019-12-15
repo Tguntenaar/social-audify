@@ -54,7 +54,7 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
       // Signature
-      // add_signature($signature);
+      $this->add_signature($signature);
 
       $this->mailer->send();
       return 1;
@@ -85,9 +85,9 @@ use PHPMailer\PHPMailer\Exception;
     // $mail->Body = 'Embedded Image: <img alt="Signature" src="https://www.socialaudify.com/wp-content/uploads/signatures/3_signature.jpg"> Here is an image!';
 
     if ($signature) {
-      $temp_body = $this->mailer->Body;
-      str_replace("#{signature}", "<img alt='Signature' src='{$signature}'>", $temp_body);
-      $this->mailer->Body = $temp_body;
+      $body = $this->mailer->Body;
+      $new_body = str_replace("#{signature}", "<img alt='Signature' src='{$signature}'>", $body);
+      $this->mailer->Body = $new_body;
     }
   }
 }
