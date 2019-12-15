@@ -54,8 +54,7 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
       // Signature
-      add_signature($signature);
-
+      // add_signature($signature);
 
       $this->mailer->send();
       return 1;
