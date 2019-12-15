@@ -55,7 +55,7 @@ use PHPMailer\PHPMailer\Exception;
       // $mail->AddEmbeddedImage(filename, cid, name);
       // $mail->AddEmbeddedImage('my-photo.jpg', 'my-photo', 'my-photo.jpg ');
       // $mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png");
-      // $mail->Body = 'Embedded Image: <img alt="PHPMailer" src="cid:my-attach"> Here is an image!';
+      // $mail->Body = 'Embedded Image: <img alt="Signature" src="https://www.socialaudify.com/wp-content/uploads/signatures/3_signature.jpg"> Here is an image!';
 
       $this->mailer->send();
       return 1;
@@ -64,12 +64,19 @@ use PHPMailer\PHPMailer\Exception;
     }
   }
 
-  function replace_template_fields($string, $client_name, $audit_name, $audit_link, $isHtml = true) {
+  function replace_template_fields($string, $client_name, $audit_name, $audit_link, $imgurl, $isHtml = true) {
     $a = str_replace("#{name}", $client_name, $string);
     $b = str_replace("#{audit}", $audit_name, $a);
 
     $link_tag = "<a href='{$audit_link}' title='Audit link'>{$audit_name}</a>";
-    $c = str_replace("#{auditlink}", $isHtml ? $link_tag : $audit_link, $b);
+    if ($isHtml) {
+      $c = str_replace("#{auditlink}", $isHtml ? $link_tag : $audit_link, $b);
+      $d = str_replace("#{signature}", "img", $c);
+    } else {
+      $c = str_replace("#{auditlink}", $isHtml ? $link_tag : $audit_link, $b);
+      $d = str_replace("#{signature}", '<img alt="Signature" src="'.$imgurl.'">', $c);
+    }
+    
 
     // add more fields
     // $d = str_replace("#{company}", $company, $c);

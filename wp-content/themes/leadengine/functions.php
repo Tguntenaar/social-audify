@@ -580,23 +580,11 @@ function signature_delete()
   $upload_id = $user->signature;
 
   if ($upload_id != 0) {
-    $attachments = get_posts(
-      array(
-        'post_type'      => 'attachment',
-        'numberposts'    => -1,
-        'post_status'    => 'inherit',
-        'post_parent'    => $upload_id,
-      )
-    );
-
-    $counter = 0;
-
-    foreach ($attachments as $attachment) {
-      $counter += 1;
-      $force_delete = true;
-      wp_delete_attachment($attachment->ID, $force_delete);
-    }
     
+    $force_delete = true;
+    wp_delete_attachment($upload_id, $force_delete);
+    $user->update("User", "signature", 0);
+
     wp_send_json(array('status' => "succes", "counter" => $counter));
   } else {
     wp_send_json(array('status' => "no signature"));

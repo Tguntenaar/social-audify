@@ -19,14 +19,13 @@ $wordpress_upload_dir = wp_upload_dir();
 $signature_directory = $wordpress_upload_dir['basedir'] . "/signatures";
 // $wordpress_upload_dir['path'] is the full server path to wp-content/uploads/2017/05, for multisite works good as well
 // $wordpress_upload_dir['url'] the absolute URL to the same folder, actually we do not need it, just to show the link to file
-$i = 1; // number of tries when the file with the same name is already exists
  
 $signature = $_FILES['mail-signature'];
 
 $file_name = $signature['name'];
 $path_parts = pathinfo($file_name);
-$extension = $path_parts['extension'];
-$new_file_name = $user_id . "_signature." . $extension;
+$file_extension = $path_parts['extension'];
+$new_file_name = $user_id . "_signature." . $file_extension;
 
 $new_file_path = $signature_directory . '/' . $new_file_name;
 $new_file_mime = mime_content_type( $signature['tmp_name'] );
@@ -35,27 +34,20 @@ if( empty( $signature ) )
 	die( 'File is not selected.' );
  
 if( $signature['error'] )
-	die( $signature['error'] );
+  die("No signature selected");
  
 if( $signature['size'] > wp_max_upload_size() )
-	die( 'It is too large than expected.' );
+  wp_redirect( "https://". $_SERVER["HTTP_HOST"] . "/profile-page/#mail-settings?error=size");
 
-// $new_file_mime == "image/png" ) //
 if( !in_array( $new_file_mime, get_allowed_mime_types() ) )
 	die( 'WordPress doesn\'t allow this type of uploads.' );
- 
-if ( file_exists($new_file_path) ) {
-  // dont put in trash
-  $force_delete = true;
-  $post_id = 0; // TODO:
-  wp_delete_attachment($post_id, $force_delete);
-}
 
 // looks like everything is OK
 if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
   if ($user->signature != 0) {
     // wp_delete_attachment_files($user->signature, array $meta, array $backup_sizes, string $file );
-    wp_delete_attachment($user->signature, true);
+    $force_delete = true;
+    wp_delete_attachment($user->signature, $force_delete);
   } 
 
 	$upload_id = wp_insert_attachment( array(
@@ -66,14 +58,13 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
 		'post_status'    => 'inherit'
   ), $new_file_path );
  
+  // TODO:
 	// wp_generate_attachment_metadata() won't work if you do not include this file
-	require_once( ABSPATH . 'wp-admin/includes/image.php' );
- 
+	// require_once( ABSPATH . 'wp-admin/includes/image.php' );
 	// Generate and save the attachment metas into the database
-	wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
+	// wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
   
-  
-  $user->update("User", "signature", $upload_id); 
+  $user->update("User", "signature", $upload_id);
 
 	// Show the uploaded file in browser
   // wp_redirect( $wordpress_upload_dir['baseurl'] . '/signatures'. '/' . basename( $new_file_path ) );

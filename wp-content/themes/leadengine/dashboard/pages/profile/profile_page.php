@@ -11,25 +11,6 @@
   // Header
   include(dirname(__FILE__)."/../header/dashboard_header.php");
   $user = $user_control->get($user_id);
-
-  // TODO:
-  $attachments = get_posts(
-    $defaults = array(
-      'numberposts'      => -1, // all
-      'category'         => 0,
-      'orderby'          => 'date',
-      'order'            => 'DESC',
-      'include'          => array(),
-      'exclude'          => array(),
-      'meta_key'         => '',
-      'meta_value'       => '',
-      'post_type'        => 'attachment',
-      'suppress_filters' => true,
-    )
-  );
-  // TODO:
-  // var_dump($attachments);
-
 ?>
 <head>
   <meta charset="utf-8">
@@ -174,10 +155,10 @@
                 if ($signature_url):
               ?>
               Your Photo: <br/>
-              <img src=<?php echo $signature_url ?> alt="Signature" width="250">
+              <img src=<?php echo $signature_url ?> alt="Signature" width="250" id="signature-img">
               <br/>
               <?php endif; ?>
-              <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" />
+              <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>
               <input type="submit" name="submit" value="Submit" />
             </form>
             <br/>
@@ -200,7 +181,10 @@
         type: "POST",
         url: ajaxurl,
         data: { 'action': "delete_signature" },
-        success: logResponse,
+        success: function(response) {
+          logResponse(response);
+          $('#signature-img').hide();
+        },
         error: logResponse,
       });
     });
