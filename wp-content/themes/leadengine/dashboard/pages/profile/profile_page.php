@@ -158,11 +158,12 @@
               <img src=<?php echo $signature_url ?> alt="Signature" width="250" id="signature-img">
               <br/>
               <?php endif; ?>
-              <input class="button" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>
+              <input class="button" style="margin-top: 20px" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>
+              <div style="clear:both; margin-bottom: 25px;"></div>
+              <button id="delete-signature">Delete</button>
               <input type="submit" name="submit" value="Submit" />
             </form>
             <br/>
-            <button id="delete-signature">Delete</button>
           </div>
 
           <div id="account-settings">

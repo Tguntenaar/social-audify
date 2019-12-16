@@ -1077,6 +1077,18 @@ nav ul a li {
   transform: translate(-50%, 0);
 }
 
+#delete-signature {
+	margin-right: 10px;
+	border: 1px solid #487dd7 !important;
+	color: #487dd7 !important;
+	background: transparent !important;
+}
+
+#delete-signature:hover {
+	color: #fff !important;
+	background: #487dd7 !important;
+}
+
 .overview-audit-report .client-id {
 		margin-left: 0px !important;
 		text-align: left;
