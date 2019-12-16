@@ -214,21 +214,21 @@ foreach ($clients as $c) {
       console.log(retrievedClients);
 
       if (!$.isEmptyObject(retrievedClients) && retrievedClients.length > 0) {
-        // toggleUpdate(false);
-        // showBounceBall(true, 'Give us a few seconds as we import your clients');
-        // $.ajax({
-        //   type: "POST",
-        //   url: ajaxurl,
-        //   data: {action: 'import_clients', clients: retrievedClients},
-        //   success: function(response) {
-        //     window.location.replace('https://<?php echo getenv('HTTP_HOST'); ?>/client-dashboard');
-        //   },
-        //   error: function (xhr, textStatus, errorThrown) {
-        //     showBounceBall(false);
-        //     var send_error = error_func(xhr, textStatus, errorThrown, retrievedClients);
-        //     logError(send_error, 'setups/import_clients.php', 'submit');
-        //   }
-        // });
+        toggleUpdate(false);
+        showBounceBall(true, 'Give us a few seconds as we import your clients');
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: {action: 'import_clients', clients: retrievedClients},
+          success: function(response) {
+            window.location.replace('https://<?php echo getenv('HTTP_HOST'); ?>/client-dashboard');
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            showBounceBall(false);
+            var send_error = error_func(xhr, textStatus, errorThrown, retrievedClients);
+            logError(send_error, 'setups/import_clients.php', 'submit');
+          }
+        });
       } else {
         showModal(initiateModal('errorModal', 'error', {
           'text': `No valid clients found`,
