@@ -1,0 +1,611 @@
+// Colors
+$base-color: #4da1ff;
+
+// Template sizes
+$header-height: 70px;
+$sidebar-size: 220px;
+$introduction-height: 480px;
+
+// Paddings
+$padding-right: 90px;
+
+// STD CSS
+body {
+    background: #f7f7f7;
+}
+
+.vertical-align {
+    height: auto;
+	position: relative;
+	top: 50%;
+	-webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
+.button {
+    width: 150px;
+    height: 45px;
+    line-height: 45px;
+    font-size: 14px;
+    display: block;
+    border-radius: 3px;
+    text-align: center;
+    color: #fff;
+    background: $base-color;
+    box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.2);
+    margin-left: 10px;
+    float: left;
+
+    &:first-of-type {
+        margin-left: 0px;
+    }
+}
+
+.title {
+    color: #2f2f2f;
+    font-weight: 600;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 15px;
+    color: #2f2f2f;
+}
+
+.section-subtitle {
+    font-size: 13px;
+    color: #cfd2d6;
+    display: block;
+    margin-left: 37px;
+    margin-bottom: 30px;
+}
+
+.font-blue {
+    color: #4da1ff !important;
+    font-weight: bold;
+}
+
+.font-red {
+    color: #e36364 !important;
+    font-weight: bold;
+}
+.section-icon {
+    float: left;
+    margin-bottom: -3px;
+}
+
+
+.statistics {
+    width: 100%;
+    padding-right: $padding-right; 
+    height: auto;
+    margin-top: 15px;
+    display:grid;
+    grid-template-columns: 23% 24% 24% 24%;
+    grid-column-gap: 25px;
+
+    .stat-box {
+        height: 250px;
+        background: #fff;
+        box-shadow: 0px 8px 15px rgba(40, 40, 40, 0.1);
+        padding-top: 110px;
+        padding-left: 20px;
+        padding-right: 20px;
+        position: relative;
+
+        .stat-title {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: #9b9b9b;
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+        .information {
+            position: absolute;
+            top: 24px;
+            right: 20px;
+            color: #9b9b9b !important;
+            font-size: 18px !important;
+        }
+
+        .skills{
+            width:100%;
+            height:15px;
+            position:relative;
+            top: 0; left: 0;
+            margin-bottom: 40px;
+        }
+        .title-bar{
+            position:absolute;
+            top:-30px;
+        }
+
+        .procent {
+            top: -13px;
+            position: relative;
+        }
+
+        .title-bar h5 {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .skills span {
+            float:right;
+            margin-top:-22px;
+            margin-right:5px;
+        }
+
+        .blue {
+            background: #4da1ff !important;
+            box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.25);
+        }
+
+        .red {
+            background: #e36364 !important;
+            box-shadow: 0px 8px 15px rgba(227, 99, 100, 0.25);
+        }
+          
+        .skillbar{
+            background-color:#ff3333;
+            width:0px;
+            height:10px;
+        }
+
+        .x-as {
+            // border-bottom: 1px solid #e5e5e5;
+            width: 100%;
+            margin-top: -20px;
+        }
+
+        .left-value {
+            color: #cecece;
+            font-size: 12px !important;
+            position: absolute;
+            left: 20px;
+            margin-top: -15px;
+        }
+
+        .right-value {
+            color: #cecece;
+            font-size: 12px !important;
+            position: absolute;
+            right: 20px;
+            margin-top: -15px;
+        }
+
+        .center-value {
+            color: #cecece;
+            font-size: 12px !important;
+            margin-top: -15px;
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0);
+        }
+    }
+}
+
+.small-statistics {
+    width: auto;
+    height: auto;
+    float: left;
+    background: #e0e0e0;
+    padding: 35px;
+    margin-top: 40px;
+
+    .stat-box {
+        width: 230px;
+        height: 190px;
+        background: #fff;
+        box-shadow: 0px 8px 15px rgba(40, 40, 40, 0.05);
+        padding: 30px;
+        float: left;
+        margin-right: 50px;
+        position: relative;
+
+        .information {
+            position: absolute;
+            top: 10px;
+            right: 32px;
+            color: #9b9b9b !important;
+            font-size: 18px !important;
+        }
+
+        .stat-title {
+            position: absolute;
+            left: 30px;
+            top: 15px;
+            color: #9b9b9b;
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+        .your-stat {
+            width: 100%;
+            height: 40px;
+            margin-top: 40px;
+            float: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        i {
+            font-size: 20px !important;
+            float: right;
+            margin-top: 8px;
+        }
+
+        .check {
+            color: #2ecc71 !important;
+        }
+
+        .not-check {
+            color: #e74c3c !important;
+        }
+
+        .competitor-stat {
+            width: 100%;
+            height: 40px;
+            float: left;
+        }
+
+        .title-bar {
+            height:40px;
+            line-height: 40px;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        &:last-of-type {
+            margin-right: 0px;
+        }
+    }
+}
+.advice {
+    width: 50%;
+    height: auto;
+    float: left;
+    margin-top: 80px;
+    margin-bottom: 80px;
+
+    .advice-title {
+        font-size: 16px;
+        font-weight: bold;
+        color: #2f2f2f;
+    }
+
+    .skills{
+        background-color:#ddd;
+        width:100%;
+        height:12px;
+        position:relative;
+        margin-top: 10px;
+        border-radius: 3px;
+      }
+      .title-bar{
+        position:absolute;
+        top:-50px;
+        margin:5px
+      }
+      .skills span {
+        float:right;
+        margin-top:-22px;
+        margin-right:5px;
+      }
+      
+      .skillbar{
+        background-color: $base-color;
+        width:0px;
+        height:12px;
+        margin-top: -19px;
+        border-radius: 3px;
+        box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.3);
+      }
+
+      .procent {
+        font-size: 21px !important;
+        margin-top: -12px !important;
+        margin-right: -65px !important;
+        color: $base-color !important;
+        font-weight: 300;
+      }
+
+      p {
+        color: #888888;
+        margin-top: 35px;
+        margin-bottom: 35px;
+        font-weight: 100;
+        font-size: 15px;
+        width: 110%;
+        line-height: 24px;
+    }
+}
+
+// Header CSS
+header {
+    width: 100%;
+    height: $header-height;
+    background: $base-color;
+    float: left;
+    display: gird;
+    padding-right: $padding-right;
+
+    .audit-name {
+        width: $sidebar-size;
+        height: $header-height;
+        background: #387dca;
+        color: #fff;
+        text-align: center;
+        line-height: $header-height;
+        float: left;
+    }
+
+    .languages {
+        width: auto;
+        height: $header-height;
+        float: right;
+        line-height: $header-height;
+        color: #fff;
+        i {
+            margin-left: 3px;
+            margin-bottom: -2px;
+        }
+    }
+}
+
+// Introduction CSS
+.introduction {
+    width: 100%;
+    height: $introduction-height;
+    float: left;
+    
+    .sidebar {
+        width: $sidebar-size;
+        height: 100%;
+        border-right: 1px solid #e1e1e1;
+        border-bottom: 1px solid #e1e1e1;
+        float: left;
+        .audit-owner {
+            width: 100%;
+            text-align: center;
+
+            .profile-picture {
+                height: 135px;
+                width: 135px;
+                border-radius: 50%;
+                overflow: hidden;
+                margin: 0 auto;
+                position: relative;
+                img {
+                    height:100%;
+                    width: auto;
+                    margin: 0 auto;
+                    position: relative; 
+                    left: 50%;
+                    transform: translateX(-50%);
+                    -webkit-transform: translateX(-50%);
+                    -ms-transform: translateX(-50%);
+                
+                }
+            }
+
+            .name {
+                display: block;
+                font-weight: bold;
+                margin-top: 10px;
+                color: #2d2d2d;
+            }
+
+            .contact-icons {
+                width: 135px;
+                height: auto;
+                margin: 0 auto;
+                margin-top: 10px;
+                a {
+                    color: #545454;
+                    margin-right: 25px;
+                    
+                    &:last-of-type {
+                        margin-right: 0px;
+                    }
+
+                    i {
+                        font-size: 18px;
+                    }
+                }
+            }
+        }
+    }
+
+    .introduction-right {
+        height: $introduction-height;
+        width: -webkit-calc(100% - #{$sidebar-size});
+        width:    -moz-calc(100% - #{$sidebar-size});
+        width:         calc(100% - #{$sidebar-size});
+        float: left;
+        border-bottom: 1px solid #e1e1e1;
+        padding-right:  $padding-right;
+
+
+        .introduction-text {
+            height: 100%;
+            width: 50%;
+            float: left;
+
+            .intro-text-block {
+                width: 100%;
+                padding-left: 60px;
+            }
+
+            p {
+                color: #888888;
+                margin-top: 10px;
+                font-weight: 100;
+                font-size: 15px;
+                width: 90%;
+                line-height: 24px;
+            }
+
+            .buttons {
+                height: 40px;
+                width: 100%;
+            }
+        }
+
+        .video {
+            width: 50%;
+            height: 100%;
+            float: left;
+        
+            .video-iframe {
+                width: 500;
+                height: 315px;
+                float: right;
+                
+                iframe {
+                    width: 100%;
+                    height: 315px;
+                }
+            }
+        }
+    }
+}
+
+#facebook-section,
+#instagram-section {
+    width: 100%;
+    height: auto;
+    float: left;
+
+    .chart-holder {
+        width: 100%;
+        height: auto;
+        background: #fff;
+        padding:20px;
+        position: relative;
+        box-shadow: 0px 8px 15px rgba(60, 60, 60, 0.05);
+        margin-bottom: 20px;
+
+        .stat-title {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: #9b9b9b;
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+        .information {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: #9b9b9b !important;
+            font-size: 18px !important;
+        }
+
+        canvas {
+            margin-top: 60px;
+        }
+
+        .averages {
+            width: auto;
+            height: auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            -webkit-transform: translateX(-50%);
+            -ms-transform: translateX(-50%);
+
+            .your_averages {
+                font-weight: bold;
+            }
+
+            .competitor_averages {
+                font-weight: bold;
+                margin-left: 40px;
+            }
+
+            .data {
+                margin-left: 10px;
+                font-weight: 300 !important;
+            }
+        }
+
+        canvas {
+            width: 100%;
+        }
+    }
+
+    .sidebar {
+        width: $sidebar-size;
+        height: 100%;
+        // border-right: 1px solid #e1e1e1;
+        min-height: 400px; // Niet nodig
+        padding-top: 70px;
+        padding-left: 30px;
+        float: left;
+
+        ul {
+            margin-top: 20px;
+            padding-left: 0px;
+
+            li {
+                width: 155px;
+                height: 55px;
+                line-height: 55px;
+                color: #c4c4c4;
+                list-style-type: none;
+                font-weight: 100;
+                font-size: 15px;
+                padding-left: 25px;
+                cursor: pointer; 
+
+                .nav-position {
+                    // float: left;
+                }
+
+                i {
+                    margin-right: 14px;
+                    font-size: 20px;
+                    float: left;
+                    margin-top: 18px;
+                }
+            }
+
+            .active {
+                background: #fff;
+                border-radius: 4px;
+                border: 1px solid #eeeeee;
+                box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+                color: #4da1ff !important;
+            }
+        }
+
+    }
+
+    .facebook-right {
+        height: auto;
+        width: -webkit-calc(100% - #{$sidebar-size});
+        width:    -moz-calc(100% - #{$sidebar-size});
+        width:         calc(100% - #{$sidebar-size});
+        float: left;
+        padding-top: 70px;
+        padding-left: 60px;
+        border-left: 1px solid #e1e1e1;
+
+        i {
+           font-size: 24px;
+           color: #2f2f2f;
+           margin-bottom: -5px;
+        }
+    }
+
+}
+
+#instagram-section {
+    display: none;
+}
