@@ -221,6 +221,7 @@ foreach ($clients as $c) {
           url: ajaxurl,
           data: {action: 'import_clients', clients: retrievedClients},
           success: function(response) {
+            console.log(response);
             window.location.replace('https://<?php echo getenv('HTTP_HOST'); ?>/client-dashboard');
           },
           error: function (xhr, textStatus, errorThrown) {
