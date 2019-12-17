@@ -42,7 +42,7 @@
   add_action( 'wp_ajax_nopriv_log_error', 'not_logged_in');
 
   function log_js_error() {
-    require_once(dirname(_FILE_)."/dashboard/controllers/log_controller.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/log_controller.php");
     $errorLogger = new Logger;
 
     $message = isset($_POST['message']) ? $_POST['message'] : "";
@@ -93,6 +93,40 @@
       wp_die();
   }
 
+  add_action( 'wp_ajax_import_clients', 'add_multiple_clients');
+  add_action( 'wp_ajax_nopriv_import_clients', 'not_logged_in');
+
+  function add_multiple_clients() {
+    require_once(dirname(__FILE__)."/dashboard/assets/php/global_regex.php");
+    require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+    require_once(dirname(__FILE__)."/dashboard/controllers/client_controller.php");
+    $Regex = new Regex;
+    $connection = new connection;
+    $client_controller = new client_controller($connection);
+
+    $clients = $_POST['clients'];
+
+    $parsedClients = array();
+    foreach ($clients as $c) {
+      if ($c['name'] != "" && $c['email'] != "" && $Regex->valid_fb($c["facebook"]) &&
+        $Regex->valid_ig($c["instagram"]) && $Regex->valid_wb($c["website"])) {
+
+        array_push($parsedClients, array(
+          "name" => $c["name"], 
+          "fb" => $c["facebook"], 
+          "ig" => $c["instagram"], 
+          "wb" => $c["website"], 
+          "mail" => sanitize_email( $c["email"] )
+        ));
+      }
+    }
+
+    $altered_rows = $client_controller->create_multiple(get_current_user_id(), $parsedClients);
+    wp_send_json(array("Succes"=>"added: ".$altered_rows));
+
+    wp_die();
+  }
+
   add_action( 'wp_ajax_update_ads_audit', 'edit_ads_audit');
   add_action( 'wp_ajax_nopriv_update_ads_audit', 'not_logged_in');
 
@@ -128,9 +162,6 @@
   add_action( 'wp_ajax_update_meta_audit', 'create_audit');
   add_action( 'wp_ajax_nopriv_update_meta_audit', 'not_logged_in');
 
-  /**
-   * FIXME: usercontroller client controller user and client?
-   */
   function create_audit() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
@@ -154,13 +185,6 @@
     $page       = json_decode(stripslashes($_POST['page_info']), true);
     $competitor = json_decode(stripslashes($_POST['competitor']), true);
 
-    /**
-     * TODO:
-     * htmlspecialchars()
-     * striptags()
-     * mysqli_real_escape_string()
-     */
-
     return array($client, $options, $page, $competitor);
   }
 
@@ -169,11 +193,6 @@
    */
   function validate_audit($safe_audit) {
     list($client, $options, $page, $competitor) = $safe_audit;
-    /**
-     * TODO:
-     * check of id's wel kloppen met een whitelist
-     * get the users clients check if the client id een van zijn clients is
-     */
 
     if (strlen($page['name']) > 25) {
       $page['name'] = substr($page['name'], 0, 5);
@@ -262,7 +281,6 @@
   add_action( 'wp_ajax_update_iba_id', 'assign_iba_id');
   add_action( 'wp_ajax_nopriv_update_iba_id', 'not_logged_in');
 
-  // TODO: vang af
   function assign_iba_id() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/user_controller.php");
@@ -272,7 +290,6 @@
     $user_control = new user_controller($connection);
     $user = $user_control->get(get_current_user_id());
 
-    // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
     $iba_id = $_POST['iba_id'];
     // TODO: thomas
     // $iba_name = $_POST['iba_name'];
@@ -378,12 +395,7 @@
   add_action( 'wp_ajax_update_meta_report', 'create_report');
   add_action( 'wp_ajax_nopriv_update_meta_report', 'not_logged_in');
 
-  // TODO: word aangepast nadat de marketing API goed werkt.
-  /**
-   * $fb_option = $options['facebook_checkbox'];
-   * $ig_option = $options['instagram_checkbox'];
-   * $wb_option = $options['website_checkbox'];
-   */
+
   function create_report() {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/report_controller.php");
