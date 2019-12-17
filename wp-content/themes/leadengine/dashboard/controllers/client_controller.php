@@ -26,7 +26,9 @@ class client_controller {
       array_push($data_list, "({$id}, '{$client['name']}', '{$client['fb']}', ".
         "'{$client['ig']}', '{$client['wb']}', '{$client['mail']}', '".date('Y-m-d H:i:s')."')");
     }
-    return $this->service->create_multiple($data_list);
+    // return $this->service->create_multiple($data_list);
+    // for testing
+    return $data_list;
   }
 
   function get($client_id) {
