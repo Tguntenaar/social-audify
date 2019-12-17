@@ -31,7 +31,7 @@ class client_service extends connection {
       "SELECT Client.*, COUNT(distinct a.id) as audit_count, COUNT(distinct r.id) as report_count from Client
         left join Audit a on a.client_id = Client.id 
         left join Report r on r.client_id = Client.id
-      WHERE Client.user_id = %d GROUP BY Client.create_date", $user_id));
+      WHERE Client.user_id = %d GROUP BY Client.id", $user_id));
   }
 
 

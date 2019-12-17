@@ -118,14 +118,12 @@
           "wb" => $c["website"], 
           "mail" => sanitize_email( $c["email"] )
         ));
-        $client_controller->create($c["name"], $c["facebook"], $c["instagram"], $c["website"], sanitize_email( $c["email"] ));
       }
     }
 
-    // $test = $client_controller->create_multiple(get_current_user_id(), $parsedClients);
-    // , "test"=>$test
-    // TODO meegeven als parsedClients count < dan clients count...
-    wp_send_json(array("Succes"=>"added: ".count($parsedClients) ));
+    $altered_rows = $client_controller->create_multiple(get_current_user_id(), $parsedClients);
+    wp_send_json(array("Succes"=>"added: ".$altered_rows));
+
     wp_die();
   }
 
