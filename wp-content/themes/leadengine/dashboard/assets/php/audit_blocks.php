@@ -4,7 +4,7 @@
       "name" => "Likes",
       "fb_name" => "country_page_likes",
       "desc" => "The likes you have on your page.",
-      "is_icon" => 0
+      "is_icon" => "0"
     ],
     ["type" => "fb_pem",
       "name" => "Posts each month",

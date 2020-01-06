@@ -14,6 +14,54 @@ body {
     background: #f7f7f7;
 }
 
+.text-link {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: #888888;
+    text-decoration: underline;
+
+    i {
+        color: #888888 !important;
+        font-size: 18px !important;
+        margin-right: 13px;
+    }
+}
+
+.score-input {
+    width: 40px;
+    height: 40px;
+    position: static;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+textarea {
+    width: 90%;
+    height: 200px;
+    margin-top: 15px;
+    resize: none;
+    background: transparent;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 10px;
+}
+
+.description-tags {
+    font-size: 12px;
+    color: #c4c4c4 !important;
+    width: 80%;
+}
+
+.contactme {
+    margin-top: 10px;
+    display:block;
+    font-size: 14px;
+    font-weight: 100;
+}
+
 .vertical-align {
     height: auto;
 	position: relative;
@@ -21,6 +69,10 @@ body {
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
+}
+
+.buttons {
+    margin-top: 30px;
 }
 
 .button {
@@ -76,6 +128,20 @@ body {
     margin-bottom: -3px;
 }
 
+pre {
+    color: #888888 !important;
+    margin-top: 10px !important;
+    font-weight: 100 !important;
+    font-size: 15px !important;
+    width: 90% !important;
+    line-height: 24px !important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
 
 .statistics {
     width: 100%;
@@ -83,17 +149,34 @@ body {
     height: auto;
     margin-top: 15px;
     display:grid;
-    grid-template-columns: 23% 24% 24% 24%;
+    grid-column-start: auto;
+    // grid-auto-rows: minmax(250px, auto);
+    grid-template-columns: repeat(auto-fill, 248px);
     grid-column-gap: 25px;
+    grid-row-gap: 25px;
+    grid-auto-rows: 250px;
+
+    .custom-height {
+        height: 525px !important;
+        grid-row: 1/3;
+    }
 
     .stat-box {
         height: 250px;
+        width: 250px;
+        float: left;
         background: #fff;
         box-shadow: 0px 8px 15px rgba(40, 40, 40, 0.1);
         padding-top: 110px;
         padding-left: 20px;
         padding-right: 20px;
         position: relative;
+        margin-bottom: 20px;
+
+        h3 {
+            font-size: 14px;
+            font-weight: bold;
+        }
 
         .stat-title {
             position: absolute;
@@ -132,6 +215,16 @@ body {
         .title-bar h5 {
             font-size: 14px;
             font-weight: bold;
+        }
+
+        .title-bar-hashtags h5 {
+            font-weight: 200;
+            font-size: 14px;
+            color: #a5a5a5;
+        }
+
+        .procent-custom {
+            top: -8px;
         }
 
         .skills span {
@@ -360,18 +453,20 @@ header {
 // Introduction CSS
 .introduction {
     width: 100%;
-    height: $introduction-height;
+    min-height: $introduction-height;
+    height: auto;
     float: left;
     
     .sidebar {
         width: $sidebar-size;
-        height: 100%;
-        border-right: 1px solid #e1e1e1;
-        border-bottom: 1px solid #e1e1e1;
+        min-height: $introduction-height;
+        height: auto;
         float: left;
+
         .audit-owner {
             width: 100%;
             text-align: center;
+            margin-top: 40px;
 
             .profile-picture {
                 height: 135px;
@@ -422,32 +517,37 @@ header {
     }
 
     .introduction-right {
-        height: $introduction-height;
+        min-height: $introduction-height;
+        height: auto;
         width: -webkit-calc(100% - #{$sidebar-size});
         width:    -moz-calc(100% - #{$sidebar-size});
         width:         calc(100% - #{$sidebar-size});
         float: left;
         border-bottom: 1px solid #e1e1e1;
         padding-right:  $padding-right;
+        padding-bottom: 30px;
+        border-left: 1px solid #e1e1e1;
 
 
         .introduction-text {
-            height: 100%;
+            height: auto;
             width: 50%;
             float: left;
+            margin-top: 60px;
 
             .intro-text-block {
                 width: 100%;
                 padding-left: 60px;
             }
 
-            p {
-                color: #888888;
-                margin-top: 10px;
-                font-weight: 100;
-                font-size: 15px;
-                width: 90%;
-                line-height: 24px;
+            p, pre {
+                color: #888888 !important;
+                margin-top: 10px !important;
+                font-weight: 100 !important;
+                font-size: 15px !important;
+                width: 90% !important;
+                line-height: 24px !important;
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
             }
 
             .buttons {
@@ -458,11 +558,12 @@ header {
 
         .video {
             width: 50%;
-            height: 100%;
+            height: auto;
             float: left;
+            margin-top: 60px;
         
             .video-iframe {
-                width: 500;
+                width: 100%;
                 height: 315px;
                 float: right;
                 
@@ -476,11 +577,46 @@ header {
 }
 
 #facebook-section,
-#instagram-section {
+#instagram-section,
+#website-section,
+#conclusion-section {
     width: 100%;
     height: auto;
     float: left;
 
+    .left {
+        width: 40%;
+    }
+
+    .right {
+        width: 60%;
+    }
+
+    .left, .right {
+        height: auto;
+        float: left;
+
+        .section-title {
+            margin-left: 0px;
+        }
+
+        p {
+            color: #888888;
+            margin-top: 10px;
+            font-weight: 100;
+            font-size: 15px;
+            width: 80%;
+            line-height: 24px;
+        }
+
+        .advice {
+            margin-top: 35px;
+            width: 75%;
+            .skills {
+                margin-bottom: 40px;
+            }
+        }
+    }
     .chart-holder {
         width: 100%;
         height: auto;
@@ -542,7 +678,9 @@ header {
 
     .sidebar {
         width: $sidebar-size;
-        height: 100%;
+        height: auto;
+        border-top: 1px solid #e1e1e1;
+
         // border-right: 1px solid #e1e1e1;
         min-height: 400px; // Niet nodig
         padding-top: 70px;
@@ -606,6 +744,16 @@ header {
 
 }
 
-#instagram-section {
+#instagram-section,
+#website-section,
+#conclusion-section {
     display: none;
+}
+
+#conclusion-section {
+    min-height: 400px;
+
+    .facebook-right {
+        padding-bottom: 60px;
+    }
 }
