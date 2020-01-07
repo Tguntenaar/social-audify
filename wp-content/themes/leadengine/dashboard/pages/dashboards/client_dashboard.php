@@ -246,10 +246,9 @@
         clientList.map(e => e.join(",")).join("\n");
 
       var encodedUri = encodeURI(csvContent);
-      // window.open(encodedUri);
       link = document.createElement('a');
       link.setAttribute('href', encodedUri);
-      link.setAttribute('download', "socialaudify_client.csv");
+      link.setAttribute('download', "social_audify_clients.csv");
       link.click();
     }
 	</script>
