@@ -86,7 +86,7 @@ use PHPMailer\PHPMailer\Exception;
 
     if ($signature) {
       $body = $this->mailer->Body;
-      $new_body = str_replace("#{signature}", "<img alt='Signature' src='{$signature}'/>", $body);
+      $new_body = str_replace("#{signature}", "<img alt='Signature' width='250' src='{$signature}'/>", $body);
       $this->mailer->Body = $new_body;
     }
   }
