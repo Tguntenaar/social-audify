@@ -55,6 +55,7 @@ use PHPMailer\PHPMailer\Exception;
 
       // Signature & Send
       $this->add_signature($signature);
+      $this->add_link();
       $this->mailer->send();
       
     } catch (Exception $e) {
@@ -76,8 +77,13 @@ use PHPMailer\PHPMailer\Exception;
     return $c;
   }
 
-  function add_link($string) {
-    return preg_replace('/#{link}{(.*)}/', '<a href="$1">$1</a>',$string)
+  /**
+   * Dit ook voor Facebook Instagram LinkedIn
+   */
+  function add_link() {
+    $body = $this->mailer->Body;
+    $new_body = preg_replace('/#{link}{(.*)}/', "<a href='$1'>$1</a>", $body);
+    $this->mailer->Body = $new_body;
   }
   
   function add_signature($signature) {
