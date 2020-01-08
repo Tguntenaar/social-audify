@@ -75,6 +75,10 @@ use PHPMailer\PHPMailer\Exception;
 
     return $c;
   }
+
+  function add_link($string) {
+    return preg_replace('/#{link}{(.*)}/', '<a href="$1">$1</a>',$string)
+  }
   
   function add_signature($signature) {
     
