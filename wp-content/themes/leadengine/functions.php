@@ -129,7 +129,31 @@ function edit_ads_audit()
   wp_die();
 }
 
+add_action( 'rest_api_init', 'prefix_register_api_routes' );
+// Function to register our new routes from the api controller.
+function prefix_register_api_routes() {
+  require_once(dirname(__FILE__) . "/dashboard/services/connection.php");
+  require_once(dirname(__FILE__) . "/dashboard/controllers/audit_controller.php");
+  require_once(dirname(__FILE__) . "/dashboard/models/audit.php");
 
+  require_once(dirname(__FILE__) . "/dashboard/controllers/report_controller.php");
+  require_once(dirname(__FILE__) . "/dashboard/models/report.php");
+
+  require_once(dirname(__FILE__) . "/dashboard/controllers/client_controller.php");
+  require_once(dirname(__FILE__) . "/dashboard/models/client.php");
+
+  require_once(dirname(__FILE__) . "/dashboard/controllers/user_controller.php");
+  require_once(dirname(__FILE__) . "/dashboard/models/user.php");
+
+  $connection = new connection;
+  $a = new audit_controller($connection);
+  $r = new report_controller($connection);
+  $c = new client_controller($connection);
+  $u = new user_controller($connection);
+
+  $controller = new REST_controller($a, $r, $c, $u);
+  $controller->register_routes();
+}
 
 add_action('wp_ajax_update_meta_audit', 'create_audit');
 add_action('wp_ajax_nopriv_update_meta_audit', 'not_logged_in');
