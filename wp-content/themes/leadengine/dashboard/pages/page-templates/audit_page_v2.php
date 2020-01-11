@@ -110,7 +110,7 @@ function get_contact_info($phone, $mail, $calendar_link, $language, $user) {
     if (isset($mail) && $mail != "") { ?><a href='mailto: <?php echo $mail; ?>' class="text-link"><i class="fas fa-envelope"></i><?php echo $mail; ?></a> <?php }
     if (isset($phone) && $phone != "") { ?><a href="callto: <?php echo $phone; ?>" class="text-link"><i class="fas fa-phone"></i><?php echo $phone; ?></a> <?php }
    
-    if($calendar_link != "") { ?>
+    if ($calendar_link != "") { ?>
     <div class="buttons">
         <a href="<?php echo $calendar_link; ?>" class="button" style="margin-left: 0px;">
         <?php if ($user->appointment_text == "") { ?>
@@ -128,7 +128,7 @@ function show_block($edit_mode, $visible) {
 }
 
 function normalize($val1, $val2) {
-    if($val1 > $val2) {
+    if ($val1 > $val2) {
         return ($val2 / $val1) * 100;
     } else {
         return ($val1 / $val2) * 100;
@@ -210,6 +210,14 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
 </header>
 
 <?php if ($audit->introduction_vis_bit == 1 || $edit_mode) { ?>
+
+<div id="shareModal" class="modal"></div>
+<div id="configModal" class="modal"></div>
+<div id="confirmModal" class="modal"></div>
+<div id="reloadModal" class="modal"></div>
+<div id="errorModal" class="modal"></div>
+<div id="firstTimeModal" class="modal"></div>
+
 <section class="introduction">
     <div class="sidebar">
         <div class="audit-owner">
@@ -253,7 +261,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
         </div>
         <div class="video">
         <?php
-            if(!$edit_mode) {
+            if (!$edit_mode) {
                 if (($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
 
                 } else if (($audit->video_iframe == "" || $audit->video_iframe == "") && $edit_mode) {
@@ -334,7 +342,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
             <?php
             foreach ($facebook_blocks as $item) {
                 if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) { 
-                    if(round($audit->facebook_data->{$item["fb_name"]}) > round($audit->competitor->facebook_data->{$item["fb_name"]})) {
+                    if (round($audit->facebook_data->{$item["fb_name"]}) > round($audit->competitor->facebook_data->{$item["fb_name"]})) {
                         $your_procent = "100";
                         $competitor_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
                     } else {
@@ -342,7 +350,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         $your_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
                     }
 
-                    if($audit->has_comp) {
+                    if ($audit->has_comp) {
                         $max_value = ($audit->facebook_data->{$item["fb_name"]} 
                                       > $audit->competitor->facebook_data->{$item["fb_name"]}) 
                                       ? $audit->facebook_data->{$item["fb_name"]}
@@ -352,7 +360,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
 
-                        <?php if(!$edit_mode) { ?>
+                        <?php if (!$edit_mode) { ?>
                             <i class="fas fa-info-circle information"></i>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
@@ -362,15 +370,15 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                             <div class="title-bar">
                                 <h5>You</h5>
                             </div>
-                            <span class="procent font-blue">
-                                <?php if($audit->has_comp) { ?>
-                                     <?php echo round($audit->facebook_data->{$item["fb_name"]}); ?>
-                                <?php } ?>
+                            <span class="procent font-blue"><?php 
+                              if ($audit->has_comp) {
+                                echo round($audit->facebook_data->{$item["fb_name"]});
+                              } ?>
                             </span>
                             <div style="clear: both;"></div>
                             <div class="skillbar blue"></div>  
                         </div>
-                        <?php if($audit->has_comp) { ?>
+                        <?php if ($audit->has_comp) { ?>
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -401,7 +409,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
                         
-                        <?php if(!$edit_mode) { ?>
+                        <?php if (!$edit_mode) { ?>
                             <i class="fas fa-info-circle information"></i>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
@@ -411,7 +419,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
                         </div>
-                        <?php if($audit->has_comp) { 
+                        <?php if ($audit->has_comp) { 
                             $comp_val = ($audit->competitor->facebook_data->{$item["fb_name"]} == 1) 
                                 ? '<i class="fas fa-check-circle check"></i>' 
                                 : '<i class="fas fa-times-circle not-check"></i>';
@@ -471,18 +479,10 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
 
         <i class="fab fa-instagram section-icon"></i>
         <span class="section-title">
-            <?php if ($user->instagram_title == "") { ?>
-                <?php echo $language['insta_title']; ?>:
-            <?php } else {
-                echo $user->instagram_title;
-            } ?>
+          <?php echo ($user->instagram_title == "") ? $language['insta_title'] : $user->instagram_title; ?>
         </span>     
         <span class="section-subtitle">
-        <?php if ($user->instagram_sub_title == "") { ?>
-              <?php echo $language['insta_subtitle']; ?>
-            <?php } else {
-                echo $user->instagram_sub_title;
-            } ?>
+          <?php echo ($user->instagram_sub_title == "") ? $language['insta_subtitle'] : $user->instagram_sub_title; ?>
         </span> 
 
         <div style="width: 100%; height: auto; padding-right: 70px;">
@@ -563,7 +563,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
             <?php
             foreach ($instagram_blocks as $item) {
                 if (show_block($edit_mode, $audit->{$item["type"]})) { 
-                    if(round($audit->instagram_data->{$item["ig_name"]}) > round($audit->competitor->instagram_data->{$item["ig_name"]})) {
+                    if (round($audit->instagram_data->{$item["ig_name"]}) > round($audit->competitor->instagram_data->{$item["ig_name"]})) {
                         $your_procent = "100";
                         $competitor_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
                     } else {
@@ -571,7 +571,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         $your_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
                     }
 
-                    if($audit->has_comp) {
+                    if ($audit->has_comp) {
                         $max_value = ($audit->instagram_data->{$item["ig_name"]} 
                                       > $audit->competitor->instagram_data->{$item["ig_name"]}) 
                                       ? $audit->instagram_data->{$item["ig_name"]}
@@ -581,7 +581,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
 
-                        <?php if(!$edit_mode) { ?>
+                        <?php if (!$edit_mode) { ?>
                             <i class="fas fa-info-circle information"></i>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
@@ -592,14 +592,14 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                 <h5>You</h5>
                             </div>
                             <span class="procent font-blue">
-                                <?php if($audit->has_comp) { ?>
+                                <?php if ($audit->has_comp) { ?>
                                      <?php echo round($audit->instagram_data->{$item["ig_name"]}); ?>
                                 <?php } ?>
                             </span>
                             <div style="clear: both;"></div>
                             <div class="skillbar blue"></div>  
                         </div>
-                        <?php if($audit->has_comp) { ?>
+                        <?php if ($audit->has_comp) { ?>
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -661,93 +661,80 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
     <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?></span>
 
     <i class="fas fa-globe section-icon"></i>
-        <span class="section-title">
-            <?php if ($user->website_title == "") { ?>
-                <?php echo $language['website_title']; ?>:
-            <?php } else {
-                echo $user->website_title;
-            } ?>
+        <span class="section-title"><?php 
+          echo ($user->website_title == "") ? $language['website_title'] : $user->website_title; ?>
         </span>     
-        <span class="section-subtitle">
-            <?php if ($user->website_sub_title == "") { ?>
-              <?php echo $language['website_subtitle']; ?>
-            <?php } else {
-                echo $user->website_sub_title;
-            } ?>
+        <span class="section-subtitle"><?php 
+          echo ($user->website_sub_title == "") ? $language['website_subtitle'] : $user->website_sub_title; ?>
         </span>   
 
         <div class="statistics">
         <?php
             foreach ($website_blocks as $item) {
-                if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) { 
-                    if($item['name'] != "Mobile Friendly") {
-                        $arr = explode("s", $audit->{$item['db_name']}, 2);
+                if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) {
+                    if ($item['name'] != "Mobile Friendly") {
+                      $arr = explode("s", $audit->{$item['db_name']}, 2);
+                      $first = $arr[0];
+                      $your_string = $first . "s";
+                      $your_value = (double) $first;
+
+                      if ($audit->has_comp) {
+                        $arr = explode("s", $audit->competitor->{$item['db_name']}, 2);
                         $first = $arr[0];
-                        $your_string = $first . "s";
-                        $your_value = (double) $first;
+                        $comp_string = $first . "s";
+                        $comp_value = (int) $first;
+                      }
 
-                        if($audit->has_comp) {
-                            $arr = explode("s", $audit->competitor->{$item['db_name']}, 2);
-                            $first = $arr[0];
-                            $comp_string = $first . "s";
-                            $comp_value = (int) $first;
-                        }
-
-                        if($audit->has_comp) {
-                            $max_value = ($your_value  > $comp_value) ? $your_value : $comp_value;
-                        }
+                      if ($audit->has_comp) {
+                        $max_value = ($your_value  > $comp_value) ? $your_value : $comp_value;
+                      }
 
                     } else {
-                        $arr = explode("/", $audit->{$item['db_name']}, 2);
+                      $arr = explode("/", $audit->{$item['db_name']}, 2);
+                      $first = $arr[0];
+                      $your_string = $first;
+                      $your_value = (double) $first;
+
+                      if ($audit->has_comp) {
+                        $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
                         $first = $arr[0];
-                        $your_string = $first;
-                        $your_value = (double) $first;
+                        $comp_string = $first;
+                        $comp_value = (int) $first;
+                      }
 
-                        if($audit->has_comp) {
-                            $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
-                            $first = $arr[0];
-                            $comp_string = $first;
-                            $comp_value = (int) $first;
-                        }
-
-                        if($audit->has_comp) {
-                            $max_value = ($your_value  > $comp_value) ? $your_value : $comp_value;
-                        }
+                      if ($audit->has_comp) {
+                        $max_value = ($your_value  > $comp_value) ? $your_value : $comp_value;
+                      }
                     }
 
-                    if(round($your_value) > round($comp_value)) {
-                        $your_procent = "100";
-                        $competitor_procent = (string)normalize($your_value, $comp_value);
+                    if (round($your_value) > round($comp_value)) {
+                      $your_procent = "100";
+                      $competitor_procent = (string)normalize($your_value, $comp_value);
                     } else {
-                        $competitor_procent = "100";
-                        $your_procent = (string)normalize($your_value, $comp_value);
-                    }
-
-
-                    ?>
-
+                      $competitor_procent = "100";
+                      $your_procent = (string)normalize($your_value, $comp_value);
+                    } ?>
                     <div class="stat-box">
-                        <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-
-                        <?php if(!$edit_mode) { ?>
-                            <i class="fas fa-info-circle information"></i>
-                        <?php } else { ?>
-                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                        <?php } ?>
+                        <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php 
+                        if (!$edit_mode) { ?>
+                          <i class="fas fa-info-circle information"></i><?php 
+                        } else { 
+                          visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
+                        } ?>
 
                         <div class="skills" data-percent="<?php echo $your_procent; ?>%">
                             <div class="title-bar">
                                 <h5>You</h5>
                             </div>
                             <span class="procent font-blue">
-                                <?php if($audit->has_comp) { ?>
+                                <?php if ($audit->has_comp) { ?>
                                      <?php echo $your_string; ?>
                                 <?php } ?>
                             </span>
                             <div style="clear: both;"></div>
                             <div class="skillbar blue"></div>  
                         </div>
-                        <?php if($audit->has_comp) { ?>
+                        <?php if ($audit->has_comp) { ?>
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -761,8 +748,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         <span class="left-value">0</span>
                         <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
                         <span class="right-value"><?php echo $max_value; ?></span>
-                    </div>
-                <?php 
+                    </div> <?php 
                 }
             } ?>
         </div>
@@ -777,7 +763,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
 
-                        <?php if(!$edit_mode) { ?>
+                        <?php if (!$edit_mode) { ?>
                             <i class="fas fa-info-circle information"></i>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
@@ -787,7 +773,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
                         </div>
-                        <?php if($audit->has_comp) { 
+                        <?php if ($audit->has_comp) { 
                             $comp_val = ($audit->competitor->{$item["db_name"]} == 1) 
                                 ? '<i class="fas fa-check-circle check"></i>' 
                                 : '<i class="fas fa-times-circle not-check"></i>';
@@ -803,29 +789,27 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
             } ?>
         </div>
         <div class="facebook-advice advice">
-            <span class="advice-title"><?php echo $language['website_advice']; ?></span>
+          <span class="advice-title"><?php echo $language['website_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['wb']; ?>%">
-                <span class="procent font-red">
-                <?php
-                    if (!$edit_mode) { 
-                        echo $score['wb'] . "%";
-                    } else {
-                        ?><input type="text" class="score-input" value="<?php echo $score['wb']; ?>" name="wesbite_score" id="website_score"/><?php
-                    } 
-                ?>
-                </span>
-                <div style="margin-top: 12px;" class="skillbar red"></div>  
+              <span class="procent font-red"> <?php
+                if (!$edit_mode) { 
+                  echo $score['wb'] . "%";
+                } else {
+                  ?><input type="text" class="score-input" value="<?php echo $score['wb']; ?>" name="wesbite_score" id="website_score"/><?php
+                } ?>
+              </span>
+              <div style="margin-top: 12px;" class="skillbar red"></div>  
             </div>
             <p>
-                <?php if ($edit_mode) { ?>
-                  <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
-                    <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo  $advice['wb']; ?></textarea>
-                  </form><?php
-                } else {  ?>
-                    <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
-                        <?php echo "<pre>" . change_tags($advice['wb'], $client, $audit) . "</pre>"; ?></p><?php
-                    get_contact_info($phone, $mail, $calendar_link, $language, $user); 
-                } ?>
+              <?php if ($edit_mode) { ?>
+                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
+                  <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo  $advice['wb']; ?></textarea>
+                </form><?php
+              } else {  ?>
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
+                      <?php echo "<pre>" . change_tags($advice['wb'], $client, $audit) . "</pre>"; ?></p><?php
+                  get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+              } ?>
             </p>
         </div>
     </div>
@@ -843,24 +827,23 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
     </div>
     <div class="facebook-right">
         <div class="left">
-            <span class="section-title"><?php echo $language['conclusion']; ?></span>      
-            <?php 
-                if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
-                    if ($edit_mode) { ?>
-                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-                        <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
-                    </form>
+            <span class="section-title"><?php echo $language['conclusion']; ?></span><?php 
+              if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
+                if ($edit_mode) { ?>
+                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
+                    <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
+                </form>
 
-                    <div class="description-tags">
-                        You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
-                    </div>
-                    <?php
-                    } else {  ?>
-                        <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
-                            <?php if ($audit->conclusion == NULL) { echo "<pre>" . change_tags($user->conclusion_audit, $client, $audit) . "</pre>"; } else { echo "<pre>" . change_tags($audit->conclusion, $client, $audit) . "</pre>"; } ?></p><?php
-                        get_contact_info($phone, $mail, $calendar_link, $language, $user); 
-                        }
+                <div class="description-tags">
+                    You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+                </div><?php
+                } else {  ?>
+                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'> <?php 
+                    echo ($audit->conclusion == NULL) ? "<pre>" . change_tags($user->conclusion_audit, $client, $audit) . "</pre>" : "<pre>" . change_tags($audit->conclusion, $client, $audit) . "</pre>"; ?>
+                  </p><?php
+                  get_contact_info($phone, $mail, $calendar_link, $language, $user); 
                 }
+              }
             ?>
         </div>
         <div class="right">
@@ -890,12 +873,12 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
 </body>
 <script>
 var commonPost = {
-'type': 'audit',
-'audit': '<?php echo $audit->id; ?>',
+  'type': 'audit',
+  'audit': '<?php echo $audit->id; ?>',
 }
 
 
-$(document).ready(function(){
+$(document).ready(function() {
     
     startAnimation();
 
@@ -947,19 +930,19 @@ $(document).ready(function(){
         startAnimation();
     });
 
-    <?php if(($audit->facebook_vis_bit == 0 && !$edit_mode) && ($audit->instagram_vis_bit != 0 && !$edit_mode)) { ?>
+    <?php if (($audit->facebook_vis_bit == 0 && !$edit_mode) && ($audit->instagram_vis_bit != 0 && !$edit_mode)) { ?>
         $(".facebook-option").removeClass("active");
         $(".instagram-option").addClass("active");
         $("#facebook-section").css("display", "none");
         $("#instagram-section").css("display", "block");
-    <?php } elseif(($audit->facebook_vis_bit == 0 && !$edit_mode) 
+    <?php } elseif (($audit->facebook_vis_bit == 0 && !$edit_mode) 
                     && ($audit->instagram_vis_bit == 0 && !$edit_mode)
                     && ($audit->website_vis_bit != 0 && !$edit_mode)) { ?>
         $(".facebook-option").removeClass("active");
         $(".website-option").addClass("active");
         $("#facebook-section").css("display", "none");
         $("#website-section").css("display", "block");
-    <?php } elseif(($audit->facebook_vis_bit == 0 && !$edit_mode) 
+    <?php } elseif (($audit->facebook_vis_bit == 0 && !$edit_mode) 
                     && ($audit->instagram_vis_bit == 0 && !$edit_mode) 
                     && ($audit->website_vis_bit == 0 && !$edit_mode)) { ?>
         $(".facebook-option").removeClass("active");
@@ -969,14 +952,12 @@ $(document).ready(function(){
     <?php } ?>
     
 
-    function startAnimation(){
-        jQuery('.skills').each(function(){
-
-            jQuery(this).find('.skillbar').animate({
-                width:jQuery(this).attr('data-percent')
-            },1000); 
-            
-        });
+    function startAnimation() {
+      $('.skills').each(function() {
+        $(this).find('.skillbar').animate({
+          width:$(this).attr('data-percent')
+        },1000);  
+      });
     }    
 
     $("input:radio[class=iframe-radio]").on('click', function() {
