@@ -175,6 +175,10 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
     }
   }
 
+  $public = 0;
+  if(isset($_GET['view'])) {
+      $public = 1;
+  }
 ?>
 <html>
 <head>
@@ -206,7 +210,20 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
 <body>
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
+
     <div class="languages">Dutch <i class="fas fa-chevron-down"></i></div>
+    <?php if ($edit_mode) { ?>
+        <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
+        <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
+        <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
+        <a href="?preview_mode=True" class="preview" style="float: right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+        <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
+        <?php
+      } else {
+        if ($user_id == $author_id) {?>
+          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        }
+      } ?>
 </header>
 
 <?php if ($audit->introduction_vis_bit == 1 || $edit_mode) { ?>
@@ -761,19 +778,18 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                 : '<i class="fas fa-times-circle not-check"></i>';
                     ?>
                     <div class="stat-box">
-                        <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-
-                        <?php if (!$edit_mode) { ?>
-                            <i class="fas fa-info-circle information"></i>
-                        <?php } else { ?>
-                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                        <?php } ?>
+                        <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php 
+                        if (!$edit_mode) { ?>
+                          <i class="fas fa-info-circle information"></i><?php 
+                        } else {
+                          visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
+                        } ?>
 
                         <div class="your-stat">
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
-                        </div>
-                        <?php if ($audit->has_comp) { 
+                        </div><?php 
+                        if ($audit->has_comp):
                             $comp_val = ($audit->competitor->{$item["db_name"]} == 1) 
                                 ? '<i class="fas fa-check-circle check"></i>' 
                                 : '<i class="fas fa-times-circle not-check"></i>';
@@ -782,7 +798,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                 <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
                                 <?php echo $comp_val; ?>
                             </div>
-                        <?php } ?>
+                        <?php endif; ?>
                     </div>
                 <?php 
                 }
@@ -877,7 +893,171 @@ var commonPost = {
   'audit': '<?php echo $audit->id; ?>',
 }
 
+<?php // Website Crawl
+    if($public) { ?>
+       $(window).ready(function(){
+          $(this).one('mousemove', function() { 
+              // mouse move
+          }).one('scroll', function(){
+            $.ajax({
+              type: "POST",
+              url: ajaxurl,
+              data: { action: 'insert_view',  ...commonPost },
+              success: function (response) {
+                  console.log(response);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                  var send_error = error_func(xhr, textStatus, errorThrown, data);
+                  logError(send_error, 'page-templates/audit_page.php', 'insert_view');
+              },
+            });
+          });
+      });
+  <?php }
+  if ($audit->website_bit && !$audit->has_website): ?>
 
+    var modalData = {
+      'text': 'Website data available',
+      'subtext': 'Confirm to reload the page and view the crawled website data',
+      'confirm': 'reload_confirmed'
+    }
+
+    var reloadModal = initiateModal('reloadModal', 'confirm', modalData);
+    $('#reload_confirmed').click(function() {
+      window.location.reload();
+    });
+
+    function crawlFinishedCheck() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost },
+        success: function (response) {
+          if (response == true) {
+            showModal(reloadModal);
+          } else {
+            setTimeout(function() { crawlFinishedCheck(); }, 8000);
+          }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'toggle_visibility');
+        },
+      });
+    }
+    crawlFinishedCheck();<?php
+  endif; ?>
+
+  $(function() {
+    // Share & Track Modal
+    var modalData = {
+        'text': "This link is copied to your clipboard:",
+        'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
+        'subtext': `You can send this link from your own email address to your lead. If your lead
+          clicks on the link, you will see it in your dashboard, so make sure you don’t
+          click on the link yourself in order to be able to track this.`,
+      }
+
+      var shareModal = initiateModal('shareModal', 'notification', modalData);
+      $('#copy_link').click(function() {
+        showModal(shareModal);
+        document.getElementById("public_link").select();
+        document.execCommand("copy");
+      });
+
+      // Auto Mail + color Model
+      var modalData = {
+        text:`<span style="font-weight:bold; font-size: 18px;">Configuration audit</span>`,
+        subtext:`Do you want to sent this client automatic reminders?<br/>
+          <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br/><br/>
+          Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails:
+          <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a><br><br>
+          Do you want a custom color for this audit?<br/><br />
+          <span style="font-weight: 500;">Theme color:</span><br /> <input type="color" id="color" value="<?php echo $theme_color; ?>">
+          <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i><br /><br />
+          <span style="font-weight: 500;">Audit language:</span><br />
+          <?php echo $language_options; ?>`,
+        confirm: 'config_confirmed'
+      }
+
+      var configModal = initiateModal('configModal', 'confirm', modalData);
+      $('#config_link').click(function() {
+        $('#color').val('<?php echo $theme_color; ?>');
+        showModal(configModal);
+      });
+
+      $("#config_confirmed").click(function() {
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: {
+            action: 'update_config',
+            color: $('#color').val(),
+            value: $("#mail_bit_check").is(':checked'),
+            language: $("#language :selected").val(),
+            ...commonPost
+          },
+          success: function(response) {
+            console.log(response);
+            window.location.reload()
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'mail_config_confirm');
+            showModal(initiateModal('errorModal', 'error', {
+              'text': "Can't update mail function",
+              'subtext': "Please try again later or notify an admin if the issue persists"
+            }));
+          }
+        });
+      });
+
+      // Delete Audit Modal
+      var modalData = {
+        'text': 'Sure you want to delete this Audit?',
+        'subtext': 'This action is irreversible',
+        'confirm': 'delete_confirmed'
+      }
+
+      var deleteModal = initiateModal('confirmModal', 'confirm', modalData);
+      $('#delete-this-audit').click(function() {
+        showModal(deleteModal);
+      });
+
+      // Delete Audit Modal
+      var firstTimeModalData = {
+        'text': 'Please note',
+        'subtext': 'We do not send the first email about the audit at this time! Click on share and track to copy the link and email from your own email. Then select in configuration whether or not you would like us to start sending the follow ups.',
+        'confirm': ''
+      }
+
+      var firstTimeModal = initiateModal('firstTimeModal', 'error', firstTimeModalData);
+
+      <?php if($user->first_time == 0) { ?>
+           showModal(firstTimeModal);
+           <?php $user->update('User', 'first_time', 1); ?>
+      <?php } ?>
+
+
+      $('#delete_confirmed').click(function() {
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: {'action': 'delete_page', ...commonPost},
+          success: function (response) {
+            window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
+          },
+          error: function (xhr, textStatus, errorThrownr) {
+             var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'delete_audit_confirm');
+            showModal(initiateModal('errorModal', 'error', {
+              'text': "Can't delete this audit",
+              'subtext': "Please try again later or notify an admin if the issue persists"
+            }));
+          }
+        });
+      });
+  });
 $(document).ready(function() {
     
     startAnimation();

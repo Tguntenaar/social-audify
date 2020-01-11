@@ -856,7 +856,7 @@
           });
       });
   <?php }
-  if ($audit->website_bit && !$audit->has_website) { ?>
+  if ($audit->website_bit && !$audit->has_website): ?>
 
     var modalData = {
       'text': 'Website data available',
@@ -888,7 +888,7 @@
       });
     }
     crawlFinishedCheck();<?php
-  } ?>
+  endif; ?>
 
   <?php // Graph Generate
   
