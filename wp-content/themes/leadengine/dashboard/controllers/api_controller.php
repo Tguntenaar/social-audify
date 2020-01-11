@@ -6,14 +6,20 @@
 class REST_controller {
  
  // Here initialize our namespace and resource name.
- public function __construct($audit_controller = NULL, $report_controller = NULL, $client_controller = NULL, $user_controller = NULL) {
-    $this->namespace     = '/my-namespace/v1'; // TODO:
-    $this->resource_name = 'posts';
-    $this->audit_control = $audit_controller;
-    $this->report_control = $report_controller;
-    $this->client_control = $client_controller;
-    $this->user_control = $user_controller;
- }
+//  public function __construct($audit_controller = NULL, $report_controller = NULL, $client_controller = NULL, $user_controller = NULL) {
+//     $this->namespace     = '/my-namespace/v1';
+//     $this->resource_name = 'posts';
+//     $this->audit_control = $audit_controller;
+//     $this->report_control = $report_controller;
+//     $this->client_control = $client_controller;
+//     $this->user_control = $user_controller;
+//  }
+
+ public function __construct($connection) {
+  $this->namespace     = '/api/v1'; // TODO:
+  $this->resource_name = 'posts';
+  $this->connection = $connection;
+}
 
  // Register our routes.
  public function register_routes() {
