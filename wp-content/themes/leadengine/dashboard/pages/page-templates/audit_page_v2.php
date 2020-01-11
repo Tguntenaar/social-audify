@@ -160,6 +160,21 @@ function selectAdvice($advice, $score, $user, $type) {
     'wb' => selectAdvice($audit->website_advice, $score['wb'], $user, "website")
   );
 
+if ($audit->video_iframe != NULL && $audit->video_iframe != "") {
+    $video_iframe_link = '<iframe '.stripslashes($audit->video_iframe).'</iframe>';
+} else {
+    $video_iframe_link = '';
+}
+
+function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
+    if ($edit_mode) {
+      $slash = $visible == 1 ? '' : '-slash';?>
+      <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
+        <i style="color: #000 !important" class="information far fa-eye<?php echo $slash; ?>"></i>
+      </div><?php
+    }
+  }
+
 ?>
 <html>
 <head>
@@ -193,6 +208,8 @@ function selectAdvice($advice, $score, $user, $type) {
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <div class="languages">Dutch <i class="fas fa-chevron-down"></i></div>
 </header>
+
+<?php if ($audit->introduction_vis_bit == 1 || $edit_mode) { ?>
 <section class="introduction">
     <div class="sidebar">
         <div class="audit-owner">
@@ -209,6 +226,8 @@ function selectAdvice($advice, $score, $user, $type) {
         </div>
     </div>
     <div class="introduction-right">
+        <span class="intro-vis"><?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?></span>
+
         <div class="introduction-text">
             <div class="intro-text-block">
                 <span class="title">Improvements</span>
@@ -234,24 +253,40 @@ function selectAdvice($advice, $score, $user, $type) {
         </div>
         <div class="video">
         <?php
-            if (($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
+            if(!$edit_mode) {
+                if (($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
 
-            } else if (($audit->video_iframe == "" || $audit->video_iframe == "") && $edit_mode) {
-                ?><div class="video-iframe"></div><?php
-            } else if (($audit->video_iframe != "" && $audit->video_iframe != NULL) || $edit_mode) { ?>
-                <div class="video-iframe"><?php
-                    $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
+                } else if (($audit->video_iframe == "" || $audit->video_iframe == "") && $edit_mode) {
+                    ?><div class="video-iframe"></div><?php
+                } else if (($audit->video_iframe != "" && $audit->video_iframe != NULL) || $edit_mode) { ?>
+                    <div class="video-iframe"><?php
+                        $video = str_replace("&#34;", '"', stripslashes($audit->video_iframe));
 
-                    if (strpos($video, 'height') !== false) {
-                        echo "<iframe height='315' ". $video ."</iframe>";
-                    } ?>
-                    </div><?php
-            }
+                        if (strpos($video, 'height') !== false) {
+                            echo "<iframe height='315' ". $video ."</iframe>";
+                        } ?>
+                        </div><?php
+                }
 
-            if ($audit->video_iframe != NULL && $audit->video_iframe != "") {
-                $video_iframe_link = '<iframe '.stripslashes($audit->video_iframe).'</iframe>';
+                if ($audit->video_iframe != NULL && $audit->video_iframe != "") {
+                    $video_iframe_link = '<iframe '.stripslashes($audit->video_iframe).'</iframe>';
+                } else {
+                    $video_iframe_link = '';
+                }
             } else {
-                $video_iframe_link = '';
+                ?><div class="video-options">
+                    <span class="title">Intro video</span><br />
+                    <span class="explenation-banner">You can add a video on top of your audit by adding the iframe link here. Click <a href="tutorial/#1570543881921-3fd7746a-9da5">[here]</a> to learn how to find this link.</span>
+                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" id="banner-form" method="post" enctype="multipart/form-data">
+            
+                    <input type="radio" class="iframe-radio" data-display="block" <?php echo ($audit->video_iframe != NULL && $audit->video_iframe != "") ? 'checked' : ''; ?>/>
+                        <span class="radio-label">Video</span>
+                    <input type="radio" class="iframe-radio" id="video_iframe" value="" data-display="none" <?php echo ($audit->video_iframe == NULL || $audit->video_iframe == "") ? 'checked' : ''; ?>/>
+                        <span class="radio-label">Nothing</span>
+                    <input type="text" id="iframe-input" placeholder="Insert iframe(Loom/Youtube etc.)" style="display:<?php echo ($audit->video_iframe != NULL & $audit->video_iframe != '') ? 'block' : 'none'; ?>"
+                        pattern="(?:<iframe[^>]*)(?:(?:\/>)|(?:>.*?<\/iframe>))" value='<?php echo $video_iframe_link; ?>'/>
+                    </form>
+                </div><?php
             }
         ?>
             <!-- <div class="video-iframe">
@@ -261,18 +296,24 @@ function selectAdvice($advice, $score, $user, $type) {
         </div>
     </div>
 </section>
+<?php } ?>
+
+<?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?>
 <section id="facebook-section">
     <div class="sidebar">
         <span class="title">Statistics</span>
         <ul>
-            <li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li>
-            <li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li>
-            <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
-            <li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li>
+            <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
         </ul>
         <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
+    
     <div class="facebook-right">
+        <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->facebook_vis_bit, 'facebook_vis_bit', 'visibility-first-level'); ?></span>
+        
         <i class="fab fa-facebook-square section-icon"></i>
         <span class="section-title">
             <?php if ($user->facebook_title == "") { ?>
@@ -310,7 +351,13 @@ function selectAdvice($advice, $score, $user, $type) {
                     ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-                        <i class="fas fa-info-circle information"></i>
+
+                        <?php if(!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i>
+                        <?php } else { ?>
+                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        <?php } ?>
+
                         <div class="skills" data-percent="<?php echo $your_procent; ?>%">
                             <div class="title-bar">
                                 <h5>You</h5>
@@ -353,7 +400,13 @@ function selectAdvice($advice, $score, $user, $type) {
                     ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-                        <i class="fas fa-info-circle information"></i>
+                        
+                        <?php if(!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i>
+                        <?php } else { ?>
+                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        <?php } ?>
+
                         <div class="your-stat">
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
@@ -401,18 +454,21 @@ function selectAdvice($advice, $score, $user, $type) {
         </div>
     </div>
 </section>
+<?php } ?>
 <section id="instagram-section">
     <div class="sidebar">
         <span class="title">Statistics</span>
         <ul>
-            <li class="facebook-option" class="active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li>
-            <li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li>
-            <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
-            <li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li>
+            <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
         </ul>
         <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
+        <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level'); ?></span>
+
         <i class="fab fa-instagram section-icon"></i>
         <span class="section-title">
             <?php if ($user->instagram_title == "") { ?>
@@ -524,7 +580,13 @@ function selectAdvice($advice, $score, $user, $type) {
                     ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-                        <i class="fas fa-info-circle information"></i>
+
+                        <?php if(!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i>
+                        <?php } else { ?>
+                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        <?php } ?>
+
                         <div class="skills" data-percent="<?php echo $your_procent; ?>%">
                             <div class="title-bar">
                                 <h5>You</h5>
@@ -588,14 +650,16 @@ function selectAdvice($advice, $score, $user, $type) {
     <div class="sidebar">
         <span class="title">Statistics</span>
         <ul>
-            <li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li>
-            <li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li>
-            <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
-            <li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li>
+            <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
         </ul>
         <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
+    <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?></span>
+
     <i class="fas fa-globe section-icon"></i>
         <span class="section-title">
             <?php if ($user->website_title == "") { ?>
@@ -664,7 +728,13 @@ function selectAdvice($advice, $score, $user, $type) {
 
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-                        <i class="fas fa-info-circle information"></i>
+
+                        <?php if(!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i>
+                        <?php } else { ?>
+                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        <?php } ?>
+
                         <div class="skills" data-percent="<?php echo $your_procent; ?>%">
                             <div class="title-bar">
                                 <h5>You</h5>
@@ -706,7 +776,13 @@ function selectAdvice($advice, $score, $user, $type) {
                     ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
-                        <i class="fas fa-info-circle information"></i>
+
+                        <?php if(!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i>
+                        <?php } else { ?>
+                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        <?php } ?>
+
                         <div class="your-stat">
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
@@ -758,10 +834,10 @@ function selectAdvice($advice, $score, $user, $type) {
     <div class="sidebar">
         <span class="title">Statistics</span>
         <ul>
-            <li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li>
-            <li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li>
-            <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
-            <li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li>
+        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
         </ul>
         <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
@@ -813,6 +889,12 @@ function selectAdvice($advice, $score, $user, $type) {
 </section>
 </body>
 <script>
+var commonPost = {
+'type': 'audit',
+'audit': '<?php echo $audit->id; ?>',
+}
+
+
 $(document).ready(function(){
     
     startAnimation();
@@ -865,6 +947,28 @@ $(document).ready(function(){
         startAnimation();
     });
 
+    <?php if(($audit->facebook_vis_bit == 0 && !$edit_mode) && ($audit->instagram_vis_bit != 0 && !$edit_mode)) { ?>
+        $(".facebook-option").removeClass("active");
+        $(".instagram-option").addClass("active");
+        $("#facebook-section").css("display", "none");
+        $("#instagram-section").css("display", "block");
+    <?php } elseif(($audit->facebook_vis_bit == 0 && !$edit_mode) 
+                    && ($audit->instagram_vis_bit == 0 && !$edit_mode)
+                    && ($audit->website_vis_bit != 0 && !$edit_mode)) { ?>
+        $(".facebook-option").removeClass("active");
+        $(".website-option").addClass("active");
+        $("#facebook-section").css("display", "none");
+        $("#website-section").css("display", "block");
+    <?php } elseif(($audit->facebook_vis_bit == 0 && !$edit_mode) 
+                    && ($audit->instagram_vis_bit == 0 && !$edit_mode) 
+                    && ($audit->website_vis_bit == 0 && !$edit_mode)) { ?>
+        $(".facebook-option").removeClass("active");
+        $(".conclusion-option").addClass("active");
+        $("#facebook-section").css("display", "none");
+        $("#conclusion-section").css("display", "block");
+    <?php } ?>
+    
+
     function startAnimation(){
         jQuery('.skills').each(function(){
 
@@ -873,7 +977,16 @@ $(document).ready(function(){
             },1000); 
             
         });
-    }                
+    }    
+
+    $("input:radio[class=iframe-radio]").on('click', function() {
+        $(this).parent().children('input:radio:checked').prop("checked", false);
+        $(this).parent().children('#iframe-input').css("display", $(this).data('display'));
+        $(this).prop("checked", true);
+        toggleUpdate(true);
+    });
+
+    $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });            
 });
 
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -976,6 +1089,30 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"
     }    
 });
 
+<?php if ($edit_mode) { ?>
+    // Visibility function : TODO : hier ook mooier als functions.php de geupdate visibility bool terug geeft...
+    var toggle_visibility = function(field_name) {
+      var field = $(`#${field_name}_icon`);
+      var icon = field.find('i');
+      field.html("<div class='lds-dual-ring'></div>");
+
+      if (typeof icon[0] !== 'undefined') {
+        var visible = icon.attr('class').endsWith("-slash");
+        var icon = '<i style="color: #000 !important;" class="information far fa-eye' + (visible ? '"' : '-slash"') + '></i>'
+
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: { action: 'toggle_visibility', field: field_name , ...commonPost },
+          success: function () { field.html(icon) },
+          error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, data);
+              logError(send_error, 'page-templates/audit_page_v2.php', 'toggle_visibility');
+          },
+        });
+      }
+    };
+<?php } ?>
 
 
 </script>

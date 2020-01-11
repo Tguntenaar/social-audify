@@ -36,6 +36,25 @@ textarea {
   padding: 10px;
 }
 
+.explenation-banner {
+  font-size: 14px !important;
+  margin-top: 4px;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.radio-label {
+  margin-right: 5px;
+}
+
+#iframe-input {
+  width: 100%;
+  margin-top: 10px;
+  height: 40px;
+  font-size: 14px;
+  padding-left: 5px;
+}
+
 .description-tags {
   font-size: 12px;
   color: #c4c4c4 !important;
@@ -115,6 +134,48 @@ textarea {
   margin-bottom: -3px;
 }
 
+.lds-dual-ring {
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 0px;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.lds-dual-ring:after {
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  content: " ";
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 1px;
+  border-radius: 50%;
+  border: 5px solid #6e9d9c;
+  border-color: #6e9d9c transparent #6e9d9c transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+.information {
+  cursor: pointer;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 pre {
   color: #888888 !important;
   margin-top: 10px !important;
@@ -162,6 +223,11 @@ pre {
   padding-right: 20px;
   position: relative;
   margin-bottom: 20px;
+}
+.statistics .stat-box .visibility {
+  position: absolute;
+  right: 10px;
+  top: 0px;
 }
 .statistics .stat-box h3 {
   font-size: 14px;
@@ -406,6 +472,19 @@ header .languages i {
   margin-bottom: -2px;
 }
 
+.section-vis {
+  position: absolute;
+  right: 35px;
+  top: 80px;
+}
+.section-vis i {
+  font-size: 18px !important;
+}
+.section-vis .lds-dual-ring:after {
+  top: 25px;
+  right: -10px;
+}
+
 .introduction {
   width: 100%;
   min-height: 480px;
@@ -474,6 +553,16 @@ header .languages i {
   padding-right: 90px;
   padding-bottom: 30px;
   border-left: 1px solid #e1e1e1;
+  position: relative;
+}
+.introduction .introduction-right .lds-dual-ring:after {
+  top: 25px;
+  right: -10px;
+}
+.introduction .introduction-right .intro-vis {
+  position: absolute;
+  right: 35px;
+  top: 20px;
 }
 .introduction .introduction-right .introduction-text {
   height: auto;
@@ -484,6 +573,7 @@ header .languages i {
 .introduction .introduction-right .introduction-text .intro-text-block {
   width: 100%;
   padding-left: 60px;
+  position: relative;
 }
 .introduction .introduction-right .introduction-text p, .introduction .introduction-right .introduction-text pre {
   color: #888888 !important;
@@ -727,6 +817,7 @@ header .languages i {
   padding-top: 70px;
   padding-left: 60px;
   border-left: 1px solid #e1e1e1;
+  position: relative;
 }
 #facebook-section .facebook-right i,
 #instagram-section .facebook-right i,
