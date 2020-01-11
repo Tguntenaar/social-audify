@@ -175,10 +175,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
     }
   }
 
-  $public = 0;
-  if(isset($_GET['view'])) {
-      $public = 1;
-  }
+  $public = isset($_GET['view']) ? 1 : 0;
 ?>
 <html>
 <head>
@@ -894,7 +891,7 @@ var commonPost = {
 }
 
 <?php // Website Crawl
-    if($public) { ?>
+    if (isset($_GET['view'])) { ?>
        $(window).ready(function(){
           $(this).one('mousemove', function() { 
               // mouse move
@@ -1033,10 +1030,11 @@ var commonPost = {
 
       var firstTimeModal = initiateModal('firstTimeModal', 'error', firstTimeModalData);
 
-      <?php if($user->first_time == 0) { ?>
-           showModal(firstTimeModal);
-           <?php $user->update('User', 'first_time', 1); ?>
-      <?php } ?>
+      <?php 
+      if ($user->first_time == 0) { ?>
+        showModal(firstTimeModal);
+        <?php $user->update('User', 'first_time', 1); 
+      } ?>
 
 
       $('#delete_confirmed').click(function() {

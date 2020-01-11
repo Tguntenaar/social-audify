@@ -210,11 +210,6 @@
       } ?>
     </div><?php
   }
-
-  $public = 0;
-  if(isset($_GET['view'])) {
-      $public = 1;
-  }
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
@@ -836,7 +831,7 @@
   }
 
   <?php // Website Crawl
-    if($public) { ?>
+    if (isset($_GET['view'])) { ?>
        $(window).ready(function(){
           $(this).one('mousemove', function() { 
               // mouse move
@@ -1158,7 +1153,7 @@
 
       var firstTimeModal = initiateModal('firstTimeModal', 'error', firstTimeModalData);
 
-      <?php if($user->first_time == 0) { ?>
+      <?php if ($user->first_time == 0) { ?>
            showModal(firstTimeModal);
            <?php $user->update('User', 'first_time', 1); ?>
       <?php } ?>
