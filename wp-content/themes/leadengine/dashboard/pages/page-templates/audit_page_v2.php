@@ -208,20 +208,25 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
 
-    <div class="languages">Dutch <i class="fas fa-chevron-down"></i></div>
     <?php if ($edit_mode) { ?>
-        <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
-        <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
-        <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-        <a href="?preview_mode=True" class="preview" style="float: right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
-        <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
+        <div class="languages">Dutch <i class="fas fa-chevron-down"></i></div>
+        <div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
+        <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
+        <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
+        <a href="?preview_mode=True" class="languages"><i class="far fa-eye"></i> Preview </a>
         <?php
       } else {
         if ($user_id == $author_id) {?>
-          <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+          <a href="?preview_mode=False"; class="languages"><i class="far fa-eye"></i> Edit </a><?php
         }
       } ?>
 </header>
+
+<?php
+if ($edit_mode) { ?>
+  <!-- TODO: Bram CSS -->
+  <button id="universal-update" style="position:fixed;bottom:6px;right:16px;width:200px;z-index:555;"class="advice-button floating-update"> Update </button><?php
+} ?>
 
 <?php if ($audit->introduction_vis_bit == 1 || $edit_mode) { ?>
 
@@ -1136,16 +1141,92 @@ $(document).ready(function() {
           width:$(this).attr('data-percent')
         },1000);  
       });
-    }    
+    }
 
-    $("input:radio[class=iframe-radio]").on('click', function() {
+    // On change of an text area show update all
+    $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
+        $(this).data('changed', true);
+        toggleUpdate(true);
+
+        var propId = $(this).prop('id');
+        // Disable slider
+        if ($(this).is('textarea') && propId.includes('_advice')) {
+          var adviceType = propId.replace('_advice', '');
+          handleSlider(adviceType);
+
+          // Enable slider if value is empty
+          if ($(this).val() == '') {
+            type = (propId.includes('facebook')) ? 'fb' : (propId.includes('instagram')) ? 'ig' : 'wb';
+            if (!!sliderData[type]) {
+              handleSlider(adviceType, sliderData[type].range, sliderData[type].text);
+            }
+          }
+        }
+      });
+
+      $("input[type=range]").on('mouseup', function() {
+        $(this).data('changed', true);
+        toggleUpdate(true);
+      });
+
+      $("input:radio[class=iframe-radio]").on('click', function() {
         $(this).parent().children('input:radio:checked').prop("checked", false);
         $(this).parent().children('#iframe-input').css("display", $(this).data('display'));
         $(this).prop("checked", true);
         toggleUpdate(true);
-    });
+      });
 
-    $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });            
+      $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });
+
+      $('#universal-update').on('click', function() {
+        updateAll();
+      });
+
+      function getIframe() {
+        var selected = $('#iframe-input:visible');
+        if (typeof selected[0] != 'undefined') {
+          var value = selected.val().replace('<iframe','').replace('</iframe>', '');
+          if (value != '<?php echo $audit->video_iframe; ?>') {
+            return { "video_iframe" : value };
+          }
+        }
+        return { "video_iframe" : '' };
+      }
+
+      function updateAll() {
+        var data = {
+          ...getChanged('textarea'),
+          ...getChanged("#manual-ig-form input[type=text]", true),
+          ...getChanged("input[type=range]"),
+          ...getChanged("input[type=radio]"),
+          ...getIframe(),
+        };
+        console.log(data);
+        if (!$.isEmptyObject(data)) {
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: {action: 'universal_update', ...data, ...commonPost},
+            success: function(response) {
+              toggleUpdate(false);
+              console.log(response);
+              // TODO : dit kan beter, db wordt nu gevuld met string.empty ipv NULL,
+              //  - succesvolle iframe value kan worden gereturned, en hier uitgelezen
+              //  - daarbij zit er ook een php check op.
+              if (data.video_iframe.includes("src=") || data.video_iframe == "") {
+                $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
+
+              } else {
+                alert("You have to insert a Iframe.");
+              }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, data);
+              logError(send_error, 'page-templates/audit_page.php', 'updateAll');
+            }
+          });
+        }
+      }    
 });
 
 var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];

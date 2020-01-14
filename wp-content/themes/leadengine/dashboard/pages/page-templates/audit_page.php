@@ -592,7 +592,7 @@
                   } ?>
                 </span>
               </div>
-              <div class="inner custom-inner" style="">
+              <div class="inner custom-inner">
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
@@ -1291,7 +1291,7 @@
               one: <?php replace_lbs($user->text_website_1); ?>,
               two: <?php replace_lbs($user->text_website_2); ?>,
               three: <?php replace_lbs($user->text_website_3); ?>,
-            },<?php
+            }, <?php
           } ?>
         },<?php
       } ?>
