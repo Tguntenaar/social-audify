@@ -461,7 +461,7 @@ if ($edit_mode) { ?>
                         if (!$edit_mode) { 
                             echo $score['fb'] . "%";
                         } else {
-                            ?><input type="text" class="score-input" value="<?php echo $score['fb']; ?>" name="facebook_score" id="facebook_score"/><?php
+                            ?><input type="number" min="1" max="100" class="score-input" value="<?php echo $score['fb']; ?>" name="facebook_score" id="facebook_score"/><?php
                         } 
                     ?>
                 </span>
@@ -645,7 +645,7 @@ if ($edit_mode) { ?>
                     if (!$edit_mode) { 
                         echo $score['ig'] . "%";
                     } else {
-                        ?><input type="text" class="score-input" value="<?php echo $score['ig']; ?>" name="instagram_score" id="instagram_score"/><?php
+                        ?><input type="number" min="1" max="100" class="score-input" value="<?php echo $score['ig']; ?>" name="instagram_score" id="instagram_score"/><?php
                     } 
                 ?>
                 </span>
@@ -813,7 +813,7 @@ if ($edit_mode) { ?>
                 if (!$edit_mode) { 
                   echo $score['wb'] . "%";
                 } else {
-                  ?><input type="text" class="score-input" value="<?php echo $score['wb']; ?>" name="wesbite_score" id="website_score"/><?php
+                  ?><input type="number" min="1" max="100" class="score-input" value="<?php echo $score['wb']; ?>" name="wesbite_score" id="website_score"/><?php
                 } ?>
               </span>
               <div style="margin-top: 12px;" class="skillbar red"></div>  
