@@ -1149,7 +1149,7 @@ $(document).ready(function() {
         toggleUpdate(true);
 
         var propId = $(this).prop('id');
-        // Disable slider
+        // Disable slider TODO: kijken wat we gaan doen met die sliders
         if ($(this).is('textarea') && propId.includes('_advice')) {
           var adviceType = propId.replace('_advice', '');
           handleSlider(adviceType);
@@ -1164,11 +1164,13 @@ $(document).ready(function() {
         }
       });
 
+      // TODO: if the ranges change
       $("input[type=range]").on('mouseup', function() {
         $(this).data('changed', true);
         toggleUpdate(true);
       });
 
+      // if the iframe choice changes
       $("input:radio[class=iframe-radio]").on('click', function() {
         $(this).parent().children('input:radio:checked').prop("checked", false);
         $(this).parent().children('#iframe-input').css("display", $(this).data('display'));
@@ -1176,6 +1178,7 @@ $(document).ready(function() {
         toggleUpdate(true);
       });
 
+      // if the iframe changes 
       $("#iframe-input").on('change paste keyup', function() { toggleUpdate(true) });
 
       $('#universal-update').on('click', function() {
@@ -1215,7 +1218,6 @@ $(document).ready(function() {
               //  - daarbij zit er ook een php check op.
               if (data.video_iframe.includes("src=") || data.video_iframe == "") {
                 $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
-
               } else {
                 alert("You have to insert a Iframe.");
               }
