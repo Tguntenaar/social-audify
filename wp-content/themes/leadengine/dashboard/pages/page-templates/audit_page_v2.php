@@ -3,79 +3,83 @@
  * Template Name: Audit page v2
  */
 ?>
+
+<!DOCTYPE html>
+<html lang="en" style="overflow-y: scroll;">
+
 <?php 
- // Error Logging
- include(dirname(__FILE__)."/../../controllers/log_controller.php");
- $ErrorLogger = new Logger;
+  // Error Logging
+  include(dirname(__FILE__)."/../../controllers/log_controller.php");
+  $ErrorLogger = new Logger;
 
- $post_id = get_the_ID();
- $author_id = (int)get_post_field('post_author', $post_id);
- $user_id = get_current_user_id();
- $env = getenv('HTTP_HOST');
- $slug = get_post_field("post_name", $post_id);
- $leadengine = get_template_directory_uri();
+  $post_id = get_the_ID();
+  $author_id = (int)get_post_field('post_author', $post_id);
+  $user_id = get_current_user_id();
+  $env = getenv('HTTP_HOST');
+  $slug = get_post_field("post_name", $post_id);
+  $leadengine = get_template_directory_uri();
 
- // Get Author data
- $phone =  get_user_meta($author_id, 'rcp_number', true);
- $calendar_link =  get_user_meta($author_id, 'rcp_calendar', true);
- $author = get_userdata($author_id);
- $mail = $author->user_email;
+  // Get Author data
+  $phone =  get_user_meta($author_id, 'rcp_number', true);
+  $calendar_link =  get_user_meta($author_id, 'rcp_calendar', true);
+  $author = get_userdata($author_id);
+  $mail = $author->user_email;
 
- // Mode check
- $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
-               ($user_id == $author_id || $user_id == 2) : false;
+  // Mode check
+  $edit_mode = !(isset($_GET['preview_mode']) && $_GET['preview_mode'] == "True") ?
+                ($user_id == $author_id || $user_id == 2) : false;
 
- // Language file
- include(dirname(__FILE__)."/../../assets/languages/language_file.php");
+  // Language file
+  include(dirname(__FILE__)."/../../assets/languages/language_file.php");
 
- // Import controllers & models
- include(dirname(__FILE__)."/../../services/connection.php");
- include(dirname(__FILE__)."/../../controllers/audit_controller.php");
- include(dirname(__FILE__)."/../../controllers/user_controller.php");
- include(dirname(__FILE__)."/../../controllers/client_controller.php");
+  // Import controllers & models
+  include(dirname(__FILE__)."/../../services/connection.php");
+  include(dirname(__FILE__)."/../../controllers/audit_controller.php");
+  include(dirname(__FILE__)."/../../controllers/user_controller.php");
+  include(dirname(__FILE__)."/../../controllers/client_controller.php");
 
- include(dirname(__FILE__)."/../../models/audit.php");
- include(dirname(__FILE__)."/../../models/user.php");
- include(dirname(__FILE__)."/../../models/client.php");
+  include(dirname(__FILE__)."/../../models/audit.php");
+  include(dirname(__FILE__)."/../../models/user.php");
+  include(dirname(__FILE__)."/../../models/client.php");
 
- // Import block titles
- include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
+  // Import block titles
+  include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
 
- // Cache busting
- include(dirname(__FILE__)."/../../assets/php/cache_version.php");
+  // Cache busting
+  include(dirname(__FILE__)."/../../assets/php/cache_version.php");
 
- $connection = new connection;
- $user_control   = new user_controller($connection);
- $audit_control  = new audit_controller($connection);
- $client_control  = new client_controller($connection);
+  $connection = new connection;
+  $user_control   = new user_controller($connection);
+  $audit_control  = new audit_controller($connection);
+  $client_control  = new client_controller($connection);
 
- // Get audit by post_id
- $id = $audit_control->get_id($post_id);
- $audit = $audit_control->get($id);
- $client = $client_control->get($audit->client_id);
- $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
+  // Get audit by post_id
+  $id = $audit_control->get_id($post_id);
+  $audit = $audit_control->get($id);
+  $client = $client_control->get($audit->client_id);
+  $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
 
- $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
+  $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
 
- if ($audit->manual == 0) {
-   $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
- }
-
-$leadengine = get_template_directory_uri();
-
-$options = "";
-foreach ($language as $key => $value) {
-  if ($audit->language == $key) {
-    $options .= "<option value='". $key ."' selected >". $key ."</option>";           
-  } else {
-    $options .= "<option value='". $key ."' >". $key ."</option>";           
+  if ($audit->manual == 0) {
+    $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
   }
-}
 
-$language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
-$language = $language[$audit->language];
+  $leadengine = get_template_directory_uri();
 
-function change_tags($text, $client, $audit) {
+  $options = "";
+  foreach ($language as $key => $value) {
+    if ($audit->language == $key) {
+      $options .= "<option value='". $key ."' selected >". $key ."</option>";           
+    } else {
+      $options .= "<option value='". $key ."' >". $key ."</option>";           
+    }
+  }
+
+  $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
+  $language = $language[$audit->language];
+
+  function change_tags($text, $client, $audit) {
     // Client name -> #{client}
     if (strpos($text, '#{client}') !== false) {
       $text = str_replace('#{client}', $client->name, $text);
@@ -104,38 +108,43 @@ function change_tags($text, $client, $audit) {
       $text = str_replace('#{website_score}', $score, $text);
     }
     return $text;
-}
+  }
 
-function get_contact_info($phone, $mail, $calendar_link, $language, $user) {
-    if (isset($mail) && $mail != "") { ?><a href='mailto: <?php echo $mail; ?>' class="text-link"><i class="fas fa-envelope"></i><?php echo $mail; ?></a> <?php }
-    if (isset($phone) && $phone != "") { ?><a href="callto: <?php echo $phone; ?>" class="text-link"><i class="fas fa-phone"></i><?php echo $phone; ?></a> <?php }
+  function get_contact_info($phone, $mail, $calendar_link, $language, $user) {
+    if (isset($mail) && $mail != "") { ?>
+      <a href='mailto: <?php echo $mail; ?>' class="text-link">
+        <i class="fas fa-envelope"></i><?php echo $mail; ?>
+      </a><?php 
+    }
+
+    if (isset($phone) && $phone != "") { ?>
+      <a href="callto: <?php echo $phone; ?>" class="text-link">
+        <i class="fas fa-phone"></i><?php echo $phone; ?>
+      </a><?php
+    }
    
     if ($calendar_link != "") { ?>
-    <div class="buttons">
-        <a href="<?php echo $calendar_link; ?>" class="button" style="margin-left: 0px;">
-        <?php if ($user->appointment_text == "") { ?>
-              <?php echo $language['make_appointment']; ?>
-            <?php } else {
-                echo $user->appointment_text;
-            } ?>
+      <div class="buttons">
+        <a href="<?php echo $calendar_link; ?>" class="button" style="margin-left: 0px;"><?php
+          echo $user->appointment_text == "" ? $language['make_appointment'] : $user->appointment_text;?>
         </a>
-    </div>
+      </div>
     <?php }
-}
+  }
 
-function show_block($edit_mode, $visible) {
+  function show_block($edit_mode, $visible) {
     return ($edit_mode || $visible);
-}
+  }
 
-function normalize($val1, $val2) {
+  function normalize($val1, $val2) {
     if ($val1 > $val2) {
-        return ($val2 / $val1) * 100;
+      return ($val2 / max($val1, 1)) * 100;
     } else {
-        return ($val1 / $val2) * 100;
+      return ($val1 / max($val2, 1)) * 100;
     }
-}
+  }
 
-function selectAdvice($advice, $score, $user, $type) {
+  function selectAdvice($advice, $score, $user, $type) {
     if ($advice != NULL) {
       return $advice;
     } if ($score < (int) $user->{"range_number_{$type}_1"}) {
@@ -144,7 +153,7 @@ function selectAdvice($advice, $score, $user, $type) {
       return $user->{"text_{$type}_2"};
     }
     return $user->{"text_{$type}_3"};
-}
+  }
 
    // Overall scores
    $score = array(
@@ -160,13 +169,13 @@ function selectAdvice($advice, $score, $user, $type) {
     'wb' => selectAdvice($audit->website_advice, $score['wb'], $user, "website")
   );
 
-if ($audit->video_iframe != NULL && $audit->video_iframe != "") {
+  if ($audit->video_iframe != NULL && $audit->video_iframe != "") {
     $video_iframe_link = '<iframe '.stripslashes($audit->video_iframe).'</iframe>';
-} else {
+  } else {
     $video_iframe_link = '';
-}
+  }
 
-function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
+  function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility') {
     if ($edit_mode) {
       $slash = $visible == 1 ? '' : '-slash';?>
       <div onclick="toggle_visibility('<?php echo $name; ?>')" id="<?php echo $name; ?>_icon" class="<?php echo $class; ?>">
@@ -174,10 +183,8 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
       </div><?php
     }
   }
-
-  $public = isset($_GET['view']) ? 1 : 0;
 ?>
-<html>
+
 <head>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-149815594-1"></script>
@@ -196,8 +203,9 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
   <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/audit.css<?php echo $cache_version; ?>" type="text/css">
-  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/chart.js<?php echo $cache_version; ?>"></script>
 
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
 
@@ -513,7 +521,7 @@ if ($edit_mode) { ?>
                     <span class="competitor_averages">NOS<span class="data font-red">320.42</span></span>
                 </div>
                 <div style="height: 220px">
-                     <canvas id="canvas" style="display: block; height: 100%;" class="chartjs-render-monitor"></canvas>
+                     <canvas id="lpd-chart" style="display: block; height: 100%;" class="chartjs-render-monitor"></canvas>
                 </div>
             </div>
         </div>
@@ -1066,68 +1074,68 @@ $(document).ready(function() {
     startAnimation();
 
     $( ".instagram-option" ).click(function() {
-        $(".facebook-option").removeClass("active");
-        $(".website-option").removeClass("active");
-        $(".conclusion-option").removeClass("active");
-        $(".instagram-option").addClass("active");
-        $("#facebook-section").css("display", "none");
-        $("#instagram-section").css("display", "block");
-        $("#website-section").css("display", "none");
-        $("#conclusion-section").css("display", "none");
-        startAnimation();
+      $(".facebook-option").removeClass("active");
+      $(".website-option").removeClass("active");
+      $(".conclusion-option").removeClass("active");
+      $(".instagram-option").addClass("active");
+      $("#facebook-section").css("display", "none");
+      $("#instagram-section").css("display", "block");
+      $("#website-section").css("display", "none");
+      $("#conclusion-section").css("display", "none");
+      startAnimation();
     });
 
     $( ".facebook-option" ).click(function() {
-        $(".instagram-option").removeClass("active");
-        $(".website-option").removeClass("active");
-        $(".conclusion-option").removeClass("active");
-        $(".facebook-option").addClass("active");
-        $("#facebook-section").css("display", "block");
-        $("#instagram-section").css("display", "none");
-        $("#website-section").css("display", "none");
-        $("#conclusion-section").css("display", "none");
-        startAnimation();
+      $(".instagram-option").removeClass("active");
+      $(".website-option").removeClass("active");
+      $(".conclusion-option").removeClass("active");
+      $(".facebook-option").addClass("active");
+      $("#facebook-section").css("display", "block");
+      $("#instagram-section").css("display", "none");
+      $("#website-section").css("display", "none");
+      $("#conclusion-section").css("display", "none");
+      startAnimation();
     });
 
     $( ".website-option" ).click(function() {
-        $(".instagram-option").removeClass("active");
-        $(".facebook-option").removeClass("active");
-        $(".conclusion-option").removeClass("active");
-        $(".website-option").addClass("active");
-        $("#website-section").css("display", "block");
-        $("#instagram-section").css("display", "none");
-        $("#facebook-section").css("display", "none");
-        $("#conclusion-section").css("display", "none");
-        startAnimation();
+      $(".instagram-option").removeClass("active");
+      $(".facebook-option").removeClass("active");
+      $(".conclusion-option").removeClass("active");
+      $(".website-option").addClass("active");
+      $("#website-section").css("display", "block");
+      $("#instagram-section").css("display", "none");
+      $("#facebook-section").css("display", "none");
+      $("#conclusion-section").css("display", "none");
+      startAnimation();
     });
 
     $( ".conclusion-option" ).click(function() {
-        $(".instagram-option").removeClass("active");
-        $(".facebook-option").removeClass("active");
-        $(".website-option").removeClass("active");
-        $(".conclusion-option").addClass("active");
-        $("#conclusion-section").css("display", "block");
-        $("#instagram-section").css("display", "none");
-        $("#facebook-section").css("display", "none");
-        $("#website-section").css("display", "none");
-        startAnimation();
+      $(".instagram-option").removeClass("active");
+      $(".facebook-option").removeClass("active");
+      $(".website-option").removeClass("active");
+      $(".conclusion-option").addClass("active");
+      $("#conclusion-section").css("display", "block");
+      $("#instagram-section").css("display", "none");
+      $("#facebook-section").css("display", "none");
+      $("#website-section").css("display", "none");
+      startAnimation();
     });
 
-    <?php if (($audit->facebook_vis_bit == 0 && !$edit_mode) && ($audit->instagram_vis_bit != 0 && !$edit_mode)) { ?>
+    <?php if ($audit->facebook_vis_bit == 0 && $audit->instagram_vis_bit != 0 && !$edit_mode) { ?>
         $(".facebook-option").removeClass("active");
         $(".instagram-option").addClass("active");
         $("#facebook-section").css("display", "none");
         $("#instagram-section").css("display", "block");
-    <?php } elseif (($audit->facebook_vis_bit == 0 && !$edit_mode) 
-                    && ($audit->instagram_vis_bit == 0 && !$edit_mode)
-                    && ($audit->website_vis_bit != 0 && !$edit_mode)) { ?>
+    <?php } elseif ($audit->facebook_vis_bit == 0  
+                    && $audit->instagram_vis_bit == 0
+                    && $audit->website_vis_bit != 0 && !$edit_mode) { ?>
         $(".facebook-option").removeClass("active");
         $(".website-option").addClass("active");
         $("#facebook-section").css("display", "none");
         $("#website-section").css("display", "block");
-    <?php } elseif (($audit->facebook_vis_bit == 0 && !$edit_mode) 
-                    && ($audit->instagram_vis_bit == 0 && !$edit_mode) 
-                    && ($audit->website_vis_bit == 0 && !$edit_mode)) { ?>
+    <?php } elseif ($audit->facebook_vis_bit == 0
+                    && $audit->instagram_vis_bit == 0 
+                    && $audit->website_vis_bit == 0 && !$edit_mode) { ?>
         $(".facebook-option").removeClass("active");
         $(".conclusion-option").addClass("active");
         $("#facebook-section").css("display", "none");
@@ -1244,15 +1252,7 @@ var config = {
             label: 'My First dataset',
             backgroundColor: "#e36364",
             borderColor: "#e36364",
-            data: [
-                10,
-                40,
-                20,
-                70,
-                60,
-                70,
-                40
-            ],
+            data: [ 10, 40, 20, 70, 60, 70, 40 ],
             fill: false,
         }, {
             borderWidth: 8,
@@ -1261,27 +1261,14 @@ var config = {
             fill: false,
             backgroundColor: "#4da1ff",
             borderColor: "#4da1ff",
-            data: [
-                30,
-                10,
-                40,
-                50,
-                40,
-                20,
-                10
-            ],
+            data: [ 30, 10, 40, 50, 40, 20, 10 ],
         }]
     },
     options: {
         responsive: true,
         maintainAspectRatio: false,
-        title: {
-            display: false,
-            
-        },
-        legend: {
-            display: false
-        },
+        title: { display: false, },
+        legend: { display: false },
         tooltips: {
             mode: 'index',
             intersect: false,
@@ -1295,9 +1282,7 @@ var config = {
         },
         scales: {
             xAxes: [{
-                ticks: {
-                  fontColor: "#b7b7b7", // this here
-                },
+                ticks: { fontColor: "#b7b7b7", },
                 display: true,
                 gridLines: {
                     color: "rgba(0, 0, 0, 0)",
@@ -1309,7 +1294,6 @@ var config = {
             }],
             yAxes: [{
                 gridLines: { color: "#b7b7b7" }, 
-
                 ticks: {
                   maxTicksLimit: 4,
                   fontColor: "#b7b7b7"
@@ -1324,14 +1308,28 @@ var config = {
     }
 };
 
+    
+    <?php // Graph Generate
+    if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>
+    // Line Chart values
+    var data_array = [<?php echo json_encode($audit->instagram_data->likesPerPost); ?>];
+    console.log(data_array);
 
-$.getScript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js", function () { window.onload = function() {
-    var ctx = document.getElementById('canvas').getContext('2d');
-    window.myLine = new Chart(ctx, config);
-    }    
-});
+    // // Bar Chart values
+    // var bar_labels = [<?php echo json_encode($audit->instagram_data->hashtags[0]); ?>];
+    // var bar_data = [<?php echo json_encode($audit->instagram_data->hashtags[1]); ?>];
 
-<?php if ($edit_mode) { ?>
+    <?php if ($audit->has_comp && (isset($audit->competitor) & !$audit->competitor->manual)) { ?>
+      data_array.push(<?php echo json_encode($audit->competitor->instagram_data->likesPerPost); ?>);
+    //   bar_labels.push(<?php echo json_encode($audit->competitor->instagram_data->hashtags[0]); ?>);
+    //   bar_data.push(<?php echo json_encode($audit->competitor->instagram_data->hashtags[1]); ?>);
+    <?php } ?>
+    var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
+    generateLineChart('lpd-chart', data_array, allLines, [false, true]);
+    // generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php
+  } ?>
+
+  <?php if ($edit_mode) { ?>
     // Visibility function : TODO : hier ook mooier als functions.php de geupdate visibility bool terug geeft...
     var toggle_visibility = function(field_name) {
       var field = $(`#${field_name}_icon`);
@@ -1354,8 +1352,6 @@ $.getScript("https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"
         });
       }
     };
-<?php } ?>
-
-
+  <?php } ?>
 </script>
 </html>
