@@ -114,8 +114,8 @@ function generateLineChart(canvas, dataList, labelList, axes = [false, false]) {
   if (!$(`#${canvas}`).is('canvas'))
     return;
 
-  const backgroundColors = ["#e36364", "#e36364"];
-  const borderColors = ["#4da1ff", "#4da1ff"];
+  const backgroundColors = ["#e36364", "#4da1ff"];
+  const borderColors = ["#e36364", "#4da1ff"];
 
   var sets = new Array();
   for (var i = 0; i < dataList.length; i++) {
