@@ -339,13 +339,14 @@
   </div>
 
   <div id="shareModal" class="modal"></div>
+  <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
+  
   <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="reloadModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
   <div id="firstTimeModal" class="modal"></div>
   <section class="content white custom-content min-height">
-    <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
     if (($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
 
@@ -1081,6 +1082,8 @@
       var shareModal = initiateModal('shareModal', 'notification', modalData);
       $('#copy_link').click(function() {
         showModal(shareModal);
+        var a = document.createElement("a");
+        a.href = ""
         document.getElementById("public_link").select();
         document.execCommand("copy");
       });

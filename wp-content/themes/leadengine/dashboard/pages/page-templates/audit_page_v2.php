@@ -241,12 +241,15 @@
 <?php
 if ($edit_mode) { ?>
   <!-- TODO: Bram CSS -->
-  <button id="universal-update" style="position:fixed;bottom:6px;right:16px;width:200px;z-index:555;"class="advice-button floating-update"> Update </button><?php
+  <button id="universal-update" style="position:fixed;bottom:6px;right:16px;width:200px;z-index:555;display:none;"class="advice-button floating-update"> Update </button><?php
 } ?>
 
 <?php if ($audit->introduction_vis_bit == 1 || $edit_mode) { ?>
 
 <div id="shareModal" class="modal"></div>
+<input type="text" style="display:none;" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
+
+
 <div id="configModal" class="modal"></div>
 <div id="confirmModal" class="modal"></div>
 <div id="reloadModal" class="modal"></div>
@@ -1186,6 +1189,15 @@ if ($edit_mode) { ?>
       toggleUpdate(true);
     });
 
+    // NEW ranges
+    $("input[type=number]").on('change paste keyup', function() {
+      $(this).data('changed', true);
+      console.log($(this).val());
+      $(this).val(Math.min($(this).val(), 100));
+      $(this).parent().next(".skillbar").width(`${$(this).val()}%`);
+      toggleUpdate(true);
+    });
+
     // if the iframe choice changes
     $("input:radio[class=iframe-radio]").on('click', function() {
       $(this).parent().children('input:radio:checked').prop("checked", false);
@@ -1216,7 +1228,8 @@ if ($edit_mode) { ?>
       var data = {
         ...getChanged('textarea'),
         ...getChanged("#manual-ig-form input[type=text]", true),
-        ...getChanged("input[type=range]"),
+        // ...getChanged("input[type=range]"),
+        ...getChanged("input[type=number"),
         ...getChanged("input[type=radio]"),
         ...getIframe(),
       };
