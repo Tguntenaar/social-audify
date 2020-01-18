@@ -218,7 +218,6 @@
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 </head>
 <body>
 <header>
@@ -911,6 +910,14 @@ if ($edit_mode) { ?>
     'audit': '<?php echo $audit->id; ?>',
   }
 
+  SetColor("<?php echo $theme_color; ?>");
+  function SetColor(color) {
+    var body = document.getElementsByTagName("body")[0];
+    body.style.setProperty("--base-color", color);
+    body.style.setProperty("--base-shaded-dark", shadeColor(color));
+    body.style.setProperty("--complement-color", complementColor(color));
+  }
+
   <?php // Website Crawl
   if (isset($_GET['view'])) { ?>
     $(window).ready(function() {
@@ -1247,25 +1254,19 @@ if ($edit_mode) { ?>
     }    
   });
   console.log("<?php echo $audit->instagram_bit ?>");
-  <?php // Graph Generate
-    if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>
-    // Line Chart values
-    var data_array = [<?php echo json_encode($audit->instagram_data->likesPerPost); ?>];
-    console.log(data_array);
 
-    // // Bar Chart values
-    // var bar_labels = [<?php echo json_encode($audit->instagram_data->hashtags[0]); ?>];
-    // var bar_data = [<?php echo json_encode($audit->instagram_data->hashtags[1]); ?>];
+  // Graph Generate
+  <?php if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>
+    var data_array = [<?php echo json_encode($audit->instagram_data->likesPerPost); ?>];
 
     <?php if ($audit->has_comp && (isset($audit->competitor) & !$audit->competitor->manual)) { ?>
       data_array.push(<?php echo json_encode($audit->competitor->instagram_data->likesPerPost); ?>);
-    //   bar_labels.push(<?php echo json_encode($audit->competitor->instagram_data->hashtags[0]); ?>);
-    //   bar_data.push(<?php echo json_encode($audit->competitor->instagram_data->hashtags[1]); ?>);
     <?php } ?>
+    
+    var theme = "<?php echo $theme_color; ?>";
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
-    generateLineChart('lpd-chart', data_array, allLines, [false, true]);
-    // generateAreaChart('hashtag-chart', bar_data, bar_labels); <?php
-  } ?>
+    generateLineChart('lpd-chart', data_array, allLines, [false, true], [theme, complementColor(theme)]);
+  <?php } ?>
 
   <?php if ($edit_mode) { ?>
     // Visibility function : TODO : hier ook mooier als functions.php de geupdate visibility bool terug geeft...
