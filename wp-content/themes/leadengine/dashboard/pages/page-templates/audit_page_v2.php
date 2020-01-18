@@ -8,6 +8,15 @@
 <html lang="en" style="overflow-y: scroll;">
 
 <?php 
+  /**
+   * TODO:
+   * 
+   * 1. CSS
+   * 2. MODALS
+   * 3. LANGUAGE SUPPORT 
+   * 4. COLOR SUPPORT
+   * 5. 
+   */
   // Error Logging
   include(dirname(__FILE__)."/../../controllers/log_controller.php");
   $ErrorLogger = new Logger;
@@ -197,7 +206,6 @@
   </script>
 
   <title>Audit</title>
-  <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
