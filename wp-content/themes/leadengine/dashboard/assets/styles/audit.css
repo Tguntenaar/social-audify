@@ -168,6 +168,13 @@ textarea {
   cursor: pointer;
 }
 
+.data-single {
+  font-size: 24px;
+  text-align: center;
+  width: 100%;
+  display: block;
+}
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);
@@ -466,6 +473,20 @@ header .languages {
   float: right;
   line-height: 70px;
   color: #fff;
+}
+header .languages select {
+  background: transparent;
+  border: 0;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: "";
+  width: 100px;
+  margin-right: -40px;
+  color: #fff;
+  position: relative;
+  z-index: 5;
+  outline: none;
 }
 header .languages i {
   margin-left: 3px;
@@ -818,6 +839,23 @@ header .languages i {
   padding-left: 60px;
   border-left: 1px solid #e1e1e1;
   position: relative;
+}
+#facebook-section .facebook-right .check-field,
+#instagram-section .facebook-right .check-field,
+#website-section .facebook-right .check-field,
+#conclusion-section .facebook-right .check-field {
+  width: 100%;
+  text-align: center;
+  margin-top: 50px;
+}
+#facebook-section .facebook-right .check-field i,
+#instagram-section .facebook-right .check-field i,
+#website-section .facebook-right .check-field i,
+#conclusion-section .facebook-right .check-field i {
+  width: 100%;
+  text-align: center;
+  margin-top: 50px;
+  font-size: 32px !important;
 }
 #facebook-section .facebook-right i,
 #instagram-section .facebook-right i,

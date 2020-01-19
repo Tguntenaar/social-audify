@@ -63,17 +63,6 @@
 
 $leadengine = get_template_directory_uri();
 
-$options = "";
-foreach ($language as $key => $value) {
-  if ($audit->language == $key) {
-    $options .= "<option value='". $key ."' selected >". $key ."</option>";           
-  } else {
-    $options .= "<option value='". $key ."' >". $key ."</option>";           
-  }
-}
-
-$language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
-$language = $language[$audit->language];
 
 function change_tags($text, $client, $audit) {
     // Client name -> #{client}
@@ -129,9 +118,9 @@ function show_block($edit_mode, $visible) {
 
 function normalize($val1, $val2) {
     if($val1 > $val2) {
-        return ($val2 / $val1) * 100;
+        return ($val2 / max($val1, 1)) * 100;
     } else {
-        return ($val1 / $val2) * 100;
+        return ($val1 / max($val2, 1)) * 100;
     }
 }
 
@@ -175,6 +164,20 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
     }
   }
 
+
+// Language options
+$options = "";
+foreach ($language as $key => $value) {
+    if ($audit->language == $key) {
+    $options .= "<option value='". $key ."' selected >". $key ."</option>";           
+    } else {
+    $options .= "<option value='". $key ."' >". $key ."</option>";           
+    }
+}
+
+$language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
+$language = $language[$audit->language];
+
 ?>
 <html>
 <head>
@@ -206,7 +209,10 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
 <body>
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
-    <div class="languages">Dutch <i class="fas fa-chevron-down"></i></div>
+    <div class="languages">
+        <?php echo $language_options; ?>
+        <i class="fas fa-chevron-down"></i>
+    </div>
 </header>
 
 <?php if ($audit->introduction_vis_bit == 1 || $edit_mode) { ?>
@@ -334,12 +340,14 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
             <?php
             foreach ($facebook_blocks as $item) {
                 if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) { 
-                    if(round($audit->facebook_data->{$item["fb_name"]}) > round($audit->competitor->facebook_data->{$item["fb_name"]})) {
-                        $your_procent = "100";
-                        $competitor_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
-                    } else {
-                        $competitor_procent = "100";
-                        $your_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
+                    if($audit->has_comp) {
+                        if(round($audit->facebook_data->{$item["fb_name"]}) > round($audit->competitor->facebook_data->{$item["fb_name"]})) {
+                            $your_procent = "100";
+                            $competitor_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
+                        } else {
+                            $competitor_procent = "100";
+                            $your_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
+                        }
                     }
 
                     if($audit->has_comp) {
@@ -357,20 +365,22 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
-
-                        <div class="skills" data-percent="<?php echo $your_procent; ?>%">
-                            <div class="title-bar">
-                                <h5>You</h5>
-                            </div>
-                            <span class="procent font-blue">
-                                <?php if($audit->has_comp) { ?>
-                                     <?php echo round($audit->facebook_data->{$item["fb_name"]}); ?>
-                                <?php } ?>
-                            </span>
-                            <div style="clear: both;"></div>
-                            <div class="skillbar blue"></div>  
-                        </div>
+                        
                         <?php if($audit->has_comp) { ?>
+
+                            <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                                <div class="title-bar">
+                                    <h5>You</h5>
+                                </div>
+                                <span class="procent font-blue">
+                                    <?php if($audit->has_comp) { ?>
+                                        <?php echo round($audit->facebook_data->{$item["fb_name"]}); ?>
+                                    <?php } ?>
+                                </span>
+                                <div style="clear: both;"></div>
+                                <div class="skillbar blue"></div>  
+                            </div>
+
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -379,11 +389,16 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                     <div style="clear: both;"></div>
                                     <div class="skillbar red"></div>  
                             </div>
+                        <?php } else { ?>
+                            <span class="data-single font-blue"><?php echo round($audit->facebook_data->{$item["fb_name"]}); ?></span>
                         <?php } ?>
-                        <hr class="x-as" />
-                        <span class="left-value">0</span>
-                        <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                        <span class="right-value"><?php echo ceil($max_value); ?></span>
+
+                        <?php if($audit->has_comp) { ?>
+                            <hr class="x-as" />
+                            <span class="left-value">0</span>
+                            <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                            <span class="right-value"><?php echo ceil($max_value); ?></span>
+                        <?php } ?>
                     </div>
                 <?php 
                 }
@@ -406,20 +421,22 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
-
-                        <div class="your-stat">
-                            <span class="title-bar">You</span>
-                            <?php echo $your_val; ?>
-                        </div>
-                        <?php if($audit->has_comp) { 
-                            $comp_val = ($audit->competitor->facebook_data->{$item["fb_name"]} == 1) 
-                                ? '<i class="fas fa-check-circle check"></i>' 
-                                : '<i class="fas fa-times-circle not-check"></i>';
-                        ?>
-                            <div class="competitor-stat">
-                                <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
-                                <?php echo $comp_val; ?>
+                        <?php if($audit->has_comp) { ?>
+                            <div class="your-stat">
+                                <span class="title-bar">You</span>
+                                <?php echo $your_val; ?>
                             </div>
+                            <?php 
+                                $comp_val = ($audit->competitor->facebook_data->{$item["fb_name"]} == 1) 
+                                    ? '<i class="fas fa-check-circle check"></i>' 
+                                    : '<i class="fas fa-times-circle not-check"></i>';
+                            ?>
+                                <div class="competitor-stat">
+                                    <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
+                                    <?php echo $comp_val; ?>
+                                </div>
+                        <?php } else {?>
+                            <span class="check-field"><?php echo $your_val; ?></span>
                         <?php } ?>
                     </div>
                 <?php 
@@ -500,7 +517,8 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
         </div>
 
         <div class="statistics">
-            <div class="stat-box custom-height">
+            <?php $height = ($audit->has_comp) ? "525px !important" : "345px !important"; ?>
+            <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
                 <span class="stat-title"><?php echo $language['hastag_used']; ?></span>
                 <i class="fas fa-info-circle information"></i>
                 <h3 style="margin-top: -35px;">You</h3>
@@ -529,31 +547,45 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                     <div class="skillbar blue"></div>  
                 </div>
                 <div style="clear:both; margin-bottom: 20px;"></div>
-                <h3>NOS</h3>
-                <div class="skills" data-percent="100%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
+                <?php if($audit->has_comp) { ?>
+                    <h3>NOS</h3>
+                    <div class="skills" data-percent="100%">
+                        <div class="title-bar-hashtags">
+                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
+                        </div>
+                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][0]; ?></span>
+                        <div style="clear: both;"></div>
+                        <div class="skillbar red"></div>  
                     </div>
-                    <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][0]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
-                <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
+                    <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
+                        <div class="title-bar-hashtags">
+                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
+                        </div>
+                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][1]; ?></span>
+                        <div style="clear: both;"></div>
+                        <div class="skillbar red"></div>  
                     </div>
-                    <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][1]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
-                <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
+                    <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
+                        <div class="title-bar-hashtags">
+                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
+                        </div>
+                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][2]; ?></span>
+                        <div style="clear: both;"></div>
+                        <div class="skillbar red"></div>  
                     </div>
-                    <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][2]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
+                <?php } 
+                
+                if($audit->has_comp) {
+                    $max_value = ($audit->instagram_data->hashtags[1][0] 
+                                 > $audit->competitor->instagram_data->hashtags[1][0]) 
+                                 ? $audit->instagram_data->hashtags[1][0] 
+                                 : $audit->competitor->instagram_data->hashtags[1][0];
+
+                } else {
+                    $max_value = $audit->instagram_data->hashtags[1][0];
+                }
+
+                ?>
                 <hr class="x-as" style="margin-top:20px;" />
                 <span class="left-value">0</span>
                 <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
@@ -563,15 +595,15 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
             <?php
             foreach ($instagram_blocks as $item) {
                 if (show_block($edit_mode, $audit->{$item["type"]})) { 
-                    if(round($audit->instagram_data->{$item["ig_name"]}) > round($audit->competitor->instagram_data->{$item["ig_name"]})) {
-                        $your_procent = "100";
-                        $competitor_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
-                    } else {
-                        $competitor_procent = "100";
-                        $your_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
-                    }
-
                     if($audit->has_comp) {
+                        if(round($audit->instagram_data->{$item["ig_name"]}) > round($audit->competitor->instagram_data->{$item["ig_name"]})) {
+                            $your_procent = "100";
+                            $competitor_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
+                        } else {
+                            $competitor_procent = "100";
+                            $your_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
+                        }
+
                         $max_value = ($audit->instagram_data->{$item["ig_name"]} 
                                       > $audit->competitor->instagram_data->{$item["ig_name"]}) 
                                       ? $audit->instagram_data->{$item["ig_name"]}
@@ -587,19 +619,20 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
 
-                        <div class="skills" data-percent="<?php echo $your_procent; ?>%">
-                            <div class="title-bar">
-                                <h5>You</h5>
-                            </div>
-                            <span class="procent font-blue">
-                                <?php if($audit->has_comp) { ?>
-                                     <?php echo round($audit->instagram_data->{$item["ig_name"]}); ?>
-                                <?php } ?>
-                            </span>
-                            <div style="clear: both;"></div>
-                            <div class="skillbar blue"></div>  
-                        </div>
                         <?php if($audit->has_comp) { ?>
+                            <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                                <div class="title-bar">
+                                    <h5>You</h5>
+                                </div>
+                                <span class="procent font-blue">
+                                    <?php if($audit->has_comp) { ?>
+                                        <?php echo round($audit->instagram_data->{$item["ig_name"]}); ?>
+                                    <?php } ?>
+                                </span>
+                                <div style="clear: both;"></div>
+                                <div class="skillbar blue"></div>  
+                            </div>
+                        
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -608,11 +641,14 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                     <div style="clear: both;"></div>
                                     <div class="skillbar red"></div>  
                             </div>
+                       
+                            <hr class="x-as" />
+                            <span class="left-value">0</span>
+                            <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                            <span class="right-value"><?php echo ceil($max_value); ?></span>
+                        <?php } else { ?>
+                            <span class="data-single font-blue"><?php echo round($audit->instagram_data->{$item["ig_name"]}); ?></span>                            
                         <?php } ?>
-                        <hr class="x-as" />
-                        <span class="left-value">0</span>
-                        <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                        <span class="right-value"><?php echo ceil($max_value); ?></span>
                     </div>
                 <?php 
                 }
@@ -700,7 +736,7 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                     } else {
                         $arr = explode("/", $audit->{$item['db_name']}, 2);
                         $first = $arr[0];
-                        $your_string = $first;
+                        $your_string = ($audit->has_comp) ? $first : $first . "/100";
                         $your_value = (double) $first;
 
                         if($audit->has_comp) {
@@ -711,16 +747,23 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         }
 
                         if($audit->has_comp) {
-                            $max_value = ($your_value  > $comp_value) ? $your_value : $comp_value;
+                            $max_value = 100;
                         }
                     }
 
-                    if(round($your_value) > round($comp_value)) {
-                        $your_procent = "100";
-                        $competitor_procent = (string)normalize($your_value, $comp_value);
-                    } else {
-                        $competitor_procent = "100";
-                        $your_procent = (string)normalize($your_value, $comp_value);
+                    if($audit->has_comp) {
+                        if($item['name'] != "Mobile Friendly") {
+                            if(round($your_value) > round($comp_value)) {
+                                $your_procent = "100";
+                                $competitor_procent = (string)normalize($your_value, $comp_value);
+                            } else {
+                                $competitor_procent = "100";
+                                $your_procent = (string)normalize($your_value, $comp_value);
+                            }
+                        } else {
+                            $competitor_procent = $comp_value;
+                            $your_procent = $your_value;
+                        }
                     }
 
 
@@ -734,20 +777,21 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
-
-                        <div class="skills" data-percent="<?php echo $your_procent; ?>%">
-                            <div class="title-bar">
-                                <h5>You</h5>
-                            </div>
-                            <span class="procent font-blue">
-                                <?php if($audit->has_comp) { ?>
-                                     <?php echo $your_string; ?>
-                                <?php } ?>
-                            </span>
-                            <div style="clear: both;"></div>
-                            <div class="skillbar blue"></div>  
-                        </div>
+                        
                         <?php if($audit->has_comp) { ?>
+                            <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                                <div class="title-bar">
+                                    <h5>You</h5>
+                                </div>
+                                <span class="procent font-blue">
+                                    <?php if($audit->has_comp) { ?>
+                                        <?php echo $your_string; ?>
+                                    <?php } ?>
+                                </span>
+                                <div style="clear: both;"></div>
+                                <div class="skillbar blue"></div>  
+                            </div>
+                        
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -756,11 +800,14 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                     <div style="clear: both;"></div>
                                     <div class="skillbar red"></div>  
                             </div>
+                        
+                            <hr class="x-as" />
+                            <span class="left-value">0</span>
+                            <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                            <span class="right-value"><?php echo $max_value; ?></span>
+                        <?php } else { ?>
+                            <span class="data-single font-blue"><?php echo $your_string; ?></span>                            
                         <?php } ?>
-                        <hr class="x-as" />
-                        <span class="left-value">0</span>
-                        <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                        <span class="right-value"><?php echo $max_value; ?></span>
                     </div>
                 <?php 
                 }
@@ -782,12 +829,13 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
-
+                        
+                        <?php if($audit->has_comp) { ?>
                         <div class="your-stat">
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
                         </div>
-                        <?php if($audit->has_comp) { 
+                        <?php
                             $comp_val = ($audit->competitor->{$item["db_name"]} == 1) 
                                 ? '<i class="fas fa-check-circle check"></i>' 
                                 : '<i class="fas fa-times-circle not-check"></i>';
@@ -796,6 +844,8 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
                                 <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
                                 <?php echo $comp_val; ?>
                             </div>
+                        <?php } else { ?>
+                            <span class="check-field"><?php echo $your_val; ?></span>
                         <?php } ?>
                     </div>
                 <?php 
@@ -843,7 +893,9 @@ function visibility_short_code($edit_mode, $visible, $name, $class = 'visibility
     </div>
     <div class="facebook-right">
         <div class="left">
-            <span class="section-title"><?php echo $language['conclusion']; ?></span>      
+            <span class="section-title"><?php echo $language['conclusion']; ?></span>   
+            <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?></span>
+
             <?php 
                 if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
                     if ($edit_mode) { ?>

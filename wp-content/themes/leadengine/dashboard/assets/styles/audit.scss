@@ -147,6 +147,8 @@ textarea {
     margin-bottom: -3px;
 }
 
+
+
 .lds-dual-ring {
 	display: inline-block;
 	// text-align: center;
@@ -182,6 +184,13 @@ textarea {
 
 .information {
     cursor: pointer;
+}
+
+.data-single {
+    font-size: 24px;
+    text-align: center;
+    width: 100%;
+    display: block;
 }
 
 @keyframes lds-dual-ring {
@@ -514,6 +523,21 @@ header {
         float: right;
         line-height: $header-height;
         color: #fff;
+
+        select {
+            background: transparent;
+            border: 0;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            text-indent: 1px;
+            text-overflow: '';
+            width: 100px;
+            margin-right: -40px;
+            color: #fff;
+            position:relative;
+            z-index:5;
+            outline: none;
+        }
         i {
             margin-left: 3px;
             margin-bottom: -2px;
@@ -830,6 +854,18 @@ header {
         padding-left: 60px;
         border-left: 1px solid #e1e1e1;
         position: relative;
+
+        .check-field {
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+            i {
+                width: 100%;
+                text-align: center;
+                margin-top: 50px;
+                font-size: 32px !important;
+            }
+        }
 
         i {
            font-size: 24px;
