@@ -20,8 +20,6 @@
   // Error Logging
   include(dirname(__FILE__)."/../header/php_header.php");
 
-  
-
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
   $env = getenv('HTTP_HOST');
@@ -204,9 +202,11 @@
 <body>
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
-
     <?php if ($edit_mode) { ?>
-        <div class="languages">Dutch <i class="fas fa-chevron-down"></i></div>
+        <div class="languages">
+          <?php echo $language_options; ?>
+          <i class="fas fa-chevron-down"></i>
+        </div>
         <div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
         <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
@@ -359,40 +359,41 @@ if ($edit_mode) { ?>
         <div class="statistics">
             <?php
             foreach ($facebook_blocks as $item):
-              if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) {
-                list($your_procent, $competitor_procent) = array("100", "0");
-                $max_value = $audit->facebook_data->{$item["fb_name"]};
-                if ($audit->has_comp) {
-                  list($your_procent, $competitor_procent) = percent_tuple($audit->facebook_data->{$item["fb_name"]},
-                                                              $audit->competitor->facebook_data->{$item["fb_name"]});
-                
-                  $max_value = max($audit->facebook_data->{$item["fb_name"]}, 
-                                $audit->competitor->facebook_data->{$item["fb_name"]});
-                }
-                ?>
+                if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) { 
+                  list($your_procent, $competitor_procent) = array("100", "0");
+                  $max_value = $audit->facebook_data->{$item["fb_name"]};
+                  if ($audit->has_comp) {
+                    list($your_procent, $competitor_procent) = percent_tuple($audit->facebook_data->{$item["fb_name"]},
+                                                                $audit->competitor->facebook_data->{$item["fb_name"]});
+                  
+                    $max_value = max($audit->facebook_data->{$item["fb_name"]}, 
+                                  $audit->competitor->facebook_data->{$item["fb_name"]});
+                  }
+                    ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
 
-                        <?php 
-                        if (!$edit_mode) { ?>
-                            <i class="fas fa-info-circle information"></i><?php
-                        } else {
-                          visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
-                        } ?>
+                        <?php if(!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i>
+                        <?php } else { ?>
+                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
+                        <?php } ?>
+                        
+                        <?php if($audit->has_comp) { ?>
 
-                        <div class="skills" data-percent="<?php echo $your_procent; ?>%">
-                            <div class="title-bar">
-                              <h5>You</h5>
+                            <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                                <div class="title-bar">
+                                    <h5>You</h5>
+                                </div>
+                                <span class="procent font-blue">
+                                    <?php if($audit->has_comp) { ?>
+                                        <?php echo round($audit->facebook_data->{$item["fb_name"]}); ?>
+                                    <?php } ?>
+                                </span>
+                                <div style="clear: both;"></div>
+                                <div class="skillbar blue"></div>  
                             </div>
-                            <span class="procent font-blue"><?php 
-                              if ($audit->has_comp) {
-                                echo round($audit->facebook_data->{$item["fb_name"]});
-                              } ?>
-                            </span>
-                            <div style="clear: both;"></div>
-                            <div class="skillbar blue"></div>  
-                        </div>
-                        <?php if ($audit->has_comp) { ?>
+
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -401,11 +402,16 @@ if ($edit_mode) { ?>
                                     <div style="clear: both;"></div>
                                     <div class="skillbar red"></div>  
                             </div>
+                        <?php } else { ?>
+                            <span class="data-single font-blue"><?php echo round($audit->facebook_data->{$item["fb_name"]}); ?></span>
                         <?php } ?>
-                        <hr class="x-as" />
-                        <span class="left-value">0</span>
-                        <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                        <span class="right-value"><?php echo ceil($max_value); ?></span>
+
+                        <?php if($audit->has_comp) { ?>
+                            <hr class="x-as" />
+                            <span class="left-value">0</span>
+                            <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                            <span class="right-value"><?php echo ceil($max_value); ?></span>
+                        <?php } ?>
                     </div>
                 <?php 
                 }
@@ -428,20 +434,22 @@ if ($edit_mode) { ?>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
-
-                        <div class="your-stat">
-                            <span class="title-bar">You</span>
-                            <?php echo $your_val; ?>
-                        </div>
-                        <?php if ($audit->has_comp) { 
-                            $comp_val = ($audit->competitor->facebook_data->{$item["fb_name"]} == 1) 
-                                ? '<i class="fas fa-check-circle check"></i>' 
-                                : '<i class="fas fa-times-circle not-check"></i>';
-                        ?>
-                            <div class="competitor-stat">
-                                <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
-                                <?php echo $comp_val; ?>
+                        <?php if($audit->has_comp) { ?>
+                            <div class="your-stat">
+                                <span class="title-bar">You</span>
+                                <?php echo $your_val; ?>
                             </div>
+                            <?php 
+                                $comp_val = ($audit->competitor->facebook_data->{$item["fb_name"]} == 1) 
+                                    ? '<i class="fas fa-check-circle check"></i>' 
+                                    : '<i class="fas fa-times-circle not-check"></i>';
+                            ?>
+                                <div class="competitor-stat">
+                                    <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
+                                    <?php echo $comp_val; ?>
+                                </div>
+                        <?php } else {?>
+                            <span class="check-field"><?php echo $your_val; ?></span>
                         <?php } ?>
                     </div>
                 <?php 
@@ -514,7 +522,8 @@ if ($edit_mode) { ?>
         </div>
 
         <div class="statistics">
-            <div class="stat-box custom-height">
+            <?php $height = ($audit->has_comp) ? "525px !important" : "345px !important"; ?>
+            <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
                 <span class="stat-title"><?php echo $language['hastag_used']; ?></span>
                 <i class="fas fa-info-circle information"></i>
                 <h3 style="margin-top: -35px;">You</h3>
@@ -543,31 +552,45 @@ if ($edit_mode) { ?>
                     <div class="skillbar blue"></div>  
                 </div>
                 <div style="clear:both; margin-bottom: 20px;"></div>
-                <h3>NOS</h3>
-                <div class="skills" data-percent="100%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
+                <?php if($audit->has_comp) { ?>
+                    <h3>NOS</h3>
+                    <div class="skills" data-percent="100%">
+                        <div class="title-bar-hashtags">
+                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
+                        </div>
+                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][0]; ?></span>
+                        <div style="clear: both;"></div>
+                        <div class="skillbar red"></div>  
                     </div>
-                    <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][0]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
-                <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
+                    <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
+                        <div class="title-bar-hashtags">
+                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
+                        </div>
+                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][1]; ?></span>
+                        <div style="clear: both;"></div>
+                        <div class="skillbar red"></div>  
                     </div>
-                    <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][1]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
-                <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
+                    <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
+                        <div class="title-bar-hashtags">
+                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
+                        </div>
+                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][2]; ?></span>
+                        <div style="clear: both;"></div>
+                        <div class="skillbar red"></div>  
                     </div>
-                    <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][2]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
+                <?php } 
+                
+                if($audit->has_comp) {
+                    $max_value = ($audit->instagram_data->hashtags[1][0] 
+                                 > $audit->competitor->instagram_data->hashtags[1][0]) 
+                                 ? $audit->instagram_data->hashtags[1][0] 
+                                 : $audit->competitor->instagram_data->hashtags[1][0];
+
+                } else {
+                    $max_value = $audit->instagram_data->hashtags[1][0];
+                }
+
+                ?>
                 <hr class="x-as" style="margin-top:20px;" />
                 <span class="left-value">0</span>
                 <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
@@ -577,19 +600,21 @@ if ($edit_mode) { ?>
             <?php
             foreach ($instagram_blocks as $item) {
                 if (show_block($edit_mode, $audit->{$item["type"]})) { 
-                    if (round($audit->instagram_data->{$item["ig_name"]}) > round($audit->competitor->instagram_data->{$item["ig_name"]})) {
-                        $your_procent = "100";
-                        $competitor_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
-                    } else {
-                        $competitor_procent = "100";
-                        $your_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
-                    }
+                    if($audit->has_comp) {
+                      // ----- TODO:
+                        if(round($audit->instagram_data->{$item["ig_name"]}) > round($audit->competitor->instagram_data->{$item["ig_name"]})) {
+                            $your_procent = "100";
+                            $competitor_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
+                        } else {
+                            $competitor_procent = "100";
+                            $your_procent = (string)round(normalize(round($audit->instagram_data->{$item["ig_name"]}), round($audit->competitor->instagram_data->{$item["ig_name"]})));
+                        }
 
-                    if ($audit->has_comp) {
                         $max_value = ($audit->instagram_data->{$item["ig_name"]} 
                                       > $audit->competitor->instagram_data->{$item["ig_name"]}) 
                                       ? $audit->instagram_data->{$item["ig_name"]}
                                       : $audit->competitor->instagram_data->{$item["ig_name"]};
+                     // -------
                     }
                     ?>
                     <div class="stat-box">
@@ -601,19 +626,20 @@ if ($edit_mode) { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
 
-                        <div class="skills" data-percent="<?php echo $your_procent; ?>%">
-                            <div class="title-bar">
-                                <h5>You</h5>
+                        <?php if($audit->has_comp) { ?>
+                            <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                                <div class="title-bar">
+                                    <h5>You</h5>
+                                </div>
+                                <span class="procent font-blue">
+                                    <?php if($audit->has_comp) { ?>
+                                        <?php echo round($audit->instagram_data->{$item["ig_name"]}); ?>
+                                    <?php } ?>
+                                </span>
+                                <div style="clear: both;"></div>
+                                <div class="skillbar blue"></div>  
                             </div>
-                            <span class="procent font-blue">
-                                <?php if ($audit->has_comp) { ?>
-                                     <?php echo round($audit->instagram_data->{$item["ig_name"]}); ?>
-                                <?php } ?>
-                            </span>
-                            <div style="clear: both;"></div>
-                            <div class="skillbar blue"></div>  
-                        </div>
-                        <?php if ($audit->has_comp) { ?>
+                        
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -622,11 +648,14 @@ if ($edit_mode) { ?>
                                     <div style="clear: both;"></div>
                                     <div class="skillbar red"></div>  
                             </div>
+                       
+                            <hr class="x-as" />
+                            <span class="left-value">0</span>
+                            <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                            <span class="right-value"><?php echo ceil($max_value); ?></span>
+                        <?php } else { ?>
+                            <span class="data-single font-blue"><?php echo round($audit->instagram_data->{$item["ig_name"]}); ?></span>                            
                         <?php } ?>
-                        <hr class="x-as" />
-                        <span class="left-value">0</span>
-                        <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                        <span class="right-value"><?php echo ceil($max_value); ?></span>
                     </div>
                 <?php 
                 }
@@ -712,13 +741,34 @@ if ($edit_mode) { ?>
                       if ($audit->has_comp) {
                         $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
                         $first = $arr[0];
-                        $comp_string = $first;
-                        $comp_value = (int) $first;
-                      }
+                        $your_string = ($audit->has_comp) ? $first : $first . "/100";
+                        $your_value = (double) $first;
 
-                      if ($audit->has_comp) {
-                        $max_value = ($your_value  > $comp_value) ? $your_value : $comp_value;
-                      }
+                        if($audit->has_comp) {
+                            $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
+                            $first = $arr[0];
+                            $comp_string = $first;
+                            $comp_value = (int) $first;
+                        }
+
+                        if($audit->has_comp) {
+                            $max_value = 100;
+                        }
+                    }
+
+                    if($audit->has_comp) {
+                        if($item['name'] != "Mobile Friendly") {
+                            if(round($your_value) > round($comp_value)) {
+                                $your_procent = "100";
+                                $competitor_procent = (string)normalize($your_value, $comp_value);
+                            } else {
+                                $competitor_procent = "100";
+                                $your_procent = (string)normalize($your_value, $comp_value);
+                            }
+                        } else {
+                            $competitor_procent = $comp_value;
+                            $your_procent = $your_value;
+                        }
                     }
 
                     if (round($your_value) > round($comp_value)) {
@@ -729,26 +779,27 @@ if ($edit_mode) { ?>
                       $your_procent = (string)normalize($your_value, $comp_value);
                     } ?>
                     <div class="stat-box">
-                        <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php 
+                        <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php
                         if (!$edit_mode) { ?>
                           <i class="fas fa-info-circle information"></i><?php 
                         } else { 
                           visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
                         } ?>
-
-                        <div class="skills" data-percent="<?php echo $your_procent; ?>%">
-                            <div class="title-bar">
-                                <h5>You</h5>
+                        
+                        <?php if($audit->has_comp) { ?>
+                            <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                                <div class="title-bar">
+                                    <h5>You</h5>
+                                </div>
+                                <span class="procent font-blue">
+                                    <?php if($audit->has_comp) { ?>
+                                        <?php echo $your_string; ?>
+                                    <?php } ?>
+                                </span>
+                                <div style="clear: both;"></div>
+                                <div class="skillbar blue"></div>  
                             </div>
-                            <span class="procent font-blue">
-                                <?php if ($audit->has_comp) { ?>
-                                     <?php echo $your_string; ?>
-                                <?php } ?>
-                            </span>
-                            <div style="clear: both;"></div>
-                            <div class="skillbar blue"></div>  
-                        </div>
-                        <?php if ($audit->has_comp) { ?>
+                        
                             <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
                                     <div class="title-bar">
                                         <h5><?php echo $audit->competitor_name; ?></h5>
@@ -757,12 +808,16 @@ if ($edit_mode) { ?>
                                     <div style="clear: both;"></div>
                                     <div class="skillbar red"></div>  
                             </div>
+                        
+                            <hr class="x-as" />
+                            <span class="left-value">0</span>
+                            <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                            <span class="right-value"><?php echo $max_value; ?></span>
+                        <?php } else { ?>
+                            <span class="data-single font-blue"><?php echo $your_string; ?></span>                            
                         <?php } ?>
-                        <hr class="x-as" />
-                        <span class="left-value">0</span>
-                        <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                        <span class="right-value"><?php echo $max_value; ?></span>
-                    </div> <?php 
+                    </div>
+                <?php 
                 }
             } ?>
         </div>
@@ -781,12 +836,13 @@ if ($edit_mode) { ?>
                         } else {
                           visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
                         } ?>
-
+                        
+                        <?php if($audit->has_comp) { ?>
                         <div class="your-stat">
                             <span class="title-bar">You</span>
                             <?php echo $your_val; ?>
-                        </div><?php 
-                        if ($audit->has_comp):
+                        </div>
+                        <?php
                             $comp_val = ($audit->competitor->{$item["db_name"]} == 1) 
                                 ? '<i class="fas fa-check-circle check"></i>' 
                                 : '<i class="fas fa-times-circle not-check"></i>';
@@ -795,7 +851,9 @@ if ($edit_mode) { ?>
                                 <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
                                 <?php echo $comp_val; ?>
                             </div>
-                        <?php endif; ?>
+                        <?php } else { ?>
+                            <span class="check-field"><?php echo $your_val; ?></span>
+                        <?php } ?>
                     </div>
                 <?php 
                 }
@@ -840,21 +898,26 @@ if ($edit_mode) { ?>
     </div>
     <div class="facebook-right">
         <div class="left">
-            <span class="section-title"><?php echo $language['conclusion']; ?></span><?php 
-              if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
-                if ($edit_mode) { ?>
-                <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-                    <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
-                </form>
+            <span class="section-title"><?php echo $language['conclusion']; ?></span>   
+            <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->conclusion_vis_bit, 'conclusion_vis_bit', 'visibility-first-level'); ?></span>
 
-                <div class="description-tags">
-                    You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
-                </div><?php
-                } else {  ?>
-                  <p style='font-size: 14px; font-weight: 100; line-height: 24px;'> <?php 
-                    echo ($audit->conclusion == NULL) ? "<pre>" . change_tags($user->conclusion_audit, $client, $audit) . "</pre>" : "<pre>" . change_tags($audit->conclusion, $client, $audit) . "</pre>"; ?>
-                  </p><?php
-                  get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+            <?php 
+                if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
+                    if ($edit_mode) { ?>
+                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
+                        <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
+                    </form>
+
+                    <div class="description-tags">
+                        You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+                    </div> <?php
+                    } else {?>
+                      <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php 
+                        echo "<pre>" . change_tags(($audit->conclusion == NULL) ? 
+                          $user->conclusion_audit : $audit->conclusion, $client, $audit) . "<pre/>" ?>
+                      </p><?php
+                        get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+                    }
                 }
               }
             ?>
