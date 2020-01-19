@@ -110,12 +110,9 @@ function generateBarChart(canvas, dataList, labelList, axes = [false, false]) {
 }
 
 
-function generateLineChart(canvas, dataList, labelList, axes = [false, false]) {
+function generateLineChart(canvas, dataList, labelList, axes = [false, false], colors = ["#4da1ff", "#e36364"]) {
   if (!$(`#${canvas}`).is('canvas'))
     return;
-
-  const backgroundColors = ["#e36364", "#4da1ff"];
-  const borderColors = ["#e36364", "#4da1ff"];
 
   var sets = new Array();
   for (var i = 0; i < dataList.length; i++) {
@@ -123,8 +120,7 @@ function generateLineChart(canvas, dataList, labelList, axes = [false, false]) {
       fill: false,
       borderWidth: 8,
       pointRadius: 0,
-      backgroundColor: backgroundColors[i],
-      borderColor: borderColors[i],
+      borderColor: colors[i],
       data: dataList[i]
     });
   }

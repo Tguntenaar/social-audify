@@ -1,5 +1,7 @@
 // Colors
 $base-color: #4da1ff;
+$base-shaded-dark: #387dca;
+$complement-color: #e36364;
 
 // Template sizes
 $header-height: 70px;
@@ -11,6 +13,9 @@ $padding-right: 90px;
 
 // STD CSS
 body {
+    --base-color: $base-color;
+    --base-shaded-dark: $base-shaded-dark;
+    --complement-color: $complement-color;
     background: #f7f7f7;
 }
 
@@ -103,7 +108,7 @@ textarea {
     border-radius: 3px;
     text-align: center;
     color: #fff;
-    background: $base-color;
+    background: var(--base-color);
     box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.2);
     margin-left: 10px;
     float: left;
@@ -134,12 +139,12 @@ textarea {
 }
 
 .font-blue {
-    color: #4da1ff !important;
+    color: var(--base-shaded-dark) !important;
     font-weight: bold;
 }
 
 .font-red {
-    color: #e36364 !important;
+    color: var(--complement-color) !important;
     font-weight: bold;
 }
 .section-icon {
@@ -305,12 +310,12 @@ pre {
         }
 
         .blue {
-            background: #4da1ff !important;
+            background: var(--base-shaded-dark) !important;
             box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.25);
         }
 
         .red {
-            background: #e36364 !important;
+            background: var(--complement-color) !important;
             box-shadow: 0px 8px 15px rgba(227, 99, 100, 0.25);
         }
           
@@ -462,7 +467,7 @@ pre {
       }
       
       .skillbar{
-        background-color: $base-color;
+        background-color: var(--base-color);
         width:0px;
         height:12px;
         margin-top: -19px;
@@ -474,7 +479,7 @@ pre {
         font-size: 21px !important;
         margin-top: -12px !important;
         margin-right: -65px !important;
-        color: $base-color !important;
+        color: var(--base-color) !important;
         font-weight: 300;
       }
 
@@ -493,7 +498,7 @@ pre {
 header {
     width: 100%;
     height: $header-height;
-    background: $base-color;
+    background: var(--base-color);
     float: left;
     display: gird;
     padding-right: $padding-right;
@@ -501,7 +506,7 @@ header {
     .audit-name {
         width: $sidebar-size;
         height: $header-height;
-        background: #387dca;
+        background: var(--base-shaded-dark);
         color: #fff;
         text-align: center;
         line-height: $header-height;
@@ -814,7 +819,7 @@ header {
                 border-radius: 4px;
                 border: 1px solid #eeeeee;
                 box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
-                color: #4da1ff !important;
+                color: var(--base-shaded-dark) !important;
             }
         }
 
