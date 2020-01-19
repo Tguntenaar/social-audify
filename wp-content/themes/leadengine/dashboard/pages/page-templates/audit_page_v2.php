@@ -18,12 +18,12 @@
    * 5. 
    */
   // Error Logging
-  include(dirname(__FILE__)."/../../controllers/log_controller.php");
-  $ErrorLogger = new Logger;
+  include(dirname(__FILE__)."/../header/php_header.php");
+
+  
 
   $post_id = get_the_ID();
   $author_id = (int)get_post_field('post_author', $post_id);
-  $user_id = get_current_user_id();
   $env = getenv('HTTP_HOST');
   $slug = get_post_field("post_name", $post_id);
   $leadengine = get_template_directory_uri();
@@ -41,26 +41,8 @@
   // Language file
   include(dirname(__FILE__)."/../../assets/languages/language_file.php");
 
-  // Import controllers & models
-  include(dirname(__FILE__)."/../../services/connection.php");
-  include(dirname(__FILE__)."/../../controllers/audit_controller.php");
-  include(dirname(__FILE__)."/../../controllers/user_controller.php");
-  include(dirname(__FILE__)."/../../controllers/client_controller.php");
-
-  include(dirname(__FILE__)."/../../models/audit.php");
-  include(dirname(__FILE__)."/../../models/user.php");
-  include(dirname(__FILE__)."/../../models/client.php");
-
   // Import block titles
   include(dirname(__FILE__)."/../../assets/php/audit_blocks.php");
-
-  // Cache busting
-  include(dirname(__FILE__)."/../../assets/php/cache_version.php");
-
-  $connection = new connection;
-  $user_control   = new user_controller($connection);
-  $audit_control  = new audit_controller($connection);
-  $client_control  = new client_controller($connection);
 
   // Get audit by post_id
   $id = $audit_control->get_id($post_id);
@@ -205,7 +187,7 @@
     gtag('config', 'UA-149815594-1');
   </script>
 
-  <title>Audit</title>
+  <title>Audit - <?php echo $audit->name; ?></title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -247,7 +229,6 @@ if ($edit_mode) { ?>
 
 <div id="shareModal" class="modal"></div>
 <input type="text" style="display:none;" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
-
 
 <div id="configModal" class="modal"></div>
 <div id="confirmModal" class="modal"></div>
@@ -377,35 +358,31 @@ if ($edit_mode) { ?>
 
         <div class="statistics">
             <?php
-            foreach ($facebook_blocks as $item) {
-                if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) { 
-                    if (round($audit->facebook_data->{$item["fb_name"]}) > round($audit->competitor->facebook_data->{$item["fb_name"]})) {
-                        $your_procent = "100";
-                        $competitor_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
-                    } else {
-                        $competitor_procent = "100";
-                        $your_procent = (string)round(normalize(round($audit->facebook_data->{$item["fb_name"]}), round($audit->competitor->facebook_data->{$item["fb_name"]})));
-                    }
-
-                    if ($audit->has_comp) {
-                        $max_value = ($audit->facebook_data->{$item["fb_name"]} 
-                                      > $audit->competitor->facebook_data->{$item["fb_name"]}) 
-                                      ? $audit->facebook_data->{$item["fb_name"]}
-                                      : $audit->competitor->facebook_data->{$item["fb_name"]};
-                    }
-                    ?>
+            foreach ($facebook_blocks as $item):
+              if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) {
+                list($your_procent, $competitor_procent) = array("100", "0");
+                $max_value = $audit->facebook_data->{$item["fb_name"]};
+                if ($audit->has_comp) {
+                  list($your_procent, $competitor_procent) = percent_tuple($audit->facebook_data->{$item["fb_name"]},
+                                                              $audit->competitor->facebook_data->{$item["fb_name"]});
+                
+                  $max_value = max($audit->facebook_data->{$item["fb_name"]}, 
+                                $audit->competitor->facebook_data->{$item["fb_name"]});
+                }
+                ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
 
-                        <?php if (!$edit_mode) { ?>
-                            <i class="fas fa-info-circle information"></i>
-                        <?php } else { ?>
-                            <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
-                        <?php } ?>
+                        <?php 
+                        if (!$edit_mode) { ?>
+                            <i class="fas fa-info-circle information"></i><?php
+                        } else {
+                          visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
+                        } ?>
 
                         <div class="skills" data-percent="<?php echo $your_procent; ?>%">
                             <div class="title-bar">
-                                <h5>You</h5>
+                              <h5>You</h5>
                             </div>
                             <span class="procent font-blue"><?php 
                               if ($audit->has_comp) {
@@ -432,7 +409,7 @@ if ($edit_mode) { ?>
                     </div>
                 <?php 
                 }
-            } ?>
+            endforeach; ?>
         </div>
         <div class="small-statistics">
         <?php
