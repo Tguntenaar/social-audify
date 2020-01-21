@@ -661,7 +661,7 @@
           }
         }
 
-        foreach ($instagram_blocks as $item) {
+        foreach ($instagram_blocks as $item):
           // Laat hem zien als edit mode aanstaat ?? of die bestaat in de database..
           if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
             <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
@@ -678,7 +678,7 @@
               </div>
             </div><?php
           }
-        }?>
+        endforeach;?>
         </form><?php
 
           if ($audit->manual == 1) { ?>
