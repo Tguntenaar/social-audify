@@ -238,18 +238,18 @@ if ($edit_mode) { ?>
 
 <section class="introduction">
     <div class="sidebar">
-        <div class="audit-owner">
-            <div class="profile-picture">
-                <?php echo get_wp_user_avatar($author_id, "original"); ?>
-            </div>
-            <span class="name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if ($company == "") { echo $author->display_name; } else { echo $company; }?></span>
-            <span class="contactme">Contact me</span>
-            <div class="contact-icons">
-                <?php if (isset($mail) && $mail != "") { ?><a href="mailto: <?php echo $mail; ?>"><i class="fas fa-envelope"></i></a><?php } ?>
-                <a href="#"><i class="fas fa-globe"></i></a>
-                <?php if (isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone; ?>"><i class="fas fa-phone"></i></a><?php } ?>
-            </div>
+      <div class="audit-owner">
+        <div class="profile-picture">
+          <?php echo get_wp_user_avatar($author_id, "original"); ?>
         </div>
+        <span class="name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if ($company == "") { echo $author->display_name; } else { echo $company; }?></span>
+        <span class="contactme">Contact me</span>
+        <div class="contact-icons">
+          <?php if (isset($mail) && $mail != "") { ?><a href="mailto: <?php echo $mail; ?>"><i class="fas fa-envelope"></i></a><?php } ?>
+          <a href="#"><i class="fas fa-globe"></i></a>
+          <?php if (isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone; ?>"><i class="fas fa-phone"></i></a><?php } ?>
+        </div>
+      </div>
     </div>
     <div class="introduction-right">
         <span class="intro-vis"><?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?></span>
@@ -327,14 +327,14 @@ if ($edit_mode) { ?>
 <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?>
 <section id="facebook-section">
     <div class="sidebar">
-        <span class="title">Statistics</span>
-        <ul>
-            <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
-            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
-        </ul>
-        <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <span class="title">Statistics</span>
+      <ul>
+        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
+      </ul>
+      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     
     <div class="facebook-right">
@@ -464,7 +464,7 @@ if ($edit_mode) { ?>
                         if (!$edit_mode) { 
                             echo $score['fb'] . "%";
                         } else {
-                            ?><input type="number" min="1" max="100" class="score-input" value="<?php echo $score['fb']; ?>" name="facebook_score" id="facebook_score"/><?php
+                            ?><input type="number" min="1" max="100" class="score-input" data-score="facebook" value="<?php echo $score['fb']; ?>" name="facebook_score" id="facebook_score"/><?php
                         } 
                     ?>
                 </span>
@@ -487,14 +487,14 @@ if ($edit_mode) { ?>
 <?php } ?>
 <section id="instagram-section">
     <div class="sidebar">
-        <span class="title">Statistics</span>
-        <ul>
-            <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
-            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
-        </ul>
-        <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <span class="title">Statistics</span>
+      <ul>
+        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
+      </ul>
+      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
         <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level'); ?></span>
@@ -660,7 +660,7 @@ if ($edit_mode) { ?>
                     if (!$edit_mode) { 
                         echo $score['ig'] . "%";
                     } else {
-                        ?><input type="number" min="1" max="100" class="score-input" value="<?php echo $score['ig']; ?>" name="instagram_score" id="instagram_score"/><?php
+                        ?><input type="number" min="1" max="100" class="score-input" data-score="instagram" value="<?php echo $score['ig']; ?>" name="instagram_score" id="instagram_score"/><?php
                     } 
                 ?>
                 </span>
@@ -682,14 +682,14 @@ if ($edit_mode) { ?>
 </section>
 <section id="website-section">
     <div class="sidebar">
-        <span class="title">Statistics</span>
-        <ul>
-            <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
-            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
-        </ul>
-        <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <span class="title">Statistics</span>
+      <ul>
+        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
+      </ul>
+      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
     <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?></span>
@@ -857,8 +857,8 @@ if ($edit_mode) { ?>
               <span class="procent font-red"> <?php
                 if (!$edit_mode) { 
                   echo $score['wb'] . "%";
-                } else {
-                  ?><input type="number" min="1" max="100" class="score-input" value="<?php echo $score['wb']; ?>" name="wesbite_score" id="website_score"/><?php
+                } else { ?>
+                  <input type="number" min="1" max="100" class="score-input" data-score="website" value="<?php echo $score['wb']; ?>" name="wesbite_score" id="website_score"/><?php
                 } ?>
               </span>
               <div style="margin-top: 12px;" class="skillbar red"></div>  
@@ -879,14 +879,14 @@ if ($edit_mode) { ?>
 </section>
 <section id="conclusion-section">
     <div class="sidebar">
-        <span class="title">Statistics</span>
-        <ul>
+      <span class="title">Statistics</span>
+      <ul>
         <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-            <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-            <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
-            <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
-        </ul>
-        <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
+      </ul>
+      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
         <div class="left">
@@ -895,45 +895,45 @@ if ($edit_mode) { ?>
 
             <?php 
                 if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
-                    if ($edit_mode) { ?>
-                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-                        <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
-                    </form>
+                  if ($edit_mode) { ?>
+                  <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
+                    <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
+                  </form>
 
-                    <div class="description-tags">
-                        You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
-                    </div> <?php
-                    } else {?>
-                      <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php 
-                        echo "<pre>" . change_tags(($audit->conclusion == NULL) ? 
-                          $user->conclusion_audit : $audit->conclusion, $client, $audit) . "<pre/>" ?>
-                      </p><?php
-                        get_contact_info($phone, $mail, $calendar_link, $language, $user); 
-                    }
+                  <div class="description-tags">
+                    You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+                  </div> <?php
+                  } else {?>
+                    <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php 
+                      echo "<pre>" . change_tags(($audit->conclusion == NULL) ? 
+                        $user->conclusion_audit : $audit->conclusion, $client, $audit) . "<pre/>" ?>
+                    </p><?php
+                      get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+                  }
                 }
             ?>
         </div>
         <div class="right">
-            <div class="facebook-advice advice">
-                <span class="advice-title"><?php echo $language['facebook_advice']; ?></span>
-                <div class="skills" data-percent="<?php echo $score['fb']; ?>%">
-                    <span class="procent font-red"><?php echo $score['fb']; ?>%</span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
-                <span class="advice-title"><?php echo $language['instagram_advice']; ?></span>
-                <div class="skills" data-percent="<?php echo $score['ig']; ?>%">
-                    <span class="procent font-red"><?php echo $score['ig']; ?>%</span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
-                <span class="advice-title"><?php echo $language['website_advice']; ?></span>
-                <div class="skills" data-percent="<?php echo $score['wb']; ?>%">
-                    <span class="procent font-red"><?php echo $score['wb']; ?>%</span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar red"></div>  
-                </div>
+          <div class="facebook-advice advice">
+            <span class="advice-title"><?php echo $language['facebook_advice']; ?></span>
+            <div class="skills facebook" data-percent="<?php echo $score['fb']; ?>%">
+              <span class="procent facebook font-red"><?php echo $score['fb']; ?>%</span>
+              <div style="clear: both;"></div>
+              <div class="skillbar red facebook"></div>
             </div>
+            <span class="advice-title"><?php echo $language['instagram_advice']; ?></span>
+            <div class="skills instagram" data-percent="<?php echo $score['ig']; ?>%">
+              <span class="procent instagram font-red"><?php echo $score['ig']; ?>%</span>
+              <div style="clear: both;"></div>
+              <div class="skillbar red instagram"></div>
+            </div>
+            <span class="advice-title"><?php echo $language['website_advice']; ?></span>
+            <div class="skills website" data-percent="<?php echo $score['wb']; ?>%">
+              <span class="procent website font-red"><?php echo $score['wb']; ?>%</span>
+              <div style="clear: both;"></div>
+              <div class="skillbar red website"></div>
+            </div>
+          </div>
         </div>
     </div>
 </section>
@@ -1194,8 +1194,9 @@ if ($edit_mode) { ?>
 
     function startAnimation() {
       $('.skills').each(function() {
+        // console.log($(this).data("percent"));
         $(this).find('.skillbar').animate({
-          width:$(this).attr('data-percent')
+          width:$(this).data("percent"),
         },1000);  
       });
     }
@@ -1220,21 +1221,28 @@ if ($edit_mode) { ?>
         }
       }
     });
-
-    // TODO: if the ranges change
-    $("input[type=range]").on('mouseup', function() {
-      $(this).data('changed', true);
-      toggleUpdate(true);
-    });
-
+    
     // NEW ranges
     $("input[type=number]").on('change paste keyup', function() {
       $(this).data('changed', true);
-      console.log($(this).val());
+      
+      // Animate while changing line 1241
       $(this).val(Math.min($(this).val(), 100));
       $(this).parent().next(".skillbar").width(`${$(this).val()}%`);
+      
+      // changes the percentages in the conclusion
+      var type = $(this).data("score");
+      $(`.procent.${type}`).text(`${$(this).val()}%`);
+      $(`.skills.${type}`).data("percent", `${$(this).val()}%`);
+
       toggleUpdate(true);
     });
+
+    // Animate after changing line 1230
+    // $("input[type=number]").on('focusout', function() {      
+    //   $(this).parent().parent().data("percent", `${$(this).val()}%`);
+    //   startAnimation();
+    // });
 
     // if the iframe choice changes
     $("input:radio[class=iframe-radio]").on('click', function() {
@@ -1266,7 +1274,6 @@ if ($edit_mode) { ?>
       var data = {
         ...getChanged('textarea'),
         ...getChanged("#manual-ig-form input[type=text]", true),
-        // ...getChanged("input[type=range]"),
         ...getChanged("input[type=number"),
         ...getChanged("input[type=radio]"),
         ...getIframe(),
