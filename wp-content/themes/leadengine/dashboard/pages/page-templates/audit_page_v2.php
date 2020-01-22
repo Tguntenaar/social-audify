@@ -1201,7 +1201,7 @@ if ($edit_mode) { ?>
     }
 
     // On change of an text area show update all
-    $("textarea, #manual-ig-form input[type=text]").on('keyup paste change', function() {
+    $("textarea, input[type=number].score-input").on('keyup paste change', function() {
       $(this).data('changed', true);
       toggleUpdate(true);
 
@@ -1272,7 +1272,7 @@ if ($edit_mode) { ?>
     function updateAll() {
       var data = {
         ...getChanged('textarea'),
-        ...getChanged("#manual-ig-form input[type=text]", true),
+        ...getChanged("input[type=number].score-input", true),
         ...getChanged("input[type=number"),
         ...getChanged("input[type=radio]"),
         ...getIframe(),
