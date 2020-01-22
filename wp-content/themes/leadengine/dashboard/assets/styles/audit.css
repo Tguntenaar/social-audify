@@ -85,6 +85,14 @@ textarea {
 }
 
 /* STD buttons */
+#universal-update {
+  background: #4da1ff;
+  height: 40px;
+  color: #fff;
+  border: 0px;
+  border-radius: 3px;
+}
+
 .button {
   width: 150px;
   height: 45px;
@@ -98,14 +106,35 @@ textarea {
   box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.2);
   margin-left: 10px;
   float: left;
+  font-weight: 100 !important;
 }
 .button:first-of-type {
   margin-left: 0px;
 }
 
+.previewMode {
+  margin-right: 15px;
+  font-weight: 100 !important;
+  cursor: pointer;
+}
+.previewMode:hover {
+  text-decoration: none;
+}
+
+#language {
+  margin-top: 1px !important;
+  font-weight: 100;
+  cursor: pointer;
+}
+
+.agree,
+.deny {
+  cursor: pointer;
+}
+
 /* Modal */
 .modal-content {
-  width: 500px;
+  width: 60%;
   height: auto;
   margin: 0 auto;
   position: relative;
@@ -115,15 +144,62 @@ textarea {
   transform: translateY(-50%);
   padding: 20px;
   text-align: center;
+  border: 0;
 }
 .modal-content .close {
   position: absolute;
   left: 15px;
   top: 15px;
 }
+.modal-content #delete-this-audit {
+  position: absolute;
+  right: 15px;
+  top: 15px;
+  color: #c0392b;
+  cursor: pointer;
+}
+.modal-content button {
+  width: 110px !important;
+  height: 40px !important;
+  margin-bottom: 10px !important;
+  border: 0 !important;
+  margin: 0 auto;
+}
+.modal-content select {
+  width: 150px;
+  margin: 0 auto;
+  margin-top: -10px !important;
+}
+.modal-content #color {
+  margin-top: 4px;
+}
+.modal-content .agree {
+  color: #fff;
+  background: #487dd7;
+  margin-top: 20px;
+  border-radius: 3px;
+}
+.modal-content .deny {
+  color: #487dd7;
+  background: transparent;
+}
 
-#configModal {
+#configModal,
+#shareModal {
   background: rgba(0, 0, 0, 0.6);
+}
+
+#shareModal .public-link {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #2980b9;
+}
+#shareModal .title {
+  width: 80%;
+  margin: 0 auto;
+  color: #000;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 #copy_link,
@@ -132,6 +208,7 @@ textarea {
   margin-right: 10px;
   background: transparent;
   border: 0;
+  cursor: pointer;
 }
 
 .title {
@@ -647,7 +724,7 @@ header .languages i {
 .introduction .introduction-right .video {
   width: 50%;
   height: auto;
-  float: left;
+  float: right;
   margin-top: 60px;
 }
 .introduction .introduction-right .video .video-iframe {
@@ -912,6 +989,114 @@ header .languages i {
 }
 #conclusion-section .facebook-right {
   padding-bottom: 60px;
+}
+
+@media only screen and (max-width: 996px) {
+  .introduction-text {
+    width: 100% !important;
+  }
+
+  .introduction .video {
+    width: 100% !important;
+    margin-top: 40px !important;
+  }
+}
+@media only screen and (max-width: 900px) {
+  .introduction .introduction-right {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+  .introduction .sidebar {
+    width: 100% !important;
+    height: auto;
+    min-height: 320px;
+  }
+  .introduction .video {
+    width: 100% !important;
+  }
+  .introduction .video iframe {
+    width: 80% !important;
+    margin-left: 10%;
+  }
+  .introduction .intro-text-block {
+    text-align: center;
+    padding-left: 0 !important;
+  }
+  .introduction .intro-text-block .buttons {
+    margin-bottom: 30px;
+  }
+  .introduction .intro-text-block .buttons a {
+    margin: 0 auto;
+    float: none;
+    margin-bottom: 30px;
+    margin-left: auto !important;
+  }
+
+  .introduction .introduction-right .introduction-text p,
+.introduction .introduction-right .introduction-text pre {
+    width: 100% !important;
+  }
+
+  .facebook-right {
+    width: 100% !important;
+    padding-top: 0px !important;
+    padding-left: 35px !important;
+  }
+
+  .small-statistics {
+    margin-left: -35px;
+  }
+  .small-statistics .stat-box {
+    margin-bottom: 20px;
+  }
+
+  .advice {
+    width: 80%;
+  }
+
+  .introduction .introduction-right .video {
+    position: absolute;
+    top: -360px;
+    left: -1px;
+  }
+  .introduction .introduction-right .video iframe {
+    margin-left: 0px !important;
+    width: 101% !important;
+  }
+
+  .introduction .sidebar .audit-owner {
+    width: 300px;
+    float: none;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 3px;
+    margin-top: 30px;
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .introduction .sidebar {
+    position: relative;
+    z-index: 55;
+    width: 100%;
+  }
+
+  #facebook-section .sidebar,
+#instagram-section .sidebar,
+#website-section .sidebar,
+#conclusion-section .sidebar {
+    width: 100%;
+    height: auto;
+    min-height: 200px;
+    padding-top: 20px;
+  }
+  #facebook-section .sidebar ul li,
+#instagram-section .sidebar ul li,
+#website-section .sidebar ul li,
+#conclusion-section .sidebar ul li {
+    float: left;
+    margin-bottom: 5px;
+  }
 }
 
 /*# sourceMappingURL=audit.css.map */
