@@ -1,7 +1,7 @@
 body {
-  --base-color: #4da1ff;
-  --base-shaded-dark: #387dca;
-  --complement-color: #e36364;
+  --base-color: $base-color;
+  --base-shaded-dark: $base-shaded-dark;
+  --complement-color: $complement-color;
   background: #f7f7f7;
 }
 
@@ -12,7 +12,6 @@ body {
   color: #888888;
   text-decoration: underline;
 }
-
 .text-link i {
   color: #888888 !important;
   font-size: 18px !important;
@@ -85,6 +84,7 @@ textarea {
   margin-top: 30px;
 }
 
+/* STD buttons */
 .button {
   width: 150px;
   height: 45px;
@@ -99,9 +99,39 @@ textarea {
   margin-left: 10px;
   float: left;
 }
-
 .button:first-of-type {
   margin-left: 0px;
+}
+
+/* Modal */
+.modal-content {
+  width: 500px;
+  height: auto;
+  margin: 0 auto;
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  padding: 20px;
+  text-align: center;
+}
+.modal-content .close {
+  position: absolute;
+  left: 15px;
+  top: 15px;
+}
+
+#configModal {
+  background: rgba(0, 0, 0, 0.6);
+}
+
+#copy_link,
+#config_link {
+  width: auto;
+  margin-right: 10px;
+  background: transparent;
+  border: 0;
 }
 
 .title {
@@ -188,7 +218,6 @@ textarea {
     transform: rotate(360deg);
   }
 }
-
 pre {
   color: #888888 !important;
   margin-top: 10px !important;
@@ -196,7 +225,7 @@ pre {
   font-size: 15px !important;
   width: 90% !important;
   line-height: 24px !important;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
   white-space: pre-wrap;
   /* Since CSS 2.1 */
   white-space: -moz-pre-wrap;
@@ -221,12 +250,10 @@ pre {
   grid-row-gap: 25px;
   grid-auto-rows: 250px;
 }
-
 .statistics .custom-height {
   height: 525px !important;
   grid-row: 1/3;
 }
-
 .statistics .stat-box {
   height: 250px;
   width: 250px;
@@ -239,18 +266,15 @@ pre {
   position: relative;
   margin-bottom: 20px;
 }
-
 .statistics .stat-box .visibility {
   position: absolute;
   right: 10px;
   top: 0px;
 }
-
 .statistics .stat-box h3 {
   font-size: 14px;
   font-weight: bold;
 }
-
 .statistics .stat-box .stat-title {
   position: absolute;
   left: 20px;
@@ -259,7 +283,6 @@ pre {
   font-size: 16px;
   font-weight: 300;
 }
-
 .statistics .stat-box .information {
   position: absolute;
   top: 24px;
@@ -267,7 +290,6 @@ pre {
   color: #9b9b9b !important;
   font-size: 18px !important;
 }
-
 .statistics .stat-box .skills {
   width: 100%;
   height: 15px;
@@ -276,59 +298,48 @@ pre {
   left: 0;
   margin-bottom: 40px;
 }
-
 .statistics .stat-box .title-bar {
   position: absolute;
   top: -30px;
 }
-
 .statistics .stat-box .procent {
   top: -13px;
   position: relative;
 }
-
 .statistics .stat-box .title-bar h5 {
   font-size: 14px;
   font-weight: bold;
 }
-
 .statistics .stat-box .title-bar-hashtags h5 {
   font-weight: 200;
   font-size: 14px;
   color: #a5a5a5;
 }
-
 .statistics .stat-box .procent-custom {
   top: -8px;
 }
-
 .statistics .stat-box .skills span {
   float: right;
   margin-top: -22px;
   margin-right: 5px;
 }
-
 .statistics .stat-box .blue {
   background: var(--base-shaded-dark) !important;
   box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.25);
 }
-
 .statistics .stat-box .red {
   background: var(--complement-color) !important;
   box-shadow: 0px 8px 15px rgba(227, 99, 100, 0.25);
 }
-
 .statistics .stat-box .skillbar {
   background-color: #ff3333;
   width: 0px;
   height: 10px;
 }
-
 .statistics .stat-box .x-as {
   width: 100%;
   margin-top: -20px;
 }
-
 .statistics .stat-box .left-value {
   color: #cecece;
   font-size: 12px !important;
@@ -336,7 +347,6 @@ pre {
   left: 20px;
   margin-top: -15px;
 }
-
 .statistics .stat-box .right-value {
   color: #cecece;
   font-size: 12px !important;
@@ -344,7 +354,6 @@ pre {
   right: 20px;
   margin-top: -15px;
 }
-
 .statistics .stat-box .center-value {
   color: #cecece;
   font-size: 12px !important;
@@ -362,7 +371,6 @@ pre {
   padding: 35px;
   margin-top: 40px;
 }
-
 .small-statistics .stat-box {
   width: 230px;
   height: 190px;
@@ -373,7 +381,6 @@ pre {
   margin-right: 50px;
   position: relative;
 }
-
 .small-statistics .stat-box .information {
   position: absolute;
   top: 10px;
@@ -381,7 +388,6 @@ pre {
   color: #9b9b9b !important;
   font-size: 18px !important;
 }
-
 .small-statistics .stat-box .stat-title {
   position: absolute;
   left: 30px;
@@ -390,7 +396,6 @@ pre {
   font-size: 16px;
   font-weight: 300;
 }
-
 .small-statistics .stat-box .your-stat {
   width: 100%;
   height: 40px;
@@ -398,27 +403,22 @@ pre {
   float: left;
   border-bottom: 1px solid #e5e5e5;
 }
-
 .small-statistics .stat-box i {
   font-size: 20px !important;
   float: right;
   margin-top: 8px;
 }
-
 .small-statistics .stat-box .check {
   color: #2ecc71 !important;
 }
-
 .small-statistics .stat-box .not-check {
   color: #e74c3c !important;
 }
-
 .small-statistics .stat-box .competitor-stat {
   width: 100%;
   height: 40px;
   float: left;
 }
-
 .small-statistics .stat-box .title-bar {
   height: 40px;
   line-height: 40px;
@@ -426,7 +426,6 @@ pre {
   font-weight: bold;
   font-size: 14px;
 }
-
 .small-statistics .stat-box:last-of-type {
   margin-right: 0px;
 }
@@ -438,13 +437,11 @@ pre {
   margin-top: 80px;
   margin-bottom: 80px;
 }
-
 .advice .advice-title {
   font-size: 16px;
   font-weight: bold;
   color: #2f2f2f;
 }
-
 .advice .skills {
   background-color: #ddd;
   width: 100%;
@@ -453,19 +450,16 @@ pre {
   margin-top: 10px;
   border-radius: 3px;
 }
-
 .advice .title-bar {
   position: absolute;
   top: -50px;
   margin: 5px;
 }
-
 .advice .skills span {
   float: right;
   margin-top: -22px;
   margin-right: 5px;
 }
-
 .advice .skillbar {
   background-color: var(--base-color);
   width: 0px;
@@ -474,7 +468,6 @@ pre {
   border-radius: 3px;
   box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.3);
 }
-
 .advice .procent {
   font-size: 21px !important;
   margin-top: -12px !important;
@@ -482,7 +475,6 @@ pre {
   color: var(--base-color) !important;
   font-weight: 300;
 }
-
 .advice p {
   color: #888888;
   margin-top: 35px;
@@ -501,7 +493,6 @@ header {
   display: gird;
   padding-right: 90px;
 }
-
 header .audit-name {
   width: 220px;
   height: 70px;
@@ -511,7 +502,6 @@ header .audit-name {
   line-height: 70px;
   float: left;
 }
-
 header .languages {
   width: auto;
   height: 70px;
@@ -519,7 +509,6 @@ header .languages {
   line-height: 70px;
   color: #fff;
 }
-
 header .languages select {
   background: transparent;
   border: 0;
@@ -534,7 +523,6 @@ header .languages select {
   z-index: 5;
   outline: none;
 }
-
 header .languages i {
   margin-left: 3px;
   margin-bottom: -2px;
@@ -545,11 +533,9 @@ header .languages i {
   right: 35px;
   top: 80px;
 }
-
 .section-vis i {
   font-size: 18px !important;
 }
-
 .section-vis .lds-dual-ring:after {
   top: 25px;
   right: -10px;
@@ -561,20 +547,17 @@ header .languages i {
   height: auto;
   float: left;
 }
-
 .introduction .sidebar {
   width: 220px;
   min-height: 480px;
   height: auto;
   float: left;
 }
-
 .introduction .sidebar .audit-owner {
   width: 100%;
   text-align: center;
   margin-top: 40px;
 }
-
 .introduction .sidebar .audit-owner .profile-picture {
   height: 135px;
   width: 135px;
@@ -583,7 +566,6 @@ header .languages i {
   margin: 0 auto;
   position: relative;
 }
-
 .introduction .sidebar .audit-owner .profile-picture img {
   height: 100%;
   width: auto;
@@ -594,34 +576,28 @@ header .languages i {
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
 }
-
 .introduction .sidebar .audit-owner .name {
   display: block;
   font-weight: bold;
   margin-top: 10px;
   color: #2d2d2d;
 }
-
 .introduction .sidebar .audit-owner .contact-icons {
   width: 135px;
   height: auto;
   margin: 0 auto;
   margin-top: 10px;
 }
-
 .introduction .sidebar .audit-owner .contact-icons a {
   color: #545454;
   margin-right: 25px;
 }
-
 .introduction .sidebar .audit-owner .contact-icons a:last-of-type {
   margin-right: 0px;
 }
-
 .introduction .sidebar .audit-owner .contact-icons a i {
   font-size: 18px;
 }
-
 .introduction .introduction-right {
   min-height: 480px;
   height: auto;
@@ -635,31 +611,26 @@ header .languages i {
   border-left: 1px solid #e1e1e1;
   position: relative;
 }
-
 .introduction .introduction-right .lds-dual-ring:after {
   top: 25px;
   right: -10px;
 }
-
 .introduction .introduction-right .intro-vis {
   position: absolute;
   right: 35px;
   top: 20px;
 }
-
 .introduction .introduction-right .introduction-text {
   height: auto;
   width: 50%;
   float: left;
   margin-top: 60px;
 }
-
 .introduction .introduction-right .introduction-text .intro-text-block {
   width: 100%;
   padding-left: 60px;
   position: relative;
 }
-
 .introduction .introduction-right .introduction-text p, .introduction .introduction-right .introduction-text pre {
   color: #888888 !important;
   margin-top: 10px !important;
@@ -667,27 +638,23 @@ header .languages i {
   font-size: 15px !important;
   width: 90% !important;
   line-height: 24px !important;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji" !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
 }
-
 .introduction .introduction-right .introduction-text .buttons {
   height: 40px;
   width: 100%;
 }
-
 .introduction .introduction-right .video {
   width: 50%;
   height: auto;
   float: left;
   margin-top: 60px;
 }
-
 .introduction .introduction-right .video .video-iframe {
   width: 100%;
   height: 315px;
   float: right;
 }
-
 .introduction .introduction-right .video .video-iframe iframe {
   width: 100%;
   height: 315px;
@@ -701,21 +668,18 @@ header .languages i {
   height: auto;
   float: left;
 }
-
 #facebook-section .left,
 #instagram-section .left,
 #website-section .left,
 #conclusion-section .left {
   width: 40%;
 }
-
 #facebook-section .right,
 #instagram-section .right,
 #website-section .right,
 #conclusion-section .right {
   width: 60%;
 }
-
 #facebook-section .left, #facebook-section .right,
 #instagram-section .left,
 #instagram-section .right,
@@ -726,7 +690,6 @@ header .languages i {
   height: auto;
   float: left;
 }
-
 #facebook-section .left .section-title, #facebook-section .right .section-title,
 #instagram-section .left .section-title,
 #instagram-section .right .section-title,
@@ -736,7 +699,6 @@ header .languages i {
 #conclusion-section .right .section-title {
   margin-left: 0px;
 }
-
 #facebook-section .left p, #facebook-section .right p,
 #instagram-section .left p,
 #instagram-section .right p,
@@ -751,7 +713,6 @@ header .languages i {
   width: 80%;
   line-height: 24px;
 }
-
 #facebook-section .left .advice, #facebook-section .right .advice,
 #instagram-section .left .advice,
 #instagram-section .right .advice,
@@ -762,7 +723,6 @@ header .languages i {
   margin-top: 35px;
   width: 75%;
 }
-
 #facebook-section .left .advice .skills, #facebook-section .right .advice .skills,
 #instagram-section .left .advice .skills,
 #instagram-section .right .advice .skills,
@@ -772,7 +732,6 @@ header .languages i {
 #conclusion-section .right .advice .skills {
   margin-bottom: 40px;
 }
-
 #facebook-section .chart-holder,
 #instagram-section .chart-holder,
 #website-section .chart-holder,
@@ -785,7 +744,6 @@ header .languages i {
   box-shadow: 0px 8px 15px rgba(60, 60, 60, 0.05);
   margin-bottom: 20px;
 }
-
 #facebook-section .chart-holder .stat-title,
 #instagram-section .chart-holder .stat-title,
 #website-section .chart-holder .stat-title,
@@ -797,7 +755,6 @@ header .languages i {
   font-size: 16px;
   font-weight: 300;
 }
-
 #facebook-section .chart-holder .information,
 #instagram-section .chart-holder .information,
 #website-section .chart-holder .information,
@@ -808,14 +765,12 @@ header .languages i {
   color: #9b9b9b !important;
   font-size: 18px !important;
 }
-
 #facebook-section .chart-holder canvas,
 #instagram-section .chart-holder canvas,
 #website-section .chart-holder canvas,
 #conclusion-section .chart-holder canvas {
   margin-top: 60px;
 }
-
 #facebook-section .chart-holder .averages,
 #instagram-section .chart-holder .averages,
 #website-section .chart-holder .averages,
@@ -828,14 +783,12 @@ header .languages i {
   -webkit-transform: translateX(-50%);
   -ms-transform: translateX(-50%);
 }
-
 #facebook-section .chart-holder .averages .your_averages,
 #instagram-section .chart-holder .averages .your_averages,
 #website-section .chart-holder .averages .your_averages,
 #conclusion-section .chart-holder .averages .your_averages {
   font-weight: bold;
 }
-
 #facebook-section .chart-holder .averages .competitor_averages,
 #instagram-section .chart-holder .averages .competitor_averages,
 #website-section .chart-holder .averages .competitor_averages,
@@ -843,7 +796,6 @@ header .languages i {
   font-weight: bold;
   margin-left: 40px;
 }
-
 #facebook-section .chart-holder .averages .data,
 #instagram-section .chart-holder .averages .data,
 #website-section .chart-holder .averages .data,
@@ -851,14 +803,12 @@ header .languages i {
   margin-left: 10px;
   font-weight: 300 !important;
 }
-
 #facebook-section .chart-holder canvas,
 #instagram-section .chart-holder canvas,
 #website-section .chart-holder canvas,
 #conclusion-section .chart-holder canvas {
   width: 100%;
 }
-
 #facebook-section .sidebar,
 #instagram-section .sidebar,
 #website-section .sidebar,
@@ -871,7 +821,6 @@ header .languages i {
   padding-left: 30px;
   float: left;
 }
-
 #facebook-section .sidebar ul,
 #instagram-section .sidebar ul,
 #website-section .sidebar ul,
@@ -879,7 +828,6 @@ header .languages i {
   margin-top: 20px;
   padding-left: 0px;
 }
-
 #facebook-section .sidebar ul li,
 #instagram-section .sidebar ul li,
 #website-section .sidebar ul li,
@@ -894,7 +842,6 @@ header .languages i {
   padding-left: 25px;
   cursor: pointer;
 }
-
 #facebook-section .sidebar ul li i,
 #instagram-section .sidebar ul li i,
 #website-section .sidebar ul li i,
@@ -904,7 +851,6 @@ header .languages i {
   float: left;
   margin-top: 18px;
 }
-
 #facebook-section .sidebar ul .active,
 #instagram-section .sidebar ul .active,
 #website-section .sidebar ul .active,
@@ -915,7 +861,6 @@ header .languages i {
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
   color: var(--base-shaded-dark) !important;
 }
-
 #facebook-section .facebook-right,
 #instagram-section .facebook-right,
 #website-section .facebook-right,
@@ -930,7 +875,6 @@ header .languages i {
   border-left: 1px solid #e1e1e1;
   position: relative;
 }
-
 #facebook-section .facebook-right .check-field,
 #instagram-section .facebook-right .check-field,
 #website-section .facebook-right .check-field,
@@ -939,7 +883,6 @@ header .languages i {
   text-align: center;
   margin-top: 50px;
 }
-
 #facebook-section .facebook-right .check-field i,
 #instagram-section .facebook-right .check-field i,
 #website-section .facebook-right .check-field i,
@@ -949,7 +892,6 @@ header .languages i {
   margin-top: 50px;
   font-size: 32px !important;
 }
-
 #facebook-section .facebook-right i,
 #instagram-section .facebook-right i,
 #website-section .facebook-right i,
@@ -968,7 +910,8 @@ header .languages i {
 #conclusion-section {
   min-height: 400px;
 }
-
 #conclusion-section .facebook-right {
   padding-bottom: 60px;
 }
+
+/*# sourceMappingURL=audit.css.map */
