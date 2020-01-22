@@ -203,11 +203,11 @@
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <?php if ($edit_mode) { ?>
+        <div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
         <div class="languages">
           <?php echo $language_options; ?>
           <i class="fas fa-chevron-down"></i>
         </div>
-        <div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
         <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="languages"><i class="far fa-eye"></i> Preview </a>
@@ -708,6 +708,7 @@ if ($edit_mode) { ?>
         <?php
             foreach($website_blocks as $item):
                 if (show_block($edit_mode, $audit->{$item["type"]}) && !$item["is_icon"]) {
+
                     if ($item['name'] != "Mobile Friendly") {
                       $arr = explode("s", $audit->{$item['db_name']}, 2);
                       $first = $arr[0];
@@ -735,13 +736,19 @@ if ($edit_mode) { ?>
                         $your_string = ($audit->has_comp) ? $first : $first . "/100";
                         $your_value = (double) $first;
 
-                        $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
-                        $first = $arr[0];
-                        $comp_string = $first;
-                        $comp_value = (int) $first;
-                    
-                        $max_value = 100;
-                      
+                        if ($audit->has_comp) {
+                            $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
+                            $first = $arr[0];
+                            $comp_string = $first;
+                            $comp_value = (int) $first;
+                        }
+
+                        if ($audit->has_comp) {
+                            $max_value = 100;
+                        }
+                    }
+                  }
+                    if ($audit->has_comp) {
                         if ($item['name'] != "Mobile Friendly") {
                           if (round($your_value) > round($comp_value)) {
                             $your_procent = "100";
@@ -754,15 +761,16 @@ if ($edit_mode) { ?>
                           $competitor_procent = $comp_value;
                           $your_procent = $your_value;
                         }
-                      }
-                    
-                    if (round($your_value) > round($comp_value)) {
-                      $your_procent = "100";
-                      $competitor_procent = (string)normalize($your_value, $comp_value);
-                    } else {
-                      $competitor_procent = "100";
-                      $your_procent = (string)normalize($your_value, $comp_value);
-                    } ?>
+
+                        if (round($your_value) > round($comp_value)) {
+                          $your_procent = "100";
+                          $competitor_procent = (string)normalize($your_value, $comp_value);
+                        } else {
+                          $competitor_procent = "100";
+                          $your_procent = (string)normalize($your_value, $comp_value);
+                        } 
+                    }
+                  ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php
                         if (!$edit_mode) { ?>
@@ -799,8 +807,8 @@ if ($edit_mode) { ?>
                         <?php } else { ?>
                             <span class="data-single font-blue"><?php echo $your_string; ?></span>                            
                         <?php } ?>
-                    </div> <?php 
-              }
+                    </div>
+                <?php 
             }
           endforeach; ?>
         </div>
