@@ -203,14 +203,10 @@
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <?php if ($edit_mode) { ?>
-        <div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
-        <div class="languages">
-          <?php echo $language_options; ?>
-          <i class="fas fa-chevron-down"></i>
-        </div>
+
         <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
-        <a href="?preview_mode=True" class="languages"><i class="far fa-eye"></i> Preview </a>
+        <a href="?preview_mode=True" class="languages previewMode"><i class="far fa-eye"></i> Preview </a>
         <?php
       } else {
         if ($user_id == $author_id) {?>
@@ -253,30 +249,7 @@ if ($edit_mode) { ?>
     </div>
     <div class="introduction-right">
         <span class="intro-vis"><?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?></span>
-
-        <div class="introduction-text">
-            <div class="intro-text-block">
-                <span class="title">Improvements</span>
-                <?php 
-                    if ($audit->introduction_vis_bit == 1 || $edit_mode) {
-                        if ($edit_mode) { ?>
-                        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-                            <textarea maxlength="999" input="text"  name="introduction" id="introduction"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
-                        </form>
-
-                        <div class="description-tags">
-                            You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
-                        </div>
-                        <?php
-                        } else {  ?>
-                            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
-                                <?php if ($audit->introduction == NULL) { echo "<pre>" . change_tags($user->intro_audit, $client, $audit) . "</pre>"; } else { echo "<pre>" . change_tags($audit->introduction, $client, $audit) . "</pre>"; } ?></p><?php
-                            get_contact_info($phone, $mail, $calendar_link, $language, $user); 
-                         }
-                    }
-                ?>
-            </div>
-        </div>
+        
         <div class="video">
         <?php
             if (!$edit_mode) {
@@ -319,6 +292,30 @@ if ($edit_mode) { ?>
 
                 <iframe height="315" src="https://www.youtube.com/embed/unU9vpLjHRk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div> -->
+        </div>
+
+        <div class="introduction-text">
+            <div class="intro-text-block">
+                <span class="title">Improvements</span>
+                <?php 
+                    if ($audit->introduction_vis_bit == 1 || $edit_mode) {
+                        if ($edit_mode) { ?>
+                        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
+                            <textarea maxlength="999" input="text"  name="introduction" id="introduction"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
+                        </form>
+
+                        <div class="description-tags">
+                            You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+                        </div>
+                        <?php
+                        } else {  ?>
+                            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
+                                <?php if ($audit->introduction == NULL) { echo "<pre>" . change_tags($user->intro_audit, $client, $audit) . "</pre>"; } else { echo "<pre>" . change_tags($audit->introduction, $client, $audit) . "</pre>"; } ?></p><?php
+                            get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+                         }
+                    }
+                ?>
+            </div>
         </div>
     </div>
 </section>
@@ -1009,7 +1006,7 @@ if ($edit_mode) { ?>
   $(function() {
     // Share & Track Modal
     var modalData = {
-      'text': "This link is copied to your clipboard:",
+      'text': "<span class='title'>This link is copied to your clipboard:</span>",
       'html': `<span class='public-link'>${window.location.hostname}/public/<?php echo $slug; ?></span>`,
       'subtext': `You can send this link from your own email address to your lead. If your lead
         clicks on the link, you will see it in your dashboard, so make sure you don’t
@@ -1030,10 +1027,9 @@ if ($edit_mode) { ?>
         <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br/><br/>
         Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails:
         <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a><br><br>
-        Do you want a custom color for this audit?<br/><br />
         <span style="font-weight: 500;">Theme color:</span><br /> <input type="color" id="color" value="<?php echo $theme_color; ?>">
         <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i><br /><br />
-        <span style="font-weight: 500;">Audit language:</span><br />
+        <span style="font-weight: 500;">Audit language:</span><br /><div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
         <?php echo $language_options; ?>`,
       confirm: 'config_confirmed'
     }
