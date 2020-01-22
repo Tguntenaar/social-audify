@@ -496,94 +496,94 @@ if ($edit_mode) { ?>
         </span>     
         <span class="section-subtitle">
           <?php echo ($user->instagram_sub_title == "") ? $language['insta_subtitle'] : $user->instagram_sub_title; ?>
-        </span> 
-
-        <div style="width: 100%; height: auto; padding-right: 70px;">
-            <div class="chart-holder">
-                <span class="stat-title"><?php echo $language['likes_on_post']; ?></span>
-                <i class="fas fa-info-circle information"></i>
-                <div class="averages">
-                    <span class="your_averages">You<span class="data font-blue">250.1</span></span>
-                    <span class="competitor_averages">NOS<span class="data font-red">320.42</span></span>
-                </div>
-                <div style="height: 220px">
-                     <canvas id="lpd-chart" style="display: block; height: 100%;" class="chartjs-render-monitor"></canvas>
-                </div>
-            </div>
-        </div>
-
+        </span><?php
+        if (!$audit->manual) { ?>
+          <div style="width: 100%; height: auto; padding-right: 70px;">
+              <div class="chart-holder">
+                  <span class="stat-title"><?php echo $language['likes_on_post']; ?></span>
+                  <i class="fas fa-info-circle information"></i>
+                  <div class="averages">
+                      <span class="your_averages">You<span class="data font-blue">250.1</span></span>
+                      <span class="competitor_averages"><?php echo $audit->competitor->name; ?><span class="data font-red">320.42</span></span>
+                  </div>
+                  <div style="height: 220px">
+                      <canvas id="lpd-chart" style="display: block; height: 100%;" class="chartjs-render-monitor"></canvas>
+                  </div>
+              </div>
+          </div><?php 
+        } ?>
         <div class="statistics">
-            <?php $height = ($audit->has_comp) ? "525px !important" : "345px !important"; ?>
-            <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
-                <span class="stat-title"><?php echo $language['hastag_used']; ?></span>
-                <i class="fas fa-info-circle information"></i>
-                <h3 style="margin-top: -35px;">You</h3>
-                <div class="skills" data-percent="100%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->instagram_data->hashtags[0][0]; ?></h5>
-                    </div>
-                    <span class="procent font-blue procent-custom"><?php echo $audit->instagram_data->hashtags[1][0]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar blue"></div>  
-                </div>
-                <div class="skills" data-percent="<?php echo normalize($audit->instagram_data->hashtags[1][0], $audit->instagram_data->hashtags[1][1]);?>%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->instagram_data->hashtags[0][1]; ?></h5>
-                    </div>
-                    <span class="procent font-blue procent-custom"><?php echo $audit->instagram_data->hashtags[1][1]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar blue"></div>  
-                </div>
-                <div class="skills" data-percent="<?php echo normalize($audit->instagram_data->hashtags[1][0], $audit->instagram_data->hashtags[1][2]);?>%">
-                    <div class="title-bar-hashtags">
-                        <h5>#<?php echo $audit->instagram_data->hashtags[0][2]; ?></h5>
-                    </div>
-                    <span class="procent font-blue procent-custom"><?php echo $audit->instagram_data->hashtags[1][2]; ?></span>
-                    <div style="clear: both;"></div>
-                    <div class="skillbar blue"></div>  
-                </div>
-                <div style="clear:both; margin-bottom: 20px;"></div>
-                <?php if ($audit->has_comp) { ?>
-                    <h3>NOS</h3>
-                    <div class="skills" data-percent="100%">
-                        <div class="title-bar-hashtags">
-                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
-                        </div>
-                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][0]; ?></span>
-                        <div style="clear: both;"></div>
-                        <div class="skillbar red"></div>  
-                    </div>
-                    <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
-                        <div class="title-bar-hashtags">
-                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
-                        </div>
-                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][1]; ?></span>
-                        <div style="clear: both;"></div>
-                        <div class="skillbar red"></div>  
-                    </div>
-                    <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
-                        <div class="title-bar-hashtags">
-                            <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
-                        </div>
-                        <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][2]; ?></span>
-                        <div style="clear: both;"></div>
-                        <div class="skillbar red"></div>  
-                    </div>
-                <?php } 
-                
-                $max_value = $audit->instagram_data->hashtags[1][0];
-                if ($audit->has_comp) {
-                  $max_value = max($audit->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][0]);
-                }
-
-                ?>
-                <hr class="x-as" style="margin-top:20px;" />
-                <span class="left-value">0</span>
-                <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                <span class="right-value"><?php echo ceil($max_value); ?></span>
-            </div>
-
-            <?php
+            <?php $height = ($audit->has_comp) ? "525px !important" : "345px !important"; 
+            if (!$audit->manual) { ?>
+              <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
+                  <span class="stat-title"><?php echo $language['hastag_used']; ?></span>
+                  <i class="fas fa-info-circle information"></i>
+                  <h3 style="margin-top: -35px;">You</h3>
+                  <div class="skills" data-percent="100%">
+                      <div class="title-bar-hashtags">
+                          <h5>#<?php echo $audit->instagram_data->hashtags[0][0]; ?></h5>
+                      </div>
+                      <span class="procent font-blue procent-custom"><?php echo $audit->instagram_data->hashtags[1][0]; ?></span>
+                      <div style="clear: both;"></div>
+                      <div class="skillbar blue"></div>  
+                  </div>
+                  <div class="skills" data-percent="<?php echo normalize($audit->instagram_data->hashtags[1][0], $audit->instagram_data->hashtags[1][1]);?>%">
+                      <div class="title-bar-hashtags">
+                          <h5>#<?php echo $audit->instagram_data->hashtags[0][1]; ?></h5>
+                      </div>
+                      <span class="procent font-blue procent-custom"><?php echo $audit->instagram_data->hashtags[1][1]; ?></span>
+                      <div style="clear: both;"></div>
+                      <div class="skillbar blue"></div>  
+                  </div>
+                  <div class="skills" data-percent="<?php echo normalize($audit->instagram_data->hashtags[1][0], $audit->instagram_data->hashtags[1][2]);?>%">
+                      <div class="title-bar-hashtags">
+                          <h5>#<?php echo $audit->instagram_data->hashtags[0][2]; ?></h5>
+                      </div>
+                      <span class="procent font-blue procent-custom"><?php echo $audit->instagram_data->hashtags[1][2]; ?></span>
+                      <div style="clear: both;"></div>
+                      <div class="skillbar blue"></div>  
+                  </div>
+                  <div style="clear:both; margin-bottom: 20px;"></div>
+                  <?php if ($audit->has_comp) { ?>
+                      <h3><?php echo $audit->competitor->name; ?></h3>
+                      <div class="skills" data-percent="100%">
+                          <div class="title-bar-hashtags">
+                              <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
+                          </div>
+                          <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][0]; ?></span>
+                          <div style="clear: both;"></div>
+                          <div class="skillbar red"></div>  
+                      </div>
+                      <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
+                          <div class="title-bar-hashtags">
+                              <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
+                          </div>
+                          <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][1]; ?></span>
+                          <div style="clear: both;"></div>
+                          <div class="skillbar red"></div>  
+                      </div>
+                      <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
+                          <div class="title-bar-hashtags">
+                              <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
+                          </div>
+                          <span class="procent font-red procent-custom"><?php echo $audit->competitor->instagram_data->hashtags[1][2]; ?></span>
+                          <div style="clear: both;"></div>
+                          <div class="skillbar red"></div>  
+                      </div>
+                  <?php } 
+                  
+                  $max_value = $audit->instagram_data->hashtags[1][0];
+                  if ($audit->has_comp) {
+                    $max_value = max($audit->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][0]);
+                  }
+  
+                  ?>
+                  <hr class="x-as" style="margin-top:20px;" />
+                  <span class="left-value">0</span>
+                  <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
+                  <span class="right-value"><?php echo ceil($max_value); ?></span>
+              </div><?php 
+            }
 
             function manual_check($audit, $item, $edit_mode, $comp) {
               $base = ($comp) ? $audit->competitor : $audit;
@@ -591,7 +591,7 @@ if ($edit_mode) { ?>
               $str = ($comp) ? "comp-" : "";
 
               if ($base->manual && $edit_mode) {?>
-                <input type="number" id="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value); ?>" /></span><?php
+                <input type="number" class="instagram" id="<?php echo "{$str}".$item["ig_name"]; ?>" value="<?php echo round($value); ?>" /></span><?php
               } else {
                 echo round($value); // ,2
               }
@@ -1197,7 +1197,7 @@ if ($edit_mode) { ?>
     }
 
     // On change of an text area show update all
-    $("textarea, input[type=number].score-input").on('keyup paste change', function() {
+    $("textarea, input[type=number].instagram").on('keyup paste change', function() {
       $(this).data('changed', true);
       toggleUpdate(true);
 
@@ -1268,8 +1268,8 @@ if ($edit_mode) { ?>
     function updateAll() {
       var data = {
         ...getChanged('textarea'),
-        ...getChanged("input[type=number].score-input", true),
-        ...getChanged("input[type=number"),
+        ...getChanged("input[type=number].instagram", true),
+        ...getChanged("input[type=number].score-input"),
         ...getChanged("input[type=radio]"),
         ...getIframe(),
       };
