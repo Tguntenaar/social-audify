@@ -144,6 +144,13 @@
     return $user->{"text_{$type}_3"};
   }
 
+  $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
+  if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
+    $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
+  } else {
+    $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
+  }
+
    // Overall scores
    $score = array(
     'fb' => $audit->facebook_score  != NULL ? $audit->facebook_score : 50,
@@ -198,8 +205,44 @@
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    function generatePDF() {
+      $(".load-screen").toggle();
+
+      $.ajax({
+        method: 'GET',
+        url: '<?php echo $url; ?>',
+        crossDomain: true,
+        success: function(data) {
+          const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
+          const downloadLink = document.getElementById("testje");
+          const fileName = "<?php echo $audit->name; ?>";
+
+          downloadLink.href = linkSource;
+          downloadLink.download = fileName;
+          downloadLink.click();
+
+          $(".load-screen").toggle();
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          $(".load-screen").toggle();
+          alert("Error generating PDF.");
+          console.log(xhr);
+        }
+      });
+    }
+
+    $(document).ready(function() {
+      $('#nav-icon2').click(function() {
+        $(this).toggleClass('open');
+        $('.mobile-hide').toggleClass('block');
+      });
+    });
+  </script>
+
 </head>
 <body>
+<div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.</h3></div>
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <?php if ($edit_mode) { ?>
@@ -210,7 +253,7 @@
         <?php
       } else {
         if ($user_id == $author_id) {?>
-          <a href="?preview_mode=False"; class="languages"><i class="far fa-eye"></i> Edit </a><?php
+          <a href="?preview_mode=False" style="text-decoration: none;" class="languages"><i class="far fa-eye"></i> Edit </a><?php
         }
       } ?>
 </header>
@@ -234,7 +277,7 @@ if ($edit_mode) { ?>
 
 <section class="introduction">
     <div class="sidebar">
-      <div class="audit-owner">
+      <div class="audit-owner <?php if($edit_mode) {echo "mobile-sidebar";} ?>">
         <div class="profile-picture">
           <?php echo get_wp_user_avatar($author_id, "original"); ?>
         </div>
@@ -242,12 +285,12 @@ if ($edit_mode) { ?>
         <span class="contactme">Contact me</span>
         <div class="contact-icons">
           <?php if (isset($mail) && $mail != "") { ?><a href="mailto: <?php echo $mail; ?>"><i class="fas fa-envelope"></i></a><?php } ?>
-          <a href="#"><i class="fas fa-globe"></i></a>
+          <!-- <a href="#"><i class="fas fa-globe"></i></a> -->
           <?php if (isset($phone) && $phone != "") { ?><a href="callto:<?php echo $phone; ?>"><i class="fas fa-phone"></i></a><?php } ?>
         </div>
       </div>
     </div>
-    <div class="introduction-right">
+    <div class="introduction-right <?php if($edit_mode) {echo "mobile-index";} ?>">
         <span class="intro-vis"><?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?></span>
         
         <div class="video">
@@ -331,7 +374,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     
     <div class="facebook-right">
@@ -371,7 +414,14 @@ if ($edit_mode) { ?>
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
 
                         <?php if (!$edit_mode) { ?>
-                            <i class="fas fa-info-circle information"></i>
+                          <div class="link">
+                              <i class="fas fa-info-circle information"></i>
+                              <div class="arrow" style="margin-top: 28px; margin-left: 22px;">
+                                <div class="drop">
+                                  <div class="line one"><?php echo $language[$item["name"] . " exp"]; ?></div>
+                                </div>
+                              </div>
+                            </div>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
@@ -427,7 +477,14 @@ if ($edit_mode) { ?>
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span>
                         
                         <?php if (!$edit_mode) { ?>
-                            <i class="fas fa-info-circle information"></i>
+                            <div class="link">
+                              <i class="fas fa-info-circle information"></i>
+                              <div class="arrow">
+                                <div class="drop">
+                                  <div class="line one"><?php echo $language[$item["name"] . " exp"]; ?></div>
+                                </div>
+                              </div>
+                            </div>
                         <?php } else { ?>
                             <?php visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); ?>
                         <?php } ?>
@@ -491,7 +548,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
         <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level'); ?></span>
@@ -507,7 +564,6 @@ if ($edit_mode) { ?>
         <div style="width: 100%; height: auto; padding-right: 70px;">
             <div class="chart-holder">
                 <span class="stat-title"><?php echo $language['likes_on_post']; ?></span>
-                <i class="fas fa-info-circle information"></i>
                 <div class="averages">
                     <span class="your_averages">You<span class="data font-blue">250.1</span></span>
                     <span class="competitor_averages">NOS<span class="data font-red">320.42</span></span>
@@ -522,7 +578,6 @@ if ($edit_mode) { ?>
             <?php $height = ($audit->has_comp) ? "525px !important" : "345px !important"; ?>
             <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
                 <span class="stat-title"><?php echo $language['hastag_used']; ?></span>
-                <i class="fas fa-info-circle information"></i>
                 <h3 style="margin-top: -35px;">You</h3>
                 <div class="skills" data-percent="100%">
                     <div class="title-bar-hashtags">
@@ -611,7 +666,14 @@ if ($edit_mode) { ?>
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php 
 
                         if (!$edit_mode) { ?>
-                          <i class="fas fa-info-circle information"></i> <?php 
+                            <div class="link">
+                              <i class="fas fa-info-circle information"></i>
+                              <div class="arrow" style="margin-top: 28px; margin-left: 22px;">
+                                <div class="drop">
+                                  <div class="line one"><?php echo $language[$item["name"] . " exp"]; ?></div>
+                                </div>
+                              </div>
+                            </div> <?php 
                         } else { 
                           visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
                         }
@@ -686,9 +748,11 @@ if ($edit_mode) { ?>
         <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
+    <!-- <div class="wait-screen">Wait a minute till crawl is completed.</div> -->
+
     <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->website_vis_bit, 'website_vis_bit', 'visibility-first-level'); ?></span>
 
     <i class="fas fa-globe section-icon"></i>
@@ -728,7 +792,7 @@ if ($edit_mode) { ?>
                       $your_value = (double) $first;
 
                       if ($audit->has_comp) {
-                        $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
+                        $arr = explode("/", $audit->{$item['db_name']}, 2);
                         $first = $arr[0];
                         $your_string = ($audit->has_comp) ? $first : $first . "/100";
                         $your_value = (double) $first;
@@ -737,6 +801,7 @@ if ($edit_mode) { ?>
                             $arr = explode("/", $audit->competitor->{$item['db_name']}, 2);
                             $first = $arr[0];
                             $comp_string = $first;
+
                             $comp_value = (int) $first;
                         }
 
@@ -771,7 +836,14 @@ if ($edit_mode) { ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php
                         if (!$edit_mode) { ?>
-                          <i class="fas fa-info-circle information"></i><?php 
+                            <div class="link">
+                              <i class="fas fa-info-circle information"></i>
+                              <div class="arrow" style="margin-top: 28px; margin-left: 22px;">
+                                <div class="drop">
+                                  <div class="line one"><?php echo $language[$item["name"] . " exp"]; ?></div>
+                                </div>
+                              </div>
+                            </div><?php 
                         } else { 
                           visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
                         } ?>
@@ -822,7 +894,14 @@ if ($edit_mode) { ?>
                     <div class="stat-box">
                         <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php 
                         if (!$edit_mode) { ?>
-                          <i class="fas fa-info-circle information"></i><?php 
+                            <div class="link">
+                              <i class="fas fa-info-circle information"></i>
+                              <div class="arrow">
+                                <div class="drop">
+                                  <div class="line one"><?php echo $language[$item["name"] . " exp"]; ?></div>
+                                </div>
+                              </div>
+                            </div><?php 
                         } else {
                           visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]);
                         } ?>
@@ -884,7 +963,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" class="button" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
     </div>
     <div class="facebook-right">
         <div class="left">
@@ -904,9 +983,9 @@ if ($edit_mode) { ?>
                   } else {?>
                     <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php 
                       echo "<pre>" . change_tags(($audit->conclusion == NULL) ? 
-                        $user->conclusion_audit : $audit->conclusion, $client, $audit) . "<pre/>" ?>
+                        $user->conclusion_audit : $audit->conclusion, $client, $audit) . "</pre>" ?>
                     </p><?php
-                      get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+                    ?><span class="mobile-hide"><?php get_contact_info($phone, $mail, $calendar_link, $language, $user); ?></span><?php 
                   }
                 }
             ?>
@@ -932,6 +1011,10 @@ if ($edit_mode) { ?>
               <div class="skillbar red website"></div>
             </div>
           </div>
+          <span class="desktop-hide">
+            <div style="clear: both;"></div>
+              <?php get_contact_info($phone, $mail, $calendar_link, $language, $user); ?>
+          </span> 
         </div>
     </div>
 </section>
@@ -941,6 +1024,28 @@ if ($edit_mode) { ?>
     'type': 'audit',
     'audit': '<?php echo $audit->id; ?>',
   }
+
+  <?php // Website Crawl
+    if (isset($_GET['view'])) { ?>
+       $(window).ready(function(){
+          $(this).one('mousemove', function() { 
+              // mouse move
+          }).one('scroll', function(){
+            $.ajax({
+              type: "POST",
+              url: ajaxurl,
+              data: { action: 'insert_view',  ...commonPost },
+              success: function (response) {
+                  console.log(response);
+              },
+              error: function (xhr, textStatus, errorThrown) {
+                  var send_error = error_func(xhr, textStatus, errorThrown, data);
+                  logError(send_error, 'page-templates/audit_page_v2.php', 'insert_view');
+              },
+            });
+          });
+      });
+  <?php } ?>
 
   SetColor("<?php echo $theme_color; ?>");
   function SetColor(color) {
