@@ -373,7 +373,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if(isset($audit->website_size)) {?>
+              if($audit->website_size != NULL) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -555,7 +555,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if(isset($audit->website_size)) {?>
+              if($audit->website_size != NULL) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -762,7 +762,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if(isset($audit->website_size)) {?>
+              if($audit->website_size != NULL) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -984,7 +984,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if(isset($audit->website_size)) {?>
+              if($audit->website_size != NULL) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
