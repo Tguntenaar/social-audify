@@ -1083,6 +1083,7 @@ header .languages i {
   width: 220px;
   height: auto;
   border-top: 1px solid #e1e1e1;
+  margin-top: -1px;
   min-height: 400px;
   padding-top: 70px;
   padding-left: 30px;

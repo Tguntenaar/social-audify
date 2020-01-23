@@ -371,7 +371,12 @@ if ($edit_mode) { ?>
       <ul>
         <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php 
+            if ($audit->website_vis_bit == 1 || $edit_mode) { ?>
+                <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
+        <?php } else {
+          echo "wait";
+        } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
       <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
@@ -1024,7 +1029,38 @@ if ($edit_mode) { ?>
     'type': 'audit',
     'audit': '<?php echo $audit->id; ?>',
   }
+    <?php if ($audit->website_bit && !$audit->has_website): ?>
+    var modalData = {
+      'text': 'Website data available',
+      'subtext': 'Confirm to reload the page and view the crawled website data',
+      'confirm': 'reload_confirmed'
+    }
 
+    var reloadModal = initiateModal('reloadModal', 'confirm', modalData);
+    $('#reload_confirmed').click(function() {
+      window.location.reload();
+    });
+
+    function crawlFinishedCheck() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost },
+        success: function (response) {
+          if (response == true) {
+            showModal(reloadModal);
+          } else {
+            setTimeout(function() { crawlFinishedCheck(); }, 8000);
+          }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page_v2.php', 'toggle_visibility');
+        },
+      });
+    }
+    crawlFinishedCheck();
+  <?php endif; ?>
   <?php // Website Crawl
     if (isset($_GET['view'])) { ?>
        $(window).ready(function(){
