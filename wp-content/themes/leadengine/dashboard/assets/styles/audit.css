@@ -427,7 +427,7 @@ textarea {
 }
 
 .font-red {
-  color: var(--complement-color) !important;
+  color: #e36364;
   font-weight: bold;
 }
 
@@ -595,7 +595,7 @@ pre {
   box-shadow: 0px 8px 15px rgba(77, 161, 255, 0.25);
 }
 .statistics .stat-box .red {
-  background: var(--complement-color) !important;
+  background: #e36364 !important;
   box-shadow: 0px 8px 15px rgba(227, 99, 100, 0.25);
 }
 .statistics .stat-box .skillbar {
