@@ -373,10 +373,10 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { ?>
-                <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
-        <?php } else {
-          echo "wait";
-        } ?>
+              <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
+        <?php } else { ?>
+              <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
+        <?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
       <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
@@ -550,7 +550,12 @@ if ($edit_mode) { ?>
       <ul>
         <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php 
+            if ($audit->website_vis_bit == 1 || $edit_mode) { ?>
+              <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
+        <?php } else { ?>
+              <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
+        <?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
       <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
@@ -750,7 +755,12 @@ if ($edit_mode) { ?>
       <ul>
         <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php 
+            if ($audit->website_vis_bit == 1 || $edit_mode) { ?>
+              <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
+        <?php } else { ?>
+              <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
+        <?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
       <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
@@ -965,7 +975,12 @@ if ($edit_mode) { ?>
       <ul>
         <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
-        <?php if ($audit->website_vis_bit == 1 || $edit_mode) { ?><li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li><?php } ?>
+        <?php 
+            if ($audit->website_vis_bit == 1 || $edit_mode) { ?>
+              <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
+        <?php } else { ?>
+              <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
+        <?php } ?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
       <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>

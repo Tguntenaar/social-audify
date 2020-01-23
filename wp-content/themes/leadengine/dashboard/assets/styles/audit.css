@@ -1109,6 +1109,7 @@ header .languages i {
   font-size: 15px;
   padding-left: 25px;
   cursor: pointer;
+  position: relative;
 }
 #facebook-section .sidebar ul li i,
 #instagram-section .sidebar ul li i,
