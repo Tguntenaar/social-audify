@@ -112,7 +112,7 @@ class audit {
       update_post_meta($this->id, '_wp_page_template', '/dashboard/pages/page-templates/stopped.php');
 		}
 		else {
-			update_post_meta($this->id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page.php');
+			update_post_meta($this->id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page_v2.php');
 		}
   }
 
