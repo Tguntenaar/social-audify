@@ -17,6 +17,7 @@
   $env = getenv('HTTP_HOST');
   $slug = get_post_field("post_name", $post_id);
   $leadengine = get_template_directory_uri();
+  $wp_current_user = wp_get_current_user();
 
   // Get Author data
   $phone =  get_user_meta($user_id, 'rcp_number', true);
@@ -42,7 +43,6 @@
 
   $connection = new connection;
   $user_control   = new user_controller($connection);
-
 
   // Get audit by post_id
   $user = $user_control->get($user_id);
@@ -171,6 +171,7 @@
   <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/dashboard.css<?php echo $cache_version; ?>" type="text/css">
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/chart.js<?php echo $cache_version; ?>"></script>
 
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
 
@@ -385,11 +386,12 @@
 
       <?php if ($edit_mode) { ?>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-        <a href="?preview_mode=True"; class="preview" style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+        <a href="?preview_mode=True"; style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+       
         <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;">
           <i class="fab fa-youtube"></i> Tutorial </button><?php
       } else {?>
-        <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a><?php
+        <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a> <?php
       } ?>
     </div>
   </div>
@@ -887,15 +889,23 @@
     'user': '<?php echo $user_id; ?>',
   }
 
-    // Line Chart values
-    var data_array = [[131,80,74,32,32,78,49,37,53,93,54,86,50,153,77,104,92,104,44,123,74,54,78,52,69]];
-    // Bar Chart values
-    var bar_labels = [["Social media","SMMT","Social Audify","Example"]];
-    var bar_data = [[23,23,22,20]];
+  // Line Chart values
+  var data_array = [[131,80,74,32,32,78,49,37,53,93,54,86,50,153,77,104,92,104,44,123,74,54,78,52,69]];
+  // Bar Chart values
+  var bar_labels = [["Social media","SMMT","Social Audify","Example"]];
+  var bar_data = [[23,23,22,20]];
 
-    var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
-    generateChart('lpd-chart', data_array, allLines, [true, true]);
-    generateAreaChart('hashtag-chart', bar_data, bar_labels);
+  var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
+  generateChart('lpd-chart', data_array, allLines, [true, true]);
+  generateAreaChart('hashtag-chart', bar_data, bar_labels);
+
+  $('#preview').on('change',function() {
+    if ($(this).val() === "Preview" || $(this).val() === "Edit") {
+      window.location.replace(`audit-config?preview_mode=False`)
+    } else {
+      window.location.replace(`audit-config?preview_mode=True&v=${$(this).val().slice(-1)}`)
+    }
+  });
 
   <?php
   if ($edit_mode) { ?>

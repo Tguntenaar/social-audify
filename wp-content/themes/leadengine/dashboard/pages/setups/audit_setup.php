@@ -171,6 +171,7 @@
                 <span style="font-weight: 600;" class="show-client"></span>
                 <span class="has_comp"></span><span style="font-weight: 600;" class="show-compare"></span>
               </div>
+              <br/>
             </div>
             <div>
               <div class="nav-buttons">
