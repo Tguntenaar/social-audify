@@ -587,7 +587,9 @@ if ($edit_mode) { ?>
                   <span class="stat-title"><?php echo $language['likes_on_post']; ?></span>
                   <div class="averages">
                       <span class="your_averages">You<span class="data font-blue"><?php echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span></span>
+                      <?php if($audit->has_comp): ?>
                       <span class="competitor_averages"><?php echo $audit->competitor_name; ?><span class="data font-red"><?php echo number_format($compSumPostLikes / count($audit->competitor->instagram_data->likesPerPost), 2); ?></span></span>
+                      <?php endif; ?>
                   </div>
                   <div style="height: 220px">
                       <canvas id="lpd-chart" style="display: block; height: 100%;" class="chartjs-render-monitor"></canvas>
