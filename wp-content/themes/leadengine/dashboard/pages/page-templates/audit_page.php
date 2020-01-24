@@ -193,6 +193,8 @@
 
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
   $language = $language[$audit->language];
+
+  $template_options = "<select id='template'> <option>Audit Version</option> <option> Version 2.0</option> </select>";
   
   function call_to_contact($phone, $mail, $calendar_link, $language, $user) { ?>
     <div class="info">
@@ -210,11 +212,6 @@
       } ?>
     </div><?php
   }
-
-  $public = 0;
-  if(isset($_GET['view'])) {
-      $public = 1;
-  }
   // $mail_contents = 'Hi, dit is een test. %0D%0A %0D%0A Test test test %0D%0A %0D%0A https://www.socialaudify.com/public/' . get_post_field( 'post_name', get_post() );
 ?>
 <head>
@@ -228,7 +225,7 @@
     gtag('config', 'UA-149815594-1');
   </script>
 
-  <title>Audit</title>
+  <title>Audit - <?php echo $audit->name; ?></title>
   <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -237,6 +234,7 @@
   <link rel="stylesheet" href="<?php echo $leadengine; ?>/dashboard/assets/styles/dashboard.css<?php echo $cache_version; ?>" type="text/css">
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/modal.js<?php echo $cache_version; ?>"></script>
   <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/functions.js<?php echo $cache_version; ?>"></script>
+  <script src="<?php echo $leadengine; ?>/dashboard/assets/scripts/chart.js<?php echo $cache_version; ?>"></script>
 
   <script>var ajaxurl = '<?php echo admin_url('admin-ajax.php');?>';</script>
 
@@ -344,13 +342,14 @@
   </div>
 
   <div id="shareModal" class="modal"></div>
+  <input type="hidden" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
+  
   <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
   <div id="reloadModal" class="modal"></div>
   <div id="errorModal" class="modal"></div>
   <div id="firstTimeModal" class="modal"></div>
   <section class="content white custom-content min-height">
-    <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
     <?php
     if (($audit->video_iframe == "" || $audit->video_iframe == "") && !$edit_mode) {
 
@@ -597,7 +596,7 @@
                   } ?>
                 </span>
               </div>
-              <div class="inner custom-inner" style="">
+              <div class="inner custom-inner">
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
@@ -665,7 +664,7 @@
           }
         }
 
-        foreach ($instagram_blocks as $item) {
+        foreach ($instagram_blocks as $item):
           // Laat hem zien als edit mode aanstaat ?? of die bestaat in de database..
           if (show_block($edit_mode, $audit->{$item["type"]})) { ?>
             <div class="stat-block col-lg-6" id="<?php echo $item['type']; ?>">
@@ -682,7 +681,7 @@
               </div>
             </div><?php
           }
-        }?>
+        endforeach;?>
         </form><?php
 
           if ($audit->manual == 1) { ?>
@@ -836,7 +835,7 @@
   }
 
   <?php // Website Crawl
-    if($public) { ?>
+    if (isset($_GET['view'])) { ?>
        $(window).ready(function(){
           $(this).one('mousemove', function() { 
               // mouse move
@@ -856,7 +855,7 @@
           });
       });
   <?php }
-  if ($audit->website_bit && !$audit->has_website) { ?>
+  if ($audit->website_bit && !$audit->has_website): ?>
 
     var modalData = {
       'text': 'Website data available',
@@ -888,7 +887,7 @@
       });
     }
     crawlFinishedCheck();<?php
-  } ?>
+  endif; ?>
 
   <?php // Graph Generate
   
@@ -1086,6 +1085,8 @@
       var shareModal = initiateModal('shareModal', 'notification', modalData);
       $('#copy_link').click(function() {
         showModal(shareModal);
+        var a = document.createElement("a");
+        a.href = ""
         document.getElementById("public_link").select();
         document.execCommand("copy");
       });
@@ -1101,7 +1102,7 @@
           <span style="font-weight: 500;">Theme color:</span><br /> <input type="color" id="color" value="<?php echo $theme_color; ?>">
           <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i><br /><br />
           <span style="font-weight: 500;">Audit language:</span><br />
-          <?php echo $language_options; ?>`,
+          <?php echo $language_options; ?><br/><?php echo $template_options; ?>`,
         confirm: 'config_confirmed'
       }
 
@@ -1109,7 +1110,30 @@
       $('#config_link').click(function() {
         $('#color').val('<?php echo $theme_color; ?>');
         showModal(configModal);
+        template_callback();
       });
+
+      function template_callback() {
+      $('#template').on('change',function() {
+        console.log("VERSION" + $(this).val().slice(-3, -2));
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: { action: 'update_meta_template', 
+                  template: $(this).val().slice(-3, -2), 
+                  post_id: <?php echo $post_id ?>,
+                  ...commonPost },
+          success: function (response) {
+            console.log(response);
+            window.location.replace(`${window.location.pathname}?action=configmodal`)
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'toggle_visibility');
+          }
+        });
+      });
+    }
 
       $("#config_confirmed").click(function() {
         $.ajax({
@@ -1158,7 +1182,7 @@
 
       var firstTimeModal = initiateModal('firstTimeModal', 'error', firstTimeModalData);
 
-      <?php if($user->first_time == 0) { ?>
+      <?php if ($user->first_time == 0) { ?>
            showModal(firstTimeModal);
            <?php $user->update('User', 'first_time', 1); ?>
       <?php } ?>
@@ -1296,7 +1320,7 @@
               one: <?php replace_lbs($user->text_website_1); ?>,
               two: <?php replace_lbs($user->text_website_2); ?>,
               three: <?php replace_lbs($user->text_website_3); ?>,
-            },<?php
+            }, <?php
           } ?>
         },<?php
       } ?>

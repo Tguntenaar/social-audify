@@ -69,6 +69,13 @@ function percent_diff($primary, $rest, $direct_print = false) {
   return $direct_print ? percent_print($result) : $result;
 }
 
+function percent_tuple($val, $val2) {
+  if ($val > $val2) {
+    return array("100", (string)percent_diff($val2, $val));
+  }
+  return array((string)percent_diff($val, $val2), "100");
+}
+
 function make_slug($type, $name, $id) {
   return strtolower('/'.$type.'-'.sanitize_title($name).'-'.$id.'/');
 }

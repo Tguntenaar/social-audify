@@ -45,7 +45,8 @@ class audit_controller {
 
     // create audit in wordpress databasse
     $post_id = wp_insert_post($new_post);
-    update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page.php');
+
+    update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page_v2.php');
 
     // update audit object with newly created post id
     $instance->update('post_id', $post_id);

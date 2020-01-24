@@ -157,6 +157,24 @@
     wp_die();
   }
 
+  add_action( 'wp_ajax_update_meta_template', 'test');
+  add_action( 'wp_ajax_nopriv_update_meta_template', 'not_logged_in');
+
+  function test() {
+    $post_id = $_POST['post_id'];
+
+    if ($_POST['template'] == "1") {
+      $test = update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page.php');
+    } else if ($_POST['template'] == "2") {
+      $test = update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page_v2.php');
+    }
+    if (!$test) {
+      wp_send_json_error(array('succes'=>"0"));
+      wp_die();
+    }
+    wp_send_json(array('succes'=>"1"));
+    wp_die();
+  }
 
 
   add_action( 'wp_ajax_update_meta_audit', 'create_audit');
@@ -249,21 +267,21 @@
     $page = $control->get($page_id);
 
     if($type == 'audit') {
-        $table = 'Audit_template';
-        $page->update('color', sanitize_hex_color($_POST['color']), $table);
-        $page->update('language', sanitize_text_field($_POST['language']), $table);
+      $table = 'Audit_template';
+      $page->update('color', sanitize_hex_color($_POST['color']), $table);
+      $page->update('language', sanitize_text_field($_POST['language']), $table);
     } else if($type == 'report') {
-        $table = 'Report_content';
-        $page->update('color', sanitize_hex_color($_POST['color']), $table);
+      $table = 'Report_content';
+      $page->update('color', sanitize_hex_color($_POST['color']), $table);
     } else {
-        $table = 'Configtext';
+      $table = 'Configtext';
 
-        if($_POST['flag'] == 'report') {
-            $control->update($_POST['user_id'], 'color_report', sanitize_hex_color($_POST['color']), $table);
-        } else {
-            $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
-            $control->update($_POST['user_id'], 'language', sanitize_text_field($_POST['language']), $table);            
-        }
+      if($_POST['flag'] == 'report') {
+        $control->update($_POST['user_id'], 'color_report', sanitize_hex_color($_POST['color']), $table);
+      } else {
+        $control->update($_POST['user_id'], 'color_audit', sanitize_hex_color($_POST['color']), $table);
+        $control->update($_POST['user_id'], 'language', sanitize_text_field($_POST['language']), $table);            
+      }
     }
 
 
