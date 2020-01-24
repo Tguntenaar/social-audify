@@ -376,15 +376,15 @@ if ($edit_mode) { ?>
 </section>
 <?php } ?>
 
-<?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?>
+<?php if ($audit->facebook_bit && ($audit->facebook_vis_bit == 1 || $edit_mode)) { ?>
 <section id="facebook-section">
     <div class="sidebar">
       <span class="title">Statistics</span>
       <ul>
-        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->facebook_bit && ($audit->facebook_vis_bit == 1 || $edit_mode)) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_bit && ($audit->instagram_vis_bit == 1 || $edit_mode)) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
-            if ($audit->website_vis_bit == 1 || $edit_mode) { 
+            if ($audit->website_bit && ($audit->website_vis_bit == 1 || $edit_mode)) { 
               if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
@@ -553,14 +553,15 @@ if ($edit_mode) { ?>
     </div>
 </section>
 <?php } ?>
+<?php if ($audit->instagram_bit && ($audit->instagram_vis_bit == 1 || $edit_mode)) { ?>
 <section id="instagram-section">
     <div class="sidebar">
       <span class="title">Statistics</span>
       <ul>
-        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->facebook_bit && ($audit->facebook_vis_bit == 1 || $edit_mode)) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_bit && ($audit->instagram_vis_bit == 1 || $edit_mode)) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
-            if ($audit->website_vis_bit == 1 || $edit_mode) { 
+            if ($audit->website_bit && ($audit->website_vis_bit == 1 || $edit_mode)) { 
               if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
@@ -794,14 +795,16 @@ if ($edit_mode) { ?>
         </div>
     </div>
 </section>
+<?php } ?>
+<?php if ($audit->website_bit && ($audit->website_vis_bit == 1 || $edit_mode)) { ?>
 <section id="website-section">
     <div class="sidebar">
       <span class="title">Statistics</span>
       <ul>
-        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->facebook_bit && ($audit->facebook_vis_bit == 1 || $edit_mode)) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_bit && ($audit->instagram_vis_bit == 1 || $edit_mode)) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
-            if ($audit->website_vis_bit == 1 || $edit_mode) { 
+            if ($audit->website_bit && ($audit->website_vis_bit == 1 || $edit_mode)) { 
               if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
@@ -1012,14 +1015,15 @@ if ($edit_mode) { ?>
         </div>
     </div>
 </section>
+<?php } ?>
 <section id="conclusion-section">
     <div class="sidebar">
       <span class="title">Statistics</span>
       <ul>
-        <?php if ($audit->facebook_vis_bit == 1 || $edit_mode) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
-        <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
+        <?php if ($audit->facebook_bit && ($audit->facebook_vis_bit == 1 || $edit_mode)) { ?><li class="facebook-option active"><i class="fab fa-facebook-square"></i><span class="nav-position">Facebook</span></li><?php } ?>
+        <?php if ($audit->instagram_bit && ($audit->instagram_vis_bit == 1 || $edit_mode)) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
-            if ($audit->website_vis_bit == 1 || $edit_mode) { 
+            if ($audit->website_bit && ($audit->website_vis_bit == 1 || $edit_mode)) { 
               if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
@@ -1391,21 +1395,21 @@ if ($edit_mode) { ?>
       startAnimation();
     });
 
-    <?php if ($audit->facebook_vis_bit == 0 && $audit->instagram_vis_bit != 0 && !$edit_mode) { ?>
+    <?php if ($audit->facebook_bit == 0 && $audit->instagram_bit || ($audit->facebook_vis_bit == 0 && $audit->instagram_vis_bit != 0 && !$edit_mode)) { ?>
         $(".facebook-option").removeClass("active");
         $(".instagram-option").addClass("active");
         $("#facebook-section").css("display", "none");
         $("#instagram-section").css("display", "block");
-    <?php } elseif ($audit->facebook_vis_bit == 0  
+    <?php } elseif ((!$audit->facebook_bit && !$audit->instagram_bit && $audit->website_bit)  || ($audit->facebook_vis_bit == 0  
                     && $audit->instagram_vis_bit == 0
-                    && $audit->website_vis_bit != 0 && !$edit_mode) { ?>
+                    && $audit->website_vis_bit != 0 && !$edit_mode)) { ?>
         $(".facebook-option").removeClass("active");
         $(".website-option").addClass("active");
         $("#facebook-section").css("display", "none");
         $("#website-section").css("display", "block");
-    <?php } elseif ($audit->facebook_vis_bit == 0
+    <?php } elseif ((!$audit->facebook_bit && !$audit->instagram_bit && !$audit->website_bit) || ($audit->facebook_vis_bit == 0
                     && $audit->instagram_vis_bit == 0 
-                    && $audit->website_vis_bit == 0 && !$edit_mode) { ?>
+                    && $audit->website_vis_bit == 0 && !$edit_mode)) { ?>
         $(".facebook-option").removeClass("active");
         $(".conclusion-option").addClass("active");
         $("#facebook-section").css("display", "none");
