@@ -524,8 +524,8 @@ if ($edit_mode) { ?>
                 }
               endforeach; ?>
         </div>
+        <div style="clear: both;"></div>
         <div class="facebook-advice advice">
-            <div style="clear: both;"></div>
             <span class="advice-title"><?php echo $language['facebook_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['fb']; ?>%">
               <span class="procent font-red">
@@ -769,8 +769,8 @@ if ($edit_mode) { ?>
                 }
             endforeach; ?>
         </div>
+        <div style="clear: both;"></div>
         <div class="instagram-advice advice">
-            <div style="clear: both;"></div>
             <span class="advice-title"><?php echo $language['instagram_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['ig']; ?>%">
                 <span class="procent font-red">
@@ -993,8 +993,8 @@ if ($edit_mode) { ?>
                 }
               endforeach; ?>
         </div>
+        <div style="clear: both;"></div>
         <div class="facebook-advice advice">
-          <div style="clear: both;"></div>
           <span class="advice-title"><?php echo $language['website_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['wb']; ?>%">
               <span class="procent font-red"> <?php

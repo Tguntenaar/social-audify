@@ -392,6 +392,10 @@ textarea {
   line-height: 100vh;
 }
 
+#public_link {
+  display: none;
+}
+
 #copy_link,
 #config_link {
   width: auto;

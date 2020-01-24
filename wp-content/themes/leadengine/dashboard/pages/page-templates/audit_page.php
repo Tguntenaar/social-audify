@@ -342,7 +342,7 @@
   </div>
 
   <div id="shareModal" class="modal"></div>
-  <input type="text" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
+  <input type="hidden" class="offscreen" aria-hidden="true" name="public_link" id="public_link" value=<?php echo "https://".$env."/public/".$slug; ?> />
   
   <div id="configModal" class="modal"></div>
   <div id="confirmModal" class="modal"></div>
