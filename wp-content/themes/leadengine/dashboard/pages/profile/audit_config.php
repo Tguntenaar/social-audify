@@ -44,7 +44,6 @@
   $connection = new connection;
   $user_control   = new user_controller($connection);
 
-
   // Get audit by post_id
   $user = $user_control->get($user_id);
 
@@ -387,17 +386,12 @@
 
       <?php if ($edit_mode) { ?>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
-        <!-- <a href="?preview_mode=True"; style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a> -->
-        <span style="float:right; margin-right:5px;">
-          <i class="far fa-eye"></i><select id="preview" style="float:right; margin-right:5px"><option>Preview</option><option>Version1</option><option>Version2</option></select>
-        </span>
+        <a href="?preview_mode=True"; style="float:right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
+       
         <button id="tutorial_link" class="copy-link" style="margin-right: 10px; margin-bottom: 5px;">
           <i class="fab fa-youtube"></i> Tutorial </button><?php
       } else {?>
-        <!-- <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a> -->
-        <span style="float:right; margin-right:5px;">
-          <i class="far fa-eye"></i><select id="preview" style="float:right; margin-right:5px"><option>Preview</option><option>Edit</option><option>Version <?php echo ($_GET['v'] == "1") ? "2" : "1";?></option></select>
-        </span><?php
+        <a href="?preview_mode=False"; class="edit"><i class="far fa-eye"></i> Edit </a> <?php
       } ?>
     </div>
   </div>

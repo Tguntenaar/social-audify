@@ -123,6 +123,24 @@
     wp_die();
   }
 
+  add_action( 'wp_ajax_update_meta_template', 'test');
+  add_action( 'wp_ajax_nopriv_update_meta_template', 'not_logged_in');
+
+  function test() {
+    $post_id = $_POST['post_id'];
+
+    if ($_POST['template'] == "1") {
+      $test = update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page.php');
+    } else if ($_POST['template'] == "2") {
+      $test = update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page_v2.php');
+    }
+    if (!$test) {
+      wp_send_json_error(array('succes'=>"0"));
+      wp_die();
+    }
+    wp_send_json(array('succes'=>"1"));
+    wp_die();
+  }
 
 
   add_action( 'wp_ajax_update_meta_audit', 'create_audit');

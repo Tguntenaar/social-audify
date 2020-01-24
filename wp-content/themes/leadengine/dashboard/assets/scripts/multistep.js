@@ -199,7 +199,6 @@ function validateName() {
 
   Instance.options = options;
   Instance.page.name = nameInput.val().trim();
-  Instance.page.template = $("input[name=template]:checked").val();
 
   return true;
 }

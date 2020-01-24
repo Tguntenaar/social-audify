@@ -68,6 +68,8 @@
   $language_options = "<select style='margin-top: 7px;' id='language'>" . $options . "</select>";
   $language = $language[$audit->language];
 
+  $template_options = "<select id='template'> <option>Audit Version</option> <option>Version 1.0</option> </select>";
+
   function change_tags($text, $client, $audit) {
     // Client name -> #{client}
     if (strpos($text, '#{client}') !== false) {
@@ -1028,7 +1030,7 @@ if ($edit_mode) { ?>
         <span style="font-weight: 500;">Theme color:</span><br /> <input type="color" id="color" value="<?php echo $theme_color; ?>">
         <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i><br /><br />
         <span style="font-weight: 500;">Audit language:</span><br /><div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
-        <?php echo $language_options; ?>`,
+        <?php echo $language_options; ?><br/><?php echo $template_options; ?>`,
       confirm: 'config_confirmed'
     }
 
@@ -1036,7 +1038,30 @@ if ($edit_mode) { ?>
     $('#config_link').click(function() {
       $('#color').val('<?php echo $theme_color; ?>');
       showModal(configModal);
+      template_callback();
     });
+
+    function template_callback() {
+      $('#template').on('change',function() {
+        console.log("VERSION" + $(this).val().slice(-3, -2));
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: { action: 'update_meta_template', 
+                  template: $(this).val().slice(-3, -2), 
+                  post_id: <?php echo $post_id ?>,
+                  ...commonPost },
+          success: function (response) {
+            console.log(response);
+            window.location.replace(`${window.location.pathname}?action=configmodal`)
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            logError(send_error, 'page-templates/audit_page.php', 'toggle_visibility');
+          }
+        });
+      });
+    }
 
     $("#config_confirmed").click(function() {
       $.ajax({
