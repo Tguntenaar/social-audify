@@ -1380,9 +1380,11 @@ if ($edit_mode) { ?>
     function startAnimation() {
       $('.skills').each(function() {
         // console.log($(this).data("percent"));
-        $(this).find('.skillbar').animate({
+        var bar = $(this).find('.skillbar');
+        bar.width("0");
+        bar.animate({
           width:$(this).data("percent"),
-        },1000);  
+        }, 1000);  
       });
 
       $(".procent").each(function() {
