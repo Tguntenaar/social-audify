@@ -525,6 +525,7 @@ if ($edit_mode) { ?>
               endforeach; ?>
         </div>
         <div class="facebook-advice advice">
+            <div style="clear: both;"></div>
             <span class="advice-title"><?php echo $language['facebook_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['fb']; ?>%">
               <span class="procent font-red">
@@ -769,6 +770,7 @@ if ($edit_mode) { ?>
             endforeach; ?>
         </div>
         <div class="instagram-advice advice">
+            <div style="clear: both;"></div>
             <span class="advice-title"><?php echo $language['instagram_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['ig']; ?>%">
                 <span class="procent font-red">
@@ -992,6 +994,7 @@ if ($edit_mode) { ?>
               endforeach; ?>
         </div>
         <div class="facebook-advice advice">
+          <div style="clear: both;"></div>
           <span class="advice-title"><?php echo $language['website_advice']; ?></span>
             <div class="skills" data-percent="<?php echo $score['wb']; ?>%">
               <span class="procent font-red"> <?php
@@ -1005,7 +1008,6 @@ if ($edit_mode) { ?>
             </div>
             <p>
               <?php if ($edit_mode) { ?>
-                <div style="clear: both;"></div>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
                   <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo  $advice['wb']; ?></textarea>
                 </form><?php
