@@ -605,8 +605,11 @@ if ($edit_mode) { ?>
           // $audit->competitor->instagram_data->hashtags[1][0] = NULL;
           // $audit->competitor->instagram_data->hashtags[1][1] = NULL;
           // $audit->competitor->instagram_data->hashtags[1][2] = NULL;
-          
-          $height = ($audit->has_comp) ? "525px !important" : "345px !important"; 
+          // $audit->instagram_data->hashtags = NULL;
+          // $audit->competitor->instagram_data->hashtags = 0;
+          $height = ($audit->has_comp
+            && isset($audit->competitor->instagram_data->hashtags[1][0])
+            && isset($audit->instagram_data->hashtags[1][0])) ? "525px !important" : "345px !important"; 
 
             if (!$audit->manual && (isset($audit->instagram_data->hashtags[1][0])||isset($audit->competitor->instagram_data->hashtags[1][0]))) { ?>
               <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
@@ -650,7 +653,7 @@ if ($edit_mode) { ?>
                     </div>
                   <?php } ?>
                   <div style="clear:both; margin-bottom: 20px;"></div>
-                  <?php if ($audit->has_comp) { ?>
+                  <?php if ($audit->has_comp && isset($audit->competitor->instagram_data->hashtags[1][0])) { ?>
                       <h3><?php echo $audit->competitor_name; ?></h3>
                       <?php if (isset($audit->competitor->instagram_data->hashtags[1][0])) { ?>
                           <div class="skills" data-percent="<?php echo normalize($max_value, $audit->competitor->instagram_data->hashtags[1][0])."%";?>">
