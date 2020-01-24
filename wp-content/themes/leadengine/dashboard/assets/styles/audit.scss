@@ -428,6 +428,18 @@ textarea {
     cursor: pointer;
 }
 
+.home-link {
+    color: #fff;
+    height: 70px;
+    line-height: 70px;
+    padding-left: 20px;
+    
+    &:hover {
+        color: #fff;
+        text-decoration: none;
+    }
+}
+
 .title {
     color: #2f2f2f;
     font-weight: 600;
