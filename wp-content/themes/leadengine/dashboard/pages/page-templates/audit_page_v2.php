@@ -540,6 +540,7 @@ if ($edit_mode) { ?>
             </div>
             <p> <?php 
               if ($edit_mode) { ?>
+                <div style="clear: both;"></div>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#facebook-info" method="post" enctype="multipart/form-data">
                   <textarea maxlength="999" input="text"  name="facebook_advice" id="facebook_advice"><?php echo  $advice['fb']; ?></textarea>
                 </form><?php
@@ -783,6 +784,7 @@ if ($edit_mode) { ?>
             </div>
             <p>
                 <?php if ($edit_mode) { ?>
+                  <div style="clear: both;"></div>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#instagram-info" method="post" enctype="multipart/form-data">
                     <textarea maxlength="999" input="text"  name="instagram_advice" id="instagram_advice"><?php echo  $advice['ig']; ?></textarea>
                   </form><?php
@@ -1003,6 +1005,7 @@ if ($edit_mode) { ?>
             </div>
             <p>
               <?php if ($edit_mode) { ?>
+                <div style="clear: both;"></div>
                 <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#website-info" method="post" enctype="multipart/form-data">
                   <textarea maxlength="999" input="text"  name="website_advice" id="website_advice"><?php echo  $advice['wb']; ?></textarea>
                 </form><?php
