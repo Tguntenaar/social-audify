@@ -1414,7 +1414,9 @@ if ($edit_mode) { ?>
       $(".procent").each(function() {
         if (!$(this).html().includes("%")) {
           var v = parseInt($(this).html());
-          countAnimationFromTo($(this), Math.round(v / 2), v, 500);
+          if (!isNaN(v)) {
+            countAnimationFromTo($(this), Math.round(v / 2), v, 500);
+          }
         }
       });
 
@@ -1581,7 +1583,8 @@ if ($edit_mode) { ?>
     
     var theme = "<?php echo $theme_color; ?>";
     var allLines = Array(Math.max(data_array[0].length, 12)).fill().map((_, index) => index);
-    generateLineChart('lpd-chart', data_array, allLines, [false, true], [theme, complementColor(theme)]);
+    // complementColor(theme)
+    generateLineChart('lpd-chart', data_array, allLines, [false, true], [theme, "#e36364"]);
   <?php } ?>
 
   <?php if ($edit_mode) { ?>
