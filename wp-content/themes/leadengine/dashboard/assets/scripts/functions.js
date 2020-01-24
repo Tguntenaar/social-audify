@@ -54,18 +54,36 @@ function filterSearch(value, links, counterSpan = null, isDiv = false) {
   var occ = 0;
   $.each(links, function () {
     var name = isDiv ? $(this).data('name') : $(this).prop('name');
-    var match = name.toLowerCase().includes(value.toLowerCase())
+    var match = name.toString().toLowerCase().includes(value.toLowerCase())
     $(this).css('display', match ? 'block' : 'none');
     occ += match ? 1 : 0;
   });
 
-  if (counterSpan != null) {
-    var startValue = parseInt(counterSpan.html());
-    var milliseconds = (Math.abs(startValue - occ) + 100) * 2;
+  countAnimationFromTo(counterSpan, parseInt(counterSpan.html()), occ);
+}
 
-    $({ Counter: startValue }).stop(true, false).animate({ Counter: occ += (startValue < occ) }, {
+function countAnimation(span, countTo) {
+  if (span != null) {
+    var startValue = parseInt(span.html());
+    var milliseconds = (Math.abs(startValue - countTo) + 100) * 2;
+
+    $({ Counter: startValue }).stop(true, false).animate({ Counter: countTo += (startValue < countTo) }, {
       duration: milliseconds, step: function () {
-        counterSpan.html(parseInt(this.Counter));
+        span.html(parseInt(this.Counter));
+      }
+    });
+  }
+}
+
+function countAnimationFromTo(span, from, to, duration = null) {
+  if (span != null) {
+    var startValue = from;
+    var countTo = to;
+    var milliseconds = duration || (Math.abs(startValue - countTo) + 100) * 2;
+
+    $({ Counter: startValue }).stop(true, false).animate({ Counter: countTo += (startValue < countTo) }, {
+      duration: milliseconds, step: function () {
+        span.html(parseInt(this.Counter));
       }
     });
   }

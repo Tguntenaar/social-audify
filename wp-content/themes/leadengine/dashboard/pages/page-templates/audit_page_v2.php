@@ -577,7 +577,7 @@ if ($edit_mode) { ?>
                   <span class="stat-title"><?php echo $language['likes_on_post']; ?></span>
                   <div class="averages">
                       <span class="your_averages">You<span class="data font-blue">250.1</span></span>
-                      <span class="competitor_averages"><?php echo $audit->competitor->name; ?><span class="data font-red">320.42</span></span>
+                      <span class="competitor_averages"><?php echo $audit->competitor_name; ?><span class="data font-red">320.42</span></span>
                   </div>
                   <div style="height: 220px">
                       <canvas id="lpd-chart" style="display: block; height: 100%;" class="chartjs-render-monitor"></canvas>
@@ -617,7 +617,7 @@ if ($edit_mode) { ?>
                   </div>
                   <div style="clear:both; margin-bottom: 20px;"></div>
                   <?php if ($audit->has_comp) { ?>
-                      <h3><?php echo $audit->competitor->name; ?></h3>
+                      <h3><?php echo $audit->competitor_name; ?></h3>
                       <div class="skills" data-percent="100%">
                           <div class="title-bar-hashtags">
                               <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
@@ -698,7 +698,7 @@ if ($edit_mode) { ?>
                         }
                         
                         if ($audit->has_comp) { ?>
-                          <div class="skills" data-percent="<?php echo $your_procent; ?>%">
+                          <div class="skills you" data-percent="<?php echo $your_procent; ?>%">
                             <div class="title-bar">
                               <h5>You</h5>
                             </div>
@@ -709,7 +709,7 @@ if ($edit_mode) { ?>
                             <div class="skillbar blue"></div>  
                           </div>
                       
-                          <div class="skills" data-percent="<?php echo $competitor_procent; ?>%">
+                          <div class="skills competitor" data-percent="<?php echo $competitor_procent; ?>%">
                                   <div class="title-bar">
                                       <h5><?php echo $audit->competitor_name; ?></h5>
                                   </div>
@@ -720,8 +720,8 @@ if ($edit_mode) { ?>
                       
                           <hr class="x-as" />
                           <span class="left-value">0</span>
-                          <span class="center-value"><?php echo ceil(($max_value / 2)); ?></span>
-                          <span class="right-value"><?php echo ceil($max_value); ?></span> <?php 
+                          <span class="center-value"><?php echo floor(($max_value / 2)); ?></span>
+                          <span class="right-value"><?php echo floor($max_value); ?></span> <?php 
                         } else { ?>
                           <span class="data-single font-blue"><?php manual_check($audit, $item, $edit_mode, 0); ?></span><?php 
                         } ?>
@@ -1053,7 +1053,7 @@ if ($edit_mode) { ?>
     'type': 'audit',
     'audit': '<?php echo $audit->id; ?>',
   }
-    <?php if ($audit->website_bit && !$audit->has_website): ?>
+  <?php if ($audit->website_bit && !$audit->has_website): ?>
     var modalData = {
       'text': 'Website data available',
       'subtext': 'Confirm to reload the page and view the crawled website data',
@@ -1384,6 +1384,22 @@ if ($edit_mode) { ?>
           width:$(this).data("percent"),
         },1000);  
       });
+
+      $(".procent").each(function() {
+        if (!$(this).html().includes("%")) {
+          var v = parseInt($(this).html());
+          countAnimationFromTo($(this), Math.round(v / 2), v, 500);
+        }
+      });
+
+      <?php if (!$audit->has_comp): ?>
+      $('.data-single').each(function() {
+        var v = parseInt($(this).text());
+        if (!isNaN(v)) {
+            countAnimationFromTo($(this), Math.round(v / 2), v, 500);
+        }
+      });
+      <?php endif; ?>
     }
 
     // On change of an text area show update all
@@ -1405,6 +1421,44 @@ if ($edit_mode) { ?>
           }
         }
       }
+    });
+
+    function percent_diff(val1, val2) {
+      return Math.round(val1 / Math.max(val2, 1) * 100);
+    }
+
+    function percent_tuple(val1, val2) {
+      if (val1 > val2) {
+        return ["100", percent_diff(val2, val1).toString()];
+      } else {
+        return [percent_diff(val1, val2).toString(), "100"];
+      }
+    }
+
+    $('input[type=number].instagram').on('focusout', function() {
+      // todol
+      var box = $(this).parents(".stat-box");
+      var you = box.find('.skills.you');
+      var comp = box.find('.skills.competitor');
+
+      var val1 = parseInt(you.find('input[type=number]').val());
+      var val2 = parseInt(comp.find('input[type=number]').val());
+      var [p1, p2] = percent_tuple(val1, val2);
+
+
+      you.data('percent', `${p1}%`);
+      you.find('.skillbar').animate({
+        width:`${p1}%`,
+      }, 1000);  
+
+      comp.data('percent', `${p2}%`);
+      comp.find('.skillbar').animate({
+        width:`${p2}%`,
+      }, 1000);
+      var biggestValue = Math.max(val1, val2);
+      // instant box.find('.right-value').text(biggestValue);
+      countAnimation(box.find('.center-value'), Math.round(biggestValue / 2));
+      countAnimation(box.find('.right-value'), biggestValue);
     });
     
     // NEW ranges
