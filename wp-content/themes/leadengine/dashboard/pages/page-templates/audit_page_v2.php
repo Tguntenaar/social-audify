@@ -614,7 +614,7 @@ if ($edit_mode) { ?>
                   <h3 style="margin-top: -35px;">You</h3>
                   <?php
                     $max_value = $audit->instagram_data->hashtags[1][0];
-                    if ($audit->has_comp && (isset($audit->instagram_data->hashtags[1][0])||isset($audit->competitor->instagram_data->hashtags[1][0]))) {
+                    if ($audit->has_comp && (isset($audit->instagram_data->hashtags[1][0])&&isset($audit->competitor->instagram_data->hashtags[1][0]))) {
                       $max_value = max($audit->instagram_data->hashtags[1][0], 
                       $audit->competitor->instagram_data->hashtags[1][0]);
                     }
