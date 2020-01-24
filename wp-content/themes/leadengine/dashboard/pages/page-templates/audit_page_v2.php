@@ -151,7 +151,7 @@
                   ? array_sum($audit->instagram_data->likesPerPost) 
                   : NULL;
 
-      if($audit->has_comp) {
+      if ($audit->has_comp) {
           $compSumPostLikes = array_sum($audit->competitor->instagram_data->likesPerPost);
       }
   }
@@ -289,7 +289,7 @@ if ($edit_mode) { ?>
 
 <section class="introduction">
     <div class="sidebar">
-      <div class="audit-owner <?php if($edit_mode) {echo "mobile-sidebar";} ?>">
+      <div class="audit-owner <?php if ($edit_mode) {echo "mobile-sidebar";} ?>">
         <div class="profile-picture">
           <?php echo get_wp_user_avatar($author_id, "original"); ?>
         </div>
@@ -302,7 +302,7 @@ if ($edit_mode) { ?>
         </div>
       </div>
     </div>
-    <div class="introduction-right <?php if($edit_mode) {echo "mobile-index";} ?>">
+    <div class="introduction-right <?php if ($edit_mode) {echo "mobile-index";} ?>">
         <span class="intro-vis"><?php visibility_short_code($edit_mode, $audit->introduction_vis_bit, 'introduction_vis_bit', 'visibility-first-level'); ?></span>
         
         <div class="video">
@@ -385,7 +385,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if($audit->website_size != NULL) {?>
+              if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -561,7 +561,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if($audit->website_size != NULL) {?>
+              if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -587,7 +587,7 @@ if ($edit_mode) { ?>
                   <span class="stat-title"><?php echo $language['likes_on_post']; ?></span>
                   <div class="averages">
                       <span class="your_averages">You<span class="data font-blue"><?php echo number_format($sumPostLikes / count($audit->instagram_data->likesPerPost), 2); ?></span></span>
-                      <?php if($audit->has_comp): ?>
+                      <?php if ($audit->has_comp): ?>
                       <span class="competitor_averages"><?php echo $audit->competitor_name; ?><span class="data font-red"><?php echo number_format($compSumPostLikes / count($audit->competitor->instagram_data->likesPerPost), 2); ?></span></span>
                       <?php endif; ?>
                   </div>
@@ -598,13 +598,29 @@ if ($edit_mode) { ?>
           </div><?php 
         } ?>
         <div class="statistics">
-            <?php $height = ($audit->has_comp) ? "525px !important" : "345px !important"; 
-            if (!$audit->manual) { ?>
+          <?php
+          // $audit->instagram_data->hashtags[1][0] = NULL;
+          // $audit->instagram_data->hashtags[1][1] = NULL;
+          // $audit->instagram_data->hashtags[1][2] = NULL;
+          // $audit->competitor->instagram_data->hashtags[1][0] = NULL;
+          // $audit->competitor->instagram_data->hashtags[1][1] = NULL;
+          // $audit->competitor->instagram_data->hashtags[1][2] = NULL;
+          
+          $height = ($audit->has_comp) ? "525px !important" : "345px !important"; 
+
+            if (!$audit->manual && (isset($audit->instagram_data->hashtags[1][0])||isset($audit->competitor->instagram_data->hashtags[1][0]))) { ?>
               <div class="stat-box custom-height" style="height: <?php echo $height; ?>;">
                   <span class="stat-title"><?php echo $language['hastag_used']; ?></span>
                   <h3 style="margin-top: -35px;">You</h3>
-                  <?php if(isset($audit->instagram_data->hashtags[1][0])) { ?>
-                    <div class="skills" data-percent="100%">
+                  <?php
+                    $max_value = $audit->instagram_data->hashtags[1][0];
+                    if ($audit->has_comp && (isset($audit->instagram_data->hashtags[1][0])||isset($audit->competitor->instagram_data->hashtags[1][0]))) {
+                      $max_value = max($audit->instagram_data->hashtags[1][0], 
+                      $audit->competitor->instagram_data->hashtags[1][0]);
+                    }
+                  ?>
+                  <?php if (isset($audit->instagram_data->hashtags[1][0])) { ?>
+                    <div class="skills" data-percent="<?php echo normalize($max_value, $audit->instagram_data->hashtags[1][0])."%";?>">
                         <div class="title-bar-hashtags">
                             <h5>#<?php echo $audit->instagram_data->hashtags[0][0]; ?></h5>
                         </div>
@@ -613,7 +629,7 @@ if ($edit_mode) { ?>
                         <div class="skillbar blue"></div>  
                   </div>
                   <?php } ?>
-                  <?php if(isset($audit->instagram_data->hashtags[1][1])) { ?>
+                  <?php if (isset($audit->instagram_data->hashtags[1][1])) { ?>
                     <div class="skills" data-percent="<?php echo normalize($audit->instagram_data->hashtags[1][0], $audit->instagram_data->hashtags[1][1]);?>%">
                         <div class="title-bar-hashtags">
                             <h5>#<?php echo $audit->instagram_data->hashtags[0][1]; ?></h5>
@@ -623,7 +639,7 @@ if ($edit_mode) { ?>
                         <div class="skillbar blue"></div>  
                     </div>
                   <?php } ?>
-                  <?php if(isset($audit->instagram_data->hashtags[1][2])) { ?>
+                  <?php if (isset($audit->instagram_data->hashtags[1][2])) { ?>
                     <div class="skills" data-percent="<?php echo normalize($audit->instagram_data->hashtags[1][0], $audit->instagram_data->hashtags[1][2]);?>%">
                         <div class="title-bar-hashtags">
                             <h5>#<?php echo $audit->instagram_data->hashtags[0][2]; ?></h5>
@@ -636,8 +652,8 @@ if ($edit_mode) { ?>
                   <div style="clear:both; margin-bottom: 20px;"></div>
                   <?php if ($audit->has_comp) { ?>
                       <h3><?php echo $audit->competitor_name; ?></h3>
-                      <?php if(isset($audit->competitor->instagram_data->hashtags[1][0])) { ?>
-                          <div class="skills" data-percent="100%">
+                      <?php if (isset($audit->competitor->instagram_data->hashtags[1][0])) { ?>
+                          <div class="skills" data-percent="<?php echo normalize($max_value, $audit->competitor->instagram_data->hashtags[1][0])."%";?>">
                               <div class="title-bar-hashtags">
                                   <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][0]; ?></h5>
                               </div>
@@ -646,8 +662,8 @@ if ($edit_mode) { ?>
                               <div class="skillbar red"></div>  
                           </div>
                       <?php } ?>
-                      <?php if(isset($audit->competitor->instagram_data->hashtags[1][1])) { ?>
-                        <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][1]);?>%">
+                      <?php if (isset($audit->competitor->instagram_data->hashtags[1][1])) { ?>
+                        <div class="skills" data-percent="<?php echo normalize($max_value, $audit->competitor->instagram_data->hashtags[1][1]);?>%">
                             <div class="title-bar-hashtags">
                                 <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][1]; ?></h5>
                             </div>
@@ -656,8 +672,8 @@ if ($edit_mode) { ?>
                             <div class="skillbar red"></div>  
                         </div>
                       <?php } ?>
-                      <?php if(isset($audit->competitor->instagram_data->hashtags[1][2])) { ?>
-                        <div class="skills" data-percent="<?php echo normalize($audit->competitor->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][2]);?>%">
+                      <?php if (isset($audit->competitor->instagram_data->hashtags[1][2])) { ?>
+                        <div class="skills" data-percent="<?php echo normalize($max_value, $audit->competitor->instagram_data->hashtags[1][2]);?>%">
                             <div class="title-bar-hashtags">
                                 <h5>#<?php echo $audit->competitor->instagram_data->hashtags[0][2]; ?></h5>
                             </div>
@@ -666,18 +682,11 @@ if ($edit_mode) { ?>
                             <div class="skillbar red"></div>  
                         </div>
                       <?php } ?>
-                  <?php } 
-                  
-                  $max_value = $audit->instagram_data->hashtags[1][0];
-                  if ($audit->has_comp) {
-                    $max_value = max($audit->instagram_data->hashtags[1][0], $audit->competitor->instagram_data->hashtags[1][0]);
-                  }
-  
-                  ?>
+                  <?php } ?>
                   <hr class="x-as" style="margin-top:20px;" />
                   <span class="left-value">0</span>
-                  <span class="center-value"><?php echo floor(($max_value / 2)); ?></span>
-                  <span class="right-value"><?php echo floor($max_value); ?></span>
+                  <span class="center-value"><?php echo round(($max_value / 2)); ?></span>
+                  <span class="right-value"><?php echo round($max_value); ?></span>
               </div><?php 
             }
 
@@ -790,7 +799,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if($audit->website_size != NULL) {?>
+              if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -1008,7 +1017,7 @@ if ($edit_mode) { ?>
         <?php if ($audit->instagram_vis_bit == 1 || $edit_mode) { ?><li class="instagram-option"><i class="fab fa-instagram"></i><span class="nav-position">Instagram</span></li><?php } ?>
         <?php 
             if ($audit->website_vis_bit == 1 || $edit_mode) { 
-              if($audit->website_size != NULL) {?>
+              if ($audit->has_website) {?>
                 <li class="website-option"><i class="fas fa-globe"></i><span class="nav-position">Website</span></li>
         <?php } else { ?>
               <li class="" style="cursor: initial;"><i class="fas fa-globe"></i><span class="nav-position">Website</span><span style="font-size: 9px; position: absolute; right: 0px; bottom: -18px;">Wait a minute</span><span></li>
@@ -1411,22 +1420,23 @@ if ($edit_mode) { ?>
         }, 1000);  
       });
 
-      $(".procent").each(function() {
-        if (!$(this).html().includes("%")) {
-          var v = parseInt($(this).html());
-          if (!isNaN(v)) {
-            countAnimationFromTo($(this), Math.round(v / 2), v, 500);
-          }
-        }
-      });
+      // TODO: raar side effectje dat de getallen inet meer kloppen
+      // $(".procent").each(function() {
+      //   if (!$(this).html().includes("%")) {
+      //     var v = parseInt($(this).html());
+      //     if (!isNaN(v)) {
+      //       countAnimationFromTo($(this), Math.round(v / 2), v, 500);
+      //     }
+      //   }
+      // });
 
       <?php if (!$audit->has_comp): ?>
-      $('.data-single').each(function() {
-        var v = parseInt($(this).text());
-        if (!isNaN(v)) {
-            countAnimationFromTo($(this), Math.round(v / 2), v, 500);
-        }
-      });
+      // $('.data-single').each(function() {
+      //   var v = parseInt($(this).text());
+      //   if (!isNaN(v)) {
+      //       countAnimationFromTo($(this), Math.round(v / 2), v, 500);
+      //   }
+      // });
       <?php endif; ?>
     }
 
