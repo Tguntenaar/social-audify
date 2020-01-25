@@ -40,6 +40,15 @@ $number_of_audits  = $audit_control->get_amount();
 $number_of_reports = $report_control->get_amount();
 $number_of_clients = $client_control->get_amount();
 
+// TODO : NEW CONFIG PAGE > moet nog getest...
+// CHECK DASHBOARD.PHP -> daar staat nu ook $user code in.
+if ($user_id != null) {
+  $user = $user_control->get($user_id);
+  if ($user->audit_config == NULL) {
+    $user->update('User', 'audit_config', $audit_control->create_config());
+  }
+}
+
 /*
  * COMMON FUNCTIONS
  */

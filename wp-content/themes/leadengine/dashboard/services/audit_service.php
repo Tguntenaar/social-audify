@@ -53,23 +53,6 @@ class audit_service extends connection {
         where id = %d", $id));
   }
 
-  public function get_all_audits() {
-    return $this->dbwp->get_results(
-      "SELECT a.*, d.manual, $this->template_fields, $this->visibility_fields, $this->crawl_fields, $this->data_fields
-        FROM Audit as a
-        LEFT JOIN Audit_template as t
-          ON t.audit_id = a.id
-        LEFT JOIN Audit_stat_visibility as v
-          ON v.audit_id = a.id
-        LEFT JOIN Audit_crawl as c
-          ON c.audit_id = a.id and c.competitor = 0
-        LEFT JOIN Audit_data as d
-          on d.audit_id = a.id and d.competitor = 0
-        WHERE a.create_date >= DATE(NOW()) - INTERVAL 7 DAY
-        ORDER BY a.create_date DESC");
-  }
-
-
   public function get_all($user_id, $date = null) {
     if (!isset($date)) {
       return $this->dbwp->get_results($this->dbwp->prepare(
@@ -116,11 +99,21 @@ class audit_service extends connection {
       "UPDATE `Audit_stat_visibility` SET $field_name = !$field_name WHERE audit_id = %d", $id));
   }
 
-
-  public function insert_template($id, $audit_id) {
+  public function insert_template($id, $audit_id, $data = null) {
+    // TODO : moet nog anders na config page op oude manier weg...
+    if (isset($data)) {
+      return $this->dbwp->get_results($this->dbwp->prepare(
+        "INSERT INTO Audit_template (audit_id, $this->template_fields) VALUES (%d, $data)", $audit_id));
+    }
     return $this->dbwp->get_results($this->dbwp->prepare(
       "INSERT INTO Audit_template (audit_id, video_iframe, language) 
         SELECT %d, std_iframe, language FROM Configtext WHERE user_id = %d", $audit_id, $id));
+  }
+
+
+  public function insert_crawl($audit_id, $data) {
+    return $this->dbwp->get_results($this->dbwp->prepare(
+      "INSERT INTO Audit_crawl (audit_id, $this->crawl_fields) VALUES (%d, $data)", $audit_id));
   }
 
 

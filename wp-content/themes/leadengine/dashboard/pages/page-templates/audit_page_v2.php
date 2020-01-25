@@ -45,10 +45,17 @@
   // Get audit by post_id
   $id = $audit_control->get_id($post_id);
   $audit = $audit_control->get($id);
-  $client = $client_control->get($audit->client_id);
   $user = $user_control->get($user_id !== 0 ? $user_id : $author_id);
+  $client = $client_control->get($audit->client_id);
 
-  $theme_color = ($audit->color == "") ? $user->color_audit : $audit->color;
+
+  // CONFIG PAGE SETTINGS - NEW!
+  $audit->is_config = $user->audit_config === $audit->id;
+  if (!$audit->is_config) {
+    $config = $audit_control->get($user->audit_config);
+  }
+
+  $theme_color = $audit->color == "" ? $config->color : $audit->color;
 
   if ($audit->manual == 0) {
     $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
@@ -117,7 +124,7 @@
     if ($calendar_link != "") { ?>
       <div class="buttons">
         <a href="<?php echo $calendar_link; ?>" target='_blank' rel='noreferrer' class="button" style="margin-left: 0px;"><?php
-          echo $user->appointment_text == "" ? $language['make_appointment'] : $user->appointment_text; ?>
+          echo $user->appointment_text != "" ? $user->appointment_text : $language['make_appointment']; ?>
         </a>
       </div>
     <?php }
@@ -147,13 +154,10 @@
   }
 
   if ($audit->manual == 0) {
-    $sumPostLikes = $audit->instagram_bit == "1" 
-                  ? array_sum($audit->instagram_data->likesPerPost) 
-                  : NULL;
-
-      if ($audit->has_comp) {
-          $compSumPostLikes = array_sum($audit->competitor->instagram_data->likesPerPost);
-      }
+    $sumPostLikes = $audit->instagram_bit == "1" ? array_sum($audit->instagram_data->likesPerPost) : NULL;
+    if ($audit->has_comp) {
+      $compSumPostLikes = array_sum($audit->competitor->instagram_data->likesPerPost);
+    }
   }
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
@@ -350,27 +354,25 @@ if ($edit_mode) { ?>
         </div>
 
         <div class="introduction-text">
-            <div class="intro-text-block">
-                <span class="title">Improvements</span>
-                <?php 
-                    if ($audit->introduction_vis_bit == 1 || $edit_mode) {
-                        if ($edit_mode) { ?>
-                        <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
-                            <textarea maxlength="999" input="text"  name="introduction" id="introduction"><?php if ($audit->introduction == NULL) { echo $user->intro_audit; } else { echo $audit->introduction; } ?></textarea>
-                        </form>
+          <div class="intro-text-block">
+            <span class="title">Improvements</span><?php 
+              if ($audit->introduction_vis_bit == 1 || $edit_mode) {
+                  if ($edit_mode) { ?>
+                    <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#introduction" method="post" enctype="multipart/form-data">
+                      <textarea maxlength="999" input="text"  name="introduction" id="introduction"><?php
+                        echo $audit->introduction == NULL ? $config->introduction : $audit->introduction; ?></textarea>
+                    </form>
 
-                        <div class="description-tags">
-                            You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
-                        </div>
-                        <?php
-                        } else {  ?>
-                            <p style='font-size: 14px; font-weight: 100; line-height: 24px;'>
-                                <?php if ($audit->introduction == NULL) { echo "<pre>" . change_tags($user->intro_audit, $client, $audit) . "</pre>"; } else { echo "<pre>" . change_tags($audit->introduction, $client, $audit) . "</pre>"; } ?></p><?php
-                            get_contact_info($phone, $mail, $calendar_link, $language, $user); 
-                         }
-                    }
-                ?>
-            </div>
+                    <div class="description-tags">
+                      You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
+                    </div><?php
+                  } else {  ?>
+                    <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+                      echo "<pre>".change_tags($audit->introduction == NULL ? $config->introduction : $audit->introduction, $client, $audit)."</pre>"; ?></p><?php
+                    get_contact_info($phone, $mail, $calendar_link, $language, $user); 
+                  }
+              } ?>
+          </div>
         </div>
     </div>
 </section>
@@ -1048,16 +1050,15 @@ if ($edit_mode) { ?>
                 if ($audit->conclusion_vis_bit == 1 || $edit_mode) {
                   if ($edit_mode) { ?>
                   <form action="<?php echo $_SERVER['REQUEST_URI']; ?>#conclusion" method="post" enctype="multipart/form-data">
-                    <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php if ($audit->conclusion == NULL) { echo $user->conclusion_audit; } else { echo $audit->conclusion; } ?></textarea>
+                    <textarea maxlength="999" input="text"  name="conclusion" id="conclusion"><?php echo $audit->conclusion == NULL ? $config->conclusion : $audit->conclusion; ?></textarea>
                   </form>
 
                   <div class="description-tags">
                     You can insert the following tags in all the text fields: <span style="font-size: 10px; color: #000;">#{client}, #{competitor}, #{fb_score}, #{insta_score}, #{website_score}</span>
                   </div> <?php
                   } else {?>
-                    <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php 
-                      echo "<pre>" . change_tags(($audit->conclusion == NULL) ? 
-                        $user->conclusion_audit : $audit->conclusion, $client, $audit) . "</pre>" ?>
+                    <p style='font-size: 14px; font-weight: 100; line-height: 24px;'><?php
+                      echo "<pre>".change_tags(($audit->conclusion == NULL) ? $config->conclusion : $audit->conclusion, $client, $audit)."</pre>" ?>
                     </p><?php
                     ?><span class="mobile-hide"><?php get_contact_info($phone, $mail, $calendar_link, $language, $user); ?></span><?php 
                   }

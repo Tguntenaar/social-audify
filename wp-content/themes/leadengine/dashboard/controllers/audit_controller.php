@@ -23,9 +23,8 @@ class audit_controller {
     ));
 
     // create audit in database
-    $valueList = array_values($instance->get_array_data());
     $valueString = "";
-    foreach ($valueList as $value) {
+    foreach (array_values($instance->get_array_data()) as $value) {
       $valueString .= "'{$value}', ";
     }
     $instance->id = $this->service->create($user_id, $valueString);
@@ -71,8 +70,40 @@ class audit_controller {
           $instance->request_website_meta($competitor['website'], 1);
       }
     }
-
     return $slug;
+  }
+
+  // CONFIG PAGE FUNCTION, NEW!
+  function create_config() {
+    include(dirname(__FILE__)."/../assets/php/default_config.php");
+
+    $user_id = get_current_user_id();
+    $config_id = $this->service->create($user_id, $default_audit_values);
+
+    $new_post = array(
+      'post_author' =>  $user_id,
+      'post_title'  =>  "audit-config-" . $config_id,
+      'post_type'   => 'page',
+      'post_status' => 'publish',
+      'post_category' => array('3')
+    );
+
+    // create audit in wordpress databasse
+    $post_id = wp_insert_post($new_post);
+    update_post_meta($post_id, '_wp_page_template', '/dashboard/pages/page-templates/audit_page_v2.php');
+
+    // update config with newly created post id
+    $this->service->insert_visibility($user_id, $config_id);
+    $this->service->insert_template($user_id, $config_id, $default_audit_template);
+    $this->service->insert_crawl($config_id, $default_audit_crawl);
+    $this->service->update($config_id, 'Audit', 'post_id', $post_id, 0);
+
+    $this->service->insert_data($config_id, 
+      'SocialAudify', json_encode($default_facebook_data),
+      'SocialAudify', json_encode($default_instagram_data), 0, 0
+    );
+
+    return $config_id;
   }
 
 
@@ -100,11 +131,6 @@ class audit_controller {
 
     return $return_audits;
   }
-
-  function get_all_audits() {
-     return  $this->service->get_all_audits();
-  }
-
 
   function get_amount($date = NULL, $user_id = NULL) {
     $user = $user_id == NULL ? get_current_user_id() : $user_id;
