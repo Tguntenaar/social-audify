@@ -225,7 +225,10 @@
         method: 'GET',
         url: '<?php echo $url; ?>',
         crossDomain: true,
+        dataType : 'jsonp',
+        jsonpCallback: 'jsonCallback',
         success: function(data) {
+          alert("test");
           const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
           const downloadLink = document.getElementById("testje");
           const fileName = "<?php echo $audit->name; ?>";
