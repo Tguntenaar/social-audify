@@ -291,7 +291,7 @@ textarea {
 
 .previewMode {
   margin-right: 15px;
-  font-weight: 100 !important;
+  font-weight: 300 !important;
   cursor: pointer;
 }
 .previewMode:hover {
@@ -325,12 +325,12 @@ textarea {
 }
 .modal-content .close {
   position: absolute;
-  left: 15px;
+  right: 15px;
   top: 15px;
 }
 .modal-content #delete-this-audit {
   position: absolute;
-  right: 15px;
+  left: 15px;
   top: 15px;
   color: #c0392b;
   cursor: pointer;
@@ -403,6 +403,7 @@ textarea {
   background: transparent;
   border: 0;
   cursor: pointer;
+  font-weight: 300 !important;
 }
 
 .home-link {
@@ -414,6 +415,11 @@ textarea {
 .home-link:hover {
   color: #fff;
   text-decoration: none;
+}
+
+.generate-pdf:hover {
+  text-decoration: none;
+  opacity: 0.8;
 }
 
 .title {
@@ -651,6 +657,7 @@ pre {
   float: left;
   background: #e0e0e0;
   padding: 35px;
+  padding-bottom: 0px;
   margin-top: 40px;
 }
 .small-statistics .stat-box {
@@ -662,6 +669,7 @@ pre {
   float: left;
   margin-right: 50px;
   position: relative;
+  margin-bottom: 35px;
 }
 .small-statistics .stat-box .information {
   position: absolute;

@@ -254,6 +254,7 @@
 
 </head>
 <body>
+<a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
 <div class="load-screen"><div class='lds-dual-ring'></div> <h3>Generating PDF, wait a minute.</h3></div>
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
@@ -265,7 +266,7 @@
         <?php
       } else {
         if ($user_id == $author_id) {?>
-          <a href="?preview_mode=False" style="text-decoration: none;" class="languages"><i class="far fa-eye"></i> Edit </a><?php
+          <a href="?preview_mode=False" style="text-decoration: none; font-weight: 300;" class="languages"><i class="far fa-eye"></i> Edit </a><?php
         }
       } ?>
 </header>
@@ -892,10 +893,10 @@ if ($edit_mode) { ?>
                         }
 
                         if (round($your_value) > round($comp_value)) {
-                          $your_procent = "100";
+                          $your_procent = (string)normalize($your_value, 100);
                           $competitor_procent = (string)normalize($your_value, $comp_value);
                         } else {
-                          $competitor_procent = "100";
+                          $competitor_procent = (string)normalize($comp_value, 100);
                           $your_procent = (string)normalize($your_value, $comp_value);
                         } 
                     }
