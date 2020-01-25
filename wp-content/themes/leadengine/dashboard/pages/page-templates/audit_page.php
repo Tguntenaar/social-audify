@@ -1324,7 +1324,7 @@
           } ?>
         },<?php
       } ?>
-    }
+    } // END of sliderData
     if (!!sliderData.fb) {
       handleSlider('facebook', sliderData.fb.range, sliderData.fb.text);
     }
