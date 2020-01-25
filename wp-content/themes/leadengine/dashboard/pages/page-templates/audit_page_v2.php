@@ -263,7 +263,9 @@
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <?php if ($edit_mode) { ?>
         <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
-        <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
+        <?php if (!$audit->is_config) { ?>
+          <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button><?php
+        } ?>
         <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="languages previewMode"><i class="far fa-eye"></i> Preview </a>
         <?php
