@@ -158,7 +158,7 @@
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
   if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
-    $url = "http://livecrawl.socialaudify.com/pdf/" . $post_url;
+    $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   } else {
     $url = "htts://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
