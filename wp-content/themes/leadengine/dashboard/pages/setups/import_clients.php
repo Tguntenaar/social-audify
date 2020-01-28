@@ -149,7 +149,7 @@ foreach ($clients as $c) {
     // Parse the CSV input into JSON
     function csvToJson(data) {
       var columns = {
-        name: ['client', 'name'],
+        name: ['client', 'name', 'company'],
         facebook: ['fb', 'facebook'],
         instagram: ['ig', 'insta', 'instagram'],
         website: ['website', 'web', 'url', 'site'],
