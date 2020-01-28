@@ -7,7 +7,7 @@
 ?>
 <html>
 <head>
-  <title>Admin Dashboard</title>
+  <title><?php echo "DEV"; ?>Admin Dashboard</title>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/dashboard.css" type="text/css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -86,6 +86,7 @@
           <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Create Date</div>
         </div>
         <div class="inner-scroll client-dashboard" id="audit-results"><?php
+          $today_count_audit = 0;
           foreach ($all_audits as $audit) {
             $user = $user_control->get((int)$client_control->get($audit->client_id)->user_id);
             $today_count_audit += (date('Ymd') == date('Ymd', strtotime($audit->create_date)));
@@ -129,6 +130,7 @@
           <div class="col remove-on-mobile col-sm-3 col-md-3 col-lg-3 row-title-style" style="padding:0;">Create Date</div>
         </div>
         <div class="inner-scroll client-dashboard" id="report-results"><?php
+          $today_count_report = 0;
           foreach ($all_reports as $report) {
             $user = $user_control->get((int)$client_control->get($report->client_id)->user_id);
             $today_count_report += (date('Ymd') == date('Ymd', strtotime($report->create_date)));
@@ -180,6 +182,26 @@
   $(document).on('keyup', 'input#search-input-report', function() {
     filterSearch($(this).val(), elems_reports, counterSpanReport);
   });
+
+  function thomas() {
+    var u = [<?php 
+    foreach($users as $user) {
+      echo "\n[".$user->id.",'".get_user_meta($user->id, 'rcp_btw_number', true)."'],";
+    }?>];
+    // var u = [{id:"68",number:""}, {}, {},];
+    exportcsv("User ID,thomas", u);
+  }
+
+  // list of objects
+  function exportcsv(columns, list) {
+    let csvContent = columns + "\n" + list.map(e => e.join(",")).join("\n");
+
+    var encodedUri = 'data:text/csv;charset=utf-8,%EF%BB%BF' + encodeURIComponent(csvContent);
+    link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', "btw_nummers.csv");
+    link.click();
+  }
 </script>
 
 </body>
