@@ -189,7 +189,6 @@
     foreach($users as $user) {
       echo "\n[".$user->id.",'".get_user_meta($user->id, 'rcp_btw_number', true)."'],";
     }?>];
-    // var u = [{id:"68",number:""}, {}, {},];
     exportcsv("User ID,BTW", u);
   }
 
