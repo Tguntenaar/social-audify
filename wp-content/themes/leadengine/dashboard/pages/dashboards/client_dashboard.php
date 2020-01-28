@@ -26,6 +26,7 @@
   <title>Contact Dashboard</title>
   <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js" charset="utf-8" defer></script>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/client_dashboard.css<?php echo $cache_version; ?>" type="text/css" />
+  <script src="//code.tidio.co/shn7vki15l32gvyiv33o2bmemv7ckkc2.js" async></script>
 </head>
 <body>
   <div id="adAccountModal" class="modal"></div>

@@ -54,7 +54,6 @@
       fbq('init', '693894334380047');
       fbq('track', 'PageView');
     </script>
-    <script src="//code.tidio.co/shn7vki15l32gvyiv33o2bmemv7ckkc2.js" async></script>
     <noscript><img height="1" width="1" style="display:none"
       src="https://www.facebook.com/tr?id=693894334380047&ev=PageView&noscript=1"
     /></noscript>
