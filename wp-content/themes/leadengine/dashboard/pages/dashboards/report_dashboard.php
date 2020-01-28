@@ -8,6 +8,7 @@
 <html lang='en'>
 <head>
   <title>Report Dashboard</title>
+  <script src="//code.tidio.co/shn7vki15l32gvyiv33o2bmemv7ckkc2.js" async></script>
 </head>
   <?php
     // Header
