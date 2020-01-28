@@ -7,7 +7,7 @@
 ?>
 <html>
 <head>
-  <title><?php echo "DEV"; ?>Admin Dashboard</title>
+  <title>Admin Dashboard</title>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/dashboard.css" type="text/css" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -183,13 +183,14 @@
     filterSearch($(this).val(), elems_reports, counterSpanReport);
   });
 
-  function thomas() {
+  // call in console
+  function btw() {
     var u = [<?php 
     foreach($users as $user) {
       echo "\n[".$user->id.",'".get_user_meta($user->id, 'rcp_btw_number', true)."'],";
     }?>];
     // var u = [{id:"68",number:""}, {}, {},];
-    exportcsv("User ID,thomas", u);
+    exportcsv("User ID,BTW", u);
   }
 
   // list of objects

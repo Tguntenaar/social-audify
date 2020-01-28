@@ -476,7 +476,37 @@ if ($edit_mode) { ?>
                         } ?>
                     </div> <?php 
                 }
-            endforeach; ?>
+            endforeach; 
+            if($edit_mode) {
+              foreach ($facebook_ad_blocks as $item) {
+                if (($audit->has_comp || !$item["is_comp"]) && show_block($edit_mode, $audit->{$item["type"]})) {
+                  $path = $item["is_comp"] ? $audit->competitor : $audit; ?>
+                  <div class="stat-box" id="fb_ads">
+                      <span class="stat-title"><?php echo $language[$item["name"]]; ?></span><?php
+                      
+                      if ($edit_mode) { 
+                        visibility_short_code($edit_mode, $audit->{$item["type"]}, $item["type"]); 
+                      }
+                      // preview mode
+                      if ($edit_mode)  { ?>
+                        <form class="ads-radio" action=""><?php
+                          $checked = $path->facebook_data->runningAdds;
+                          $name = $item["is_comp"] ? "ads_c" : "ads"; ?>
+                          <input type="radio" name="<?php echo $name; ?>" value="yes" <?php echo $checked ? "checked" : ""; ?>/>
+                            <span class="label_ads">Yes</span>
+                          <input type="radio" name="<?php echo $name; ?>" value="no" <?php echo !$checked ? "checked" : ""; ?>/>
+                            <span class="label_ads">No</span>
+                      </form>
+                        <span class="explenation-ads">
+                          <a target="_blank" rel="noreferrer" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
+                            Click here to watch if this page is currently running ads. (This can't be automated)
+                          </a>
+                        </span><?php
+                      } ?>
+                  </div><?php
+                }
+              } 
+          }?>
         </div>
         <div class="small-statistics">
         <?php
@@ -522,7 +552,50 @@ if ($edit_mode) { ?>
                     </div>
                 <?php 
                 }
-              endforeach; ?>
+              endforeach; 
+              if(!$edit_mode) {
+                if (show_block($edit_mode, $audit->fb_ads)) {?>
+                  <div class="stat-box" id="fb_ads">
+                      <span class="stat-title"><?php echo $language['Running ads']; ?></span><?php
+                      if (!$edit_mode) { ?>
+                        <div class="link">
+                            <i class="fas fa-info-circle information"></i>
+                            <div class="arrow" style="margin-top: 28px; margin-left: 22px;">
+                              <div class="drop">
+                                <div class="line one"><?php echo $language[$item["Running ads"] . " exp"]; ?></div>
+                              </div>
+                            </div>
+                        </div><?php 
+                      }
+                      // preview mode
+                      if (!$edit_mode) { ?>
+                          <?php if ($audit->has_comp) { ?>
+                            <div class="your-stat">
+                              <span class="title-bar">You</span>
+                              <?php echo ($audit->facebook_data->runningAdds)
+                                         ? '<i class="fas fa-check-circle check"></i>' 
+                                         : '<i class="fas fa-times-circle not-check"></i>'; ?>
+                            </div>
+
+                            <div class="competitor-stat">
+                                <span class="title-bar"><?php echo $audit->competitor_name; ?></span>
+                                <?php echo ($audit->competitor->facebook_data->runningAdds)
+                                         ? '<i class="fas fa-check-circle check"></i>' 
+                                         : '<i class="fas fa-times-circle not-check"></i>'; ?>
+                            </div><?php 
+                          } else { ?>
+                            <span class="check-field">
+                            <?php echo ($audit->facebook_data->runningAdds)
+                                         ? '<i class="fas fa-check-circle check"></i>' 
+                                         : '<i class="fas fa-times-circle not-check"></i>'; ?>
+                            </span><?php 
+                          } ?>
+                    
+                
+                      <?php }  
+                } 
+                ?></div><?php
+            } ?>
         </div>
         <div style="clear: both;"></div>
         <div class="facebook-advice advice">
@@ -1214,6 +1287,34 @@ if ($edit_mode) { ?>
   endif; ?>
 
   $(function() {
+      function update_ads(button, competitor) {
+        var data = {
+          action: 'update_ads_audit',
+          competitor: (competitor) ? 'true' : 'false',
+          ads: button,
+          ...commonPost
+        };
+
+        $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data: data,
+          success: logResponse,
+          error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, data);
+              logError(send_error, 'page-templates/audit_page.php', 'update_ads');
+          },
+        });
+      }
+
+      $('input:radio[name=ads]').change(function () {
+        update_ads(this.value, false);
+      });
+
+      $('input:radio[name=ads_c]').change(function () {
+        
+        update_ads(this.value, true);
+      });
     // Share & Track Modal
     var modalData = {
       'text': "<span class='title'>This link is copied to your clipboard:</span>",
