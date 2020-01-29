@@ -189,8 +189,9 @@
     foreach($users as $user) {
       $encrypted_btw = get_user_meta($user->id, 'rcp_btw_number', true);
       $btw = openssl_decrypt(esc_attr( $encrypted_btw ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
-      echo "\n[".$user->id.",'".$btw."'],";
-    }?>];
+      $country = get_user_meta($user->id, 'rcp_country', true);
+      echo "\n[".$user->id.",'".$btw."','".$country."'],";
+        }?>];
     exportcsv("User ID,BTW", u);
   }
 
