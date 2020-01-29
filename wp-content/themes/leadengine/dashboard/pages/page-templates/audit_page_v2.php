@@ -1341,7 +1341,7 @@ if ($edit_mode) { ?>
         <span style="font-weight: 500;">Theme color:</span><br /> <input type="color" id="color" value="<?php echo $theme_color; ?>">
         <i class="fas fa-undo" onclick="$('#color').val('<?php echo $theme_color; ?>')" ></i><br /><br />
         <span style="font-weight: 500;">Audit language:</span><br /><div id="delete-this-audit" class="languages"> <i class="fas fa-trash"></i> </div>
-        <?php echo $language_options; ?><br/><?php echo $template_options; ?>`,
+        <?php echo $language_options; ?><br/><span style="font-weight: 500;">Audit template:</span><br /><?php echo $template_options; ?>`,
       confirm: 'config_confirmed'
     }
 
