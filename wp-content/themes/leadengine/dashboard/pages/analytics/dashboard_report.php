@@ -187,11 +187,9 @@
   function btw() {
     var u = [<?php 
     foreach($users as $user) {
-      $encrypted_btw = get_user_meta($user->id, 'rcp_btw_number', true);
-      $btw = openssl_decrypt(esc_attr( $encrypted_btw ), "AES-128-ECB", "ASDJFLB@JB#@#KB@#$@@#%)$()");
-      echo "\n[".$user->id.",'".$btw."'],";
+      echo "\n[".$user->id.",'".get_user_meta($user->id, 'rcp_btw_number', true)."','".get_user_meta($user->id, 'rcp_country', true)."'],";
     }?>];
-    exportcsv("User ID,BTW", u);
+    exportcsv("User ID,BTW,Country", u);
   }
 
   // list of objects
