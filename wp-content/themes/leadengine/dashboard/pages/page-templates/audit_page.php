@@ -1266,7 +1266,7 @@
 
     <?php
     function replace_lbs($string) {
-      echo json_encode(preg_replace("/\r|\n/", '\n', $string));
+      echo json_encode($string);
     } ?>
 
     var sliderData = {<?php
