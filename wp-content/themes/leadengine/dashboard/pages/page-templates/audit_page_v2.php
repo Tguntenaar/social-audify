@@ -1762,7 +1762,7 @@ if ($edit_mode) { ?>
 
     <?php
     function replace_lbs($string) {
-      echo json_encode(preg_replace("/\r|\n/", '\n', $string));
+      echo json_encode( $string);
     } 
     function advice_equal_to_user($user, $audit, $type) {
       if (
