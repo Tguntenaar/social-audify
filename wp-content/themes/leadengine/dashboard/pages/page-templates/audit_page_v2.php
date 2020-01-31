@@ -1749,14 +1749,20 @@ if ($edit_mode) { ?>
         }
       });
     }
+    
+    var decodeHtmlEntity = function(str) {
+      return str.replace(/&#(\d+);/g, function(match, dec) {
+        return String.fromCharCode(dec);
+      });
+    };
 
     function changeAdvice(sliderValue, range, adviceArea, text) {
       if (sliderValue < range.one) {
-        adviceArea.val(text.one);
+        adviceArea.val(decodeHtmlEntity(text.one));
       } else if (sliderValue < range.two) {
-        adviceArea.val(text.two);
+        adviceArea.val(decodeHtmlEntity(text.two));
       } else {
-        adviceArea.val(text.three);
+        adviceArea.val(decodeHtmlEntity(text.three));
       }
     }
 
@@ -1849,6 +1855,7 @@ if ($edit_mode) { ?>
         },
       <?php  endif; ?>
     }; // END slider data
+
     if (!!sliderData.fb) {
       handleSlider('facebook', sliderData.fb.range, sliderData.fb.text);
     }
