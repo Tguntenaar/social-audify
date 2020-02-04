@@ -242,14 +242,10 @@
   <script>
     function generatePDF() {
       $(".load-screen").toggle();
-      alert("<?php echo $url; ?>");
       $.ajax({
         method: 'GET',
         url: '<?php echo $url; ?>',
         crossDomain: true,
-        xhrFields: {
-            withCredentials: true
-        },
         success: function(data) {
           const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
           const downloadLink = document.getElementById("testje");
@@ -265,6 +261,8 @@
           $(".load-screen").toggle();
           alert("Error generating PDF.");
           console.log(xhr);
+          console.log(textStatus);
+          console.log(errorThrown);
         }
       });
     }
