@@ -177,7 +177,7 @@
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
   if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
-    $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
+    $url = "http://crawl.socialaudify.com/pdf/" . $post_url;
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
@@ -243,7 +243,7 @@
     function generatePDF() {
       $(".load-screen").toggle();
       $.ajax({
-        method: 'JSONP',
+        method: 'GET',
         url: '<?php echo $url; ?>',
         crossDomain: true,
         xhrFields: {
