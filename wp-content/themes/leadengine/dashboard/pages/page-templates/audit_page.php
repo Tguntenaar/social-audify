@@ -177,7 +177,7 @@
 
   $post_url = htmlentities(base64_encode(get_site_url() . "/" . get_post_field( 'post_name', get_post() )));
   if ($_SERVER['SERVER_NAME'] == "dev.socialaudify.com") {
-    $url = "http://crawl.socialaudify.com/pdf/" . $post_url;
+    $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   } else {
     $url = "https://livecrawl.socialaudify.com/pdf/" . $post_url;
   }
@@ -246,9 +246,10 @@
         method: 'GET',
         url: '<?php echo $url; ?>',
         crossDomain: true,
-        xhrFields: {
-           withCredentials: true
-        },
+        headers: {
+              "accept": "application/json",
+              "Access-Control-Allow-Origin":"*"
+          }
         success: function(data) {
           const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
           const downloadLink = document.getElementById("testje");
