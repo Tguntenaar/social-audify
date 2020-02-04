@@ -243,7 +243,7 @@
     function generatePDF() {
       $(".load-screen").toggle();
       $.ajax({
-        method: 'GET',
+        method: 'JSONP',
         url: '<?php echo $url; ?>',
         crossDomain: true,
         xhrFields: {
