@@ -249,7 +249,7 @@
         headers: {
               "accept": "application/json",
               "Access-Control-Allow-Origin":"*"
-          }
+        },
         success: function(data) {
           const linkSource = `data:application/pdf;base64,${$.parseJSON(data)}`;
           const downloadLink = document.getElementById("testje");
