@@ -242,7 +242,7 @@
   <script>
     function generatePDF() {
       $(".load-screen").toggle();
-
+      alert(<?php echo $url; ?>);
       $.ajax({
         method: 'GET',
         url: '<?php echo $url; ?>',
