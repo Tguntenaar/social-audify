@@ -202,12 +202,8 @@
       <a href="mailto:<?php echo $mail; ?>"><i class="fas fa-envelope"></i><?php echo $mail; ?></a>
       <?php
       if ($calendar_link != "") { ?>
-        <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>
-        <?php if ($user->appointment_text == "") { ?>
-              <?php echo $language['make_appointment']; ?>
-            <?php } else {
-                echo $user->appointment_text;
-            } ?>
+        <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php
+          echo $language['make_appointment']; ?>
         </a><?php
       } ?>
     </div><?php
@@ -817,12 +813,8 @@
     <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
          if ($calendar_link != "") { ?>
           <div class='footer-calendar'></div>
-          <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>
-          <?php if ($user->appointment_text == "") { ?>
-                <?php echo $language['make_appointment']; ?>
-              <?php } else {
-                  echo $user->appointment_text;
-              } ?>
+          <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php
+            echo $language['make_appointment']; ?>
           </a><?php
         } ?>
 </body>

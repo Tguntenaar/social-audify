@@ -117,7 +117,7 @@
     if ($calendar_link != "") { ?>
       <div class="buttons">
         <a href="<?php echo $calendar_link; ?>" target='_blank' rel='noreferrer' class="button" style="margin-left: 0px;"><?php
-          echo $user->appointment_text == "" ? $language['make_appointment'] : $user->appointment_text; ?>
+          echo $language['make_appointment']; ?>
         </a>
       </div>
     <?php }

@@ -61,7 +61,7 @@ $language = array(
         "Google Tagmanager exp" => "Does the website implement Google Tagmanager.",
         "Mobile Friendly exp" => "Passes the Google Mobile Friendly check.",
         "Desktop Load Time exp" => "The time to interactive of the desktop website in ms.",
-        "Mobile Load Time exp" => "The time to interactive of the mobile website in ms."
+        "Mobile Load Time exp" => "The time to interactive of the mobile website in ms.",
     ],
     "Spanish" => [
       "conclusion"=> "Conclusión",
