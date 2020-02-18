@@ -62,6 +62,7 @@ $language = array(
         "Mobile Friendly exp" => "Passes the Google Mobile Friendly check.",
         "Desktop Load Time exp" => "The time to interactive of the desktop website in ms.",
         "Mobile Load Time exp" => "The time to interactive of the mobile website in ms.",
+        "Contact me" => "Contact me"
     ],
     "Spanish" => [
       "conclusion"=> "Conclusión",
@@ -124,7 +125,8 @@ $language = array(
       "Google Tagmanager exp"=> "¿Cuenta la página web con google tagmanager?",
       "Mobile Friendly exp"=> "Pasa el cheque de google mobile friendly",
       "Desktop Load Time exp"=> "El tiempo de interactividad del sitio web en ordenador es de ms",
-      "Mobile Load Time exp"=> "El tiempo de interacción en dispositivos móviles es de ms"
+      "Mobile Load Time exp"=> "El tiempo de interacción en dispositivos móviles es de ms",
+      "Contact me" => "Contáctame"
     ],
     "Dutch" =>     [
         "conclusion" => "Conclusie",
@@ -187,7 +189,8 @@ $language = array(
         "Google Tagmanager exp" => "Maakt de website gebruik van de Google Tag Manager.",
         "Mobile Friendly exp" => "Komt de website door de Mobielvriendelijke test van Google.",
         "Desktop Load Time exp" => "De tijd die nodig is om de pagina te laden op een desktop in ms.",
-        "Mobile Load Time exp" => "De tijd die nodig is om de pagina op een mobiele telefoon te laden in ms."
+        "Mobile Load Time exp" => "De tijd die nodig is om de pagina op een mobiele telefoon te laden in ms.",
+        "Contact me" => "Neem contact op"
     ],
 );
 ?>
