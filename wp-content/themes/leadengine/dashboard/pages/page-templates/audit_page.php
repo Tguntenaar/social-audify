@@ -203,11 +203,7 @@
       <?php
       if ($calendar_link != "") { ?>
         <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>
-        <?php if ($user->appointment_text == "") { ?>
-              <?php echo $language['make_appointment']; ?>
-            <?php } else {
-                echo $user->appointment_text;
-            } ?>
+        <?php echo $language['make_appointment']; ?>
         </a><?php
       } ?>
     </div><?php
@@ -818,11 +814,7 @@
          if ($calendar_link != "") { ?>
           <div class='footer-calendar'></div>
           <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i>
-          <?php if ($user->appointment_text == "") { ?>
-                <?php echo $language['make_appointment']; ?>
-              <?php } else {
-                  echo $user->appointment_text;
-              } ?>
+             <?php echo $language['make_appointment']; ?>
           </a><?php
         } ?>
 </body>
