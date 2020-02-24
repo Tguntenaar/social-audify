@@ -394,7 +394,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     
     <div class="facebook-right">
