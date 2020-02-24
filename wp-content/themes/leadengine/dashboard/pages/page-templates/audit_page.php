@@ -326,7 +326,7 @@
         <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="preview" style="float: right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>
-        <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a>
+        <!-- <a class="copy-link" onclick="generatePDF()" style="margin-right: 15px;"><i class="fas fa-file-pdf"></i>Pdf</a> -->
         <a id="testje"  class="copy-link" style="display:none;" download="file.pdf"></a>
         <?php
       } else {
