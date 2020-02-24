@@ -117,7 +117,7 @@
     if ($calendar_link != "") { ?>
       <div class="buttons">
         <a href="<?php echo $calendar_link; ?>" target='_blank' rel='noreferrer' class="button" style="margin-left: 0px;"><?php
-          echo $user->appointment_text == "" ? $language['make_appointment'] : $user->appointment_text; ?>
+          echo $language['make_appointment']; ?>
         </a>
       </div>
     <?php }
@@ -294,7 +294,7 @@ if ($edit_mode) { ?>
           <?php echo get_wp_user_avatar($author_id, "original"); ?>
         </div>
         <span class="name"><?php $company = get_user_meta($author_id, 'rcp_company', true ); if ($company == "") { echo $author->display_name; } else { echo $company; }?></span>
-        <span class="contactme">Contact me</span>
+        <span class="contactme"><?php echo $language["Contact me"]; ?></span>
         <div class="contact-icons">
           <?php if (isset($mail) && $mail != "") { ?><a href="mailto: <?php echo $mail; ?>"><i class="fas fa-envelope"></i></a><?php } ?>
           <!-- <a href="#"><i class="fas fa-globe"></i></a> -->
