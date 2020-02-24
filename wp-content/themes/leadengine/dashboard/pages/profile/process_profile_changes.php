@@ -24,9 +24,9 @@
       'mail_text_1'       => 'mail_text_1',
       'mail_text_2'       => 'mail_text_2',
       'mail_text_3'       => 'mail_text_3',
-      'mail_subject_1'    => 'subject_1',
-      'mail_subject_2'    => 'subject_2',
-      'mail_subject_3'    => 'subject_3',
+      'subject_1'    => 'subject_1',
+      'subject_2'    => 'subject_2',
+      'subject_3'    => 'subject_3',
     );
 
     // TODO ; meer input validation    

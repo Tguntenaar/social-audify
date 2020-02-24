@@ -101,22 +101,22 @@
                 </div>
                 <!-- mail 1 block -->
                 <div class="first-content-mail-block tab">
-                  <input class="subject-line" type="text" name="mail_subject_1" id="mail_subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
-                  <textarea maxlength="1999" input="text" name="mail_text_1" id="mail_text"><?php
+                  <input class="subject-line" type="text" name="subject_1" id="subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
+                  <textarea maxlength="1999" input="text" name="mail_text_1" id="mail_text_1"><?php
                     echo trim($user->mail_text_1);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
                 <div class="second-content-mail-block tab" style="display:none">
-                  <input class="subject-line" type="text" name="mail_subject_2" id="mail_subject_2" placeholder="Subject" value="<?php echo $user->subject_2?>">
-                  <textarea maxlength="1999" input="text" name="mail_text_2" id="mail_text2"><?php
+                  <input class="subject-line" type="text" name="subject_2" id="subject_2" placeholder="Subject" value="<?php echo $user->subject_2?>">
+                  <textarea maxlength="1999" input="text" name="mail_text_2" id="mail_text_2"><?php
                     echo trim($user->mail_text_2);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
                 <div class="third-content-mail-block tab" style="display:none">
-                  <input class="subject-line" type="text" name="mail_subject_3" id="mail_subject_3" placeholder="Subject" value="<?php echo $user->subject_3?>">
-                  <textarea maxlength="1999" input="text" name="mail_text_3" id="mail_text3"><?php
+                  <input class="subject-line" type="text" name="subject_3" id="subject_3" placeholder="Subject" value="<?php echo $user->subject_3?>">
+                  <textarea maxlength="1999" input="text" name="mail_text_3" id="mail_text_3"><?php
                     echo trim($user->mail_text_3);
                   ?></textarea>
                 </div>
