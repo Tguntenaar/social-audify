@@ -99,30 +99,30 @@
                 <p>Use #{audit} to type the name your audit in the subject/mail.</p>
                 <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
                 <div class="initial-content-mail-block tab">
-                  <input class="subject-line" type="text" name="mail_subject_initial" id="mail_subject_initial" placeholder="Subject" value="<?php echo $user->subject_initial?>">
-                  <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
-                    // echo trim($user->mail_text);
+                  <input class="subject-line" type="text" name="subject_initial" id="subject_initial" placeholder="Subject" value="<?php echo $user->subject_initial?>">
+                  <textarea maxlength="1999" input="text" name="initial_text" id="initial_text"><?php
+                    echo trim($user->initial_text);
                   ?></textarea>
                 </div>
 
-                <div class="first-content-mail-block tab">
+                <div class="first-content-mail-block tab" style="display:none">
                   <input class="subject-line" type="text" name="mail_subject_1" id="mail_subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
-                  <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
-                    echo trim($user->mail_text);
+                  <textarea maxlength="1999" input="text" name="mail_text_1" id="mail_text_1"><?php
+                    echo trim($user->mail_text_1);
                   ?></textarea>
                 </div>
                 <!-- mail 2 block -->
                 <div class="second-content-mail-block tab" style="display:none">
                   <input class="subject-line" type="text" name="mail_subject_2" id="mail_subject_2" placeholder="Subject" value="<?php echo $user->subject_2?>">
-                  <textarea maxlength="1999" input="text" name="second_mail_text" id="mail_text2"><?php
-                    echo trim($user->second_mail_text);
+                  <textarea maxlength="1999" input="text" name="mail_text_2" id="mail_text_2"><?php
+                    echo trim($user->mail_text_2);
                   ?></textarea>
                 </div>
                 <!-- mail 3 block -->
                 <div class="third-content-mail-block tab" style="display:none">
                   <input class="subject-line" type="text" name="mail_subject_3" id="mail_subject_3" placeholder="Subject" value="<?php echo $user->subject_3?>">
-                  <textarea maxlength="1999" input="text" name="third_mail_text" id="mail_text3"><?php
-                    echo trim($user->third_mail_text);
+                  <textarea maxlength="1999" input="text" name="mail_text_3" id="mail_text_3"><?php
+                    echo trim($user->mail_text_3);
                   ?></textarea>
                 </div>
               </div>
@@ -178,10 +178,11 @@
     $("#when-mail-item").click(function() { toggle(mailBlocks, 'when', 'mail') });
     $("#content-mail-item").click(function() { toggle(mailBlocks, 'content', 'mail') });
 
-    var contentMailBlocks = ['first', 'second', 'third'];
-    $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail')});
-    $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail')});
-    $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail')});
+    var contentMailBlocks = ['initial', 'first', 'second', 'third'];
+    $("#initial-content-mail-item").click(function() { toggle(contentMailBlocks, 'initial', 'content-mail') });
+    $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail') });
+    $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail') });
+    $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail') });
 
     function toggle(blocks, show, type) {
       blocks.forEach(function (el) {
