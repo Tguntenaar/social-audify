@@ -89,7 +89,8 @@
               <!-- mail content -->
               <div class="content-mail-block tab" style="display:none">
                 <ul>
-                  <li id="first-content-mail-item" class="active-menu-item">Mail 1</li>
+                  <li id="initial-content-mail-item" class="active-menu-item">Initial mail</li>
+                  <li id="first-content-mail-item" >Mail 1</li>
                   <li id="second-content-mail-item">Mail 2</li>
                   <li id="third-content-mail-item">Mail 3</li>
                 </ul>
@@ -97,6 +98,13 @@
                 <p>Use #{name} to type the name of receiver in the subject/mail.</p>
                 <p>Use #{audit} to type the name your audit in the subject/mail.</p>
                 <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
+                <div class="initial-content-mail-block tab">
+                  <input class="subject-line" type="text" name="mail_subject_initial" id="mail_subject_initial" placeholder="Subject" value="<?php echo $user->subject_initial?>">
+                  <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php
+                    // echo trim($user->mail_text);
+                  ?></textarea>
+                </div>
+
                 <div class="first-content-mail-block tab">
                   <input class="subject-line" type="text" name="mail_subject_1" id="mail_subject_1" placeholder="Subject" value="<?php echo $user->subject_1?>">
                   <textarea maxlength="1999" input="text" name="mail_text" id="mail_text"><?php

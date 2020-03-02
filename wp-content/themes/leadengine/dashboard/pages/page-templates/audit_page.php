@@ -236,6 +236,27 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
+    function send_mail() {
+      alert("test");
+      $.ajax({
+         type: "POST",
+         url: ajaxurl,
+         data : {
+            action: 'send_mail',
+            user: <?php echo json_encode(array("id" => $user->id, "name" => $user->name, "email" => $user->email)); ?>,
+            client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
+            audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
+         },
+         success: function(response) {
+            console.log(response);
+          },
+          error: function (xhr, textStatus, errorThrown) {
+            console.log(xhr)
+            console.log(textStatus)
+            console.log(errorThrown)
+          }
+      });
+    }
     function generatePDF() {
       $(".load-screen").toggle();
 
@@ -319,6 +340,7 @@
 
 
       Audit: <?php echo $audit->name;
+      ?><a onclick="send_mail()">Run PHP Function</a><?php
 
 
       if ($edit_mode) { ?>

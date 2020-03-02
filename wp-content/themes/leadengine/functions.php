@@ -92,6 +92,22 @@
 
       wp_die();
   }
+  add_action( 'wp_ajax_send_mail', 'send_mail');
+  add_action( 'wp_ajax_nopriv_send_mail', 'not_logged_in');
+
+  function send_mail() {
+    require_once(dirname(__FILE__)."/dashboard/phpmailer/send_mail.php");
+
+    $audit = (object) $_POST['audit'];
+    $client = (object) $_POST['client'];
+    $user = (object) $_POST['user'];
+
+    $test = send_mail_to($user, $client, $audit);
+
+    wp_send_json(array('TABLE'=>$audit->id));
+    wp_die();
+  }
+
 
   add_action( 'wp_ajax_import_clients', 'add_multiple_clients');
   add_action( 'wp_ajax_nopriv_import_clients', 'not_logged_in');
