@@ -645,7 +645,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     <div class="facebook-right">
         <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level'); ?></span>
@@ -890,7 +890,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     <div class="facebook-right">
     <!-- <div class="wait-screen">Wait a minute till crawl is completed.</div> -->
@@ -1110,7 +1110,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     <div class="facebook-right">
         <div class="left">
@@ -1139,24 +1139,30 @@ if ($edit_mode) { ?>
         </div>
         <div class="right">
           <div class="facebook-advice advice">
+            <?php if ($audit->facebook_bit && ($audit->facebook_vis_bit == 1 || $edit_mode)): ?> 
             <span class="advice-title"><?php echo $language['facebook_advice']; ?></span>
             <div class="skills facebook" data-percent="<?php echo $score['fb']; ?>%">
               <span class="procent facebook font-red"><?php echo $score['fb']; ?>%</span>
               <div style="clear: both;"></div>
               <div class="skillbar red facebook"></div>
             </div>
+            <?php endif; ?>
+            <?php if ($audit->instagram_bit && ($audit->instagram_vis_bit == 1 || $edit_mode)): ?>
             <span class="advice-title"><?php echo $language['instagram_advice']; ?></span>
             <div class="skills instagram" data-percent="<?php echo $score['ig']; ?>%">
               <span class="procent instagram font-red"><?php echo $score['ig']; ?>%</span>
               <div style="clear: both;"></div>
               <div class="skillbar red instagram"></div>
             </div>
+            <?php endif; ?>
+            <?php if ($audit->website_bit && ($audit->website_vis_bit == 1 || $edit_mode) && $audit->has_website): ?>
             <span class="advice-title"><?php echo $language['website_advice']; ?></span>
             <div class="skills website" data-percent="<?php echo $score['wb']; ?>%">
               <span class="procent website font-red"><?php echo $score['wb']; ?>%</span>
               <div style="clear: both;"></div>
               <div class="skillbar red website"></div>
             </div>
+            <?php endif; ?>
           </div>
           <span class="desktop-hide">
             <div style="clear: both;"></div>
