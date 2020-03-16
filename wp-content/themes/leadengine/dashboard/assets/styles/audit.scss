@@ -66,6 +66,28 @@ body {
     z-index: 55;
   }
   
+  .send_mail {
+    float: right;
+	width: auto;
+	padding-left: 30px;
+	padding-right: 30px;
+	height: 70px;
+    line-height: 70px;
+    color: #fff !important;
+    font-weight: 300; 
+	background: #27ae60;
+	margin-right: -95px;
+    cursor: pointer;
+    
+    &:hover {
+        opacity: 0.9;
+    }
+
+    i  {
+        margin-left: 6px;
+    }
+  }
+
   .drop{
     position:absolute;
     content:"";
