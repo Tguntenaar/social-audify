@@ -236,26 +236,33 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    function send_mail() {
-      alert("test");
-      $.ajax({
-         type: "POST",
-         url: ajaxurl,
-         data : {
-            action: 'send_mail',
-            user: <?php echo json_encode(array("id" => $user->id, "name" => $user->name, "email" => $user->email)); ?>,
-            client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
-            audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
-         },
-         success: function(response) {
-            console.log(response);
+    var mail_send = 0;
+
+    function send_mail(mail_send) {
+      if(<?php echo $audit->send_mail; ?> || window.mail_send) {
+        alert("Mail already send.");
+      } else {
+          $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data : {
+              action: 'send_mail',
+              user: <?php echo json_encode(array("id" => $user->id, "name" => $user->name, "email" => $user->email, "initial_text" => $user->initial_text, "subject_initial" => $user->subject_initial)); ?>,
+              client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
+              audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
+          },
+          success: function(response) {
+              console.log(response);
+
           },
           error: function (xhr, textStatus, errorThrown) {
-            console.log(xhr)
-            console.log(textStatus)
-            console.log(errorThrown)
+              console.log(xhr)
+              console.log(textStatus)
+              console.log(errorThrown)
           }
-      });
+        });
+        window.mail_send = 1;
+      }
     }
     function generatePDF() {
       $(".load-screen").toggle();
@@ -340,11 +347,11 @@
 
 
       Audit: <?php echo $audit->name;
-      ?><a onclick="send_mail()">Run PHP Function</a><?php
 
 
       if ($edit_mode) { ?>
         <div id="delete-this-audit"> <i class="fas fa-trash"></i> </div>
+        <a class="send_mail" onclick="send_mail()">Send audit <i class="fab fa-telegram-plane"></i></a>       
         <button id="copy_link" class="copy-link" style="margin-right: 15px;"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="copy-link"> <i class="fas fa-cog"></i> Config </button>
         <a href="?preview_mode=True" class="preview" style="float: right; margin-right:5px"><i class="far fa-eye"></i> Preview </a>

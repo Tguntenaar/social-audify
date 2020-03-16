@@ -38,11 +38,12 @@ function send_mail_to($user, $client, $audit) {
   $report_control = new report_controller($connection);
   $client_control = new client_controller($connection);
 
+  $audit_control->update($audit->id, 'send_mail', 1, 'Audit');
+  
   $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
-  $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $audit->name, $link);
-  $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-
-  $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
+  $body_string = replace_template_mail_fields($user->initial_text, $client, $audit->name, $link);
+  $subject = replace_template_mail_fields($user->subject_initial, $client, $audit->name, $link);
+  $subject = $subject == "" ? 'Hi, we created an audit for you!' : $subject;
   $body_string = str_replace("\n", "<br />", $body_string);
 
   $body_string .= '<br /><br />Link: <a href=' . $link . ' title="Audit link">' . $audit->name . "</a>.<br /><br />";

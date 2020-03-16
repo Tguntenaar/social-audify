@@ -218,6 +218,35 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
+    var mail_send = 0;
+
+    function send_mail(mail_send) {
+      if(<?php echo $audit->send_mail; ?> || window.mail_send) {
+        alert("Mail already send.");
+      } else {
+          $.ajax({
+          type: "POST",
+          url: ajaxurl,
+          data : {
+              action: 'send_mail',
+              user: <?php echo json_encode(array("id" => $user->id, "name" => $user->name, "email" => $user->email, "initial_text" => $user->initial_text, "subject_initial" => $user->subject_initial)); ?>,
+              client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
+              audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
+          },
+          success: function(response) {
+              console.log(response);
+
+          },
+          error: function (xhr, textStatus, errorThrown) {
+              console.log(xhr)
+              console.log(textStatus)
+              console.log(errorThrown)
+          }
+        });
+        window.mail_send = 1;
+      }
+    }
+
     function generatePDF() {
       $(".load-screen").toggle();
 
@@ -258,6 +287,7 @@
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <?php if ($edit_mode) { ?>
+        <a class="send_mail" onclick="send_mail()">Send audit <i class="fab fa-telegram-plane"></i></a>       
         <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
         <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
