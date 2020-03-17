@@ -229,6 +229,7 @@
           mail: {"subject":$('#initial-subject').val(), "body": $("#initial-body").val()},
           client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
           audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
+          signature: '<?php echo $user->signature ?>'
         },
         success: function(response) {
           console.log(response);

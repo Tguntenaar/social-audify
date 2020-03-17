@@ -49,6 +49,7 @@ foreach ($wp_users as $wp_user) {
   $mail_data = $user_control->get($wp_user->ID);
   $company = get_user_meta($wp_user->ID, 'rcp_company', true);
   $name = $company !== "" ? $company : $wp_user->display_name;
+  $signature = wp_get_attachment_url($mail_data->signature);
 
   // Check if it is a socialaudify user
   if (!isset($mail_data)) {
@@ -92,7 +93,7 @@ foreach ($wp_users as $wp_user) {
       }
 
       $mail_controller = new mail_controller();
-      $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail, $subject, $body_string, false, $audit->name, $link);
+      $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail, $subject, $body_string, $signature, $audit->name, $link);
     }
   }
 }
