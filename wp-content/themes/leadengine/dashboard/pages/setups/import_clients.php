@@ -33,7 +33,7 @@ foreach ($clients as $c) {
         <h1 class="create-report-h1" style="width: 65%; margin: 0 auto; margin-bottom: 40px; margin-top: 100px;">Mass import all your contacts.</h1>
         <div class="file-upload" style="margin-bottom: 30px;">
           <div class="file-upload-button">
-            <label class="create-audit-button client-button" style="border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
+            <label class="create-audit-button" style="float: none; width: 200px; border: 1px solid #487dd7; cursor: pointer;font-size: 16px; margin-bottom: 0px !important; margin-top: 0px !important;">
               <input type="file" name="File Upload" id="update-data-from-file" accept=".csv" />
               Choose csv file
             </label>

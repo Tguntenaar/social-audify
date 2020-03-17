@@ -113,10 +113,10 @@
     </a>
 
     <a href="https://www.facebook.com/socialaudify/" target="_blank" rel="norefferer" style="float:right;margin-right:50px;">
-     <i style="margin-right: 5px;" class="far fa-comment"></i>Questions
+      <i style="margin-right: 5px;" class="far fa-comment"></i>Questions
     </a>
     <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
-      <i class="fab fa-youtube" style="margin-right: 5px;"></i>Tutorial
+      <i style="margin-right: 5px;" class="fab fa-youtube"></i>Tutorial
     </a>
     <a href="../search-page/" class="search-icon">
       <i style="margin-right: 5px;" class="fas fa-search"></i>Search
@@ -126,27 +126,28 @@
   <section class="content">
     <div class="sidebar col-xs-12 col-sm-12 col-md-12 col-lg-3">
       <div class="person-info">
-        <a href="/profile-page/#profile-avatar" class="person-image center">
-          <?php
-            if ( ($wp_current_user instanceof WP_User) ) {
-              echo get_avatar( $user_id, $size = 32, $alt = 'Profile Picture' );
-            }
-          ?>
-      </a>
+        <a href="/profile-page/#profile-avatar" class="person-image center"><?php
+          if ( ($wp_current_user instanceof WP_User) ) {
+            echo get_avatar( $user_id, $size = 32, $alt = 'Profile Picture' );
+          } ?>
+        </a>
         <div class="person-info">
-          <span class="person-name block"><?php $company_name = get_user_meta(get_current_user_id(), 'rcp_company', true ); echo $company_name != "" ? $company_name : $wp_current_user->display_name; ?></span>
+          <span class="person-name"><?php
+            $company_name = get_user_meta(get_current_user_id(), 'rcp_company', true ); 
+            echo $company_name != "" ? $company_name : $wp_current_user->display_name; ?>
+          </span>
         </div>
       </div>
       <div class="stats">
-        <div class="stat-block custom-height col-lg-4">
+        <div class="nav-stats col-lg-4">
           <span class="title">Contacts</span>
           <span class="data"><?php echo $number_of_clients; ?></span>
         </div>
-        <div class="stat-block custom-height col-lg-4">
+        <div class="nav-stats col-lg-4">
           <span class="title">Audits</span>
           <span class="data"><?php echo $number_of_audits; ?></span>
         </div>
-        <div class="stat-block custom-height col-lg-4">
+        <div class="nav-stats col-lg-4">
           <span class="title">Reports</span>
           <span class="data"><?php echo $number_of_reports; ?></span>
         </div>
@@ -162,6 +163,7 @@
           <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout" ><li><i class="fas fa-power-off"></i>Logout</i></a>
         </ul>
       </nav>
+
       <!-- Animated CSS stuff -->
       <div id="nav-icon1">
         <span></span>

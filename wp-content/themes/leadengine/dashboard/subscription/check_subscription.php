@@ -39,7 +39,6 @@ foreach($users as $user_id){
       if(!rcp_user_has_access( $user_id->ID, "1" )) {
           $audits = $audit_control->get_all(NULL, $user_id->ID);
           foreach($audits as $audit) {
-              echo "test";
               update_post_meta($audit->post_id, '_wp_page_template', '/dashboard/pages/page-templates/stopped.php');
            }
       } else {

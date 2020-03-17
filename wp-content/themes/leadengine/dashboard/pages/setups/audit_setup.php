@@ -72,14 +72,14 @@
     <!-- Containers for multistep form -->
     <div class="overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
-        <div class="inner height-auto">
+        <div class="inner">
           <span class="title title-audit-page">Create an Audit</span>
           <div class="audit_count"><?php
             echo $audits_made.'/'.$max_audits.' audits today'; ?>
           </div>
 
           <!-- One "tab" for each step in the form: -->
-          <form id="regForm" style="margin-bottom: 20px;" class="submit-audit">
+          <form class="setup-form submit-audit">
             <!-- Facebook tab -->
             <div class="tab tab-setup">
               <span class="login-title">Login to retrieve the data of Facebook that is needed to create an Audit.</span>
@@ -181,7 +181,7 @@
             </div>
 
             <!-- Circles that indicate form steps: -->
-            <div class="steps dot-nav" style="text-align:center;">
+            <div class="dot-nav" style="text-align:center;">
               <span class="step"></span>
               <span class="step"></span>
               <span class="step"></span>

@@ -151,7 +151,9 @@
                   wp_nav_menu( array( 'theme_location' => 'header-menu', 'depth' => 3, 'container' => false, 'menu_class' => 'nav navbar-nav', 'fallback_cb' => 'wp_bootstrap_navwalker::fallback', 'walker' => new wp_bootstrap_navwalker()) );
                ?>
                <?php if (isset($redux_ThemeTek['tek-header-button']) && !is_user_logged_in()){
-                   get_template_part( 'core/templates/header/content', 'header-button' );
+                  get_template_part( 'core/templates/header/content', 'header-button' );
+               } elseif (is_user_logged_in()) { ?>
+                  <a class="modal-menu-item menu-item tt_button tt_secondary_button btn_primary_color default_header_btn" href="/dashboard">Go to Dashboard</a><?php 
                } ?>
             </div>
             </div>

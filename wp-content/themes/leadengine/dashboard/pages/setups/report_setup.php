@@ -65,12 +65,11 @@
   <!-- Containers for multistep form -->
   <div class="new-create-style-report overview-audit-report col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 left responsive-height" style="height: 605px;">
-      <div class="inner height-auto">
+      <div class="inner">
         <span class="title title-audit-page">Create a report</span>
 
         <!-- One "tab" for each step in the form: -->
-        <form id='regForm' style="margin-bottom: 20px;">
-
+        <form class="setup-form">
           <!-- Facebook login tab -->
           <div class="tab tab-setup">
             <span class="login-title">Login to retrieve the data of Facebook that is needed to create a Report.</span>

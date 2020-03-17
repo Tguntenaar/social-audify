@@ -325,7 +325,7 @@
               <div class="inner">
                 <span class="title-box facebook"><?php echo $item["name"]; ?></span><?php
                 if (!$report->manual) { ?>
-                  <span class="explenation"><?php echo $item["desc"]; ?></span>
+                  <span class="explanation"><?php echo $item["desc"]; ?></span>
                   <span class="data_animation"><?php
                     echo number_format($social_stats->{$item["data"]}->{$item["fb_name"]}, $item["decimals"], '.', ''); ?>
                   </span><?php

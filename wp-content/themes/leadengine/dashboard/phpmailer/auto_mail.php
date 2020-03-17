@@ -96,15 +96,4 @@ foreach ($wp_users as $wp_user) {
     }
   }
 }
-
-function replace_template_mail_fields($string, $client, $audit, $link) {
-  $a = str_replace("#{name}", $client->name, $string);
-  $b = str_replace("#{audit}", $audit, $a);
-  $str =  "<a href='{$link}' title='Audit link'>{$audit}</a>";
-  $c = str_replace("#{auditlink}", $str, $b);
-  // add more fields
-  // $d = str_replace("#{company}", $company, $c);
-  return $c;
-}
-
 ?>

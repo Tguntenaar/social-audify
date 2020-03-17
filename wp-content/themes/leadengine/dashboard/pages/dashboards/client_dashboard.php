@@ -39,7 +39,7 @@
       <span><i class="fas fa-trash delete-this-audit" id="delete_button_client" style="left:20px; right:500px; width:16px;"></i></span>
       <span class="modal-title">Edit Contact:</span>
       <form id="edit-form" action="/process-client/?edit=true" method="post">
-        <div class="" style="align:center">
+        <div>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 edit-client-left">
             <span class="input-tag">Name</span>
             <span class="input-tag">Facebook url</span>
@@ -55,7 +55,7 @@
             <input type="text" id="website_url" name="website_url" data-type="website" placeholder="www.website.com" pattern="<?php echo $Regex->wb;?>"><br />
             <input type="email" id="mail_adress" name="client_mail" placeholder="mail@example.com"><br />
             <div id="ad-account-bttn-wrapper" style="display:none">
-              <span class="responsive-label-ad">Ad account</span><button type="button" class="create-audit-button client-button" id="connect-ad-account">Connect</button><br>
+              <span class="responsive-label-ad">Ad account</span><button type="button" class="advice-button" style="margin-top:0" id="connect-ad-account">Connect</button><br>
             </div>
             <div id="fb-login-wrapper" class="custom-fb-button">
               <div class="fb-login-button login-center"

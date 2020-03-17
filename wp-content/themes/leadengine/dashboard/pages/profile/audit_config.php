@@ -162,7 +162,7 @@
   }
 ?>
 <head>
-  <title>Audit config</title>
+  <title>Configuration audit</title>
   <!-- TODO: Moet nog met chrome canary worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
@@ -187,20 +187,20 @@
       $('.yes-tut').click(function() {
         $('.into-tutorial').css("display", "none");
         $('.video-options').css({"z-index": "5555"});
-        $('.video-explenation').css({"display": "block"});
+        $('.video-explanation').css({"display": "block"});
         $('.video-button').css({"display": "block"});
       });
 
       $('.video-button').click(function() {
         $('.video-options').css({"z-index": "5"});
-        $('.video-explenation').css({"display": "none"});
+        $('.video-explanation').css({"display": "none"});
         $('.video-button').css({"display": "none"});
         $('.introtext-button').css({"display": "block"});
         $('.audit-intro').css({"z-index": "5555", "position": "relative"});
         $('html, body').animate({
           scrollTop: $(".audit-intro-text").offset().top
         }, 2000);
-        $('.intro-explenation').css({"display": "block"});
+        $('.intro-explanation').css({"display": "block"});
       });
 
       $('.introtext-button').click(function() {
@@ -208,8 +208,8 @@
         $('.audit-intro').css({"z-index": "5"});
         $('.title-button').css({"display": "block"});
         $('.video-button').css({"display": "none"});
-        $('.title-explenation').css({"display": "block"});
-        $('.intro-explenation').css({"display": "none"});
+        $('.title-explanation').css({"display": "block"});
+        $('.intro-explanation').css({"display": "none"});
 
         $('.facebook-inf-title').css({"z-index": "5555", "position": "relative"});
         $('.sub-title').css({"z-index": "5555", "position": "relative"});
@@ -229,8 +229,8 @@
         $('.introtext-button').css({"display": "none"});
         $('.visibility-button').css({"display": "block"});
 
-        $('.title-explenation').css({"display": "none"});
-        $('.visibility-explenation').css({"display": "block"});
+        $('.title-explanation').css({"display": "none"});
+        $('.visibility-explanation').css({"display": "block"});
       });
 
       $('.visibility-button').click(function() {
@@ -239,8 +239,8 @@
         $('.visibility-button').css({"display": "none"});
         $('.between-button').css({"display": "block"});
 
-        $('.social-text-explenation').css({"display": "block"});
-        $('.visibility-explenation').css({"display": "none"});
+        $('.social-text-explanation').css({"display": "block"});
+        $('.visibility-explanation').css({"display": "none"});
 
         $('.config-right').css({"z-index": "5555"});
 
@@ -253,8 +253,8 @@
         $('.between-button').css({"display": "none"});
         $('.visibility-button').css({"display": "none"});
 
-        $('.social-text-explenation').css({"display": "none"});
-        $('.end-explenation').css({"display": "block"});
+        $('.social-text-explanation').css({"display": "none"});
+        $('.end-explanation').css({"display": "block"});
 
         $('.config-right').css({"z-index": "5"});
 
@@ -323,32 +323,32 @@
               </div>
           </div>
 
-          <div class="video-explenation vertical-align" style="text-align: center; left: 100px;">
-              <span class="tut-title">Video explenation</span>
+          <div class="video-explanation vertical-align" style="text-align: center; left: 100px;">
+              <span class="tut-title">Video explanation</span>
               <p>You can add a video at the top of every audit. This can be a video you uploaded to YouTube, or a Loom you recorded. In order to do this, you need to select 'video' and then paste the iframe code. Both YouTube and Loom offer this when you go to the 'share' option and select 'embed code'. Copy and past the code and the video will be added, adding a personal touch to your audit!</p>
           </div>
 
-          <div class="intro-explenation vertical-align" style="text-align: center;">
-              <span class="tut-title">Introduction explenation</span>
+          <div class="intro-explanation vertical-align" style="text-align: center;">
+              <span class="tut-title">Introduction explanation</span>
               <p>This is the standard introduction that will be shown on top of your audit. If you already use a video, you may also choose to hide the introductoin as your video may already be your introduction.</p>
           </div>
 
-          <div class="title-explenation vertical-align" style="text-align: center;">
+          <div class="title-explanation vertical-align" style="text-align: center;">
               <span class="tut-title">Facebook stats</span>
               <p>This will be the title of the sectoin about Facebook. Here you can choose the title which will be shown for this section, as well as the subtitle.</p>
           </div>
 
-          <div class="visibility-explenation vertical-align" style="text-align: center;">
-              <span class="tut-title">Visibility explenation</span>
+          <div class="visibility-explanation vertical-align" style="text-align: center;">
+              <span class="tut-title">Visibility explanation</span>
               <p>You can turn off the visibility of a certain statistic by clicking on the eye. It will no longer be shown in the audit.</p>
           </div>
 
-          <div class="social-text-explenation vertical-align" style="text-align: center; right: 300px">
+          <div class="social-text-explanation vertical-align" style="text-align: center; right: 300px">
               <span class="tut-title">Facebook Text</span>
               <p>When making an audit, you can give a score to someone's FaceBook. Using this option allows you to have a few standard texts appear when you give a certain score. For example: the first textblock will be shown if the score you give is between 0 and 30 (you can also change the percentage). The 2nd text block will be shown for scores between 30 and 70. The final text block will be shown for a score of 70 and above.</p>
           </div>
 
-          <div class="end-explenation vertical-align" style="text-align: center;">
+          <div class="end-explanation vertical-align" style="text-align: center;">
               <div style="height: auto; width: 340px; margin: 0 auto;">
                   <span class="tut-title" style="margin-bottom: 15px; line-height:23px;">This was a short tutorial on how to configurate your audits, want to see more check out our tutorial.</span>
                   <div style="clear: both; margin-bottom: 15px;"></div>
@@ -491,7 +491,7 @@
                         echo printValue(0, $item['is_icon']);
                      ?>
                     </span>
-                    <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span><?php
+                    <span class="explanation"><?php echo $language[$item["name"] . " exp"]; ?></span><?php
                       visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
                   </div>
                 </div><?php
@@ -506,7 +506,7 @@
                       $class = 0 ? "check" : "times";
                       $color = 0 ? "#27ae60" : "#c0392b"; ?>
 
-                      <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span>
+                      <span class="explanation"><?php echo $language[$item["name"] . " exp"]; ?></span>
                       <span class="data_animation">
                         <i class='fas fa-<?php echo $class; ?>' style='color: <?php echo $color; ?>'></i>
                       </span><?php
@@ -519,7 +519,7 @@
                           <span class="label_ads">No</span>
                       </form><?php
                         visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
-                      <span class="explenation-ads">
+                      <span class="explanation-ads">
                         <a target="_blank" rel="noreferrer" href="<?php echo 'https://www.facebook.com/pg/'. $path->facebook_name .'/ads/'; ?>">
                           Click here to watch if this page is currently running ads. (This can't be automated)
                         </a>
@@ -639,7 +639,7 @@
 
                 </span>
               </div>
-              <div class="inner custom-inner" style="">
+              <div class="inner custom-inner">
                 <canvas id="lpd-chart" class="chart-instagram"  style="height: 292px;"></canvas>
               </div>
               <div class="legend">
@@ -661,7 +661,7 @@
                 <span class="data_animation"><?php
                 echo 0; ?>
                 </span>
-                <span class="explenation"><?php echo $language[$item["name"] . " exp"]; ?></span>
+                <span class="explanation"><?php echo $language[$item["name"] . " exp"]; ?></span>
             <?php
         }
 
@@ -790,7 +790,7 @@
                       echo 0; ?>
                     </span><?php
                       visibility_short_code($edit_mode, $user->{$item["type"]}, $item["type"]); ?>
-                    <span class="explenation"><?php echo $language[$item["name"]]; ?></span>
+                    <span class="explanation"><?php echo $language[$item["name"]]; ?></span>
                   </div>
                 </div><?php
               }
@@ -872,12 +872,16 @@
   <div class="footer">
     <span class="phone-number"><?php echo $language['phone_number']; ?>: <a href="callto:<?php echo $phone; ?>"><?php echo $phone; ?></a></span>
     <span class="mailadres"><?php echo $language['email']; ?>: <a href="mailto:<?php echo $author->user_email; ?>"><?php echo $author->user_email; ?></a></span><?php
-    if ($calendar_link != "") { ?>
-        <?php if(!$edit_mode) { ?>
-             <a class="calendar" href="<?php echo $calendar_link; ?>"><i class="fas fa-calendar"></i><?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?></a>
-        <?php } else { ?>
-       <i class="fas fa-calendar" style="margin-left: 20px; margin-right: 5px;"></i><input type="text" maxlength="25" name="appointment_text" id="appointment_text" value="<?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>">
-        <?php }
+      if ($calendar_link != "") {
+        if(!$edit_mode) { ?>
+          <a class="calendar" href="<?php echo $calendar_link; ?>">
+            <i class="fas fa-calendar"></i><?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>
+          </a><?php
+        } else { ?>
+          <i class="fas fa-calendar" style="margin-left: 20px; margin-right: 5px;"></i>
+          <input type="text" maxlength="25" name="appointment_text" id="appointment_text" 
+            value="<?php echo ($user->appointment_text != NULL) ? $user->appointment_text : $language['make_appointment']; ?>"><?php
+        }
     } ?>
   </div>
 </body>

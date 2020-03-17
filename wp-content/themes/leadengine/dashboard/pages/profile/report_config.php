@@ -135,7 +135,7 @@
 ?>
 
 <head>
-  <title>Report</title>
+  <title>Configuration Report</title>
   <!-- TODO: Moet nog met JMeter worden gecheckt... -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -267,7 +267,7 @@
               <div class="inner">
                 <span class="title-box facebook"><?php echo $item["name"]; ?></span>
 
-                  <span class="explenation"><?php echo $item["desc"]; ?></span>
+                  <span class="explanation"><?php echo $item["desc"]; ?></span>
                   <span class="data_animation"><?php
                     echo 0; ?>
                   </span>

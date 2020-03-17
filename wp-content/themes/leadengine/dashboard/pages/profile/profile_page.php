@@ -93,11 +93,15 @@
                   <li id="first-content-mail-item" >Mail 1</li>
                   <li id="second-content-mail-item">Mail 2</li>
                   <li id="third-content-mail-item">Mail 3</li>
+                  <li id="test-content-mail-item">Test</li>
                 </ul>
+                <div class="mail-components">
+                  <p>Use #{name} to type the name of receiver in the subject/mail.</p>
+                  <p>Use #{audit} to type the name your audit in the subject/mail.</p>
+                  <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
+                  <p>Use #{href}{url}{text} to create a hyperlink in your mail.</p>
+                </div>
                 <!-- mail 1 block -->
-                <p>Use #{name} to type the name of receiver in the subject/mail.</p>
-                <p>Use #{audit} to type the name your audit in the subject/mail.</p>
-                <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
                 <div class="initial-content-mail-block tab">
                   <input class="subject-line" type="text" name="subject_initial" id="subject_initial" placeholder="Subject" value="<?php echo $user->subject_initial?>">
                   <textarea maxlength="1999" input="text" name="initial_text" id="initial_text"><?php
@@ -125,12 +129,50 @@
                     echo trim($user->mail_text_3);
                   ?></textarea>
                 </div>
+                <!-- mail test block -->
+                <div class="test-content-mail-block tab" style="display:none">
+                  <div style="width:75px;">
+                    <input type="radio" name="mail" value="1" checked>
+                      <span class="radio-label">mail 1</span>
+                    <input type="radio" name="mail" value="2">
+                      <span class="radio-label">mail 2</span>
+                    <input type="radio" name="mail" value="3">
+                    <span class="radio-label">mail 3</span>
+                  </div>
+                  <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" id="recipient_email" value="<?php echo $user->email?>" style="margin-top:10px;">
+                  <button type="button" class="create-button-client" id="send-mail">Send test mail</button>
+                </div>
               </div>
-              <input type="submit" value="Update" class="update-button" >
+              <div class="mail-components">
+                <input type="submit" value="Update" class="update-button" >
+              </div>
             </form>
             <div class="profile-exp">
               <i id="mail-exp" class="info-i fas fa-info"></i>
             </div>
+          </div>
+
+          <div class="profile-page-blocks">
+            <h3 class="h3-fix">Mail signature</h3>
+            
+            <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
+              <?php 
+                $wordpress_upload_dir = wp_upload_dir();
+                $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
+                $upload_id = $user->signature;
+                $signature_url = wp_get_attachment_url($upload_id);
+                if ($signature_url):
+              ?>
+              Your Photo: <br/>
+              <img src=<?php echo $signature_url ?> alt="Signature" width="250" id="signature-img">
+              <br/>
+              <?php endif; ?>
+              <input class="button" style="margin-top: 20px" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>
+              <div style="clear:both; margin-bottom: 25px;"></div>
+              <button id="delete-signature">Delete</button>
+              <input type="submit" name="submit" value="Submit" />
+            </form>
+            <br/>
           </div>
 
           <div id="account-settings">
@@ -144,6 +186,31 @@
 </body>
 <script>
   $(function() {
+    $('#delete-signature').click(function() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: { 'action': "delete_signature" },
+        success: function(response) {
+          logResponse(response);
+          $('#signature-img').hide();
+        },
+        error: logResponse,
+      });
+    });
+
+    $('#send-mail').click(function() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: { 'action': "test_mail",
+                "mail": $("#recipient_email").val(),
+                "mailcount": $("input[name=mail]:checked").val() },
+        success: logResponse,
+        error: logResponse,
+      });
+    });
+
     $('#day_1, #day_2, #day_3').change(function() {
       $('#first-day-value').text($('#day_1').val());
       $('#second-day-value').text($('#day_2').val());
@@ -178,11 +245,12 @@
     $("#when-mail-item").click(function() { toggle(mailBlocks, 'when', 'mail') });
     $("#content-mail-item").click(function() { toggle(mailBlocks, 'content', 'mail') });
 
-    var contentMailBlocks = ['initial', 'first', 'second', 'third'];
-    $("#initial-content-mail-item").click(function() { toggle(contentMailBlocks, 'initial', 'content-mail') });
-    $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail') });
-    $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail') });
-    $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail') });
+    var contentMailBlocks = ['initial', 'first', 'second', 'third', 'test'];
+    $("#initial-content-mail-item").click(function() { toggle(contentMailBlocks, 'initial', 'content-mail'); $('.mail-components').show(); });
+    $("#first-content-mail-item").click(function() { toggle(contentMailBlocks, 'first', 'content-mail'); $('.mail-components').show(); });
+    $("#second-content-mail-item").click(function() { toggle(contentMailBlocks, 'second', 'content-mail'); $('.mail-components').show(); });
+    $("#third-content-mail-item").click(function() { toggle(contentMailBlocks, 'third', 'content-mail'); $('.mail-components').show(); });
+    $("#test-content-mail-item").click(function() { toggle(contentMailBlocks, 'test', 'content-mail'); $('.mail-components').hide(); });
 
     function toggle(blocks, show, type) {
       blocks.forEach(function (el) {

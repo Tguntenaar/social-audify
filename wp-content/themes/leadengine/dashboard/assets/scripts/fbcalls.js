@@ -39,7 +39,7 @@ function testBatch() {
 }
 
 function makeIGpromise(iba, client, competitor = 0) {
-  var firstPromise = new Promise(function (resolve, reject) {
+  var promise1 = new Promise(function (resolve, reject) {
     // if (iba != null) { TODO: catch in the next promise zodat ie alsnog de insta query uitvoertals het nodig is.
     //   resolve(iba);
     // } else {
@@ -53,8 +53,8 @@ function makeIGpromise(iba, client, competitor = 0) {
     // }
   });
 
-  var secondPromise = new Promise(function (resolve, reject) {
-    firstPromise.then(function (iba_id) {
+  var promise2 = new Promise(function (resolve, reject) {
+    promise1.then(function (iba_id) {
       if (typeof iba_id !== 'object') {
         console.log(getInstaQuery(iba_id, client.instagram));
         FB.api(getInstaQuery(iba_id, client.instagram), function (response) {
@@ -73,7 +73,7 @@ function makeIGpromise(iba, client, competitor = 0) {
     });
   });
 
-  return secondPromise;
+  return promise2;
 }
 
 function makeFbPromise(client, competitor = 0) {

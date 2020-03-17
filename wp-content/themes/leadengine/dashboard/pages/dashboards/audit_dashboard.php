@@ -45,8 +45,8 @@
       <div class="graph-box no-border col-xs-12 col-sm-12 col-md-12 col-lg-6">
         <span class="stat-box-title">% increase in number of audits this month</span>
         <span class="graph-procent"><?php echo percent_print($yearly_increase, $alter_percent_audit); ?></span>
-        <span class="graph-info">
-          <?php echo percent_print($last_month_increase, $alter_percent_audit); ?> compared to last month<br />
+        <span class="graph-info"><?php
+          echo percent_print($last_month_increase, $alter_percent_audit); ?> compared to last month<br />
           (<?php echo $monthly_values[11]." Audits in ".date("F Y"); ?>)
         </span>
         <canvas id="chart-audit"></canvas>
@@ -55,13 +55,13 @@
         <div class="inner no-scroll">
           <span class="title"><span class="title-background">Audits</span>
             <span class="count" id="counterSpan"><?php echo $number_of_audits; ?></span>
-            <span class="selectDelete" style="color:black; display:none"><i class="fas fa-trash"></i></span>
+            <span class="selectDelete" style="display:none"><i class="fas fa-trash"></i></span>
           </span>
           <input type="text" name="search" id="search-input" placeholder="Search..."/>
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title">
-            <div class="row-title-style col-12 col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Audit Name</div>
-            <div class="row-title-style remove-on-mobile col col-sm-5 col-md-5 col-lg-5" style="padding-left: 0;">Client</div>
-            <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2" style="padding-left: 0;">Viewed</div>
+            <div class="row-title-style col-12 col-sm-5 col-md-5 col-lg-5">Audit Name</div>
+            <div class="row-title-style remove-on-mobile col col-sm-5 col-md-5 col-lg-5">Client</div>
+            <div class="row-title-style remove-on-mobile col col-sm-2 col-md-2 col-lg-2">Viewed</div>
           </div>
           <div class="inner-scroll" id="audit-results"><?php
             foreach ($this_year as $audit) {
@@ -83,7 +83,7 @@
 
 	<script charset='utf-8'>
 		$(function() {
-      generateChart('chart-audit', [<?php echo json_encode($daily_values); ?>]);
+      generateChart('chart-audit',  [<?php echo json_encode($daily_values); ?>], null, [false, false], "22,160,133");
 
       var elems = $('#audit-results .audit-row');
       var selectedList = [];
