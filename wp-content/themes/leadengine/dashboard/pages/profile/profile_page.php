@@ -93,7 +93,7 @@
                   <li id="first-content-mail-item" >Mail 1</li>
                   <li id="second-content-mail-item">Mail 2</li>
                   <li id="third-content-mail-item">Mail 3</li>
-                  <li id="test-content-mail-item">Test</li>
+                  <li id="test-content-mail-item">Send Test Mail</li>
                 </ul>
                 <div class="mail-components">
                   <p>Use #{name} to type the name of receiver in the subject/mail.</p>
@@ -132,6 +132,8 @@
                 <!-- mail test block -->
                 <div class="test-content-mail-block tab" style="display:none">
                   <div style="width:75px;">
+                    <input type="radio" name="mail" value="0" checked>
+                      <span class="radio-label">Initial mail</span>
                     <input type="radio" name="mail" value="1" checked>
                       <span class="radio-label">mail 1</span>
                     <input type="radio" name="mail" value="2">
