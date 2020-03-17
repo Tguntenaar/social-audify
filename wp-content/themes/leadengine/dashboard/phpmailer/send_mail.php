@@ -37,7 +37,7 @@ function send_mail_to($user, $client, $audit) {
   $audit_control  = new audit_controller($connection);
   $report_control = new report_controller($connection);
   $client_control = new client_controller($connection);
-
+  
   $audit_control->update($audit->id, 'send_mail', 1, 'Audit');
   
   $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;

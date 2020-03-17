@@ -96,15 +96,35 @@
   add_action( 'wp_ajax_nopriv_send_mail', 'not_logged_in');
 
   function send_mail() {
-    require_once(dirname(__FILE__)."/dashboard/phpmailer/send_mail.php");
+    require_once(dirname(__FILE__)."/dashboard/phpmailer/mail_controller.php");
+    
+    $wp_user = wp_get_current_user();
+    $company = get_user_meta($wp_user->ID, 'rcp_company', true);
+    $name = $company !== "" ? $company : $wp_user->display_name;
+    
+    $client = (object) $_POST['client'];
+    $signature = false;
 
     $audit = (object) $_POST['audit'];
-    $client = (object) $_POST['client'];
-    $user = (object) $_POST['user'];
+    $mail = (object) $_POST['mail'];
 
-    $test = send_mail_to($user, $client, $audit);
+    $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
 
-    wp_send_json(array('TABLE'=>$audit->id));
+    $mail_controller = new mail_controller();
+    $result = $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail,
+    $mail->subject, $mail->body, $signature, $audit->name, $link);
+
+    // Toggle send mail
+    if ($result === 1) {
+      require_once(dirname(__FILE__)."/dashboard/services/connection.php");
+      require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
+
+      $connection = new connection;
+      $audit_control  = new audit_controller($connection);
+      $audit_control->update($audit->id, 'send_mail', 1, 'Audit');
+    }
+
+    wp_send_json(array('result' => $result, 'subject'=>$mail->subject, "body"=> $mail->body));
     wp_die();
   }
 

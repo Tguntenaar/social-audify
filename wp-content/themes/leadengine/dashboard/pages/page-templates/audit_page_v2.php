@@ -220,31 +220,53 @@
   <script>
     var mail_send = 0;
 
-    function send_mail(mail_send) {
-      if(<?php echo $audit->send_mail; ?> || window.mail_send) {
-        alert("Mail already send.");
-      } else {
-          $.ajax({
-          type: "POST",
-          url: ajaxurl,
-          data : {
-              action: 'send_mail',
-              user: <?php echo json_encode(array("id" => $user->id, "name" => $user->name, "email" => $user->email, "initial_text" => $user->initial_text, "subject_initial" => $user->subject_initial)); ?>,
-              client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
-              audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
-          },
-          success: function(response) {
-              console.log(response);
+    function send_mail() {
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: {
+          action: 'send_mail',
+          mail: {"subject":$('#initial-subject').val(), "body": $("#initial-body").val()},
+          client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
+          audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
+        },
+        success: function(response) {
+          console.log(response);
+          window.mail_send = 1;
+        },
+        error: function (xhr, textStatus, errorThrown) {
+          var send_error = error_func(xhr, textStatus, errorThrown, data);
+          logError(send_error, 'page-templates/audit_page_v2.php', 'send_mail');
+          window.mail_send = 0;
+        }
+      });
+      window.mail_send = 1;
+    }
 
-          },
-          error: function (xhr, textStatus, errorThrown) {
-              console.log(xhr)
-              console.log(textStatus)
-              console.log(errorThrown)
-          }
-        });
-        window.mail_send = 1;
+    function showMailModal() {
+      if (<?php echo $audit->send_mail; ?> || window.mail_send) {
+        var text = "You already sent this mail.. Are you sure you want to send this audit again?";
+        var confirmText = "Send anyway";
+      } else {
+        var text = 'Would you like to change anything?';
+        var confirmText = "Send mail";
       }
+        
+      var mailModalData = {
+        'text': text,
+        'subtext': `<input class="subject-line" type="text" id="initial-subject" placeholder="Subject" value="<?php echo $user->subject_initial?>">
+        <textarea maxlength="999" input="text" id="initial-body"><?php echo $user->initial_text ?></textarea>`,
+        'confirm': 'mail_send_confirmed',
+        'confirmtext' : confirmText
+      }
+
+      var mailModal = initiateModal('mailModal', 'confirm', mailModalData);
+
+      showModal(mailModal)
+      
+      $('#mail_send_confirmed').click(function() {
+        send_mail()
+      });
     }
 
     function generatePDF() {
@@ -267,7 +289,10 @@
         },
         error: function (xhr, textStatus, errorThrown) {
           $(".load-screen").toggle();
-          alert("Error generating PDF.");
+          showModal(initiateModal('errorModal', 'error', {
+            'text': "Error generating PDF file",
+            'subtext': "Please try again later or notify an admin if the issue persists"
+          }));
           console.log(xhr);
         }
       });
@@ -287,7 +312,7 @@
 <header>
     <div class="audit-name"><?php echo $audit->name; ?></div>
     <?php if ($edit_mode) { ?>
-        <a class="send_mail" onclick="send_mail()">Send audit <i class="fab fa-telegram-plane"></i></a>       
+        <a class="send_mail" onclick="showMailModal()">Send audit <i class="fab fa-telegram-plane"></i></a>       
         <a href="/dashboard/" class="home-link"><i class="fas fa-th-large"></i> Dashboard </a>
         <button id="copy_link" class="languages"> <i class="fas fa-share-alt-square"></i> Share & Track </button>
         <button id="config_link" class="languages"> <i class="fas fa-cog"></i> Config </button>
@@ -316,6 +341,7 @@ if ($edit_mode) { ?>
 <div id="reloadModal" class="modal"></div>
 <div id="errorModal" class="modal"></div>
 <div id="firstTimeModal" class="modal"></div>
+<div id="mailModal" class="modal"></div>
 
 <section class="introduction">
     <div class="sidebar">
@@ -424,7 +450,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     
     <div class="facebook-right">
@@ -675,7 +701,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     <div class="facebook-right">
         <span class="section-vis"><?php visibility_short_code($edit_mode, $audit->instagram_vis_bit, 'instagram_vis_bit', 'visibility-first-level'); ?></span>
@@ -920,7 +946,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     <div class="facebook-right">
     <!-- <div class="wait-screen">Wait a minute till crawl is completed.</div> -->
@@ -1140,7 +1166,7 @@ if ($edit_mode) { ?>
         }?>
         <?php if ($audit->conclusion_vis_bit == 1 || $edit_mode) { ?><li class="conclusion-option"><i class="fas fa-check"></i><span class="nav-position">Conclusion</span></li><?php } ?>
       </ul>
-      <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a>
+      <!-- <a href="#" onclick="generatePDF()" class="button generate-pdf" style="background: #dbecfd; font-weight: bold; color: #4da1ff; box-shadow: none;">Generate PDF</a> -->
     </div>
     <div class="facebook-right">
         <div class="left">
@@ -1226,8 +1252,8 @@ if ($edit_mode) { ?>
           }
         },
         error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
-            logError(send_error, 'page-templates/audit_page_v2.php', 'toggle_visibility');
+          var send_error = error_func(xhr, textStatus, errorThrown, data);
+          logError(send_error, 'page-templates/audit_page_v2.php', 'toggle_visibility');
         },
       });
     }
@@ -1364,7 +1390,7 @@ if ($edit_mode) { ?>
     // Auto Mail + color Model
     var modalData = {
       text:`<span style="font-weight:bold; font-size: 18px;">Configuration audit</span>`,
-      subtext:`Do you want to sent this client automatic reminders?<br/>
+      subtext:`Do you want to send this client automatic reminders?<br/>
         <input type="checkbox" id="mail_bit_check" <?php echo $audit->mail_bit ? 'checked': ''; ?>><br/><br/>
         Social Audify can send automatic reminders if your lead does not open the audit. You can configure the emails:
         <a style="margin-bottom:10px" href='/profile-page/#mail-settings'>[here]</a><br><br>
@@ -1716,7 +1742,10 @@ if ($edit_mode) { ?>
             if (data.video_iframe.includes("src=") || data.video_iframe == "") {
               $('.intro-video').html(`<iframe${data.video_iframe}</iframe>`);
             } else {
-              alert("You have to insert a Iframe.");
+              showModal(initiateModal('errorModal', 'error', {
+                'text': "Did you insert an Iframe?",
+                'subtext': "Only iframes are allowed in this field."
+              }));
             }
           },
           error: function (xhr, textStatus, errorThrown) {
@@ -1727,7 +1756,6 @@ if ($edit_mode) { ?>
       }
     }    
   });
-  console.log("<?php echo $audit->instagram_bit ?>");
 
   // Graph Generate
   <?php if ($audit->instagram_bit == "1" && $audit->manual == 0) { ?>

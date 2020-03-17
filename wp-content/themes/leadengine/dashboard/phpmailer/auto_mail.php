@@ -37,17 +37,18 @@ $report_control = new report_controller($connection);
 $client_control = new client_controller($connection);
 
 // HIER BEGINT DE CODE
-$users = get_users();
+$wp_users = get_users();
 
-foreach ($users as $user) {
-  $audit_send_list = array();
+foreach ($wp_users as $wp_user) {
 
-  if ($user->ID == 1) {
+  if ($wp_user->ID == 1) {
     continue;
   }
+  
   // Get config from users
-  // $mail_data = $main_control->get_user_mail_config($user->ID);
-  $mail_data = $user_control->get($user->ID);
+  $mail_data = $user_control->get($wp_user->ID);
+  $company = get_user_meta($wp_user->ID, 'rcp_company', true);
+  $name = $company !== "" ? $company : $wp_user->display_name;
 
   // Check if it is a socialaudify user
   if (!isset($mail_data)) {
@@ -60,7 +61,7 @@ foreach ($users as $user) {
   }
 
   // get all audits from past 4 months (day_3 max value is 90 days anyways)
-  $audits = $audit_control->get_all(4, $user->ID);
+  $audits = $audit_control->get_all(4, $wp_user->ID);
 
   foreach ($audits as $audit) {
     if ($audit->mail_bit == 0) {
@@ -68,7 +69,7 @@ foreach ($users as $user) {
     }
 
     $client = $client_control->get($audit->client_id);
-    $company = get_user_meta($user->ID, 'rcp_company', true);
+    
     $earlier = new DateTime($audit->create_date);
     $later = new DateTime(date('Y-m-d H:i:s'));
     $day_difference = $later->diff($earlier)->format("%a");
@@ -80,56 +81,18 @@ foreach ($users as $user) {
 
       // Create mail body
       if ($day_difference == $mail_data->day_1) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->mail_text, $client, $audit->name, $link);
+        $subject = $mail_data->subject_1;
+        $body_string = $mail_data->mail_text_1;
       } else if ($day_difference == $mail_data->day_2) {
-        $subject = replace_template_mail_fields($mail_data->subject_1, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->second_mail_text, $client, $audit->name, $link);
+        $subject = $mail_data->subject_2;
+        $body_string = $mail_data->mail_text_2;
       } else {
-        $subject = replace_template_mail_fields($mail_data->subject_3, $client, $audit->name, $link);
-        $body_string = replace_template_mail_fields($mail_data->third_mail_text, $client, $audit->name, $link);
+        $subject = $mail_data->subject_3;
+        $body_string = $mail_data->mail_text_3;
       }
 
-      $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
-      $body_string = str_replace("\n", "<br />", $body_string);
-
-      $body_string .= '<br /><br />Link: <a href=' . $link . ' title="Audit link">' . $audit->name . "</a>.<br /><br />";
-
-      // Instantiation and passing `true` enables exceptions
-      $mail = new PHPMailer(true);
-
-      try {
-        //Server settings
-        $mail->SMTPDebug = 0;                                       // Enable verbose debug output
-        $mail->isSMTP();                                            // Set mailer to use SMTP
-        $mail->Host       = 'smtp.transip.email';                   // Specify main and backup SMTP servers
-        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-        $mail->Username   = 'socialaudify@vps.transip.email';       // SMTP username
-        $mail->Password   = 'XQhkUjNxqxBsaZrq';                     // SMTP password
-        $mail->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
-        $mail->Port       = 465;
-        $mail->CharSet    = 'UTF-8';                                  // TCP port to connect to
-
-        //Recipients  
-        $company = get_user_meta($user->ID, 'rcp_company', true);
-        $name = $company !== "" ? $company : $user->display_name;
-
-        $mail->setFrom('automail@socialaudify.com', $name);
-        $mail->addAddress($client->mail, $client->name);     // Add a recipient              // Name is optional
-        $mail->addReplyTo($user->user_email, $name);
-
-        // Content
-        $mail->isHTML(true);                                  // Set email format to HTML
-        $mail->Subject = $subject;
-        $mail->Body    = $body_string;
-
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
-
-        $mail->send();
-        echo 'Message has been sent';
-      } catch (Exception $e) {
-        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-      }
+      $mail_controller = new mail_controller();
+      $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail, $subject, $body_string, false, $audit->name, $link);
     }
   }
 }
