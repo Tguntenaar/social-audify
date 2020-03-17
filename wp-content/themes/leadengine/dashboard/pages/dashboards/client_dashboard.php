@@ -160,6 +160,30 @@
       $('#ad-account-bttn-wrapper').css({display: 'block'});
     }
 
+    function deleteClients(selectedList) {
+        console.log(selectedList);
+        showModal(initiateModal('confirmModal', 'confirm', {
+          'text': `Delete Clients`,
+          'subtext': `Would you like to delete the selected Client${(selectedList.length == 1 ? '' : 's')}?`,
+          'confirm': 'delete_confirmed'
+        }));
+
+        $("#delete_confirmed").click(function() {
+          $('#edit-client-modal').css({'display': 'none'});
+          showBounceBall(true, 'Deleting Clients...');
+          $.ajax({
+            type: "POST",
+            url: ajaxurl,
+            data: {action: 'delete_multiple', ids: selectedList, type: 'client'},
+            success: function(response) { location.reload(); },
+            error: function (xhr, textStatus, errorThrown) {
+              var send_error = error_func(xhr, textStatus, errorThrown, selectedList);
+              logError(send_error, 'setups/delete_clients.php', 'submit');
+              location.reload();
+            }
+          });
+        });
+      }
     $(function() {
       var elems = $("#client-results .client-overview-row");
       var selectedList = [];
