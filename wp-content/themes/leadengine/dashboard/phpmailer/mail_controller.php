@@ -82,7 +82,7 @@ use PHPMailer\PHPMailer\Exception;
    */
   function add_link() {
     $body = $this->mailer->Body;
-    $new_body = preg_replace('/#{href}{(.*)}{(.*)}/', "<a href='$2'>$1</a>", $body);
+    $new_body = preg_replace('/#{href}\[(.*)\]\[(.*)\]/', "<a href='$2'>$1</a>", $body);
     $this->mailer->Body = $new_body;
   }
   

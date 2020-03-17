@@ -99,7 +99,7 @@
                   <p>Use #{name} to type the name of receiver in the subject/mail.</p>
                   <p>Use #{audit} to type the name your audit in the subject/mail.</p>
                   <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
-                  <p>Use #{href}{url}{text} to create a hyperlink in your mail.</p>
+                  <p>Use #{href}[url][text] to create a hyperlink in your mail.</p>
                 </div>
                 <!-- mail 1 block -->
                 <div class="initial-content-mail-block tab">
