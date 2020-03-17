@@ -245,7 +245,7 @@
 
     function showMailModal() {
       if (<?php echo $audit->send_mail; ?> || window.mail_send) {
-        var text = "You already sent this mail.. Are you sure you want to send this audit again?";
+        var text = "You already sent this mail.. Are you sure you want to send another one?";
         var confirmText = "Send anyway";
       } else {
         var text = 'Would you like to change anything?';
