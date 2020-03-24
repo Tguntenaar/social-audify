@@ -51,7 +51,7 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->isHTML(true);                                  // Set email format to HTML
       $this->mailer->Subject = $subject;
       $this->mailer->Body    = $body_html;
-      $this->mailer->AltBody = $body + "\n\n" + $audit_link;
+      $this->mailer->AltBody = "<html>" + $body + "\n\n" + $audit_link + "</html>";
 
       // Signature & Send
       $this->add_signature($signature);
