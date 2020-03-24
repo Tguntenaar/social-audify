@@ -26,7 +26,7 @@ use PHPMailer\PHPMailer\Exception;
     try {
       $subject = $subject == "" ? 'Hi, here is a reminder to open the audit we made for you!' : $subject;
 
-      $body_html = str_replace("\n", "<br />", $body);
+      $body_html = "<html>".str_replace("\n", "<br />", $body)."</html>";
       $body_html .= "<br /><br />Link: <a href='{$audit_link}' title='Audit link'>{$audit_name}</a><br /><br />";
 
       $subject = $this->replace_template_fields($subject, $recipient_name, $audit_name, $audit_link);
@@ -43,7 +43,7 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
       $this->mailer->Port       = 465;
       $this->mailer->CharSet    = 'UTF-8';                                // TCP port to connect to
-      $this->mailer->setFrom('automail@socialaudify.com', $sender_name);  // Name is optional
+      $this->mailer->setFrom('contact@socialaudify.com', $sender_name);  // Name is optional
       $this->mailer->addAddress($recipient_email, $recipient_name);       // Add a recipient
       $this->mailer->addReplyTo($sender_email, $sender_name);
 
@@ -51,7 +51,7 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->isHTML(true);                                  // Set email format to HTML
       $this->mailer->Subject = $subject;
       $this->mailer->Body    = $body_html;
-      $this->mailer->AltBody = "<html>" + $body + "\n\n" + $audit_link + "</html>";
+      $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
       // Signature & Send
       $this->add_signature($signature);
