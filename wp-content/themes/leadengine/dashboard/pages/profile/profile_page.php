@@ -159,14 +159,12 @@
             
             <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
               <?php 
-                $wordpress_upload_dir = wp_upload_dir();
-                $signature_directory = $wordpress_upload_dir["basedir"] . "/signature";
-                $upload_id = $user->signature;
-                $signature_url = wp_get_attachment_url($upload_id);
-                if ($signature_url):
+                $meta = get_user_meta($user_id);
+                $signature = new signature($user, $meta);
+                if ($signature):
               ?>
-              Your Photo: <br/>
-              <img src=<?php echo $signature_url ?> alt="Signature" width="250" id="signature-img">
+              <br/>
+              <?php $signature->html(); ?>
               <br/>
               <?php endif; ?>
               <input class="button" style="margin-top: 20px" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>

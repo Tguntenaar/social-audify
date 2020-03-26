@@ -323,9 +323,10 @@ function assign_iba_id()
   $user_control = new user_controller($connection);
   $user = $user_control->get(get_current_user_id());
 
+  // TODO: Add instagram business account name to database. so users can see which account is currently in use.
+
   // $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
   $iba_id = $_POST['iba_id'];
-  // TODO: thomas
   // $iba_name = $_POST['iba_name'];
 
   $value = $user->update('User', 'instagram_business_account_id', $iba_id);
@@ -1051,6 +1052,11 @@ function pw_rcp_add_user_fields()
   $calendar = get_user_meta($id, 'rcp_calendar', true);
   $selected_country = get_user_meta($id, 'rcp_country', true);
   $company = get_user_meta($id, 'rcp_company', true);
+  $website = get_user_meta($id, 'rcp_website', true);
+  $jobtitle = get_user_meta($id, 'rcp_jobtitle', true);
+  $facebook = get_user_meta($id, 'rcp_facebook', true);
+  $instagram = get_user_meta($id, 'rcp_instagram', true);
+  $linkedin = get_user_meta($id, 'rcp_linkedin', true);
 
   ?>
       <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
@@ -1059,17 +1065,52 @@ function pw_rcp_add_user_fields()
           <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr($number); ?>" />
         </p>
       <?php } ?>
-      <p class="rcp_calendar_custom" style="">
+      <p class="rcp_calendar_custom" >
         <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
           <label for="rcp_calendar"><?php _e('Your calendar link', 'rcp'); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" placeholder="https://" value="<?php echo esc_attr($calendar); ?>" />
         <?php } ?>
       </p>
 
-      <p class="rcp_company_custom" style="">
+      <p class="rcp_company_custom" >
         <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
           <label for="rcp_company"><?php _e('Your company name', 'rcp'); ?></label>
           <input name="rcp_company" id="rcp_company" placeholder="Name will be shown on the audit/report page and e-mails." type="text" value="<?php echo esc_attr($company); ?>" />
+        <?php } ?>
+      </p>
+
+      <p class="rcp_website_custom" >
+        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+          <label for="rcp_website"><?php _e('Your website', 'rcp'); ?></label>
+          <input name="rcp_website" id="rcp_website" placeholder="Url will be used in your mail signature." type="text" value="<?php echo esc_attr($website); ?>" />
+        <?php } ?>
+      </p>
+
+      <p class="rcp_jobtitle_custom" >
+        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+          <label for="rcp_jobtitle"><?php _e('Your jobtitle', 'rcp'); ?></label>
+          <input name="rcp_jobtitle" id="rcp_jobtitle" placeholder="Job title will be used in your mail signature." type="text" value="<?php echo esc_attr($jobtitle); ?>" />
+        <?php } ?>
+      </p>
+
+      <p class="rcp_facebook_custom" >
+        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+          <label for="rcp_facebook"><?php _e('Your facebook url', 'rcp'); ?></label>
+          <input name="rcp_facebook" id="rcp_facebook" placeholder="https://" type="text" value="<?php echo esc_attr($facebook); ?>" />
+        <?php } ?>
+      </p>
+
+      <p class="rcp_instagram_custom" >
+        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+          <label for="rcp_instagram"><?php _e('Your instagram url', 'rcp'); ?></label>
+          <input name="rcp_instagram" id="rcp_instagram" placeholder="https://" type="text" value="<?php echo esc_attr($instagram); ?>" />
+        <?php } ?>
+      </p>
+
+      <p class="rcp_linkedin_custom" >
+        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+          <label for="rcp_linkedin"><?php _e('Your linkedin url', 'rcp'); ?></label>
+          <input name="rcp_linkedin" id="rcp_linkedin" placeholder="https://" type="text" value="<?php echo esc_attr($linkedin); ?>" />
         <?php } ?>
       </p>
 
@@ -1102,7 +1143,13 @@ function pw_rcp_add_user_fields()
       $number = get_user_meta($user_id, 'rcp_number', true);
       $btw_number = get_user_meta($user_id, 'rcp_btw_number', true);
       $company = get_user_meta($user_id, 'rcp_company', true);
+      $website = get_user_meta($user_id, 'rcp_website', true);
       $country = get_user_meta($user_id, 'rcp_country', true);
+      $jobtitle = get_user_meta($user_id, 'rcp_jobtitle', true);
+      $facebook = get_user_meta($user_id, 'rcp_facebook', true);
+      $instagram = get_user_meta($user_id, 'rcp_instagram', true);
+      $linkedin = get_user_meta($user_id, 'rcp_linkedin', true);
+
       ?>
       <tr valign="top">
         <th scope="row" valign="top">
@@ -1141,6 +1188,56 @@ function pw_rcp_add_user_fields()
         <td>
           <input name="rcp_company" id="rcp_company" type="text" value="<?php echo esc_attr($company); ?>" />
           <p class="description"><?php _e('The member\'s company name', 'rcp'); ?></p>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row" valign="top">
+          <label for="rcp_website"><?php _e('Website Url', 'rcp'); ?></label>
+        </th>
+        <td>
+          <input name="rcp_website" id="rcp_website" type="text" value="<?php echo esc_attr($website); ?>" />
+          <p class="description"><?php _e('The member\'s website url', 'rcp'); ?></p>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row" valign="top">
+          <label for="rcp_jobtitle"><?php _e('The member\'s job title', 'rcp'); ?></label>
+        </th>
+        <td>
+          <input name="rcp_jobtitle" id="rcp_jobtitle" type="text" value="<?php echo esc_attr($jobtitle); ?>" />
+          <p class="description"><?php _e('The member\'s job title', 'rcp'); ?></p>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row" valign="top">
+          <label for="rcp_facebook"><?php _e('The member\'s facebook', 'rcp'); ?></label>
+        </th>
+        <td>
+          <input name="rcp_facebook" id="rcp_facebook" type="text" value="<?php echo esc_attr($facebook); ?>" />
+          <p class="description"><?php _e('The member\'s facebook', 'rcp'); ?></p>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row" valign="top">
+          <label for="rcp_instagram"><?php _e('The member\'s instagram', 'rcp'); ?></label>
+        </th>
+        <td>
+          <input name="rcp_instagram" id="rcp_instagram" type="text" value="<?php echo esc_attr($instagram); ?>" />
+          <p class="description"><?php _e('The member\'s instagram', 'rcp'); ?></p>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row" valign="top">
+          <label for="rcp_linkedin"><?php _e('The member\'s linkedin', 'rcp'); ?></label>
+        </th>
+        <td>
+          <input name="rcp_linkedin" id="rcp_linkedin" type="text" value="<?php echo esc_attr($linkedin); ?>" />
+          <p class="description"><?php _e('The member\'s linkedin', 'rcp'); ?></p>
         </td>
       </tr>
 
@@ -1263,6 +1360,11 @@ function pw_rcp_add_user_fields()
       }
 
       update_user_meta($user_id, 'rcp_company', sanitize_text_field($_POST['rcp_company']));
+      update_user_meta($user_id, 'rcp_website', sanitize_text_field($_POST['rcp_website']));
+      update_user_meta($user_id, 'rcp_jobtitle', sanitize_text_field($_POST['rcp_jobtitle']));
+      update_user_meta($user_id, 'rcp_facebook', sanitize_text_field($_POST['rcp_facebook']));
+      update_user_meta($user_id, 'rcp_instagram', sanitize_text_field($_POST['rcp_instagram']));
+      update_user_meta($user_id, 'rcp_linkedin', sanitize_text_field($_POST['rcp_linkedin']));
     }
 
     add_action('wp_login_failed', 'my_front_end_login_fail');  // hook failed login

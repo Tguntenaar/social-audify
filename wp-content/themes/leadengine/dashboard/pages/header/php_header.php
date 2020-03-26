@@ -16,6 +16,7 @@ include(dirname(__FILE__)."/../../models/client.php");
 include(dirname(__FILE__)."/../../models/audit.php");
 include(dirname(__FILE__)."/../../models/report.php");
 include(dirname(__FILE__)."/../../models/user.php");
+include(dirname(__FILE__)."/../../models/signature.php");
 
 // PHP Regex
 include(dirname(__FILE__)."/../../assets/php/global_regex.php");

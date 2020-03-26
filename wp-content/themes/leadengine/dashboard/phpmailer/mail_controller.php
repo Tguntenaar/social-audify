@@ -95,17 +95,14 @@ use PHPMailer\PHPMailer\Exception;
   }
   
   function add_signature($signature) {
-    
-    // TODO: maybe..? : https://stackoverflow.com/questions/3708153/send-email-with-phpmailer-embed-image-in-body
-    // $mail->AddEmbeddedImage(filename, cid, name);
-    // $mail->AddEmbeddedImage('my-photo.jpg', 'my-photo', 'my-photo.jpg ');
-    // $mail->AddEmbeddedImage("rocks.png", "my-attach", "rocks.png");
-    // $mail->Body = 'Embedded Image: <img alt="Signature" src="https://www.socialaudify.com/wp-content/uploads/signatures/3_signature.jpg"> Here is an image!';
-
     if ($signature) {
       $body = $this->mailer->Body;
-      $new_body = str_replace("#{signature}", "<img alt='Signature' width='250' src='{$signature}'/>", $body);
+      $new_body = str_replace("#{signature}", $signature->html(), $body);
       $this->mailer->Body = $new_body;
+
+      $body = $this->mailer->AltBody;
+      $new_body = str_replace("#{signature}", $signature->plain_text(), $body);
+      $this->mailer->AltBody = $new_body;
     }
   }
 }
