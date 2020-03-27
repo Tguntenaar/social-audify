@@ -1065,54 +1065,54 @@ function pw_rcp_add_user_fields()
           <input name="rcp_number" id="rcp_number" type="text" value="<?php echo esc_attr($number); ?>" />
         </p>
       <?php } ?>
-      <p class="rcp_calendar_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_calendar_custom" >
           <label for="rcp_calendar"><?php _e('Your calendar link', 'rcp'); ?></label>
           <input name="rcp_calendar" id="rcp_calendar" type="url" placeholder="https://" value="<?php echo esc_attr($calendar); ?>" />
-        <?php } ?>
-      </p>
+        </p>
+      <?php } ?>
 
-      <p class="rcp_company_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_company_custom" >
           <label for="rcp_company"><?php _e('Your company name', 'rcp'); ?></label>
           <input name="rcp_company" id="rcp_company" placeholder="Name will be shown on the audit/report page and e-mails." type="text" value="<?php echo esc_attr($company); ?>" />
-        <?php } ?>
-      </p>
-
-      <p class="rcp_website_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        </p>
+      <?php } ?>
+      
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_website_custom" >
           <label for="rcp_website"><?php _e('Your website', 'rcp'); ?></label>
           <input name="rcp_website" id="rcp_website" placeholder="Url will be used in your mail signature." type="text" value="<?php echo esc_attr($website); ?>" />
-        <?php } ?>
-      </p>
+        </p>
+      <?php } ?>
 
-      <p class="rcp_jobtitle_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_jobtitle_custom" >
           <label for="rcp_jobtitle"><?php _e('Your jobtitle', 'rcp'); ?></label>
           <input name="rcp_jobtitle" id="rcp_jobtitle" placeholder="Job title will be used in your mail signature." type="text" value="<?php echo esc_attr($jobtitle); ?>" />
-        <?php } ?>
-      </p>
+        </p>
+      <?php } ?>
 
-      <p class="rcp_facebook_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_facebook_custom" >
           <label for="rcp_facebook"><?php _e('Your facebook url', 'rcp'); ?></label>
           <input name="rcp_facebook" id="rcp_facebook" placeholder="https://" type="text" value="<?php echo esc_attr($facebook); ?>" />
-        <?php } ?>
-      </p>
+        </p>
+      <?php } ?>
 
-      <p class="rcp_instagram_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_instagram_custom" >
           <label for="rcp_instagram"><?php _e('Your instagram url', 'rcp'); ?></label>
           <input name="rcp_instagram" id="rcp_instagram" placeholder="https://" type="text" value="<?php echo esc_attr($instagram); ?>" />
-        <?php } ?>
-      </p>
+        </p>
+      <?php } ?>
 
-      <p class="rcp_linkedin_custom" >
-        <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+      <?php if (!(get_post_field('post_name', get_post()) == "register")) { ?>
+        <p class="rcp_linkedin_custom" >
           <label for="rcp_linkedin"><?php _e('Your linkedin url', 'rcp'); ?></label>
           <input name="rcp_linkedin" id="rcp_linkedin" placeholder="https://" type="text" value="<?php echo esc_attr($linkedin); ?>" />
-        <?php } ?>
-      </p>
+        </p>
+      <?php } ?>
 
       <p id="rcp_country_text" style="width: 47%; margin-top: 50px; float:left;">
         <label for="rcp_country"><?php _e('Country', 'rcp'); ?></label>
@@ -1318,9 +1318,9 @@ function pw_rcp_add_user_fields()
         update_user_meta($user_id, 'rcp_country', sanitize_text_field($posted['rcp_country']));
       }
 
-      if (!empty($_POST['rcp_website'])) {
-        update_user_meta($user_id, 'rcp_website', sanitize_text_field($_POST['rcp_website']));
-      }
+      
+      update_user_meta($user_id, 'rcp_website', "");
+      
     }
 
     add_action('rcp_user_profile_updated', 'pw_rcp_save_user_fields_on_profile_save', 10);
