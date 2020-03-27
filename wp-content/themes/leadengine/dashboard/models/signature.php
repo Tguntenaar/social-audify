@@ -64,7 +64,7 @@ class signature
       <tbody>
         <tr cellspacing="0" cellpadding="0" style="padding:0!important;">
           <td style="padding-top: 20px; padding-bottom: 20px; padding-right: 20px; font-size: 10pt; font-family: Arial; width: 125px" vAlign="middle">
-            <img src="<?php echo $this->img_url ?>" alt="Signature" width="250" id="signature-img">
+            <img src="<?php echo $this->img_url ?>" alt="upload company logo" width="250" id="signature-img">
           </td>
           <td
             cellspacing="0" cellpadding="0" style="padding-top: 20px; padding-bottom: 20px;  vertical-align: middle !important;  display: table-cell; font-size: 10pt; font-family: Arial; width: 400px; padding-left: 20px; border-left: <?php echo $this->color ?> 1px solid"
