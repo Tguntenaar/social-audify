@@ -221,16 +221,17 @@
     var mail_send = 0;
 
     function send_mail() {
-      $.ajax({
-        type: "POST",
-        url: ajaxurl,
-        data: {
+      var data = {
           action: 'send_mail',
           mail: {"subject":$('#initial-subject').val(), "body": $("#initial-body").val()},
           client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
           audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
           signature: '<?php echo $user->signature ?>'
-        },
+        };
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data,
         success: function(response) {
           console.log(response);
           window.mail_send = 1;
@@ -1241,10 +1242,11 @@ if ($edit_mode) { ?>
     });
 
     function crawlFinishedCheck() {
+      var data = { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost };
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost },
+        data: data,
         success: function (response) {
           if (response == true) {
             showModal(reloadModal);
@@ -1274,7 +1276,7 @@ if ($edit_mode) { ?>
                   console.log(response);
               },
               error: function (xhr, textStatus, errorThrown) {
-                  var send_error = error_func(xhr, textStatus, errorThrown, data);
+                  var send_error = error_func(xhr, textStatus, errorThrown, { action: 'insert_view',  ...commonPost });
                   logError(send_error, 'page-templates/audit_page_v2.php', 'insert_view');
               },
             });
@@ -1302,7 +1304,7 @@ if ($edit_mode) { ?>
           data: { action: 'insert_view',  ...commonPost },
           success: function (response) { console.log(response); },
           error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            var send_error = error_func(xhr, textStatus, errorThrown, { action: 'insert_view',  ...commonPost });
             logError(send_error, 'page-templates/audit_page.php', 'insert_view');
           },
         });
@@ -1323,10 +1325,11 @@ if ($edit_mode) { ?>
     });
 
     function crawlFinishedCheck() {
+      var data = { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost };
       $.ajax({
         type: "POST",
         url: ajaxurl,
-        data: { action: 'crawl_data_check', comp: '<?php echo $audit->has_comp; ?>', ...commonPost },
+        data: data,
         success: function (response) {
           if (response == true) {
             showModal(reloadModal);
@@ -1412,13 +1415,14 @@ if ($edit_mode) { ?>
     function template_callback() {
       $('#template').on('change',function() {
         console.log("VERSION" + $(this).val().slice(-3, -2));
+        var data = { action: 'update_meta_template', 
+                  template: $(this).val().slice(-3, -2), 
+                  post_id: <?php echo $post_id ?>,
+                  ...commonPost };
         $.ajax({
           type: "POST",
           url: ajaxurl,
-          data: { action: 'update_meta_template', 
-                  template: $(this).val().slice(-3, -2), 
-                  post_id: <?php echo $post_id ?>,
-                  ...commonPost },
+          data: data,
           success: function (response) {
             console.log(response);
             window.location.replace(`${window.location.pathname}?action=configmodal`)
@@ -1432,16 +1436,17 @@ if ($edit_mode) { ?>
     }
 
     $("#config_confirmed").click(function() {
-      $.ajax({
-        type: "POST",
-        url: ajaxurl,
-        data: {
+      var data = {
           action: 'update_config',
           color: $('#color').val(),
           value: $("#mail_bit_check").is(':checked'),
           language: $("#language :selected").val(),
           ...commonPost
-        },
+        };
+      $.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data,
         success: function(response) {
           console.log(response);
           window.location.reload()
@@ -1496,7 +1501,7 @@ if ($edit_mode) { ?>
           window.location.replace('https://<?php echo $env; ?>/audit-dashboard')
         },
         error: function (xhr, textStatus, errorThrownr) {
-          var send_error = error_func(xhr, textStatus, errorThrown, data);
+          var send_error = error_func(xhr, textStatus, errorThrown, {'action': 'delete_page', ...commonPost});
           logError(send_error, 'page-templates/audit_page.php', 'delete_audit_confirm');
           showModal(initiateModal('errorModal', 'error', {
             'text': "Can't delete this audit",
@@ -1750,7 +1755,7 @@ if ($edit_mode) { ?>
             }
           },
           error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            var send_error = error_func(xhr, textStatus, errorThrown, {action: 'universal_update', ...data, ...commonPost});
             logError(send_error, 'page-templates/audit_page.php', 'updateAll');
           }
         });
@@ -1789,7 +1794,7 @@ if ($edit_mode) { ?>
           data: { action: 'toggle_visibility', field: field_name , ...commonPost },
           success: function () { field.html(icon) },
           error: function (xhr, textStatus, errorThrown) {
-            var send_error = error_func(xhr, textStatus, errorThrown, data);
+            var send_error = error_func(xhr, textStatus, errorThrown, { action: 'toggle_visibility', field: field_name , ...commonPost });
             logError(send_error, 'page-templates/audit_page_v2.php', 'toggle_visibility');
           },
         });
