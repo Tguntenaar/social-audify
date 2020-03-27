@@ -159,6 +159,13 @@
             
             <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
               <?php 
+                // Adds fields to meta
+                $website = get_user_meta($id, 'rcp_website', true);
+                $jobtitle = get_user_meta($id, 'rcp_jobtitle', true);
+                $facebook = get_user_meta($id, 'rcp_facebook', true);
+                $instagram = get_user_meta($id, 'rcp_instagram', true);
+                $linkedin = get_user_meta($id, 'rcp_linkedin', true);
+                
                 $meta = get_user_meta($user_id);
                 $signature = new signature($user, $meta);
                 if ($signature):
