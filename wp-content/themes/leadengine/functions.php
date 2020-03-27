@@ -1317,10 +1317,6 @@ function pw_rcp_add_user_fields()
       if (!empty($posted['rcp_country'])) {
         update_user_meta($user_id, 'rcp_country', sanitize_text_field($posted['rcp_country']));
       }
-
-      
-      update_user_meta($user_id, 'rcp_website', "");
-      
     }
 
     add_action('rcp_user_profile_updated', 'pw_rcp_save_user_fields_on_profile_save', 10);
