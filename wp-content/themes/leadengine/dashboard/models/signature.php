@@ -24,12 +24,12 @@ class signature
     $this->last_name = $meta['last_name'][0];
     $this->company = $meta['rcp_company'][0];
     
-    $this->website = ($meta['rcp_website'] != NULL) ? $meta['rcp_website'][0] : "";
-    $this->jobtitle = ($meta['rcp_jobtitle'] != NULL) ? $meta['rcp_jobtitle'][0] : ""; 
-    $this->mobile_phone_number = ($meta['rcp_number'] != NULL) ? $meta['rcp_number'][0] : "";  
-    $this->mobile_phone_number = ($meta['rcp_facebook'] != NULL) ? $meta['rcp_facebook'][0] : "";  
-    $this->mobile_phone_number = ($meta['rcp_instagram'] != NULL) ? $meta['rcp_instagram'][0] : "";  
-    $this->mobile_phone_number = ($meta['rcp_linkedin'] != NULL) ? $meta['rcp_linkedin'][0] : "";  
+    $this->website = (isset($meta['rcp_website'])) ? $meta['rcp_website'][0] : "";
+    $this->jobtitle = (isset($meta['rcp_jobtitle'])) ? $meta['rcp_jobtitle'][0] : ""; 
+    $this->mobile_phone_number = (isset($meta['rcp_number'])) ? $meta['rcp_number'][0] : "";  
+    $this->mobile_phone_number = (isset($meta['rcp_facebook'])) ? $meta['rcp_facebook'][0] : "";  
+    $this->mobile_phone_number = (isset($meta['rcp_instagram'])) ? $meta['rcp_instagram'][0] : "";  
+    $this->mobile_phone_number = (isset($meta['rcp_linkedin'])) ? $meta['rcp_linkedin'][0] : "";  
 
     $upload_id = $user->signature;
     $this->img_url = wp_get_attachment_url($upload_id);
