@@ -4089,6 +4089,23 @@ tr input {
 	border-bottom-right-radius: 3px;
 }
 
+.mail-components p {
+	font-size: 12px;
+	font-style: italic;
+}
+
+.test-content-mail-block input[type="radio"] {
+	/* float: left; */
+	margin-bottom: -5px;
+}
+
+.test-content-mail-block .radio-label {
+	width: auto;
+	margin-bottom: 10px;
+	display: inline-block;
+	margin-left: 15px;
+	font-size: 12px;
+}
 .sub-menu-profile, #affwp-affiliate-dashboard-tabs {
 	margin-left: -15px;
 	margin-top: 15px;

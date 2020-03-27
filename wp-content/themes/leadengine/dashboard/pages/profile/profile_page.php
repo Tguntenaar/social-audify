@@ -96,10 +96,10 @@
                   <li id="test-content-mail-item">Send Test Mail</li>
                 </ul>
                 <div class="mail-components">
-                  <p>Use #{name} to type the name of receiver in the subject/mail.</p>
-                  <p>Use #{audit} to type the name your audit in the subject/mail.</p>
-                  <p>Use #{auditlink} to type audit name as a trackable link of your audit in the subject/mail.</p>
-                  <p>Use #{href}[url][text] to create a hyperlink in your mail.</p>
+                  <p>Use <strong>#{name}</strong> to type the name of receiver in the subject/mail.</p>
+                  <p>Use <strong>#{audit}</strong> to type the name your audit in the subject/mail.</p>
+                  <p>Use <strong>#{auditlink}</strong> to type audit name as a trackable link of your audit in the subject/mail.</p>
+                  <p>Use <strong>#{href}[url][text]</strong> to create a hyperlink in your mail.</p>
                 </div>
                 <!-- mail 1 block -->
                 <div class="initial-content-mail-block tab">
@@ -131,16 +131,22 @@
                 </div>
                 <!-- mail test block -->
                 <div class="test-content-mail-block tab" style="display:none">
-                  <div style="width:75px;">
+                  <!-- <div style="width:75px;"> -->
+                   <span style="font-weight: 500; display: block; margin-left: 0px;" class="radio-label">Choose your mail to test:</span>
+
                     <input type="radio" name="mail" value="0" checked>
-                      <span class="radio-label">Initial mail</span>
+                    <span class="radio-label">Initial mail</span>
+                    <br />
                     <input type="radio" name="mail" value="1" checked>
-                      <span class="radio-label">mail 1</span>
+                    <span class="radio-label">mail 1</span>
+                    <br />
                     <input type="radio" name="mail" value="2">
-                      <span class="radio-label">mail 2</span>
+                    <span class="radio-label">mail 2</span>
+                    <br />
                     <input type="radio" name="mail" value="3">
                     <span class="radio-label">mail 3</span>
-                  </div>
+                  <!-- </div> -->
+                  <span style="font-weight: 500; display: block; margin-left: 0px;" class="radio-label">To:</span>
                   <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" id="recipient_email" value="<?php echo $user->email?>" style="margin-top:10px;">
                   <button type="button" class="create-button-client" id="send-mail">Send test mail</button>
                 </div>

@@ -33,11 +33,11 @@ if ( rcp_errors()->get_error_data( 'invalid_key' ) === 'password' ) {
 	<fieldset class="rcp_change_password_fieldset">
 		<p style="margin-top: 105px;">
 			<label for="rcp_user_pass"><?php echo apply_filters( 'rcp_registration_new_password_label', __( 'New Password', 'rcp' ) ); ?></label>
-			<input name="rcp_user_pass" id="rcp_user_pass" class="required" type="password"/>
+			<input style="margin-top: 30px;" name="rcp_user_pass" id="rcp_user_pass" class="required" type="password"/>
 		</p>
 		<p style="margin-top: -40px;">
 			<label for="rcp_user_pass_confirm"><?php echo apply_filters( 'rcp_registration_confirm_password_label', __( 'Password Confirm', 'rcp' ) ); ?></label>
-			<input name="rcp_user_pass_confirm" id="rcp_user_pass_confirm" class="required" type="password"/>
+			<input style="margin-top: 30px;" name="rcp_user_pass_confirm" id="rcp_user_pass_confirm" class="required" type="password"/>
 		</p>
 		<p style="margin-top: -40px;">
 			<input type="hidden" name="rcp_action" value="reset-password"/>
