@@ -1360,7 +1360,9 @@ function pw_rcp_add_user_fields()
       }
 
       update_user_meta($user_id, 'rcp_company', sanitize_text_field($_POST['rcp_company']));
+      if (!empty($_POST['rcp_calendar'])) {
       update_user_meta($user_id, 'rcp_website', sanitize_text_field($_POST['rcp_website']));
+      }
       update_user_meta($user_id, 'rcp_jobtitle', sanitize_text_field($_POST['rcp_jobtitle']));
       update_user_meta($user_id, 'rcp_facebook', sanitize_text_field($_POST['rcp_facebook']));
       update_user_meta($user_id, 'rcp_instagram', sanitize_text_field($_POST['rcp_instagram']));
