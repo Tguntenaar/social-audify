@@ -64,16 +64,17 @@ class signature
       <tbody>
         <tr cellspacing="0" cellpadding="0" style="padding:0!important;">
           <td style="padding-top: 20px; padding-bottom: 20px; padding-right: 20px; font-size: 10pt; font-family: Arial; width: 125px" vAlign="middle">
-            <img src=<?php echo $this->img_url ?> alt="Signature" width="250" id="signature-img">
+            <img src="<?php echo $this->img_url ?>" alt="Signature" width="250" id="signature-img">
           </td>
           <td
             cellspacing="0" cellpadding="0" style="padding-top: 20px; padding-bottom: 20px;  vertical-align: middle !important;  display: table-cell; font-size: 10pt; font-family: Arial; width: 400px; padding-left: 20px; border-left: <?php echo $this->color ?> 1px solid"
             valign="top">
             <strong style="font-size: 11pt">
-              <span style="font-size: 11pt; color: <?php echo $this->color ?>"><?php echo $this->company ?> </strong> |
+              <span style="font-size: 11pt; color: <?php echo $this->color ?>"><?php echo $this->first_name." ".$this->last_name ?> </strong> |
               <?php echo $this->jobtitle; ?></s><br><br><span style="color: #000000">
               <span style="color: <?php echo $this->color ?>">
                 <span style="color: <?php echo $this->color ?>"></span></span>
+                <span style="color: <?php echo $this->color ?>"><strong>a:</strong></span></span> <?php echo $this->company ?><br> 
               <a style="color: #000000"><span style="color: <?php echo $this->color ?>"><strong>e:  </strong></span><?php echo $this->email?></a> <br />
               <span style="color: <?php echo $this->color ?>"><strong>w:</strong></span> <a style="text-decoration: none; color: #000000"
                 href="<?php echo $this->website; ?>"><?php echo str_replace(['https://', 'http://'], '', $this->website); ?></a> <br>
