@@ -4257,11 +4257,6 @@ h4 {
 	margin-top: 30px;
 }
 
-.profile-page i {
-	cursor: pointer;
-	color: #487dd7 !important;
-}
-
 #audit-settings ul, #report-settings ul, #mail-settings ul {
 	height: auto;
 	line-height: 40px;
