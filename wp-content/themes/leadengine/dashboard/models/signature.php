@@ -60,7 +60,9 @@ class signature
       "<td style='padding-top: 20px; padding-bottom: 20px; padding-right: 20px; font-size: 10pt; font-family: Arial; width: 125px' vAlign='middle'>
         <img src='{$this->img_url}' alt='upload company logo' width='250' id='signature-img'></td>" : '';
 
-    return "<table style='border-collapse: collapse; border-spacing: 0; width: 525px' cellSpacing='0' cellPadding='0'>
+    return "
+      <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css' integrity='sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU' crossorigin='anonymous'>
+      <table style='border-collapse: collapse; border-spacing: 0; width: 525px' cellSpacing='0' cellPadding='0'>
         <tbody>
           <tr cellspacing='0' cellpadding='0' style='padding:0!important;'>{$image_html}
             <td cellspacing='0' cellpadding='0' style='padding-top: 20px; padding-bottom: 20px;  vertical-align: middle !important; 
@@ -78,7 +80,7 @@ class signature
             </td>
           </tr>
         </tbody>
-    </table>";
+      </table>";
   }
 
   public function plain_text()
