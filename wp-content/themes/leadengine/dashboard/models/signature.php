@@ -42,58 +42,43 @@ class signature
     return $this->$name;
   }
 
-  /**
-   * TODO: echo $signature
-   */
   public function __toString()
   {
-      try 
-      {
-          return (string) $this->html();
-      } 
-      catch (Exception $exception) 
-      {
-          return '';
-      }
+    try 
+    {
+      return $this->html_string();
+    } 
+    catch (Exception $exception) 
+    {
+      return '';
+    }
   }
 
-  public function html()
-  {
-  ?>
-    <table style=" border-collapse: collapse; border-spacing: 0; width: 525px" cellSpacing="0" cellPadding="0">
-      <tbody>
-        <tr cellspacing="0" cellpadding="0" style="padding:0!important;">
-          <?php if ($this->img_url): ?>
-          <td style="padding-top: 20px; padding-bottom: 20px; padding-right: 20px; font-size: 10pt; font-family: Arial; width: 125px" vAlign="middle">
-            <img src="<?php echo $this->img_url ?>" alt="upload company logo" width="250" id="signature-img">
-          </td>
-          <?php endif; ?>
-          <td
-            cellspacing="0" cellpadding="0" style="padding-top: 20px; padding-bottom: 20px;  vertical-align: middle !important;  display: table-cell; font-size: 10pt; font-family: Arial; width: 400px; padding-left: 20px; border-left: <?php echo $this->color ?> 1px solid"
-            valign="top">
-            <strong style="font-size: 11pt">
-              <span style="font-size: 11pt; color: <?php echo $this->color ?>"><?php echo $this->first_name." ".$this->last_name ?> </strong> |
-              <?php echo $this->jobtitle; ?></s><br><br><span style="color: #000000">
-              <span style="color: <?php echo $this->color ?>"><span style="color: <?php echo $this->color ?>"></span></span>
+  public function html_string() {
+    $website_label = str_replace(['https://', 'http://'], '', $this->website);
+    $image_html = $this->img_url ?
+      "<td style='padding-top: 20px; padding-bottom: 20px; padding-right: 20px; font-size: 10pt; font-family: Arial; width: 125px' vAlign='middle'>
+        <img src='{$this->img_url}' alt='upload company logo' width='250' id='signature-img'></td>" : '';
 
-              <span style="color: <?php echo $this->color ?>"><?php echo $this->company ?></span></span><br> 
-              <a style="color: #000000"><span style="color: <?php echo $this->color ?>"><strong>e:  </strong></span><?php echo $this->email?></a> <br />
-              <span style="color: <?php echo $this->color ?>"><strong>w:</strong></span> <a style="text-decoration: none; color: #000000"
-                href="<?php echo $this->website; ?>"><?php echo str_replace(['https://', 'http://'], '', $this->website); ?></a> <br>
-              <span style="color: <?php echo $this->color ?>"><strong>m:</strong></span> <?php echo $this->mobile_phone_number ?></span><br><br>
-            <a href="<?php echo $this->facebook ?>"><i style="color: <?php echo $this->color ?>" class="fab fa-facebook-square"></i></a>&nbsp;
-            <a href="<?php echo $this->instagram ?>"><i style="color: <?php echo $this->color ?>" class="fab fa-instagram"></i></a>&nbsp;
-            <a href="<?php echo $this->website ?>"><i style="color: <?php echo $this->color ?>" class="fas fa-globe"></i></a>&nbsp;
-            <a href="<?php echo $this->linkedin ?>"><i style="color: <?php echo $this->color ?>" class="fab fa-linkedin"></i></a></TD>
-            <!-- TODO: 
-            html to voegen aan mail controller
-            signature color
-            als een veld leeg is moet ie verdwijnen in de signature
-          -->
-        </tr>
-      </tbody>
-    </table>
-  <?php
+    return "<table style='border-collapse: collapse; border-spacing: 0; width: 525px' cellSpacing='0' cellPadding='0'>
+        <tbody>
+          <tr cellspacing='0' cellpadding='0' style='padding:0!important;'>{$image_html}
+            <td cellspacing='0' cellpadding='0' style='padding-top: 20px; padding-bottom: 20px;  vertical-align: middle !important; 
+                display: table-cell; font-size: 10pt; font-family: Arial; width: 400px; padding-left: 20px; border-left: {$this->color} 1px solid' valign='top'>
+              <strong style='font-size: 11pt'><span style='color: {$this->color}'>{$this->first_name} {$this->last_name}</strong> | {$this->jobtitle}<br><br>
+              <span style='color:{$this->color}'>{$this->company}</span><br>
+              <span style='color:{$this->color}'><strong>e: </strong></span>{$this->email}<br>
+              <span style='color:{$this->color}'><strong>w:</strong></span>
+                <a style='text-decoration:none; color:#000000' href='{$this->website}'>{$website_label}</a><br>
+              <span style='color: {$this->color}'><strong>m:</strong></span> {$this->mobile_phone_number}</span><br><br>
+              <a href='{$this->facebook}'><i style='color:{$this->color}' class='fab fa-facebook-square'></i></a>&nbsp;
+              <a href='{$this->instagram}'><i style='color:{$this->color}' class='fab fa-instagram'></i></a>&nbsp;
+              <a href='{$this->website}'><i style='color:{$this->color}' class='fas fa-globe'></i></a>&nbsp;
+              <a href='{$this->linkedin}'><i style='color:{$this->color}' class='fab fa-linkedin'></i></a>
+            </td>
+          </tr>
+        </tbody>
+    </table>";
   }
 
   public function plain_text()

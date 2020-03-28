@@ -177,7 +177,7 @@
                 if ($signature):
               ?>
               <br/>
-              <?php $signature->html(); ?>
+              <?php echo $signature; ?>
               <br/>
               <?php endif; ?>
               <input class="button" style="margin-top: 20px" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>

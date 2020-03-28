@@ -623,8 +623,9 @@ function send_test_mail()
 
   include(dirname(__FILE__) . "/dashboard/services/connection.php");
   include(dirname(__FILE__) . "/dashboard/controllers/user_controller.php");
-  include(dirname(__FILE__) . "/dashboard/models/user.php");
   include(dirname(__FILE__) . "/dashboard/phpmailer/mail_controller.php");
+  include(dirname(__FILE__) . "/dashboard/models/signature.php");
+  include(dirname(__FILE__) . "/dashboard/models/user.php");
 
   $connection = new connection;
   $user_control = new user_controller($connection);
@@ -632,7 +633,9 @@ function send_test_mail()
 
   $user_id = get_current_user_id();
   $user =  $user_control->get($user_id);
+  $meta = get_user_meta($user_id);
 
+  $signature = new signature($user, $meta);
   $recipient_email = sanitize_email($_POST['mail']);
   
   if ($_POST['mailcount'] == 0) {
@@ -642,7 +645,7 @@ function send_test_mail()
     $subject = $user->{'subject_' . $_POST['mailcount']};
     $body = $user->{'mail_text_' . $_POST['mailcount']};
   }
-  $signature = wp_get_attachment_url($user->signature);
+
   $audit_name = "Audit Name";
   $audit_link = "https://www.socialaudify.com/audit-config";
 

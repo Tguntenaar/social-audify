@@ -97,7 +97,7 @@ use PHPMailer\PHPMailer\Exception;
   function add_signature($signature) {
     if ($signature) {
       $body = $this->mailer->Body;
-      $new_body = str_replace("#{signature}", $signature->html(), $body);
+      $new_body = str_replace("#{signature}", $signature, $body);
       $this->mailer->Body = $new_body;
 
       $body = $this->mailer->AltBody;
