@@ -249,6 +249,12 @@ function rcp_admin_notices() {
 				$text = __( 'Membership cancelled. The customer will retain access until they reach their expiration date.', 'rcp' );
 				break;
 
+			case 'membership_cancellation_failed' :
+
+				$text = ! empty( $_GET['rcp_cancel_failure_message'] ) ? sprintf( __( 'Membership cancellation failed: %s', 'rcp' ), esc_html( urldecode( $_GET['rcp_cancel_failure_message'] ) ) ) : __( 'Membership cancellation failed', 'rcp' );
+				$class = 'error';
+				break;
+
 			case 'membership_note_added' :
 
 				$text = __( 'Note added', 'rcp' );
@@ -339,6 +345,28 @@ function rcp_admin_notices() {
 			case 'discount_not_added' :
 
 				$text  = __( 'The discount code could not be created due to an error', 'rcp' );
+				$class = 'error';
+				break;
+
+			case 'discount_code_already_exists' :
+
+				if ( ! empty( $_GET['discount_code'] ) ) {
+					$text = sprintf( __( 'A discount with the code %s already exists.', 'rcp' ), '<code>' . esc_html( urldecode( $_GET['discount_code'] ) ) . '</code>' );
+				} else {
+					$text = __( 'A discount with this code already exists.', 'rcp' );
+				}
+				$class = 'error';
+				break;
+
+			case 'discount_amount_missing' :
+
+				$text  = __( 'Please enter a discount amount containing numbers only.', 'rcp' );
+				$class = 'error';
+				break;
+
+			case 'discount_invalid_percent' :
+
+				$text  = __( 'Percentage discounts must be whole numbers between 1 and 100.', 'rcp' );
 				$class = 'error';
 				break;
 

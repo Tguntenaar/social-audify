@@ -258,6 +258,7 @@ class Member extends Base {
 			} else {
 				$membership_id = rcp_add_membership( array(
 					'customer_id' => $customer->get_id(),
+					'user_id'     => $customer->get_user_id(),
 					$column       => $meta_value
 				) );
 

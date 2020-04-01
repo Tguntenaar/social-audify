@@ -78,7 +78,7 @@ if ( ! empty( $memberships ) ) {
 						<?php
 						echo $membership->get_expiration_date();
 
-						if ( $membership->is_recurring() && $membership->is_active() ) {
+						if ( $membership->is_recurring() && 'active' === $membership->get_status() ) {
 							echo '<p class="rcp-membership-auto-renew-notice">' . __( '(renews automatically)', 'rcp' ) . '</p>';
 						}
 						?>
@@ -114,7 +114,7 @@ if ( ! empty( $memberships ) ) {
 						}
 
 						if ( $membership->upgrade_possible() ) {
-							$links[] = apply_filters( 'rcp_subscription_details_action_upgrade', '<a href="' . esc_url( rcp_get_membership_upgrade_url( $membership->get_id() ) ) . '" title="' . esc_attr__( 'Upgrade or change your membership', 'rcp' ) . '" class="rcp_sub_details_renew">' . __( 'Upgrade or change your membership', 'rcp' ) . '</a>', $user_ID );
+							$links[] = apply_filters( 'rcp_subscription_details_action_upgrade', '<a href="' . esc_url( rcp_get_membership_upgrade_url( $membership->get_id() ) ) . '" title="' . esc_attr__( 'Upgrade or change your membership', 'rcp' ) . '" class="rcp_sub_details_change_membership">' . __( 'Upgrade or change your membership', 'rcp' ) . '</a>', $user_ID );
 						}
 
 						if ( $membership->is_active() && $membership->can_cancel() && ! $membership->has_payment_plan() ) {
@@ -198,6 +198,11 @@ if ( ! empty( $memberships ) ) {
 					<td data-th="<?php esc_attr_e( 'Payment Status', 'rcp' ); ?>"><?php echo rcp_get_payment_status_label( $payment ); ?></td>
 					<td data-th="<?php esc_attr_e( 'Date', 'rcp' ); ?>"><?php echo date_i18n( get_option( 'date_format' ), strtotime( $payment->date, current_time( 'timestamp' ) ) ); ?></td>
 					<td data-th="<?php esc_attr_e( 'Actions', 'rcp' ); ?>">
+						<?php if ( in_array( $payment->status, array( 'pending', 'abandoned', 'failed' ) ) && empty( $payment->transaction_id ) ) : ?>
+							<a href="<?php echo esc_url( rcp_get_payment_recovery_url( $payment->id ) ); ?>">
+								<?php echo 'failed' === $payment->status ? __( 'Retry Payment', 'rcp' ) : __( 'Complete Payment', 'rcp' ); ?>
+							</a> <br/>
+						<?php endif; ?>
 						<a href="<?php echo esc_url( rcp_get_invoice_url( $payment->id ) ); ?>"><?php _e( 'View Receipt', 'rcp' ); ?></a>
 					</td>
 				</tr>

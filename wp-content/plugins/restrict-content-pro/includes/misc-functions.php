@@ -16,8 +16,18 @@
  * @return bool True if we are in sandbox mode
  */
 function rcp_is_sandbox(){
+
     global $rcp_options;
-    return (bool) apply_filters( 'rcp_is_sandbox', isset( $rcp_options['sandbox'] ) );
+
+    $is_sandbox = ( defined( 'RCP_GATEWAY_SANDBOX_MODE' ) && RCP_GATEWAY_SANDBOX_MODE ) ? true : isset( $rcp_options['sandbox'] );
+
+	/**
+	 * Filters whether or not sandbox mode is enabled.
+	 *
+	 * @param bool $is_sandbox
+	 */
+    return (bool) apply_filters( 'rcp_is_sandbox', $is_sandbox );
+
 }
 
 /**
@@ -1322,18 +1332,12 @@ function rcp_get_level_meta_db_name() {
 /**
  * Get the name of the discount codes database table.
  *
+ * @since 3.2 Removed `rcp_discounts_db_name` filter.
+ *
  * @return string
  */
 function rcp_get_discounts_db_name() {
-	global $wpdb;
-
-	$prefix = is_plugin_active_for_network( plugin_basename( RCP_PLUGIN_FILE ) ) ? '' : $wpdb->prefix;
-
-	if ( defined( 'RCP_NETWORK_SEPARATE_SITES' ) && RCP_NETWORK_SEPARATE_SITES ) {
-		$prefix = $wpdb->prefix;
-	}
-
-	return apply_filters( 'rcp_discounts_db_name', $prefix . 'rcp_discounts' );
+	return restrict_content_pro()->discounts_table->get_table_name();
 }
 
 /**

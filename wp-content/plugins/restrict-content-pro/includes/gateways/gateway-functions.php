@@ -127,9 +127,40 @@ function rcp_send_to_gateway( $gateway, $subscription_data ) {
 		$gateway  = $gateways->get_gateway( $gateway );
 		$gateway  = new $gateway['class']( $subscription_data );
 
+		/**
+		 * @var RCP_Payment_Gateway $gateway
+		 */
+
 		$gateway->process_signup();
 
 	}
+
+}
+
+/**
+ * Send payment / subscription data to gateway for ajax processing
+ *
+ * @param string $gateway           Gatway slug.
+ * @param array  $subscription_data Array of registration data.
+ *
+ * @since 3.2
+ * @return true|array|WP_Error
+ */
+function rcp_handle_gateway_ajax_processing( $gateway, $subscription_data ) {
+
+	if ( ! rcp_gateway_supports( $gateway, 'ajax-payment' ) ) {
+		return new WP_Error( 'ajax_unsupported', __( 'Ajax payment is not supported by this payment method.', 'rcp' ) );
+	}
+
+	$gateways = new RCP_Payment_Gateways;
+	$gateway  = $gateways->get_gateway( $gateway );
+	$gateway  = new $gateway['class']( $subscription_data );
+
+	/**
+	 * @var RCP_Payment_Gateway $gateway
+	 */
+
+	return $gateway->process_ajax_signup();
 
 }
 
@@ -157,6 +188,28 @@ function rcp_gateway_supports( $gateway = 'paypal', $item = 'recurring' ) {
 	}
 
 	return $ret;
+
+}
+
+/**
+ * Get the `RCP_Payment_Gateway` class for a specific gateway.
+ *
+ * @param string $gateway_slug Payment gateway slug.
+ *
+ * @since 3.3
+ * @return RCP_Payment_Gateway|false
+ */
+function rcp_get_gateway_class( $gateway_slug ) {
+
+	$class    = false;
+	$gateways = new RCP_Payment_Gateways;
+	$gateway  = $gateways->get_gateway( $gateway_slug );
+
+	if ( is_array( $gateway ) && isset( $gateway['class'] ) && class_exists( $gateway['class'] ) ) {
+		$class = new $gateway['class'];
+	}
+
+	return $class;
 
 }
 
@@ -242,7 +295,20 @@ function rcp_load_gateway_scripts() {
 
 	global $rcp_options;
 
-	$load_scripts = rcp_is_registration_page() || defined( 'RCP_LOAD_SCRIPTS_GLOBALLY' );
+	$is_rcp_page = rcp_is_registration_page();
+	if ( ! $is_rcp_page ) {
+		// Check other known pages.
+		$pages = array( 'redirect', 'account_page', 'edit_profile', 'update_card' );
+
+		foreach ( $pages as $page_key ) {
+			if ( ! empty( $rcp_options[ $page_key ] ) && is_page( absint( $rcp_options[ $page_key ] ) ) ) {
+				$is_rcp_page = true;
+				break;
+			}
+		}
+	}
+
+	$load_scripts = $is_rcp_page || defined( 'RCP_LOAD_SCRIPTS_GLOBALLY' );
 	$gateways     = new RCP_Payment_Gateways;
 
 	/*
@@ -301,7 +367,7 @@ function rcp_process_update_card_form_post() {
 	}
 
 	// Bail if this user isn't actually the customer associated with this membership.
-	if ( $membership->get_customer()->get_user_id() != get_current_user_id() ) {
+	if ( $membership->get_user_id() != get_current_user_id() ) {
 		wp_die( __( 'You do not have permission to perform this action.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 403 ) );
 	}
 

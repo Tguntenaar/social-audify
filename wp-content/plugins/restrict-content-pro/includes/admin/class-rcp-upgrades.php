@@ -42,12 +42,14 @@ class RCP_Upgrades {
 		$this->v30_upgrades();
 		$this->v304_upgrades();
 		$this->v31_upgrades();
+		$this->v32_upgrades();
 
-		// If upgrades have occurred or the DB version is differnt from the version constant
+		// If upgrades have occurred or the DB version is different from the version constant
 		if ( $this->upgraded || $this->version <> RCP_PLUGIN_VERSION ) {
 			rcp_log( sprintf( 'RCP upgraded from version %s to %s.', $this->version, RCP_PLUGIN_VERSION ), true );
 			update_option( 'rcp_version_upgraded_from', $this->version );
 			update_option( 'rcp_version', RCP_PLUGIN_VERSION );
+			update_option( 'rcp_version_upgraded_on', current_time( 'mysql', true ) );
 		}
 
 	}
@@ -185,49 +187,10 @@ class RCP_Upgrades {
 
 			/**
 			 * Upgrade discounts table.
+			 *
+			 * Discounts migration moved to BerlinDB
+			 * @see \RCP\Database\Tables\Discounts::__202002101()
 			 */
-			$discounts_class = new RCP_Discounts();
-
-			rcp_log( 'Performing version 3.0 upgrade: Upgrading discounts table.', true );
-
-			$discounts_table_name = rcp_get_discounts_db_name();
-			$discounts_cols       = $wpdb->get_col( "DESC " . $discounts_table_name, 0 );
-			$column_added         = in_array( 'membership_level_ids', $discounts_cols );
-
-			if ( ! $column_added ) {
-				// Column would have been added in @rcp_options_install() above, but just in case....
-				$updated = $wpdb->query( "ALTER TABLE {$discounts_table_name} ADD membership_level_ids TEXT NOT NULL AFTER subscription_id" );
-
-				if ( false === $updated ) {
-					rcp_log( sprintf( 'Error adding the membership_level_ids column in %s.', $discounts_table_name ), true );
-					return;
-				}
-			}
-
-			rcp_log( sprintf( 'Adding membership_level_ids column in %s was successful. Now migrating data.', $discounts_table_name ), true );
-
-			// Migrate existing membership IDs to new column in proper format.
-			$discounts = rcp_get_discounts();
-
-			if ( ! empty( $discounts ) ) {
-				// Prevent discount sync with Stripe - we don't need it here.
-				remove_action( 'rcp_edit_discount', 'rcp_stripe_update_discount', 10 );
-
-				foreach ( $discounts as $discount ) {
-					$membership_level_ids = ( $discount->subscription_id == 0 ) ? array() : array( $discount->subscription_id );
-					$args                 = array(
-						'membership_level_ids' => $membership_level_ids
-					);
-					$discounts_class->update( $discount->id, $args );
-				}
-
-				rcp_log( sprintf( 'Successfully updated membership_level_ids column for %d discount codes.', count( $discounts ) ), true );
-			} else {
-				rcp_log( 'No discount codes to upgrade.', true );
-			}
-
-			// Delete old column.
-			$wpdb->query( "ALTER TABLE {$discounts_table_name} DROP COLUMN subscription_id" );
 
 			/**
 			 * Change column types in rcp_payments.
@@ -286,14 +249,41 @@ class RCP_Upgrades {
 			rcp_log( 'Performing version 3.1 upgrades: options install.', true );
 			@rcp_options_install();
 
-			global $rcp_options, $wpdb;
+			/**
+			 * Database upgrade to add `one_time` column to discounts table has been moved to:
+			 * @see \RCP\Database\Tables\Discounts::__202002101()
+			 */
+		}
 
-			if ( ! empty( $rcp_options['one_time_discounts'] ) ) {
-				rcp_log( 'Performing version 3.1 upgrades: setting all discounts to one time.', true );
+	}
 
-				$discounts_table_name = rcp_get_discounts_db_name();
+	/**
+	 * Process 3.2 upgrades.
+	 *      - Remove Stripe Checkout gateway.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function v32_upgrades() {
 
-				$wpdb->query( "UPDATE {$discounts_table_name} SET one_time = 1" );
+		if( version_compare( $this->version, '3.2', '<' ) ) {
+			global $rcp_options;
+
+			$enabled_gateways = isset( $rcp_options['gateways'] ) ? array_map( 'trim', $rcp_options['gateways'] ) : array();
+
+			if ( ! empty( $enabled_gateways ) && is_array( $enabled_gateways ) && array_key_exists( 'stripe_checkout', $enabled_gateways ) ) {
+				rcp_log( 'Performing version 3.2 upgrades: removing Stripe Checkout gateway.', true );
+				unset( $enabled_gateways[ 'stripe_checkout' ] );
+
+				// If Stripe doesn't exist, add it.
+				if ( ! array_key_exists( 'stripe', $enabled_gateways ) ) {
+					rcp_log( 'Performing version 3.2 upgrades: adding Stripe Elements gateway.', true );
+					$enabled_gateways['stripe'] = 1;
+				}
+
+				$rcp_options['gateways'] = $enabled_gateways;
+
+				update_option( 'rcp_settings', $rcp_options );
 			}
 		}
 

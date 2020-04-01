@@ -164,8 +164,18 @@ function rcp_add_customer( $data = array() ) {
 		$data['user_id'] = absint( $data['user_id'] );
 	} else {
 		// We need to create a new user.
-		$user_args = ! empty( $dat['user_args'] ) ? $data['user_args'] : array();
-		$user_id   = wp_insert_user( $user_args );
+		$user_args       = ! empty( $data['user_args'] ) ? $data['user_args'] : array();
+		$required_fields = array( 'user_login', 'user_email', 'user_pass' );
+
+		foreach ( $required_fields as $required_field ) {
+			if ( empty( $user_args[ $required_field ] ) ) {
+				rcp_log( sprintf( 'Failed to add new customer - missing required user field: %s', $required_field ) );
+
+				return false;
+			}
+		}
+
+		$user_id = wp_insert_user( $user_args );
 
 		if ( is_wp_error( $user_id ) ) {
 			return false;
@@ -530,6 +540,10 @@ function rcp_get_customer_gateway_id( $customer_id, $gateways ) {
  */
 function rcp_user_has_active_membership( $user_id = 0 ) {
 
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
 	$customer              = rcp_get_customer_by_user_id( $user_id );
 	$has_active_membership = false;
 
@@ -560,6 +574,10 @@ function rcp_user_has_active_membership( $user_id = 0 ) {
  */
 function rcp_user_has_paid_membership( $user_id = 0 ) {
 
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
 	$customer            = rcp_get_customer_by_user_id( $user_id );
 	$has_paid_membership = false;
 
@@ -589,6 +607,10 @@ function rcp_user_has_paid_membership( $user_id = 0 ) {
  * @return bool
  */
 function rcp_user_has_free_membership( $user_id = 0 ) {
+
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
 
 	$customer            = rcp_get_customer_by_user_id( $user_id );
 	$has_free_membership = false;
@@ -634,6 +656,10 @@ function rcp_user_has_free_membership( $user_id = 0 ) {
  */
 function rcp_user_has_expired_membership( $user_id = 0 ) {
 
+	if ( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
 	$customer               = rcp_get_customer_by_user_id( $user_id );
 	$has_expired_membership = false;
 
@@ -667,7 +693,7 @@ function rcp_user_has_expired_membership( $user_id = 0 ) {
  */
 function rcp_user_has_access( $user_id = 0, $access_level_needed = 0 ) {
 
-	if( empty( $user_id ) && is_user_logged_in() ) {
+	if ( empty( $user_id ) && is_user_logged_in() ) {
 		$user_id = get_current_user_id();
 	}
 

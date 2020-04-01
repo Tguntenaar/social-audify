@@ -43,7 +43,7 @@ function rcp_send_membership_email( $membership_id_or_object, $status = '' ) {
 
 	global $rcp_options;
 
-	$user_id       = $membership->get_customer()->get_user_id();
+	$user_id       = $membership->get_user_id();
 	$user_info     = get_userdata( $user_id );
 	$message       = $subject = $admin_subject = '';
 	$admin_message = '';
@@ -90,7 +90,7 @@ function rcp_send_membership_email( $membership_id_or_object, $status = '' ) {
 				$admin_subject = isset( $rcp_options['active_subject_admin'] ) ? $rcp_options['active_subject_admin'] : '';
 
 				if( empty( $admin_message ) ) {
-					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'is now subscribed to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Membership level', 'rcp' ) . ': ' . rcp_get_subscription( $user_id ) . "\n\n";
+					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'is now subscribed to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Membership level', 'rcp' ) . ': ' . $membership->get_membership_level_name() . "\n\n";
 					$admin_message = apply_filters( 'rcp_before_admin_email_active_thanks', $admin_message, $user_id );
 					$admin_message .= __( 'Thank you', 'rcp' );
 				}
@@ -123,7 +123,7 @@ function rcp_send_membership_email( $membership_id_or_object, $status = '' ) {
 				$admin_subject = isset( $rcp_options['free_subject_admin'] ) ? $rcp_options['free_subject_admin'] : '';
 
 				if( empty( $admin_message ) ) {
-					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'is now subscribed to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Membership level', 'rcp' ) . ': ' . rcp_get_subscription( $user_id ) . "\n\n";
+					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'is now subscribed to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Membership level', 'rcp' ) . ': ' . $membership->get_membership_level_name() . "\n\n";
 					$admin_message = apply_filters( 'rcp_before_admin_email_free_thanks', $admin_message, $user_id );
 					$admin_message .= __( 'Thank you', 'rcp' );
 				}
@@ -157,7 +157,7 @@ function rcp_send_membership_email( $membership_id_or_object, $status = '' ) {
 				$admin_subject = isset( $rcp_options['trial_subject_admin'] ) ? $rcp_options['trial_subject_admin'] : '';
 
 				if( empty( $admin_message ) ) {
-					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'is now subscribed to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Membership level', 'rcp' ) . ': ' . rcp_get_subscription( $user_id ) . "\n\n";
+					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'is now subscribed to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Membership level', 'rcp' ) . ': ' . $membership->get_membership_level_name() . "\n\n";
 					$admin_message = apply_filters( 'rcp_before_admin_email_trial_thanks', $admin_message, $user_id );
 					$admin_message .= __( 'Thank you', 'rcp' );
 				}
@@ -190,7 +190,7 @@ function rcp_send_membership_email( $membership_id_or_object, $status = '' ) {
 				$admin_subject = isset( $rcp_options['cancelled_subject_admin'] ) ? $rcp_options['cancelled_subject_admin'] : '';
 
 				if( empty( $admin_message ) ) {
-					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'has cancelled their membership to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Their membership level was', 'rcp' ) . ': ' . rcp_get_subscription( $user_id ) . "\n\n";
+					$admin_message = __( 'Hello', 'rcp' ) . "\n\n" . $user_info->display_name . ' (' . $user_info->user_login . ') ' . __( 'has cancelled their membership to', 'rcp' ) . ' ' . $site_name . ".\n\n" . __( 'Their membership level was', 'rcp' ) . ': ' . $membership->get_membership_level_name() . "\n\n";
 					$admin_message = apply_filters( 'rcp_before_admin_email_cancelled_thanks', $admin_message, $user_id );
 					$admin_message .= __( 'Thank you', 'rcp' );
 				}
@@ -405,6 +405,28 @@ function rcp_email_payment_received( $payment_id ) {
 	$admin_message = ! empty( $rcp_options['payment_received_email_admin'] ) ? $rcp_options['payment_received_email_admin'] : false;
 	$admin_subject = ! empty( $rcp_options['payment_received_subject_admin'] ) ? $rcp_options['payment_received_subject_admin'] : false;
 
+	/**
+	 * Filters the admin email message.
+	 *
+	 * @param string $admin_message Admin email contents.
+	 * @param int    $payment_id    ID of the payment record.
+	 * @param object $payment       Full payment object from the database.
+	 *
+	 * @since 3.3.9
+	 */
+	$admin_message = apply_filters( 'rcp_payment_received_admin_email', $admin_message, $payment_id, $payment );
+
+	/**
+	 * Filters the admin email subject.
+	 *
+	 * @param string $admin_subject Admin email subject.
+	 * @param int    $payment_id    ID of the payment record.
+	 * @param object $payment       Full payment object from the database.
+	 *
+	 * @since 3.3.9
+	 */
+	$admin_subject = apply_filters( 'rcp_email_payment_received_admin_subject', $admin_subject, $payment_id, $payment );
+
 	$emails = new RCP_Emails;
 	$emails->member_id = $payment['user_id'];
 	$emails->payment_id = $payment_id;
@@ -450,9 +472,36 @@ function rcp_email_member_on_renewal_payment_failure( RCP_Member $member, RCP_Pa
 
 	global $rcp_options;
 
-	$status     = $member->get_status();
-	$customer   = rcp_get_customer_by_user_id( $member->ID );
-	$membership = ! empty( $customer ) ? rcp_get_customer_single_membership( $customer->get_id() ) : false;
+	$membership  = ! empty( $gateway->membership ) ? $gateway->membership : false;
+	$status      = ! empty( $membership ) ? $membership->get_status() : '';
+	$sent        = false;
+	$last_sent   = ! empty( $membership ) ? rcp_get_membership_meta( $membership->get_id(), 'renewal_payment_failed_email_last_sent', true ) : false;
+	$number_sent = ! empty( $membership ) ? (int) rcp_get_membership_meta( $membership->get_id(), 'renewal_payment_failed_emails_number', true ) : 0;
+
+	// Bail if an email was sent within the last 20 hours.
+	if ( ! empty( $last_sent ) && $last_sent > date( 'Y-m-d H:i:s', strtotime( '-20 hours' ) ) ) {
+		rcp_log( sprintf( 'Skipping renewal payment failed email for membership #%d. Email was last sent less than 20 hours ago: %s.', $membership->get_id(), $last_sent ) );
+
+		return;
+	}
+
+	/**
+	 * Filters the maximum number of failure emails allowed to be sent per membership.
+	 *
+	 * @param int                  $max_emails Maximum number of emails to send.
+	 * @param RCP_Membership|false $membership Associated membership record.
+	 * @param RCP_Payment_Gateway  $gateway    Gateway object.
+	 *
+	 * @since 3.3.2
+	 */
+	$max_emails = (int) apply_filters( 'rcp_maximum_renewal_payment_failed_emails', 5, $membership, $gateway );
+
+	// Bail if we've exceeded the maximum of 5 emails for a single membership.
+	if ( $number_sent >= $max_emails ) {
+		rcp_log( sprintf( 'Skipping renewal payment failed email for membership #%d. Reached the maximum number of %d emails.', $membership->get_id(), $max_emails ) );
+
+		return;
+	}
 
 	// Email member
 	if ( empty( $rcp_options['disable_renewal_payment_failed_email'] ) ) {
@@ -467,7 +516,7 @@ function rcp_email_member_on_renewal_payment_failure( RCP_Member $member, RCP_Pa
 			$emails->member_id = $member->ID;
 			$emails->membership = $membership;
 
-			$emails->send( $member->user_email, $subject, $message );
+			$sent = $emails->send( $member->user_email, $subject, $message );
 
 			rcp_log( sprintf( 'Renewal Payment Failure email sent to user #%d.', $member->ID ) );
 		} else {
@@ -492,12 +541,17 @@ function rcp_email_member_on_renewal_payment_failure( RCP_Member $member, RCP_Pa
 			$emails->member_id = $member->ID;
 			$emails->membership = $membership;
 
-			$emails->send( $admin_emails, $subject, $message );
+			$sent = $emails->send( $admin_emails, $subject, $message );
 
 			rcp_log( 'Renewal Payment Failure email sent to admin(s).' );
 		} else {
 			rcp_log( 'Renewal Payment Failure email not sent to admin(s) - subject or message is empty.' );
 		}
+	}
+
+	if ( $sent && ! empty( $membership ) ) {
+		rcp_update_membership_meta( $membership->get_id(), 'renewal_payment_failed_email_last_sent', date( 'Y-m-d H:i:s' ) );
+		rcp_update_membership_meta( $membership->get_id(), 'renewal_payment_failed_emails_number', $number_sent + 1 );
 	}
 
 }
@@ -877,10 +931,10 @@ function rcp_email_tag_invoice_url( $user_id = 0, $payment_id = 0 ) {
 		global $rcp_options;
 
 		if ( ! empty( $rcp_options['account_page'] ) ) {
-			$url = esc_url( get_permalink( $rcp_options['account_page'] ) );
+			$url = esc_url_raw( get_permalink( $rcp_options['account_page'] ) );
 		}
 	} else {
-		$url = esc_url( rcp_get_invoice_url( $payment->id ) );
+		$url = esc_url_raw( rcp_get_invoice_url( $payment->id ) );
 	}
 
 	return $url;
@@ -948,7 +1002,107 @@ function rcp_email_tag_discount_code( $user_id = 0, $payment_id = 0 ) {
  * @return string
  */
 function rcp_email_tag_email_verification( $user_id = 0, $payment_id = 0 ) {
-	return esc_url( rcp_generate_verification_link( $user_id ) );
+	return esc_url_raw( rcp_generate_verification_link( $user_id ) );
+}
+
+/**
+ * Email template tag: %update_billing_card_url%
+ * The URL to update a membership billing card. This is better than inserting the link manually
+ * because it adds the `membership_id` query arg.
+ *
+ * @param int $user_id    The member ID.
+ * @param int $payment_id The payment ID.
+ *
+ * @since 3.2
+ * @return string
+ */
+function rcp_email_tag_update_billing_card_url( $user_id = 0, $payment_id = 0 ) {
+
+	global $rcp_options;
+
+	if ( empty( $rcp_options['update_card'] ) ) {
+		return '';
+	}
+
+	$url = get_permalink( absint( $rcp_options['update_card'] ) );
+
+	if ( empty( $url ) ) {
+		return '';
+	}
+
+	/**
+	 * @var RCP_Payments $rcp_payments_db
+	 */
+	global $rcp_payments_db;
+
+	if ( ! empty( $payment_id ) ) {
+		$payment = $rcp_payments_db->get_payment( $payment_id );
+	} else {
+		$payment = $rcp_payments_db->get_payments( array(
+			'user_id' => $user_id,
+			'order'   => 'DESC',
+			'number'  => 1
+		) );
+
+		$payment = reset( $payment );
+	}
+
+	if ( is_object( $payment ) && ! empty( $payment->membership_id ) ) {
+		$url = add_query_arg( 'membership_id', urlencode( $payment->membership_id ), $url );
+	}
+
+	return $url;
+
+}
+
+/**
+ * Email template tag: %membership_renew_url%
+ *
+ * The URL to renew a membership.
+ *
+ * @param int    $user_id    The user ID.
+ * @param int    $payment_id The payment ID.
+ * @param string $tag        The email tag.
+ * @param bool   $membership The membership object.
+ *
+ * @since 3.3.1
+ * @return string
+ */
+function rcp_email_tag_membership_renew_url( $user_id = 0, $payment_id = 0, $tag = '', $membership = false ) {
+
+	$url = '';
+
+	if ( $membership instanceof RCP_Membership ) {
+		$url = rcp_get_membership_renewal_url( $membership->get_id() );
+	}
+
+	return $url;
+
+}
+
+/**
+ * Email template tag: %membership_change_url%
+ *
+ * The URL to change a membership.
+ *
+ * @param int    $user_id    The user ID.
+ * @param int    $payment_id The payment ID.
+ * @param string $tag        The email tag.
+ * @param bool   $membership The membership object.
+ *
+ * @since 3.3.1
+ * @return string
+ */
+function rcp_email_tag_membership_change_url( $user_id = 0, $payment_id = 0, $tag = '', $membership = false ) {
+
+	$url = '';
+
+	if ( $membership instanceof RCP_Membership ) {
+		$url = rcp_get_membership_upgrade_url( $membership->get_id() );
+	}
+
+	return $url;
+
 }
 
 /**

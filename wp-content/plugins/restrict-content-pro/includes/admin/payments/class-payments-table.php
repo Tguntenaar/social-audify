@@ -119,7 +119,7 @@ class Payments_Table extends List_Table {
 	 * @return string
 	 */
 	protected function get_primary_column_name() {
-		return 'customer';
+		return 'id';
 	}
 
 	/**
@@ -139,8 +139,13 @@ class Payments_Table extends List_Table {
 		switch ( $column_name ) {
 
 			case 'customer' :
-				$user  = get_userdata( $payment->user_id );
-				$value = ! empty( $user->display_name ) ? esc_html( $user->display_name ) : sprintf( __( 'User #%d (deleted)', 'rcp' ), $payment->user_id );
+				$user = get_userdata( $payment->user_id );
+
+				if ( ! empty( $user ) ) {
+					$value = ! empty( $user->display_name ) ? esc_html( $user->display_name ) : esc_html( $user->user_login );
+				} else {
+					$value =  sprintf( __( 'User #%d (deleted)', 'rcp' ), $payment->user_id );
+				}
 				break;
 
 			case 'membership' :
@@ -486,6 +491,18 @@ class Payments_Table extends List_Table {
 			$args['gateway'] = sanitize_text_field( $gateway );
 		}
 
+		// Start Date
+		$start_date = $this->get_request_var( 'start-date' );
+		if ( ! empty( $start_date ) ) {
+			$args['date']['start'] = sanitize_text_field( $start_date );
+		}
+
+		// End Date
+		$end_date = $this->get_request_var( 'end-date' );
+		if ( ! empty( $end_date ) ) {
+			$args['date']['end'] = sanitize_text_field( $end_date );
+		}
+
 		if ( $count ) {
 			return $payments->count( $args );
 		}
@@ -543,6 +560,9 @@ class Payments_Table extends List_Table {
 			return;
 		}
 
+		$start_date = isset( $_GET['start-date'] )  ? sanitize_text_field( $_GET['start-date'] ) : null;
+		$end_date   = isset( $_GET['end-date'] )    ? sanitize_text_field( $_GET['end-date'] )   : null;
+
 		$gateway  = $this->get_request_var( 'gateway', '' );
 		$gateways = rcp_get_payment_gateways();
 
@@ -558,6 +578,11 @@ class Payments_Table extends List_Table {
 		$levels   = rcp_get_subscription_levels( 'all' );
 		?>
 		<div class="alignleft actions">
+			<label for="rcp-payments-start-date"><?php _e( 'Start Date', 'rcp' ); ?></label>
+			<input type="text" id="rcp-payments-start-date" name="start-date" class="rcp-datepicker" value="<?php echo esc_attr( $start_date ); ?>" placeholder="YYYY-mm-dd"/>
+			<label for="rcp-payments-end-date"><?php _e( 'End Date', 'rcp' ); ?></label>
+			<input type="text" id="rcp-payments-end-date" name="end-date" class="rcp-datepicker" value="<?php echo esc_attr( $end_date ); ?>" placeholder="YYYY-mm-dd"/>
+
 			<?php if ( ! empty( $gateways ) ) : ?>
 				<label for="rcp-payment-gateways-filter" class="screen-reader-text"><?php _e( 'Filter by gateway', 'rcp' ); ?></label>
 				<select id="rcp-payment-gateways-filter" name="gateway">

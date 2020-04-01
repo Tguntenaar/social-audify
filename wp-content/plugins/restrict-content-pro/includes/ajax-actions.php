@@ -36,7 +36,7 @@ function rcp_validate_discount_with_ajax() {
 			}
 
 			$return['valid']  = true;
-			$return['amount'] = rcp_discount_sign_filter( $code_details->amount, $code_details->unit );
+			$return['amount'] = rcp_discount_sign_filter( $code_details->get_amount(), $code_details->get_unit() );
 
 		}
 
@@ -163,7 +163,7 @@ function rcp_validate_registration_state( $args = array() ) {
 		if( rcp_validate_discount( $return['discount_code'], $return['level_id'] ) ) {
 			$code_details              = rcp_get_discount_details_by_code( $return['discount_code'] );
 			$return['discount_valid']  = true;
-			$return['discount_amount'] = rcp_discount_sign_filter( $code_details->amount, $code_details->unit );
+			$return['discount_amount'] = rcp_discount_sign_filter( $code_details->get_amount(), $code_details->get_unit() );
 		}
 	}
 

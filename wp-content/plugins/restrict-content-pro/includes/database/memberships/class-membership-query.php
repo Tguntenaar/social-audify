@@ -121,6 +121,7 @@ class Membership extends Query {
 	 * @type array         $date_query              Query all datetime columns together. See WP_Date_Query.
 	 * @type array         $created_date_query      Date query clauses to limit memberships by. See WP_Date_Query.
 	 *                                              Default null.
+	 * @type array         $activated_date_query    Date query clauses to limit by. See WP_Date_Query. Default null.
 	 * @type array         $trial_end_date_query    Date query clauses to limit by. See WP_Date_Query. Default null.
 	 * @type array         $renewed_date_query      Date query clauses to limit by. See WP_Date_Query. Default null.
 	 * @type array         $cancellation_date_query Date query clauses to limit by. See WP_Date_Query. Default null.

@@ -38,7 +38,7 @@ function rcp_add_ons_admin() {
 
 				$tab_url = add_query_arg( array(
 					'settings-updated' => false,
-					'tab'              => $tab_id
+					'tab'              => urlencode( $tab_id )
 				) );
 
 				$active = $active_tab == $tab_id ? ' nav-tab-active' : '';
@@ -86,7 +86,7 @@ function rcp_add_ons_get_feed( $tab = 'pro' ) {
 		$url = 'https://restrictcontentpro.com/?feed=feed-add-ons';
 
 		if ( 'pro' !== $tab ) {
-			$url = add_query_arg( array( 'display' => $tab ), $url );
+			$url = add_query_arg( array( 'display' => urlencode( $tab ) ), $url );
 		}
 
 		$feed = wp_remote_get( esc_url_raw( $url ) );

@@ -210,7 +210,7 @@ class RCP_Payment_Gateway_2Checkout extends RCP_Payment_Gateway {
 				die( '-4' );
 			}
 
-			$member = new RCP_Member( $this->membership->get_customer()->get_user_id() ); // for backwards compatibility
+			$member = new RCP_Member( $this->membership->get_user_id() ); // for backwards compatibility
 
 			if( 'twocheckout' != $this->membership->get_gateway() ) {
 				rcp_log( 'Exiting 2Checkout webhook - membership is not a 2Checkout subscription.' );
@@ -257,7 +257,7 @@ class RCP_Payment_Gateway_2Checkout extends RCP_Payment_Gateway {
 						'subscription_key' => $subscription_key,
 						'amount'           => sanitize_text_field( $_POST['item_list_amount_1'] ), // don't have a total from this call, but this should be safe
 						'subtotal'         => sanitize_text_field( $_POST['item_list_amount_1'] ),
-						'user_id'          => $this->membership->get_customer()->get_user_id(),
+						'user_id'          => $this->membership->get_user_id(),
 						'customer_id'      => $this->membership->get_customer()->get_id(),
 						'membership_id'    => $this->membership->get_id(),
 						'transaction_id'   => sanitize_text_field( $_POST['invoice_id'] ),
@@ -404,7 +404,7 @@ class RCP_Payment_Gateway_2Checkout extends RCP_Payment_Gateway {
 				// Pull in the public encryption key for our environment
 				TCO.loadPubKey('<?php echo $this->environment; ?>');
 
-				jQuery('body').off('rcp_register_form_submission').on('rcp_register_form_submission', function rcp_2co_register_form_submission_handler(event, response, form_id) {
+				jQuery('body').on('rcp_register_form_submission', function rcp_2co_register_form_submission_handler(event, response, form_id) {
 
 					if ( response.gateway.slug !== 'twocheckout' ) {
 						return;

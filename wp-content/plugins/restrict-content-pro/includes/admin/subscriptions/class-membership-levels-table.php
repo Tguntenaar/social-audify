@@ -234,7 +234,7 @@ class Membership_Levels_Table extends List_Table {
 	 */
 	public function column_name( $membership_level ) {
 
-		$edit_level_url = add_query_arg( 'edit_subscription', $membership_level->id, $this->get_base_url() );
+		$edit_level_url = add_query_arg( 'edit_subscription', urlencode( $membership_level->id ), $this->get_base_url() );
 
 		$actions = array(
 			'edit' => '<a href="' . esc_url( $edit_level_url ) . '">' . __( 'Edit', 'rcp' ) . '</a>',

@@ -52,7 +52,7 @@ function rcp_show_user_columns( $value, $column_name, $user_id ) {
 			 */
 
 			$edit_page = add_query_arg( array(
-				'membership_id' => $membership->get_id(),
+				'membership_id' => urlencode( $membership->get_id() ),
 				'view'          => 'edit'
 			), $admin_page );
 

@@ -37,16 +37,42 @@ function rcp_process_add_payment() {
 
 	if ( $user ) {
 
+		$membership_level = rcp_get_subscription_details( absint( $_POST['membership_level_id'] ) );
+		$customer         = rcp_get_customer_by( 'user_id', $user->ID );
+
 		$data = array(
 			'amount'           => empty( $_POST['amount'] ) ? 0.00 : sanitize_text_field( $_POST['amount'] ),
 			'user_id'          => $user->ID,
 			'date'             => empty( $_POST['date'] ) ? date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ) : date( 'Y-m-d', strtotime( $_POST['date'], current_time( 'timestamp' ) ) ) . ' ' . date( 'H:i:s', current_time( 'timestamp' ) ),
 			'payment_type'     => 'manual',
-			'subscription'     => rcp_get_subscription( $user->ID ),
-			'subscription_key' => rcp_get_subscription_key( $user->ID ),
+			'subscription'     => ! empty( $membership_level->name ) ? sanitize_text_field( $membership_level->name ) : '',
+			'object_id'        => isset( $membership_level->id ) ? absint( $membership_level->id ) : 0,
+			'object_type'      => 'subscription',
 			'transaction_id'   => sanitize_text_field( $_POST['transaction-id'] ),
 			'status'           => sanitize_text_field( $_POST['status'] ),
 		);
+
+		// We're setting the subtotal here so we can use $data['amount'] as a fallback.
+		$data['subtotal'] = isset( $membership_level->price ) ? sanitize_text_field( $membership_level->price ) : $data['amount'];
+
+		if ( $customer instanceof RCP_Customer && ! empty( $membership_level->id ) ) {
+			$data['customer_id'] = $customer->get_id();
+
+			$memberships = $customer->get_memberships( array(
+				'object_id'   => $membership_level->id,
+				'object_type' => 'membership',
+				'number'      => 1
+			) );
+
+			if ( isset( $memberships[0] ) && $memberships[0] instanceof RCP_Membership ) {
+				$data['subscription_key'] = $memberships[0]->get_subscription_key();
+				$data['membership_id']    = $memberships[0]->get_id();
+			}
+		}
+
+		if ( empty( $data['subscription_key'] ) ) {
+			$data['subscription_key'] = rcp_get_subscription_key( $user->ID );
+		}
 
 		$add = $payments->insert( $data );
 

@@ -192,8 +192,19 @@ function rcp_is_trialing( $user_id = 0 ) {
 		$user_id = get_current_user_id();
 	}
 
-	$member = new RCP_Member( $user_id );
-	return $member->is_trialing();
+	$customer = rcp_get_customer_by_user_id( $user_id );
+
+	if ( empty( $customer ) ) {
+		return false;
+	}
+
+	foreach ( $customer->get_memberships() as $membership ) {
+		if ( $membership->is_trialing() ) {
+			return true;
+		}
+	}
+
+	return false;
 
 }
 
@@ -239,7 +250,7 @@ function rcp_print_user_payments_formatted( $user_id ) {
 
 				<tr class="rcp_row<?php echo rcp_is_odd( $i ) ? ' alternate' : ''; ?>">
 					<td class="column-primary" data-colname="<?php esc_attr_e( 'ID', 'rcp' ); ?>">
-						<a href="<?php echo esc_url( add_query_arg( array( 'payment_id' => $payment->id, 'view' => 'edit-payment' ), admin_url( 'admin.php?page=rcp-payments' ) ) ); ?>" class="rcp-edit-payment"><?php echo esc_html( $payment->id ); ?></a>
+						<a href="<?php echo esc_url( add_query_arg( array( 'payment_id' => urlencode( $payment->id ), 'view' => 'edit-payment' ), admin_url( 'admin.php?page=rcp-payments' ) ) ); ?>" class="rcp-edit-payment"><?php echo esc_html( $payment->id ); ?></a>
 						<button type="button" class="toggle-row"><span class="screen-reader-text"><?php _e( 'Show more details', 'rcp' ); ?></span></button>
 					</td>
 					<td data-colname="<?php esc_attr_e( 'Date', 'rcp' ); ?>"><?php echo esc_html( $payment->date ); ?></td>

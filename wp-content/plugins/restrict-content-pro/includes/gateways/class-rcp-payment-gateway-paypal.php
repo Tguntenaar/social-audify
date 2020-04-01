@@ -282,10 +282,10 @@ class RCP_Payment_Gateway_PayPal extends RCP_Payment_Gateway {
 			}
 
 			if ( empty( $user_id ) ) {
-				$user_id = $this->membership->get_customer()->get_user_id();
+				$user_id = $this->membership->get_user_id();
 			}
 
-			$member = new RCP_Member( $this->membership->get_customer()->get_user_id() ); // for backwards compat
+			$member = new RCP_Member( $this->membership->get_user_id() ); // for backwards compat
 
 			rcp_log( sprintf( 'Processing IPN for membership #%d.', $this->membership->get_id() ) );
 
@@ -335,7 +335,7 @@ class RCP_Payment_Gateway_PayPal extends RCP_Payment_Gateway {
 				'subscription'     => $posted['item_name'],
 				'payment_type'     => $posted['txn_type'],
 				'subscription_key' => $subscription_key,
-				'user_id'          => $this->membership->get_customer()->get_user_id(),
+				'user_id'          => $this->membership->get_user_id(),
 				'customer_id'      => $this->membership->get_customer_id(),
 				'membership_id'    => $this->membership->get_id(),
 				'transaction_id'   => ! empty( $posted['txn_id'] ) ? $posted['txn_id'] : false,

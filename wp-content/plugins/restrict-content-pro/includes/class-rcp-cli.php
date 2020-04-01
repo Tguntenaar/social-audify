@@ -235,6 +235,7 @@ class RCP_CLI extends WP_CLI_Command {
 
 				$membership_args = array(
 					'customer_id'      => absint( $customer_id ),
+					'user_id'          => $user_id,
 					'object_id'        => ! empty( $level_id ) ? $level_id : $level_ids[array_rand( $level_ids )], // specified or random membership level ID
 					'status'           => $this_status,
 					'created_date'     => $created_date,
@@ -517,7 +518,7 @@ class RCP_CLI extends WP_CLI_Command {
 	 */
 	protected function print_membership_details( $membership ) {
 
-		$user_id = $membership->get_customer()->get_user_id();
+		$user_id = $membership->get_user_id();
 		$user    = get_userdata( $user_id );
 
 		WP_CLI::log( WP_CLI::colorize( '%G' . sprintf( __( 'Membership #%d ( %s )', 'rcp' ), $membership->get_id(), $user->user_email ) . '%N' ) );

@@ -41,6 +41,11 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 		public $customers_table;
 
 		/**
+		 * @var \RCP\Database\Tables\Discounts
+		 */
+		public $discounts_table;
+
+		/**
 		 * @var \RCP\Database\Tables\Memberships
 		 */
 		public $memberships_table;
@@ -54,6 +59,11 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 		 * @var \RCP\Database\Tables\Queue
 		 */
 		public $queue_table;
+
+		/**
+		 * @var \RCP\Database\Tables\Membership_Counts
+		 */
+		public $membership_counts_table;
 
 		/**
 		 * Main Restrict_Content_Pro Instance.
@@ -164,7 +174,7 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 		private function setup_constants() {
 
 			if ( ! defined( 'RCP_PLUGIN_VERSION' ) ) {
-				define( 'RCP_PLUGIN_VERSION', '3.1.2' );
+				define( 'RCP_PLUGIN_VERSION', '3.3.9' );
 			}
 
 			if ( ! defined( 'RCP_PLUGIN_FILE' ) ) {
@@ -222,10 +232,12 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 		 */
 		private function setup_application() {
 
-			self::$instance->customers_table   = new \RCP\Database\Tables\Customers();
-			self::$instance->memberships_table = new \RCP\Database\Tables\Memberships();
-			self::$instance->membership_meta_table = new \RCP\Database\Tables\Membership_Meta();
-			self::$instance->queue_table       = new \RCP\Database\Tables\Queue();
+			self::$instance->customers_table         = new \RCP\Database\Tables\Customers();
+			self::$instance->discounts_table         = new \RCP\Database\Tables\Discounts();
+			self::$instance->memberships_table       = new \RCP\Database\Tables\Memberships();
+			self::$instance->membership_meta_table   = new \RCP\Database\Tables\Membership_Meta();
+			self::$instance->queue_table             = new \RCP\Database\Tables\Queue();
+			self::$instance->membership_counts_table = new \RCP\Database\Tables\Membership_Counts();
 
 		}
 
@@ -249,17 +261,23 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 
 			// Tables
 			require_once RCP_PLUGIN_DIR . 'includes/database/customers/class-customers-table.php';
+			require_once RCP_PLUGIN_DIR . 'includes/database/discounts/class-discounts-table.php';
+			require_once RCP_PLUGIN_DIR . 'includes/database/membership-counts/class-membership-counts-table.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/memberships/class-memberships-table.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/memberships/class-membership-meta-table.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/queue/class-queue-table.php';
 
 			// Queries
 			require_once RCP_PLUGIN_DIR . 'includes/database/customers/class-customer-query.php';
+			require_once RCP_PLUGIN_DIR . 'includes/database/discounts/class-discount-query.php';
+			require_once RCP_PLUGIN_DIR . 'includes/database/membership-counts/class-membership-count-query.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/memberships/class-membership-query.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/queue/class-queue-query.php';
 
 			// Schemas
 			require_once RCP_PLUGIN_DIR . 'includes/database/customers/class-customers-schema.php';
+			require_once RCP_PLUGIN_DIR . 'includes/database/discounts/class-discounts-schema.php';
+			require_once RCP_PLUGIN_DIR . 'includes/database/membership-counts/class-membership-counts-schema.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/memberships/class-memberships-schema.php';
 			require_once RCP_PLUGIN_DIR . 'includes/database/queue/class-queue-schema.php';
 
@@ -276,19 +294,21 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 			require_once( RCP_PLUGIN_DIR . 'includes/class-rcp-logging.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/class-rcp-member.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/class-rcp-payments.php' );
-			require_once( RCP_PLUGIN_DIR . 'includes/class-rcp-discounts.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/class-rcp-registration.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/class-rcp-reminders.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/scripts.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/ajax-actions.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/captcha-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/cron-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/compat/class-base.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/compat/class-member.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/customers/class-rcp-customer.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/customers/customer-actions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/customers/customer-functions.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/deprecated/class-rcp-discounts.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/deprecated/functions.php' );
-			require_once( RCP_PLUGIN_DIR . 'includes/discount-functions.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/discounts/class-rcp-discount.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/discounts/discount-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/email-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/gateways/class-rcp-payment-gateway.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/gateways/class-rcp-payment-gateway-braintree.php' );
@@ -308,6 +328,8 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 			require_once( RCP_PLUGIN_DIR . 'includes/login-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/member-forms.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/member-functions.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/membership-counts/class-rcp-membership-count.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/membership-counts/membership-count-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/memberships/class-rcp-membership.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/memberships/membership-actions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/memberships/membership-functions.php' );
@@ -315,6 +337,7 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 			require_once( RCP_PLUGIN_DIR . 'includes/payments/meta.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/misc-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/payments/payment-actions.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/payments/payment-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/registration-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/subscription-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/error-tracking.php' );
@@ -367,6 +390,7 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 			require_once( RCP_PLUGIN_DIR . 'includes/admin/discounts/discount-codes.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/admin/payments/payment-actions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/admin/payments/payments-page.php' );
+			require_once( RCP_PLUGIN_DIR . 'includes/admin/reports/report-actions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/admin/reports/reports-page.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/admin/export.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/admin/tools/tools-page.php' );
@@ -410,7 +434,6 @@ if ( ! class_exists( 'Restrict_Content_Pro' ) ) :
 		private function include_frontend() {
 
 			require_once( RCP_PLUGIN_DIR . 'includes/content-filters.php' );
-			require_once( RCP_PLUGIN_DIR . 'includes/captcha-functions.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/query-filters.php' );
 			require_once( RCP_PLUGIN_DIR . 'includes/redirects.php' );
 

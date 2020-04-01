@@ -198,6 +198,17 @@ class RCP_Emails {
 	}
 
 	/**
+	 * Get the ID of the payment record associated with this email.
+	 *
+	 * @access public
+	 * @since 3.3.9
+	 * @return int|false
+	 */
+	public function get_payment_id() {
+		return ! empty( $this->payment_id ) ? absint( $this->payment_id ) : false;
+	}
+
+	/**
 	 * Get the email headers
 	 *
 	 * @since 2.7
@@ -524,6 +535,21 @@ class RCP_Emails {
 				'tag'         => 'invoice_url',
 				'description' => __( 'The URL to the member\'s most recent invoice', 'rcp' ),
 				'function'    => 'rcp_email_tag_invoice_url'
+			),
+			array(
+				'tag'         => 'membership_renew_url',
+				'description' => __( 'The URL to renew the membership associated with the email being sent', 'rcp' ),
+				'function'    => 'rcp_email_tag_membership_renew_url'
+			),
+			array(
+				'tag'         => 'membership_change_url',
+				'description' => __( 'The URL to change (upgrade/downgrade) the membership associated with the email being sent', 'rcp' ),
+				'function'    => 'rcp_email_tag_membership_change_url'
+			),
+			array(
+				'tag'         => 'update_billing_card_url',
+				'description' => __( 'The URL to the "Update Billing Card" page for the latest payment (recommended for use in the Renewal Payment Failed email)', 'rcp' ),
+				'function'    => 'rcp_email_tag_update_billing_card_url'
 			),
 			array(
 				'tag'         => 'discount_code',

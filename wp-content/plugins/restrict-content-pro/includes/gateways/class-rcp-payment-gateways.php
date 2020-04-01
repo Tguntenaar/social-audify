@@ -71,27 +71,43 @@ class RCP_Payment_Gateways {
 			'paypal_pro' => array(
 				'label'        => __( 'Credit / Debit Card', 'rcp' ),
 				'admin_label'  => __( 'PayPal Pro', 'rcp' ),
-				'class'        => 'RCP_Payment_Gateway_PayPal_Pro'
+				'class'        => 'RCP_Payment_Gateway_PayPal_Pro',
+				'test_card'    => array(
+					'number' => '4111111111111111',
+					'cvc'    => '123',
+					'link'   => 'https://developer.paypal.com/docs/classic/payflow/payflow-pro/payflow-pro-testing/#credit-card-numbers-for-testing'
+				)
 			),
 			'stripe' => array(
 				'label'        => __( 'Credit / Debit Card', 'rcp' ),
 				'admin_label'  => __( 'Stripe', 'rcp' ),
-				'class'        => 'RCP_Payment_Gateway_Stripe'
-			),
-			'stripe_checkout' => array(
-				'label'        => __( 'Credit / Debit Card', 'rcp' ),
-				'admin_label'  => __( 'Stripe Checkout', 'rcp' ),
-				'class'        => 'RCP_Payment_Gateway_Stripe_Checkout'
+				'class'        => 'RCP_Payment_Gateway_Stripe',
+				'test_card'    => array(
+					'number' => '4242424242424242',
+					'cvc'    => '123',
+					'zip'    => '45814',
+					'link'   => 'https://stripe.com/docs/testing#cards'
+				)
 			),
 			'twocheckout' => array(
 				'label'        => __( 'Credit / Debit Card', 'rcp' ),
 				'admin_label'  => __( '2Checkout', 'rcp' ),
-				'class'        => 'RCP_Payment_Gateway_2Checkout'
+				'class'        => 'RCP_Payment_Gateway_2Checkout',
+				'test_card'    => array(
+					'number' => '4000000000000002',
+					'cvc'    => '123',
+					'link'   => 'https://knowledgecenter.2checkout.com/Documentation/09Test_ordering_system/01Test_payment_methods#Test_cards'
+				)
 			),
 			'braintree' => array(
 				'label'        => __( 'Credit / Debit Card', 'rcp' ),
 				'admin_label'  => __( 'Braintree', 'rcp' ),
-				'class'        => 'RCP_Payment_Gateway_Braintree'
+				'class'        => 'RCP_Payment_Gateway_Braintree',
+				'test_card'    => array(
+					'number' => '4111111111111111',
+					'cvc'    => '123',
+					'link'   => 'https://developers.braintreepayments.com/reference/general/testing/php#valid-card-numbers'
+				)
 			)
 		);
 
@@ -111,6 +127,14 @@ class RCP_Payment_Gateways {
 
 		$enabled = array();
 		$saved   = isset( $rcp_options['gateways'] ) ? array_map( 'trim', $rcp_options['gateways'] ) : array();
+
+		if ( ! empty( $saved ) && is_array( $saved ) && array_key_exists( 'stripe_checkout', $saved ) ) {
+			unset( $saved['stripe_checkout'] );
+			if ( ! in_array( 'stripe', $saved ) ) {
+				// Add normal Stripe if it's not already activated.
+				$saved['stripe'] = 1;
+			}
+		}
 
 		if( ! empty( $saved ) ) {
 
@@ -193,7 +217,41 @@ class RCP_Payment_Gateways {
 		 * @var RCP_Payment_Gateway $gateway_obj
 		 */
 
-		return $gateway_obj->fields();
+		$fields = $gateway_obj->fields();
+
+		// Add test card number.
+		$show_test_card = rcp_is_sandbox() && ! empty( $gateway['test_card']['number'] );
+		/**
+		 * Filters whether or not the test card details should be shown.
+		 *
+		 * @param bool $show_test_card Whether or not the test card information should be shown.
+		 * @param array $gateway Gateway details.
+		 */
+		$show_test_card = apply_filters( 'rcp_show_test_card_on_registration', $show_test_card, $gateway );
+		if ( $show_test_card ) {
+			ob_start();
+			?>
+			<div id="rcp-sandbox-gateway-test-cards">
+				<p><?php printf( __( '<strong>Test mode is enabled.</strong> You can use the following card details for %s test transactions:', 'rcp' ), $gateway['admin_label'] ); ?></p>
+				<ul>
+					<li><?php printf( __( 'Number: %s', 'rcp' ), $gateway['test_card']['number'] ); ?></li>
+					<?php if ( ! empty( $gateway['test_card']['cvc'] ) ) : ?>
+						<li><?php printf( __( 'CVC: %s', 'rcp' ), $gateway['test_card']['cvc'] ); ?></li>
+					<?php endif; ?>
+					<li><?php _e( 'Expiration: any future date', 'rcp' ); ?></li>
+					<?php if ( ! empty( $gateway['test_card']['zip'] ) ) : ?>
+						<li><?php printf( __( 'Zip: %s', 'rcp' ), $gateway['test_card']['zip'] ); ?></li>
+					<?php endif; ?>
+				</ul>
+				<?php if ( ! empty( $gateway['test_card']['link'] ) ) : ?>
+					<p><?php printf( __( 'For more test card numbers visit the <a href="%s" target="_blank">%s documentation page</a>.', 'rcp' ), esc_url( $gateway['test_card']['link'] ), $gateway['admin_label'] ); ?></p>
+				<?php endif; ?>
+			</div>
+			<?php
+			$fields = ob_get_clean() . $fields;
+		}
+
+		return $fields;
 
 	}
 

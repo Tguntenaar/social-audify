@@ -19,16 +19,9 @@ function rcp_admin_scripts( $hook ) {
 
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	global $rcp_options, $rcp_members_page, $rcp_customers_page, $rcp_subscriptions_page, $rcp_discounts_page, $rcp_payments_page, $rcp_reports_page, $rcp_settings_page, $rcp_export_page, $rcp_help_page, $rcp_tools_page;
-	$pages = array( $rcp_members_page, $rcp_customers_page, $rcp_subscriptions_page, $rcp_discounts_page, $rcp_payments_page, $rcp_reports_page, $rcp_settings_page, $rcp_export_page, $rcp_tools_page, $rcp_help_page );
+	global $rcp_options, $rcp_members_page, $rcp_customers_page, $rcp_discounts_page, $rcp_reports_page, $rcp_tools_page;
 
-	$pages[] = 'post.php';
-	$pages[] = 'post-new.php';
-	$pages[] = 'edit.php';
-
-	if( false !== strpos( $hook, 'rcp-restrict-post-type' ) ) {
-		$pages[] = $hook;
-	}
+	$is_rcp_page = rcp_is_rcp_admin_page();
 
 	if ( $rcp_customers_page == $hook ) {
 		// Load the password show/hide feature and strength meter.
@@ -39,7 +32,7 @@ function rcp_admin_scripts( $hook ) {
 		wp_enqueue_script( 'jquery-ui-timepicker', RCP_PLUGIN_URL . 'includes/js/jquery-ui-timepicker-addon' . $suffix . '.js', array( 'jquery-ui-datepicker', 'jquery-ui-slider' ), '1.6.3' );
 	}
 
-	if( in_array( $hook, $pages ) ) {
+	if( $is_rcp_page ) {
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-tooltip' );
@@ -49,9 +42,15 @@ function rcp_admin_scripts( $hook ) {
 
 	if ( $rcp_reports_page == $hook ) {
 		wp_enqueue_script( 'jquery-flot', RCP_PLUGIN_URL . 'includes/js/jquery.flot.min.js' );
+
+		// For now only load Chart.js and new scripts file on Membership Counts tab.
+		if ( ! empty( $_GET['tab'] ) && 'membership_counts' === $_GET['tab'] ) {
+			wp_enqueue_script( 'chart-js', RCP_PLUGIN_URL . 'includes/js/chart.min.js' );
+			wp_enqueue_script( 'rcp-admin-reports', RCP_PLUGIN_URL . 'includes/js/admin-reports.js', array( 'jquery', 'chart-js' ), RCP_PLUGIN_VERSION, true );
+		}
 	}
 
-	if( in_array( $hook, $pages ) ) {
+	if ( $is_rcp_page ) {
 		$membership = ! empty( $_GET['membership_id'] ) ? rcp_get_membership( absint( $_GET['membership_id'] ) ) : false;
 		wp_localize_script( 'rcp-admin-scripts', 'rcp_vars', array(
 				'action_cancel'       => __( 'Cancel', 'rcp' ),
@@ -123,30 +122,7 @@ add_action( 'admin_head', 'rcp_admin_help_url' );
 function rcp_admin_styles( $hook ) {
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-	global $rcp_members_page, $rcp_customers_page, $rcp_subscriptions_page, $rcp_discounts_page, $rcp_payments_page, $rcp_reports_page, $rcp_settings_page, $rcp_export_page, $rcp_help_page, $rcp_tools_page, $rcp_add_ons_page;
-
-	$pages = array(
-		$rcp_members_page,
-		$rcp_customers_page,
-		$rcp_subscriptions_page,
-		$rcp_discounts_page,
-		$rcp_payments_page,
-		$rcp_reports_page,
-		$rcp_settings_page,
-		$rcp_export_page,
-		$rcp_help_page,
-		$rcp_tools_page,
-        $rcp_add_ons_page,
-		'post.php',
-		'edit.php',
-		'post-new.php'
-	);
-
-	if( false !== strpos( $hook, 'rcp-restrict-post-type' ) ) {
-		$pages[] = $hook;
-	}
-
-	if( in_array( $hook, $pages ) ) {
+	if ( rcp_is_rcp_admin_page() ) {
 		wp_enqueue_style( 'datepicker',  RCP_PLUGIN_URL . 'includes/css/datepicker' . $suffix . '.css' );
 		wp_enqueue_style( 'rcp-admin',  RCP_PLUGIN_URL . 'includes/css/admin-styles' . $suffix . '.css', array(), RCP_PLUGIN_VERSION );
 	}
@@ -175,9 +151,15 @@ function rcp_register_scripts() {
 	global $rcp_options;
 
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	wp_register_script( 'es6-promise', RCP_PLUGIN_URL . 'includes/js/es6-promise.auto.min.js', array(), '3.5.0' );
 	wp_register_script( 'rcp-register',  RCP_PLUGIN_URL . 'includes/js/register' . $suffix . '.js', array('jquery'), RCP_PLUGIN_VERSION );
 	wp_register_script( 'jquery-blockui',  RCP_PLUGIN_URL . 'includes/js/jquery.blockUI.js', array('jquery'), RCP_PLUGIN_VERSION );
-	wp_register_script( 'recaptcha', 'https://www.google.com/recaptcha/api.js', array(), RCP_PLUGIN_VERSION );
+
+	if ( 3 === rcp_get_recaptcha_version() ) {
+		wp_register_script( 'recaptcha-v3', add_query_arg( 'render', urlencode( $rcp_options['recaptcha_public_key'] ), 'https://www.google.com/recaptcha/api.js' ), array(), RCP_PLUGIN_VERSION );
+	} else {
+		wp_register_script( 'recaptcha-v2', 'https://www.google.com/recaptcha/api.js', array(), RCP_PLUGIN_VERSION );
+	}
 
 }
 add_action( 'init', 'rcp_register_scripts' );
@@ -219,14 +201,19 @@ function rcp_print_scripts() {
 			'user_has_trialed'   => is_user_logged_in() && rcp_has_used_trial(),
 			'trial_levels'       => rcp_get_trial_level_ids(),
 			'auto_renew_default' => isset( $rcp_options['auto_renew_checked_on'] ),
-			'recaptcha_enabled'  => rcp_is_recaptcha_enabled()
+			'recaptcha_enabled'  => rcp_is_recaptcha_enabled(),
+			'recaptcha_version'  => rcp_get_recaptcha_version(),
+			'error_occurred'     => esc_html__( 'An unexpected error has occurred. Please try again or contact support if the issue persists.', 'rcp' ),
+			'enter_card_details' => esc_html__( 'Please enter your card details.', 'rcp' ),
+			'invalid_cardholder' => esc_html__( 'The card holder name you have entered is invalid', 'rcp' )
 		)
 	);
 
+	wp_print_scripts( 'es6-promise' );
 	wp_print_scripts( 'rcp-register' );
 	wp_print_scripts( 'jquery-blockui' );
-	if ( isset( $rcp_options['enable_recaptcha'] ) ) {
-		wp_print_scripts( 'recaptcha' );
+	if ( rcp_is_recaptcha_enabled() ) {
+		wp_print_scripts( 'recaptcha-v' . rcp_get_recaptcha_version() );
 	}
 
 }

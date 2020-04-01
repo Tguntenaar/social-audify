@@ -30,7 +30,8 @@ class RCP_Payment_Gateway_PayPal_Pro extends RCP_Payment_Gateway {
 		$this->supports[]  = 'one-time';
 		$this->supports[]  = 'recurring';
 		$this->supports[]  = 'fees';
-		$this->supports[] = 'trial';
+		$this->supports[]  = 'trial';
+		$this->supports[]  = 'card-updates';
 
 		if( $this->test_mode ) {
 

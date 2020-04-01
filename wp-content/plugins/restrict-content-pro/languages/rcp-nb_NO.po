@@ -4,15 +4,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Restrict Content Pro 2.6.5\n"
 "Report-Msgid-Bugs-To: https://restrictcontentpro.com/\n"
-"POT-Creation-Date: 2019-06-25 14:46-0000\n"
-"PO-Revision-Date: 2019-06-25 14:46-0000\n"
+"POT-Creation-Date: 2019-12-20 10:32+0000\n"
+"PO-Revision-Date: 2019-12-20 10:32+0000\n"
 "Last-Translator: Restrict Content Pro Team <support@restrictcontentpro.com>\n"
 "Language-Team: Restrict Content Pro <support@restrictcontentpro.com>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Poedit-KeywordsList: __;_e;_x:1,2c;_ex:1,2c;_n:1,2;_nx:1,2,4c;_n_noop:1,2;"
 "_nx_noop:1,2,3c;esc_attr__;esc_html__;esc_attr_e;esc_html_e;esc_attr_x:1,2c;"
 "esc_html_x:1,2c\n"
@@ -42,42 +42,42 @@ msgstr ""
 msgid "You do not have permission to install plugin updates"
 msgstr "Du har ikke rettigheter til å installere moduler"
 
-#: RCP_Plugin_Updater.php:384 includes/admin/admin-notices.php:422
+#: RCP_Plugin_Updater.php:384 includes/admin/admin-notices.php:455
 #: includes/admin/class-rcp-add-on-updater.php:287
 #: includes/admin/customers/add-customer.php:16
 #: includes/admin/customers/customer-actions.php:24
 #: includes/admin/customers/customer-actions.php:28
 #: includes/admin/customers/customer-actions.php:40
 #: includes/admin/customers/customer-actions.php:52
-#: includes/admin/customers/customer-actions.php:64
-#: includes/admin/customers/customer-actions.php:73
+#: includes/admin/customers/customer-actions.php:72
 #: includes/admin/customers/customer-actions.php:81
-#: includes/admin/customers/customer-actions.php:92
-#: includes/admin/customers/customer-actions.php:117
-#: includes/admin/customers/customer-actions.php:121
+#: includes/admin/customers/customer-actions.php:89
+#: includes/admin/customers/customer-actions.php:100
 #: includes/admin/customers/customer-actions.php:125
-#: includes/admin/customers/customer-actions.php:132
-#: includes/admin/customers/customer-actions.php:202
-#: includes/admin/customers/customer-actions.php:206
-#: includes/admin/customers/customer-actions.php:210
+#: includes/admin/customers/customer-actions.php:129
+#: includes/admin/customers/customer-actions.php:133
+#: includes/admin/customers/customer-actions.php:140
+#: includes/admin/customers/customer-actions.php:216
 #: includes/admin/customers/customer-actions.php:220
-#: includes/admin/customers/customer-actions.php:243
-#: includes/admin/customers/customer-actions.php:247
-#: includes/admin/customers/customer-actions.php:251
-#: includes/admin/customers/customer-actions.php:258
-#: includes/admin/customers/customer-actions.php:264
+#: includes/admin/customers/customer-actions.php:224
+#: includes/admin/customers/customer-actions.php:234
+#: includes/admin/customers/customer-actions.php:257
+#: includes/admin/customers/customer-actions.php:261
+#: includes/admin/customers/customer-actions.php:265
+#: includes/admin/customers/customer-actions.php:272
+#: includes/admin/customers/customer-actions.php:278
 #: includes/admin/customers/edit-customer.php:16
 #: includes/admin/customers/edit-customer.php:23
 #: includes/admin/discounts/discount-actions.php:24
 #: includes/admin/discounts/discount-actions.php:28
 #: includes/admin/discounts/discount-actions.php:77
 #: includes/admin/discounts/discount-actions.php:81
-#: includes/admin/discounts/discount-actions.php:131
-#: includes/admin/discounts/discount-actions.php:135
-#: includes/admin/discounts/discount-actions.php:139
-#: includes/admin/discounts/discount-actions.php:163
-#: includes/admin/discounts/discount-actions.php:167
-#: includes/admin/discounts/discount-actions.php:171
+#: includes/admin/discounts/discount-actions.php:128
+#: includes/admin/discounts/discount-actions.php:132
+#: includes/admin/discounts/discount-actions.php:136
+#: includes/admin/discounts/discount-actions.php:160
+#: includes/admin/discounts/discount-actions.php:164
+#: includes/admin/discounts/discount-actions.php:168
 #: includes/admin/discounts/discount-actions.php:194
 #: includes/admin/discounts/discount-actions.php:198
 #: includes/admin/discounts/discount-actions.php:202
@@ -122,28 +122,28 @@ msgstr "Du har ikke rettigheter til å installere moduler"
 #: includes/admin/memberships/membership-actions.php:152
 #: includes/admin/memberships/membership-actions.php:160
 #: includes/admin/memberships/membership-actions.php:200
-#: includes/admin/memberships/membership-actions.php:311
-#: includes/admin/memberships/membership-actions.php:315
-#: includes/admin/memberships/membership-actions.php:319
-#: includes/admin/memberships/membership-actions.php:326
+#: includes/admin/memberships/membership-actions.php:324
+#: includes/admin/memberships/membership-actions.php:328
 #: includes/admin/memberships/membership-actions.php:332
-#: includes/admin/memberships/membership-actions.php:358
-#: includes/admin/memberships/membership-actions.php:362
-#: includes/admin/memberships/membership-actions.php:366
-#: includes/admin/memberships/membership-actions.php:374
-#: includes/admin/memberships/membership-actions.php:405
-#: includes/admin/memberships/membership-actions.php:409
-#: includes/admin/memberships/membership-actions.php:413
-#: includes/admin/memberships/membership-actions.php:421
-#: includes/admin/memberships/membership-actions.php:454
-#: includes/admin/memberships/membership-actions.php:458
-#: includes/admin/memberships/membership-actions.php:462
+#: includes/admin/memberships/membership-actions.php:339
+#: includes/admin/memberships/membership-actions.php:345
+#: includes/admin/memberships/membership-actions.php:371
+#: includes/admin/memberships/membership-actions.php:375
+#: includes/admin/memberships/membership-actions.php:379
+#: includes/admin/memberships/membership-actions.php:387
+#: includes/admin/memberships/membership-actions.php:418
+#: includes/admin/memberships/membership-actions.php:422
+#: includes/admin/memberships/membership-actions.php:426
+#: includes/admin/memberships/membership-actions.php:434
+#: includes/admin/memberships/membership-actions.php:481
+#: includes/admin/memberships/membership-actions.php:485
+#: includes/admin/memberships/membership-actions.php:489
 #: includes/admin/payments/payment-actions.php:24
 #: includes/admin/payments/payment-actions.php:28
 #: includes/admin/payments/payment-actions.php:81
 #: includes/admin/payments/payment-actions.php:85
-#: includes/admin/payments/payment-actions.php:140
-#: includes/admin/payments/payment-actions.php:144
+#: includes/admin/payments/payment-actions.php:134
+#: includes/admin/payments/payment-actions.php:138
 #: includes/admin/post-types/restrict-post-type.php:54
 #: includes/admin/post-types/restrict-post-type.php:63
 #: includes/admin/reminders/subscription-reminders.php:106
@@ -154,11 +154,11 @@ msgstr "Du har ikke rettigheter til å installere moduler"
 #: includes/admin/reminders/subscription-reminders.php:196
 #: includes/admin/reminders/subscription-reminders.php:200
 #: includes/admin/reminders/subscription-reminders.php:204
-#: includes/admin/settings/settings.php:1868
-#: includes/admin/settings/settings.php:2092
-#: includes/admin/settings/settings.php:2096
-#: includes/admin/settings/settings.php:2100
-#: includes/admin/settings/settings.php:2172
+#: includes/admin/settings/settings.php:1880
+#: includes/admin/settings/settings.php:2104
+#: includes/admin/settings/settings.php:2108
+#: includes/admin/settings/settings.php:2112
+#: includes/admin/settings/settings.php:2184
 #: includes/admin/subscriptions/subscription-actions.php:24
 #: includes/admin/subscriptions/subscription-actions.php:28
 #: includes/admin/subscriptions/subscription-actions.php:73
@@ -172,9 +172,21 @@ msgstr "Du har ikke rettigheter til å installere moduler"
 #: includes/admin/subscriptions/subscription-actions.php:195
 #: includes/admin/subscriptions/subscription-actions.php:199
 #: includes/admin/subscriptions/subscription-actions.php:203
-#: includes/class-rcp-export.php:183
+#: includes/class-rcp-export.php:183 includes/deprecated/functions.php:1920
+#: includes/deprecated/functions.php:1937
+#: includes/deprecated/functions.php:1954
+#: includes/deprecated/functions.php:1970
+#: includes/deprecated/functions.php:1986
+#: includes/deprecated/functions.php:1995
+#: includes/deprecated/functions.php:2093
+#: includes/deprecated/functions.php:2103
+#: includes/deprecated/functions.php:2142
+#: includes/deprecated/functions.php:2159
+#: includes/deprecated/functions.php:2175
+#: includes/deprecated/functions.php:2191
+#: includes/deprecated/functions.php:2200
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:152
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:691
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:629
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:133
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:150
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:163
@@ -183,44 +195,27 @@ msgstr "Du har ikke rettigheter til å installere moduler"
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:272
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:311
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:325
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:351
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:155
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:173
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:202
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:81
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:395
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:482
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:512
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:569
-#: includes/gateways/gateway-functions.php:300
-#: includes/gateways/gateway-functions.php:305
-#: includes/gateways/gateway-functions.php:309
-#: includes/gateways/stripe/functions.php:224
-#: includes/gateways/stripe/functions.php:263
-#: includes/gateways/stripe/functions.php:280
-#: includes/gateways/stripe/functions.php:297
-#: includes/gateways/stripe/functions.php:313
-#: includes/gateways/stripe/functions.php:329
-#: includes/gateways/stripe/functions.php:338
-#: includes/gateways/stripe/functions.php:423
-#: includes/gateways/stripe/functions.php:440
-#: includes/gateways/stripe/functions.php:457
-#: includes/gateways/stripe/functions.php:473
-#: includes/gateways/stripe/functions.php:489
-#: includes/gateways/stripe/functions.php:498
-#: includes/gateways/stripe/functions.php:594
-#: includes/gateways/stripe/functions.php:604
-#: includes/gateways/stripe/functions.php:643
-#: includes/gateways/stripe/functions.php:660
-#: includes/gateways/stripe/functions.php:676
-#: includes/gateways/stripe/functions.php:692
-#: includes/gateways/stripe/functions.php:701
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:356
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:156
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:174
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:203
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:686
+#: includes/gateways/gateway-functions.php:353
+#: includes/gateways/gateway-functions.php:358
+#: includes/gateways/gateway-functions.php:362
+#: includes/gateways/stripe/functions.php:194
+#: includes/gateways/stripe/functions.php:257
+#: includes/gateways/stripe/functions.php:274
+#: includes/gateways/stripe/functions.php:291
+#: includes/gateways/stripe/functions.php:307
+#: includes/gateways/stripe/functions.php:323
+#: includes/gateways/stripe/functions.php:332
 #: includes/integrations/class-rcp-wp-approve-user.php:209
 #: includes/integrations/class-rcp-wp-approve-user.php:240
 #: includes/memberships/membership-actions.php:55
-#: includes/registration-functions.php:245
-#: includes/registration-functions.php:250
-#: includes/registration-functions.php:255 includes/user-page-columns.php:129
+#: includes/registration-functions.php:279
+#: includes/registration-functions.php:284
+#: includes/registration-functions.php:289 includes/user-page-columns.php:136
 msgid "Error"
 msgstr "Feil"
 
@@ -273,8 +268,7 @@ msgstr ""
 "Det skjedde en feil når vi forsøkte å hente listen over utvidelser fra "
 "serveren. Vennligst prøv igjen senere."
 
-#: includes/admin/admin-actions.php:42
-#: includes/admin/settings/settings.php:104
+#: includes/admin/admin-actions.php:42 includes/admin/settings/settings.php:104
 msgid "Registration Page"
 msgstr "Innmeldingsside"
 
@@ -283,13 +277,11 @@ msgstr "Innmeldingsside"
 msgid "Registration Success Page"
 msgstr "Innmeldingsside"
 
-#: includes/admin/admin-actions.php:44
-#: includes/admin/settings/settings.php:158
+#: includes/admin/admin-actions.php:44 includes/admin/settings/settings.php:158
 msgid "Account Page"
 msgstr "Konto-side"
 
-#: includes/admin/admin-actions.php:45
-#: includes/admin/settings/settings.php:186
+#: includes/admin/admin-actions.php:45 includes/admin/settings/settings.php:186
 msgid "Edit Profile Page"
 msgstr "Rediger profil-side"
 
@@ -302,30 +294,30 @@ msgstr "Oppdater kort"
 msgid "No users found"
 msgstr "Ingen brukere ble funnet"
 
-#: includes/admin/admin-notices.php:28
+#: includes/admin/admin-notices.php:26
 msgid "You should now configure your Restrict Content Pro settings"
 msgstr "Du kan nå konfigurere Restrict Content Pro-innstillingene dine"
 
-#: includes/admin/admin-notices.php:32
+#: includes/admin/admin-notices.php:30
 msgid "The Restrict Content Pro database needs to be updated: "
 msgstr "Restrict Content Pro-databasen må oppdateres: "
 
-#: includes/admin/admin-notices.php:32
+#: includes/admin/admin-notices.php:30
 msgid "upgrade now"
 msgstr "oppgrader nå"
 
-#: includes/admin/admin-notices.php:36
+#: includes/admin/admin-notices.php:34
 msgid "The Restrict Content Pro database has been updated"
 msgstr "Restrict Content Pro-databasen har blitt oppdatert"
 
-#: includes/admin/admin-notices.php:40
+#: includes/admin/admin-notices.php:38
 msgid ""
 "The page selected for log in redirect does not appear to contain a log in "
 "form. Please add [login_form] to the page then re-enable the log in redirect "
 "option."
 msgstr ""
 
-#: includes/admin/admin-notices.php:45
+#: includes/admin/admin-notices.php:43
 msgid ""
 "Your license key for Restrict Content Pro has expired. Please renew your "
 "license to re-enable automatic updates."
@@ -333,12 +325,12 @@ msgstr ""
 "Lisensnøkkelen din for Restrict Conten Pro har utløpt. Vennligst forny "
 "lisensen din for å reaktivere automatiske oppdateringer."
 
-#: includes/admin/admin-notices.php:46 includes/admin/admin-notices.php:51
+#: includes/admin/admin-notices.php:44 includes/admin/admin-notices.php:49
 msgctxt "License"
 msgid "Dismiss Notice"
 msgstr ""
 
-#: includes/admin/admin-notices.php:50
+#: includes/admin/admin-notices.php:48
 #, php-format
 msgid ""
 "Please <a href=\"%s\">enter and activate</a> your license key for Restrict "
@@ -347,33 +339,33 @@ msgstr ""
 "Vennligst <a href=«%s»>legg inn og aktiver</a> lisensnøkkelen din slik at "
 "Restrict Content Pro kan aktivere automatiske oppdateringer."
 
-#: includes/admin/admin-notices.php:57
+#: includes/admin/admin-notices.php:55
 msgid ""
 "The Restrict Content Pro \"Free Content Message\" and \"Premium Content "
 "Message\" settings have been merged into one \"Restricted Content Message\" "
 "setting field. Please visit the"
 msgstr ""
 
-#: includes/admin/admin-notices.php:57
+#: includes/admin/admin-notices.php:55
 #, fuzzy
 msgid "settings page"
 msgstr "Innstillinger"
 
-#: includes/admin/admin-notices.php:57
+#: includes/admin/admin-notices.php:55
 msgid "to confirm your new message."
 msgstr ""
 
-#: includes/admin/admin-notices.php:58
+#: includes/admin/admin-notices.php:56
 msgid ""
 "For more information, view our version 3.0 release post on the Restrict "
 "Content Pro blog: "
 msgstr ""
 
-#: includes/admin/admin-notices.php:59
+#: includes/admin/admin-notices.php:57
 msgid "Dismiss Notice"
 msgstr ""
 
-#: includes/admin/admin-notices.php:66
+#: includes/admin/admin-notices.php:64
 #, php-format
 msgid ""
 "Restrict Content Pro now supports Stripe Connect for easier setup and "
@@ -381,16 +373,16 @@ msgid ""
 "connecting your Stripe account."
 msgstr ""
 
-#: includes/admin/admin-notices.php:67
+#: includes/admin/admin-notices.php:65
 msgctxt "Stripe Connect"
 msgid "Dismiss Notice"
 msgstr ""
 
-#: includes/admin/admin-notices.php:75
+#: includes/admin/admin-notices.php:73
 msgid "Restrict Content Pro is increasing its PHP version requirement"
 msgstr ""
 
-#: includes/admin/admin-notices.php:76
+#: includes/admin/admin-notices.php:74
 #, php-format
 msgid ""
 "Restrict Content Pro will be increasing its PHP requirement to version 5.6 "
@@ -401,11 +393,11 @@ msgid ""
 "security updates</a>, which is another great reason to update."
 msgstr ""
 
-#: includes/admin/admin-notices.php:77
+#: includes/admin/admin-notices.php:75
 msgid "Which version should I upgrade to?"
 msgstr ""
 
-#: includes/admin/admin-notices.php:78
+#: includes/admin/admin-notices.php:76
 msgid ""
 "In order to be compatible with future versions of Restrict Content Pro, you "
 "should update your PHP version to 5.6, 7.0, 7.1, or 7.2. On a normal "
@@ -416,11 +408,11 @@ msgid ""
 "7+, so more testing may be required."
 msgstr ""
 
-#: includes/admin/admin-notices.php:79
+#: includes/admin/admin-notices.php:77
 msgid "Need help upgrading? Ask your web host!"
 msgstr ""
 
-#: includes/admin/admin-notices.php:80
+#: includes/admin/admin-notices.php:78
 #, php-format
 msgid ""
 "Many web hosts can give you instructions on how/where to upgrade your "
@@ -430,7 +422,7 @@ msgid ""
 "hosting partners</a> support PHP 7.0 and higher."
 msgstr ""
 
-#: includes/admin/admin-notices.php:86
+#: includes/admin/admin-notices.php:84
 #, php-format
 msgid ""
 "You are using an outdated version of the Stripe integration for Restrict "
@@ -441,7 +433,7 @@ msgstr ""
 "Pro. Vennligst <a href=«%s»>deaktiver</a> utvidelsesversjonen for å "
 "konfigurere den nye versjonen."
 
-#: includes/admin/admin-notices.php:91
+#: includes/admin/admin-notices.php:89
 #, php-format
 msgid ""
 "You are using an outdated version of the PayPal Pro / Express integration "
@@ -452,13 +444,13 @@ msgstr ""
 "Restrict Content Pro. Vennligst <a href=«%s»>deaktiver</a> "
 "utvidelsesversjonen for å konfigurere den nye versjonen."
 
-#: includes/admin/admin-notices.php:98
+#: includes/admin/admin-notices.php:95
 msgid ""
 "ACTION REQUIRED: You need to update your Authorize.net payment gateway for "
 "Restrict Content Pro"
 msgstr ""
 
-#: includes/admin/admin-notices.php:99
+#: includes/admin/admin-notices.php:96
 #, php-format
 msgid ""
 "The Authorize.net payment gateway has been removed from the main Restrict "
@@ -468,11 +460,28 @@ msgid ""
 "key</a> and <a href=\"%s\" target=\"_blank\">set up a webhook</a>."
 msgstr ""
 
-#: includes/admin/admin-notices.php:100
+#: includes/admin/admin-notices.php:97
 msgid "Install"
 msgstr ""
 
-#: includes/admin/admin-notices.php:109
+#: includes/admin/admin-notices.php:104
+msgid ""
+"Restrict Content Pro: Support for Stripe Checkout is ending in version 3.2"
+msgstr ""
+
+#: includes/admin/admin-notices.php:105
+#, php-format
+msgid ""
+"Stripe will not be updating the Stripe Checkout modal to comply with Strong "
+"Customer Authentication (SCA) and as a result, the Stripe Checkout gateway "
+"will be removed from Restrict Content Pro in version 3.2. You will "
+"automatically be switched over to our Stripe Elements gateway instead. This "
+"will affect the appearance of your registration form, but will not impact "
+"payment processing or renewals. <a href=\"%s\" target=\"_blank\">Click here "
+"to learn more.</a>"
+msgstr ""
+
+#: includes/admin/admin-notices.php:114
 #, php-format
 msgid ""
 "Restrict Content Pro will not send emails because the %s constant is active. "
@@ -480,136 +489,146 @@ msgid ""
 "by other plugins or WordPress core are not affected.)"
 msgstr ""
 
-#: includes/admin/admin-notices.php:117
+#: includes/admin/admin-notices.php:122
 msgid "Payment deleted"
 msgstr "Betalingen er slettet"
 
-#: includes/admin/admin-notices.php:122
+#: includes/admin/admin-notices.php:127
 msgid "Payment added"
 msgstr "Betaling lagt til"
 
-#: includes/admin/admin-notices.php:127
+#: includes/admin/admin-notices.php:132
 msgid "Payment creation failed"
 msgstr "Betaling mislyktes"
 
-#: includes/admin/admin-notices.php:133
+#: includes/admin/admin-notices.php:138
 msgid "Payment updated"
 msgstr "Betaling oppdatert"
 
-#: includes/admin/admin-notices.php:138
+#: includes/admin/admin-notices.php:143
 msgid "Payment update failed"
 msgstr "Oppdatering av betaling mislytes"
 
-#: includes/admin/admin-notices.php:148
+#: includes/admin/admin-notices.php:153
 msgid "Database upgrade complete"
 msgstr "Oppgradering av database vellykket"
 
-#: includes/admin/admin-notices.php:158
+#: includes/admin/admin-notices.php:163
 #, fuzzy
 msgid "The user's membership has been added"
 msgstr "Medlemskapet er lagt til"
 
-#: includes/admin/admin-notices.php:163
+#: includes/admin/admin-notices.php:168
 #, fuzzy
 msgid "The user's membership could not be added"
 msgstr "Medlemskapet kunne ikke legges til"
 
-#: includes/admin/admin-notices.php:169
+#: includes/admin/admin-notices.php:174
 msgid "Member accounts updated"
 msgstr "Medlemskontoer er oppdatert"
 
-#: includes/admin/admin-notices.php:174
+#: includes/admin/admin-notices.php:179
 msgid "Member's payment profile cancelled successfully"
 msgstr "Betalingsprofilen er kansellert"
 
-#: includes/admin/admin-notices.php:178
+#: includes/admin/admin-notices.php:183
 msgid ""
 "The member's payment profile could not be cancelled. Please see the member's "
 "user notes for details."
 msgstr ""
 
-#: includes/admin/admin-notices.php:184
+#: includes/admin/admin-notices.php:189
 msgid "Verification email sent successfully."
 msgstr ""
 
-#: includes/admin/admin-notices.php:189
+#: includes/admin/admin-notices.php:194
 msgid "The user's email has been verified successfully"
 msgstr ""
 
-#: includes/admin/admin-notices.php:199
+#: includes/admin/admin-notices.php:204
 #, fuzzy
 msgid "Customer added"
 msgstr "Egendefinert"
 
-#: includes/admin/admin-notices.php:204
+#: includes/admin/admin-notices.php:209
 #, fuzzy
 msgid "Customer updated"
 msgstr "Medlem oppdatert"
 
-#: includes/admin/admin-notices.php:209 includes/admin/admin-notices.php:249
+#: includes/admin/admin-notices.php:214 includes/admin/admin-notices.php:260
 #, fuzzy
 msgid "Note added"
 msgstr "Betaling lagt til"
 
-#: includes/admin/admin-notices.php:214
+#: includes/admin/admin-notices.php:219
 #, fuzzy
 msgid "Customer deleted"
 msgstr "Betalingen er slettet"
 
-#: includes/admin/admin-notices.php:224
+#: includes/admin/admin-notices.php:229
 #, fuzzy
 msgid "Membership added"
 msgstr "Medlemmer per side"
 
-#: includes/admin/admin-notices.php:229
+#: includes/admin/admin-notices.php:234
 #, fuzzy
 msgid "Membership updated"
 msgstr "Medlem oppdatert"
 
-#: includes/admin/admin-notices.php:234
+#: includes/admin/admin-notices.php:239
 #, fuzzy
 msgid "Membership level changed"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/admin-notices.php:239
+#: includes/admin/admin-notices.php:244
 msgid ""
 "Membership has been expired. The customer no longer has access to associated "
 "content."
 msgstr ""
 
-#: includes/admin/admin-notices.php:244
+#: includes/admin/admin-notices.php:249
 msgid ""
 "Membership cancelled. The customer will retain access until they reach their "
 "expiration date."
 msgstr ""
 
 #: includes/admin/admin-notices.php:254
+#, fuzzy, php-format
+msgid "Membership cancellation failed: %s"
+msgstr "Legg til medlemskapsnivå"
+
+#: includes/admin/admin-notices.php:254
+#, fuzzy
+msgid "Membership cancellation failed"
+msgstr "Legg til medlemskapsnivå"
+
+#: includes/admin/admin-notices.php:265
 #, fuzzy
 msgid "Membership deleted"
 msgstr "Medlem oppdatert"
 
-#: includes/admin/admin-notices.php:265
+#: includes/admin/admin-notices.php:276
 #, fuzzy
 msgid "Membership level added"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/admin-notices.php:270
+#: includes/admin/admin-notices.php:281
 #, fuzzy
 msgid "Membership level updated"
 msgstr "Medlem oppdatert"
 
-#: includes/admin/admin-notices.php:275 includes/class-rcp-levels.php:298
+#: includes/admin/admin-notices.php:286 includes/class-rcp-levels.php:298
 #: includes/class-rcp-levels.php:431
 msgid ""
 "Invalid price: the membership level price must be a valid positive number."
 msgstr ""
 
-#: includes/admin/admin-notices.php:281
+#: includes/admin/admin-notices.php:292
 msgid ""
 "Invalid fee: the membership level price must be a valid positive number."
 msgstr ""
 
-#: includes/admin/admin-notices.php:287
+#: includes/admin/admin-notices.php:298
 #, php-format
 msgid ""
 "Invalid trial: a membership level with a trial must have a price and "
@@ -617,92 +636,114 @@ msgid ""
 "article on creating trials</a> for further instructions."
 msgstr ""
 
-#: includes/admin/admin-notices.php:293 includes/class-rcp-levels.php:387
+#: includes/admin/admin-notices.php:304 includes/class-rcp-levels.php:387
 msgid "An unexpected error occurred while trying to add the membership level."
 msgstr ""
 
-#: includes/admin/admin-notices.php:299 includes/class-rcp-levels.php:522
+#: includes/admin/admin-notices.php:310 includes/class-rcp-levels.php:522
 msgid ""
 "An unexpected error occurred while trying to update the membership level."
 msgstr ""
 
-#: includes/admin/admin-notices.php:305
+#: includes/admin/admin-notices.php:316
 #, fuzzy
 msgid "Membership level fields are required"
 msgstr "Abonnements nivå felter er påkrevd"
 
-#: includes/admin/admin-notices.php:311
+#: includes/admin/admin-notices.php:322
 #, fuzzy
 msgid "Membership level deleted"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/admin-notices.php:316
+#: includes/admin/admin-notices.php:327
 #, fuzzy
 msgid "Membership level activated"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/admin-notices.php:321
+#: includes/admin/admin-notices.php:332
 #, fuzzy
 msgid "Membership level deactivated"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/admin-notices.php:331
+#: includes/admin/admin-notices.php:342
 msgid "Discount code created"
 msgstr "Kupong kode opprettet"
 
-#: includes/admin/admin-notices.php:336
+#: includes/admin/admin-notices.php:347
 msgid "The discount code could not be created due to an error"
 msgstr "Rabattkoden ble ikke laget grunnet en feil"
 
-#: includes/admin/admin-notices.php:342
+#: includes/admin/admin-notices.php:354
+#: includes/discounts/discount-functions.php:218
+#, php-format
+msgid "A discount with the code %s already exists."
+msgstr ""
+
+#: includes/admin/admin-notices.php:356
+#, fuzzy
+msgid "A discount with this code already exists."
+msgstr "Skriv inn et brukernavn eller e-postadresse."
+
+#: includes/admin/admin-notices.php:363
+#: includes/discounts/discount-functions.php:609
+msgid "Please enter a discount amount containing numbers only."
+msgstr "Vennligst skriv inn rabattsum med kun tall."
+
+#: includes/admin/admin-notices.php:369
+#: includes/discounts/discount-functions.php:228
+#: includes/discounts/discount-functions.php:622
+msgid "Percentage discounts must be whole numbers between 1 and 100."
+msgstr "Prosentvise rabatter må være i hele nummer mellom 1 og 100."
+
+#: includes/admin/admin-notices.php:375
 #, fuzzy
 msgid "Discount code successfully deleted"
 msgstr "Kupong kode opprettet"
 
-#: includes/admin/admin-notices.php:347
+#: includes/admin/admin-notices.php:380
 #, fuzzy
 msgid "Discount code activated"
 msgstr "Kupong kode opprettet"
 
-#: includes/admin/admin-notices.php:352
+#: includes/admin/admin-notices.php:385
 #, fuzzy
 msgid "Discount code deactivated"
 msgstr "Kupong kode opprettet"
 
-#: includes/admin/admin-notices.php:361
+#: includes/admin/admin-notices.php:394
 msgid "Post type restrictions updated."
 msgstr ""
 
-#: includes/admin/admin-notices.php:371
+#: includes/admin/admin-notices.php:404
 #, fuzzy
 msgid "Membership reminder added"
 msgstr "Medlemmer per side"
 
-#: includes/admin/admin-notices.php:376
+#: includes/admin/admin-notices.php:409
 #, fuzzy
 msgid "Membership reminder updated"
 msgstr "Medlem oppdatert"
 
-#: includes/admin/admin-notices.php:381
+#: includes/admin/admin-notices.php:414
 msgid "Membership reminder deleted"
 msgstr ""
 
-#: includes/admin/admin-notices.php:386
+#: includes/admin/admin-notices.php:419
 #, fuzzy
 msgid "Test reminder sent successfully"
 msgstr "Passord er endret"
 
-#: includes/admin/admin-notices.php:392
+#: includes/admin/admin-notices.php:425
 #, php-format
 msgid "Test email sent successfully to %s"
 msgstr ""
 
-#: includes/admin/admin-notices.php:397
+#: includes/admin/admin-notices.php:430
 #, fuzzy
 msgid "Test email failed to send."
 msgstr "Eposten kunne ikke bli sendt."
 
-#: includes/admin/admin-notices.php:422
+#: includes/admin/admin-notices.php:455
 msgid "Security check failed"
 msgstr ""
 
@@ -746,7 +787,7 @@ msgid "Discounts"
 msgstr "Rabatter"
 
 #: includes/admin/admin-pages.php:27
-#: includes/admin/discounts/class-discount-codes-table.php:30
+#: includes/admin/discounts/class-discount-codes-table.php:32
 #: includes/admin/discounts/discount-codes.php:26
 #: includes/class-rcp-export-members.php:50
 msgid "Discount Codes"
@@ -841,7 +882,7 @@ msgstr ""
 "href=«%2$s»>Se versjon %3$s detaljer</a>. eller <a href=«%4$s»>oppdater nå</"
 "a>."
 
-#: includes/admin/class-rcp-upgrades.php:248
+#: includes/admin/class-rcp-upgrades.php:250
 msgid "Migrate members and their memberships from user meta to a custom table."
 msgstr ""
 
@@ -879,7 +920,6 @@ msgstr "Rediger rabatter"
 
 #: includes/admin/customers/add-customer.php:41
 #: includes/admin/customers/edit-customer.php:82
-#: templates/card-update-form.php:30
 msgid "Name:"
 msgstr "Navn:"
 
@@ -913,7 +953,7 @@ msgstr "Etternavn"
 
 #: includes/admin/customers/add-customer.php:52
 #: includes/admin/customers/edit-customer.php:93
-#: templates/paypal-express-confirm.php:28
+#: templates/paypal-express-confirm.php:29
 msgid "Email:"
 msgstr "E-post:"
 
@@ -950,11 +990,11 @@ msgstr "Endre passord"
 #: includes/admin/discounts/edit-discount.php:16
 #: includes/admin/memberships/class-memberships-table.php:193
 #: includes/admin/memberships/class-memberships-table.php:300
-#: includes/admin/memberships/edit-membership.php:118
+#: includes/admin/memberships/edit-membership.php:116
 #: includes/admin/payments/edit-payment.php:24
 #: includes/admin/payments/new-payment.php:15
 #: includes/admin/subscriptions/edit-subscription.php:21
-#: includes/scripts.php:57
+#: includes/scripts.php:63
 msgid "Cancel"
 msgstr "Avbryt"
 
@@ -976,7 +1016,7 @@ msgid "Customer"
 msgstr "Egendefinert"
 
 #: includes/admin/customers/class-customers-table.php:57
-#: includes/admin/discounts/class-discount-codes-table.php:65
+#: includes/admin/discounts/class-discount-codes-table.php:67
 #: includes/admin/discounts/discount-codes.php:45
 #: includes/admin/settings/settings.php:1409
 #: includes/admin/subscriptions/class-membership-levels-table.php:65
@@ -987,8 +1027,8 @@ msgstr "Navn"
 
 #: includes/admin/customers/class-customers-table.php:58
 #: includes/admin/memberships/add-membership.php:46
-#: includes/admin/settings/settings.php:1445 templates/register-single.php:55
-#: templates/register.php:50
+#: includes/admin/settings/settings.php:1445 includes/shortcodes.php:831
+#: templates/register-single.php:55 templates/register.php:50
 msgid "Email"
 msgstr "Epost"
 
@@ -1003,7 +1043,7 @@ msgid "Last Login"
 msgstr "Brukerinnlogging"
 
 #: includes/admin/customers/class-customers-table.php:69
-#: includes/admin/discounts/class-discount-codes-table.php:84
+#: includes/admin/discounts/class-discount-codes-table.php:86
 #: includes/admin/memberships/class-memberships-table.php:71
 #: includes/admin/payments/class-payments-table.php:82
 #: includes/admin/subscriptions/class-membership-levels-table.php:80
@@ -1018,26 +1058,27 @@ msgstr "Endre Medlem"
 
 #: includes/admin/customers/class-customers-table.php:179
 #: includes/admin/discounts/class-discount-codes-table.php:275
-#: includes/admin/payments/class-payments-table.php:277
+#: includes/admin/payments/class-payments-table.php:282
 #: includes/admin/reminders/subscription-reminders.php:80
 #: includes/admin/subscriptions/class-membership-levels-table.php:249
+#: includes/gateways/stripe/functions.php:965
 msgid "Delete"
 msgstr "Slett"
 
 #: includes/admin/customers/class-customers-table.php:180
 #: includes/admin/discounts/class-discount-codes-table.php:278
 #: includes/admin/memberships/class-memberships-table.php:189
-#: includes/admin/payments/class-payments-table.php:280
+#: includes/admin/payments/class-payments-table.php:285
 #: includes/admin/subscriptions/class-membership-levels-table.php:250
 #, php-format
 msgid "ID: %d"
 msgstr ""
 
 #: includes/admin/customers/class-customers-table.php:247
-#: includes/admin/customers/edit-customer.php:117
-#: includes/admin/customers/edit-customer.php:165
-#: includes/admin/memberships/edit-membership.php:188
-#: includes/admin/payments/class-payments-table.php:175
+#: includes/admin/customers/edit-customer.php:126
+#: includes/admin/customers/edit-customer.php:174
+#: includes/admin/memberships/edit-membership.php:186
+#: includes/admin/payments/class-payments-table.php:180
 msgid "Unknown"
 msgstr ""
 
@@ -1049,7 +1090,7 @@ msgstr "Ingen brukere ble funnet"
 #: includes/admin/customers/class-customers-table.php:271
 #: includes/admin/discounts/class-discount-codes-table.php:320
 #: includes/admin/memberships/class-memberships-table.php:301
-#: includes/admin/payments/class-payments-table.php:330
+#: includes/admin/payments/class-payments-table.php:335
 #: includes/admin/subscriptions/class-membership-levels-table.php:302
 #, fuzzy
 msgid "Permanently Delete"
@@ -1061,13 +1102,13 @@ msgid "Customer(s) deleted."
 msgstr "Betalingen er slettet"
 
 #: includes/admin/customers/customer-actions.php:24
-#: includes/admin/customers/customer-actions.php:117
-#: includes/admin/customers/customer-actions.php:202
-#: includes/admin/customers/customer-actions.php:243
+#: includes/admin/customers/customer-actions.php:125
+#: includes/admin/customers/customer-actions.php:216
+#: includes/admin/customers/customer-actions.php:257
 #: includes/admin/discounts/discount-actions.php:24
 #: includes/admin/discounts/discount-actions.php:77
-#: includes/admin/discounts/discount-actions.php:131
-#: includes/admin/discounts/discount-actions.php:163
+#: includes/admin/discounts/discount-actions.php:128
+#: includes/admin/discounts/discount-actions.php:160
 #: includes/admin/discounts/discount-actions.php:194
 #: includes/admin/members/member-actions.php:27
 #: includes/admin/members/member-actions.php:155
@@ -1077,13 +1118,13 @@ msgstr "Betalingen er slettet"
 #: includes/admin/members/member-actions.php:387
 #: includes/admin/memberships/membership-actions.php:24
 #: includes/admin/memberships/membership-actions.php:144
-#: includes/admin/memberships/membership-actions.php:311
-#: includes/admin/memberships/membership-actions.php:358
-#: includes/admin/memberships/membership-actions.php:405
-#: includes/admin/memberships/membership-actions.php:454
+#: includes/admin/memberships/membership-actions.php:324
+#: includes/admin/memberships/membership-actions.php:371
+#: includes/admin/memberships/membership-actions.php:418
+#: includes/admin/memberships/membership-actions.php:481
 #: includes/admin/payments/payment-actions.php:24
 #: includes/admin/payments/payment-actions.php:81
-#: includes/admin/payments/payment-actions.php:140
+#: includes/admin/payments/payment-actions.php:134
 #: includes/admin/post-types/restrict-post-type.php:54
 #: includes/admin/subscriptions/subscription-actions.php:24
 #: includes/admin/subscriptions/subscription-actions.php:73
@@ -1094,13 +1135,13 @@ msgid "Nonce verification failed."
 msgstr "Nonce verifikasjon feilet."
 
 #: includes/admin/customers/customer-actions.php:28
-#: includes/admin/customers/customer-actions.php:121
-#: includes/admin/customers/customer-actions.php:206
-#: includes/admin/customers/customer-actions.php:247
+#: includes/admin/customers/customer-actions.php:129
+#: includes/admin/customers/customer-actions.php:220
+#: includes/admin/customers/customer-actions.php:261
 #: includes/admin/discounts/discount-actions.php:28
 #: includes/admin/discounts/discount-actions.php:81
-#: includes/admin/discounts/discount-actions.php:135
-#: includes/admin/discounts/discount-actions.php:167
+#: includes/admin/discounts/discount-actions.php:132
+#: includes/admin/discounts/discount-actions.php:164
 #: includes/admin/discounts/discount-actions.php:198
 #: includes/admin/members/member-actions.php:31
 #: includes/admin/members/member-actions.php:159
@@ -1110,25 +1151,26 @@ msgstr "Nonce verifikasjon feilet."
 #: includes/admin/members/member-actions.php:391
 #: includes/admin/memberships/membership-actions.php:28
 #: includes/admin/memberships/membership-actions.php:148
-#: includes/admin/memberships/membership-actions.php:315
-#: includes/admin/memberships/membership-actions.php:362
-#: includes/admin/memberships/membership-actions.php:409
-#: includes/admin/memberships/membership-actions.php:458
+#: includes/admin/memberships/membership-actions.php:328
+#: includes/admin/memberships/membership-actions.php:375
+#: includes/admin/memberships/membership-actions.php:422
+#: includes/admin/memberships/membership-actions.php:485
 #: includes/admin/payments/payment-actions.php:28
 #: includes/admin/payments/payment-actions.php:85
-#: includes/admin/payments/payment-actions.php:144
+#: includes/admin/payments/payment-actions.php:138
 #: includes/admin/post-types/restrict-post-type.php:63
 #: includes/admin/subscriptions/subscription-actions.php:28
 #: includes/admin/subscriptions/subscription-actions.php:77
 #: includes/admin/subscriptions/subscription-actions.php:119
 #: includes/admin/subscriptions/subscription-actions.php:166
 #: includes/admin/subscriptions/subscription-actions.php:199
-#: includes/gateways/gateway-functions.php:305
+#: includes/gateways/gateway-functions.php:358
+#: includes/gateways/stripe/functions.php:1015
 #: includes/memberships/membership-actions.php:55
-#: includes/registration-functions.php:245
-#: includes/registration-functions.php:250
-#: includes/registration-functions.php:255 includes/shortcodes.php:562
-#: includes/user-page-columns.php:129
+#: includes/registration-functions.php:279
+#: includes/registration-functions.php:284
+#: includes/registration-functions.php:289 includes/shortcodes.php:588
+#: includes/user-page-columns.php:136
 msgid "You do not have permission to perform this action."
 msgstr "Du har ikke tilgang til å gjennomføre handlingen."
 
@@ -1143,47 +1185,47 @@ msgstr "Angi en gyldig epostadresse"
 msgid "A user account already exists with the login %s."
 msgstr ""
 
-#: includes/admin/customers/customer-actions.php:64
+#: includes/admin/customers/customer-actions.php:72
 #: includes/admin/memberships/membership-actions.php:64
 msgid "Error creating customer account."
 msgstr ""
 
-#: includes/admin/customers/customer-actions.php:73
+#: includes/admin/customers/customer-actions.php:81
 #, php-format
 msgid "Unable to locate existing account with the email %s."
 msgstr ""
 
-#: includes/admin/customers/customer-actions.php:81
+#: includes/admin/customers/customer-actions.php:89
 #, php-format
 msgid "A customer with the ID %d already exists with this account."
 msgstr ""
 
-#: includes/admin/customers/customer-actions.php:92
+#: includes/admin/customers/customer-actions.php:100
 #: includes/admin/memberships/membership-actions.php:84
 msgid "Error creating customer record."
 msgstr ""
 
-#: includes/admin/customers/customer-actions.php:125
-#: includes/admin/customers/customer-actions.php:210
-#: includes/admin/customers/customer-actions.php:251
+#: includes/admin/customers/customer-actions.php:133
+#: includes/admin/customers/customer-actions.php:224
+#: includes/admin/customers/customer-actions.php:265
 #: includes/admin/members/member-actions.php:407
 #, fuzzy
 msgid "Invalid customer ID."
 msgstr "Ugyldig brukernavn"
 
-#: includes/admin/customers/customer-actions.php:132
-#: includes/admin/customers/customer-actions.php:258
+#: includes/admin/customers/customer-actions.php:140
+#: includes/admin/customers/customer-actions.php:272
 #: includes/class-rcp-cli.php:387
 #, fuzzy
 msgid "Invalid customer."
 msgstr "Ugyldig brukernavn"
 
-#: includes/admin/customers/customer-actions.php:220
+#: includes/admin/customers/customer-actions.php:234
 msgid "Failed to delete customer."
 msgstr ""
 
-#: includes/admin/customers/customer-actions.php:264
-#: includes/admin/memberships/membership-actions.php:332
+#: includes/admin/customers/customer-actions.php:278
+#: includes/admin/memberships/membership-actions.php:345
 #, fuzzy
 msgid "Please enter a note."
 msgstr "Skriv inn et brukernavn"
@@ -1215,90 +1257,114 @@ msgid "ID:"
 msgstr ""
 
 #: includes/admin/customers/edit-customer.php:109
+msgid "Has Trialed:"
+msgstr ""
+
+#: includes/admin/customers/edit-customer.php:112
+#: includes/admin/memberships/class-memberships-table.php:253
+#, fuzzy
+msgid "Yes"
+msgstr "År"
+
+#: includes/admin/customers/edit-customer.php:112
+#: includes/admin/memberships/class-memberships-table.php:253
+#, fuzzy
+msgid "No"
+msgstr "Ingen"
+
+#: includes/admin/customers/edit-customer.php:113
+#, fuzzy
+#| msgid "You may only sign up for a free trial once"
+msgid "Each customer can only sign up for one free trial."
+msgstr "Du kan bare registrere deg for gratis prøve 1 gang"
+
+#: includes/admin/customers/edit-customer.php:118
 #, fuzzy
 msgid "Last Login:"
 msgstr "Brukerinnlogging"
 
-#: includes/admin/customers/edit-customer.php:124
+#: includes/admin/customers/edit-customer.php:133
 #, fuzzy
 msgid "Email Verification:"
 msgstr "Deaktiver IPN verifikasjon"
 
-#: includes/admin/customers/edit-customer.php:132
+#: includes/admin/customers/edit-customer.php:141
 msgid "Verified"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:135 includes/admin/export.php:43
-#: includes/admin/import/import-actions.php:342
+#: includes/admin/customers/edit-customer.php:144 includes/admin/export.php:43
+#: includes/admin/import/import-actions.php:345
+#: includes/admin/memberships/edit-membership.php:391
 #: includes/admin/payments/edit-payment.php:110
-#: includes/admin/payments/new-payment.php:66 includes/misc-functions.php:1451
+#: includes/admin/payments/new-payment.php:66 includes/misc-functions.php:1459
 msgid "Pending"
 msgstr "Venter"
 
-#: includes/admin/customers/edit-customer.php:148
+#: includes/admin/customers/edit-customer.php:157
 msgid "Re-send the verification email to the customer"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:148
+#: includes/admin/customers/edit-customer.php:157
 #, fuzzy
 msgid "Re-send Email"
 msgstr "Brukers epost"
 
-#: includes/admin/customers/edit-customer.php:148
+#: includes/admin/customers/edit-customer.php:157
 msgid "Mark the customer as verified"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:148
+#: includes/admin/customers/edit-customer.php:157
 msgid "Mark Verified"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:151
+#: includes/admin/customers/edit-customer.php:160
 msgid "Not required"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:159
+#: includes/admin/customers/edit-customer.php:168
 #, fuzzy
 msgid "IP Address:"
 msgstr "Adresse"
 
-#: includes/admin/customers/edit-customer.php:179
+#: includes/admin/customers/edit-customer.php:188
 #, fuzzy
 msgid "Update Customer"
 msgstr "Oppdater kort"
 
-#: includes/admin/customers/edit-customer.php:180
+#: includes/admin/customers/edit-customer.php:189
 msgid "Delete Customer"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:187
+#: includes/admin/customers/edit-customer.php:196
 msgid "Agreements"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:189
+#: includes/admin/customers/edit-customer.php:198
 msgid "Agreed to Terms:"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:198
-#: includes/admin/customers/edit-customer.php:213
+#: includes/admin/customers/edit-customer.php:207
+#: includes/admin/customers/edit-customer.php:222
 #: includes/admin/members/edit-member.php:210
 #: includes/admin/members/edit-member.php:229
 #: includes/admin/members/edit-member.php:249
-#: includes/admin/payments/class-payments-table.php:170
-#: includes/discount-functions.php:288 includes/email-functions.php:933
+#: includes/admin/payments/class-payments-table.php:175
+#: includes/discounts/discount-functions.php:575
+#: includes/email-functions.php:965
 msgid "None"
 msgstr "Ingen"
 
-#: includes/admin/customers/edit-customer.php:204
+#: includes/admin/customers/edit-customer.php:213
 msgid "Agreed to Privacy Policy:"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:221
+#: includes/admin/customers/edit-customer.php:230
 #, fuzzy
 msgid "Memberships:"
 msgstr "Ditt medlemskap"
 
-#: includes/admin/customers/edit-customer.php:225
-#: includes/admin/customers/edit-customer.php:239
+#: includes/admin/customers/edit-customer.php:234
+#: includes/admin/customers/edit-customer.php:248
 #: includes/admin/memberships/class-memberships-table.php:29
 #: includes/admin/memberships/class-memberships-table.php:58
 #: includes/admin/payments/class-payments-table.php:67
@@ -1306,43 +1372,44 @@ msgstr "Ditt medlemskap"
 #: templates/register-total-details.php:37 templates/subscription.php:58
 #: templates/subscription.php:71 templates/subscription.php:173
 #: templates/subscription.php:182 templates/subscription.php:196
-#: templates/subscription.php:207
+#: templates/subscription.php:212
 #, fuzzy
 msgid "Membership"
 msgstr "Medlemmer"
 
-#: includes/admin/customers/edit-customer.php:226
-#: includes/admin/customers/edit-customer.php:245
-#: includes/admin/customers/edit-customer.php:273
-#: includes/admin/customers/edit-customer.php:290
-#: includes/admin/discounts/class-discount-codes-table.php:69
+#: includes/admin/customers/edit-customer.php:235
+#: includes/admin/customers/edit-customer.php:254
+#: includes/admin/customers/edit-customer.php:293
+#: includes/admin/customers/edit-customer.php:310
+#: includes/admin/discounts/class-discount-codes-table.php:71
 #: includes/admin/discounts/discount-codes.php:84
-#: includes/admin/memberships/edit-membership.php:327
-#: includes/admin/memberships/edit-membership.php:344
+#: includes/admin/memberships/edit-membership.php:333
+#: includes/admin/memberships/edit-membership.php:350
 #: includes/admin/payments/class-payments-table.php:69
 #: includes/admin/payments/edit-payment.php:47
 #: includes/admin/payments/new-payment.php:35
 #: includes/class-rcp-export-payments.php:42
 #: includes/deprecated/functions.php:605 includes/deprecated/functions.php:607
-#: includes/member-functions.php:180 includes/member-functions.php:197
-#: templates/invoice.php:330 templates/paypal-express-confirm.php:34
+#: includes/member-functions.php:243 includes/member-functions.php:260
+#: templates/invoice.php:330 templates/paypal-express-confirm.php:35
 #: templates/register-total-details.php:29
 #: templates/register-total-details.php:38 templates/subscription.php:183
 #: templates/subscription.php:197
 msgid "Amount"
 msgstr "Sum"
 
-#: includes/admin/customers/edit-customer.php:227
-#: includes/admin/customers/edit-customer.php:246
-#: includes/admin/customers/edit-customer.php:274
-#: includes/admin/customers/edit-customer.php:291
-#: includes/admin/discounts/class-discount-codes-table.php:71
-#: includes/admin/import/import-actions.php:336
+#: includes/admin/customers/edit-customer.php:236
+#: includes/admin/customers/edit-customer.php:255
+#: includes/admin/customers/edit-customer.php:294
+#: includes/admin/customers/edit-customer.php:311
+#: includes/admin/discounts/class-discount-codes-table.php:73
+#: includes/admin/import/import-actions.php:339
 #: includes/admin/import/import-functions.php:47
 #: includes/admin/members/edit-member.php:74
 #: includes/admin/memberships/class-memberships-table.php:59
-#: includes/admin/memberships/edit-membership.php:328
-#: includes/admin/memberships/edit-membership.php:345
+#: includes/admin/memberships/edit-membership.php:334
+#: includes/admin/memberships/edit-membership.php:351
+#: includes/admin/memberships/edit-membership.php:389
 #: includes/admin/payments/class-payments-table.php:73
 #: includes/admin/payments/edit-payment.php:106
 #: includes/admin/payments/new-payment.php:62
@@ -1351,14 +1418,14 @@ msgstr "Sum"
 #: includes/admin/subscriptions/edit-subscription.php:144
 #: includes/admin/subscriptions/subscription-levels.php:171
 #: includes/class-rcp-export-members.php:48
-#: includes/class-rcp-export-payments.php:38 includes/member-functions.php:181
-#: includes/member-functions.php:198 templates/subscription.php:59
+#: includes/class-rcp-export-payments.php:38 includes/member-functions.php:244
+#: includes/member-functions.php:261 templates/subscription.php:59
 #: templates/subscription.php:74
 msgid "Status"
 msgstr "Status"
 
-#: includes/admin/customers/edit-customer.php:228
-#: includes/admin/customers/edit-customer.php:247
+#: includes/admin/customers/edit-customer.php:237
+#: includes/admin/customers/edit-customer.php:256
 #: includes/admin/reminders/subscription-reminders.php:55
 #: includes/admin/tools/tools-page.php:255 templates/subscription.php:64
 #: templates/subscription.php:105 templates/subscription.php:186
@@ -1366,24 +1433,24 @@ msgstr "Status"
 msgid "Actions"
 msgstr "Valg"
 
-#: includes/admin/customers/edit-customer.php:242
-#: includes/admin/customers/edit-customer.php:286
-#: includes/admin/memberships/edit-membership.php:340
-#: includes/member-functions.php:191
+#: includes/admin/customers/edit-customer.php:251
+#: includes/admin/customers/edit-customer.php:306
+#: includes/admin/memberships/edit-membership.php:346
+#: includes/member-functions.php:254
 msgid "Show more details"
 msgstr "Se flere detaljer"
 
-#: includes/admin/customers/edit-customer.php:248
+#: includes/admin/customers/edit-customer.php:257
 #, fuzzy
 msgid "View Details"
 msgstr "Medlemsdetaljer"
 
-#: includes/admin/customers/edit-customer.php:254
+#: includes/admin/customers/edit-customer.php:263
 #, php-format
 msgid "No memberships found. Would you like to <a href=\"%s\">add one?</a>"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:261
+#: includes/admin/customers/edit-customer.php:270
 #: includes/admin/memberships/add-membership.php:20
 #: includes/admin/memberships/add-membership.php:191
 #: includes/user-page-columns.php:69
@@ -1391,191 +1458,191 @@ msgstr ""
 msgid "Add Membership"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/customers/edit-customer.php:267
+#: includes/admin/customers/edit-customer.php:287
 #, fuzzy
 msgid "Recent Payments:"
 msgstr "Søk blant betalinger"
 
-#: includes/admin/customers/edit-customer.php:271
-#: includes/admin/customers/edit-customer.php:283
-#: includes/admin/memberships/edit-membership.php:325
-#: includes/admin/memberships/edit-membership.php:337
+#: includes/admin/customers/edit-customer.php:291
+#: includes/admin/customers/edit-customer.php:303
+#: includes/admin/memberships/edit-membership.php:331
+#: includes/admin/memberships/edit-membership.php:343
 #: includes/admin/payments/class-payments-table.php:65
 #: includes/class-rcp-export-payments.php:37 includes/class-rcp-export.php:67
-#: includes/member-functions.php:175 includes/member-functions.php:189
+#: includes/member-functions.php:238 includes/member-functions.php:252
 msgid "ID"
 msgstr ""
 
-#: includes/admin/customers/edit-customer.php:272
-#: includes/admin/customers/edit-customer.php:289
-#: includes/admin/memberships/edit-membership.php:326
-#: includes/admin/memberships/edit-membership.php:343
+#: includes/admin/customers/edit-customer.php:292
+#: includes/admin/customers/edit-customer.php:309
+#: includes/admin/memberships/edit-membership.php:332
+#: includes/admin/memberships/edit-membership.php:349
 #: includes/admin/payments/class-payments-table.php:68
 #: includes/class-rcp-export-payments.php:54 includes/class-rcp-export.php:68
-#: includes/deprecated/functions.php:599 includes/member-functions.php:176
-#: includes/member-functions.php:193 templates/subscription.php:185
+#: includes/deprecated/functions.php:599 includes/member-functions.php:239
+#: includes/member-functions.php:256 templates/subscription.php:185
 #: templates/subscription.php:199
 msgid "Date"
 msgstr "Dato"
 
-#: includes/admin/customers/edit-customer.php:275
-#: includes/admin/customers/edit-customer.php:292
-#: includes/admin/memberships/edit-membership.php:329
-#: includes/admin/memberships/edit-membership.php:346
+#: includes/admin/customers/edit-customer.php:295
+#: includes/admin/customers/edit-customer.php:312
+#: includes/admin/memberships/edit-membership.php:335
+#: includes/admin/memberships/edit-membership.php:352
 #: includes/admin/payments/class-payments-table.php:72
-#: includes/admin/payments/class-payments-table.php:628
+#: includes/admin/payments/class-payments-table.php:653
 #: includes/admin/payments/edit-payment.php:96
 #: includes/admin/payments/new-payment.php:53
 #: includes/class-rcp-export-payments.php:53
-#: includes/deprecated/functions.php:603 includes/member-functions.php:179
-#: includes/member-functions.php:196
+#: includes/deprecated/functions.php:603 includes/member-functions.php:242
+#: includes/member-functions.php:259
 msgid "Transaction ID"
 msgstr "Transaksjons ID"
 
-#: includes/admin/customers/edit-customer.php:276
-#: includes/admin/customers/edit-customer.php:293
-#: includes/admin/memberships/edit-membership.php:330
-#: includes/admin/memberships/edit-membership.php:347
-#: includes/admin/payments/class-payments-table.php:261
+#: includes/admin/customers/edit-customer.php:296
+#: includes/admin/customers/edit-customer.php:313
+#: includes/admin/memberships/edit-membership.php:336
+#: includes/admin/memberships/edit-membership.php:353
+#: includes/admin/payments/class-payments-table.php:266
 #: includes/admin/payments/edit-payment.php:121
-#: includes/member-functions.php:182 includes/member-functions.php:199
+#: includes/member-functions.php:245 includes/member-functions.php:262
 #, fuzzy
 msgid "Invoice"
 msgstr "Fakturaer"
 
-#: includes/admin/customers/edit-customer.php:294
-#: includes/admin/memberships/edit-membership.php:348
+#: includes/admin/customers/edit-customer.php:314
+#: includes/admin/memberships/edit-membership.php:354
 #: includes/admin/payments/edit-payment.php:124
-#: includes/member-functions.php:199
+#: includes/member-functions.php:262
 msgid "View Invoice"
 msgstr "Se faktura"
 
-#: includes/admin/customers/edit-customer.php:301
+#: includes/admin/customers/edit-customer.php:321
 #, fuzzy, php-format
 msgid "View all %d payments"
 msgstr "Se alle betalinger"
 
-#: includes/admin/customers/edit-customer.php:307
-#: includes/admin/memberships/edit-membership.php:361
-#: includes/admin/payments/class-payments-table.php:319
+#: includes/admin/customers/edit-customer.php:327
+#: includes/admin/memberships/edit-membership.php:367
+#: includes/admin/payments/class-payments-table.php:324
 #, fuzzy
 msgid "No payments found."
 msgstr "Ingen sider funnet"
 
-#: includes/admin/customers/edit-customer.php:315
-#: includes/admin/memberships/edit-membership.php:403
+#: includes/admin/customers/edit-customer.php:335
+#: includes/admin/memberships/edit-membership.php:415
 #, fuzzy
 msgid "Notes:"
 msgstr "Notater"
 
-#: includes/admin/customers/edit-customer.php:320
-#: includes/admin/customers/edit-customer.php:326
-#: includes/admin/memberships/edit-membership.php:408
-#: includes/admin/memberships/edit-membership.php:414
+#: includes/admin/customers/edit-customer.php:340
+#: includes/admin/customers/edit-customer.php:346
+#: includes/admin/memberships/edit-membership.php:420
+#: includes/admin/memberships/edit-membership.php:426
 #, fuzzy
 msgid "Add Note"
 msgstr "Notat"
 
-#: includes/admin/customers/edit-customer.php:321
-#: includes/admin/memberships/edit-membership.php:409
+#: includes/admin/customers/edit-customer.php:341
+#: includes/admin/memberships/edit-membership.php:421
 msgid "Add a note..."
 msgstr ""
 
-#: includes/admin/discounts/class-discount-codes-table.php:29
+#: includes/admin/discounts/class-discount-codes-table.php:31
 #: includes/admin/payments/edit-payment.php:69
 #: includes/class-rcp-export-payments.php:47 templates/register-single.php:86
 #: templates/register.php:115
 msgid "Discount Code"
 msgstr "Rabattkupong"
 
-#: includes/admin/discounts/class-discount-codes-table.php:66
+#: includes/admin/discounts/class-discount-codes-table.php:68
 #: includes/admin/discounts/discount-codes.php:54
 #: includes/admin/subscriptions/class-membership-levels-table.php:66
 #: includes/admin/subscriptions/edit-subscription.php:38
 #: includes/admin/subscriptions/subscription-levels.php:55
-#: templates/invoice.php:329 templates/paypal-express-confirm.php:33
+#: templates/invoice.php:329 templates/paypal-express-confirm.php:34
 msgid "Description"
 msgstr "Beskrivelse"
 
-#: includes/admin/discounts/class-discount-codes-table.php:67
+#: includes/admin/discounts/class-discount-codes-table.php:69
 #: includes/admin/discounts/discount-codes.php:63
 msgid "Code"
 msgstr "Kode"
 
-#: includes/admin/discounts/class-discount-codes-table.php:68
+#: includes/admin/discounts/class-discount-codes-table.php:70
 #, fuzzy
 msgid "Membership Level(s)"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/discounts/class-discount-codes-table.php:70
+#: includes/admin/discounts/class-discount-codes-table.php:72
 #: includes/admin/discounts/discount-codes.php:72
 #: includes/admin/payments/class-payments-table.php:70
 msgid "Type"
 msgstr "Type"
 
-#: includes/admin/discounts/class-discount-codes-table.php:72
+#: includes/admin/discounts/class-discount-codes-table.php:74
 msgid "Uses"
 msgstr "Forsøk"
 
-#: includes/admin/discounts/class-discount-codes-table.php:73
+#: includes/admin/discounts/class-discount-codes-table.php:75
 msgid "Uses Left"
 msgstr "Gjenværende forsøk"
 
-#: includes/admin/discounts/class-discount-codes-table.php:74
-#: includes/admin/import/import-actions.php:351
+#: includes/admin/discounts/class-discount-codes-table.php:76
+#: includes/admin/import/import-actions.php:354
 #: includes/admin/memberships/class-memberships-table.php:62
 #: includes/admin/reminders/subscription-reminders.php:46
 #: includes/class-rcp-reminders.php:101
 msgid "Expiration"
 msgstr "Utgår"
 
-#: includes/admin/discounts/class-discount-codes-table.php:75
+#: includes/admin/discounts/class-discount-codes-table.php:77
 #: includes/admin/discounts/discount-codes.php:93
 #: includes/admin/discounts/edit-discount.php:72
 #, fuzzy
 msgid "One Time"
 msgstr "Bruk av rabatter"
 
-#: includes/admin/discounts/class-discount-codes-table.php:153
+#: includes/admin/discounts/class-discount-codes-table.php:152
 #: includes/admin/reminders/subscription-reminders.php:68
 #, fuzzy
 msgid "Multiple Levels"
 msgstr "Alle nivåer"
 
-#: includes/admin/discounts/class-discount-codes-table.php:157
+#: includes/admin/discounts/class-discount-codes-table.php:156
 #: includes/admin/reminders/subscription-reminders.php:72
 msgid "All Levels"
 msgstr "Alle nivåer"
 
-#: includes/admin/discounts/class-discount-codes-table.php:166
+#: includes/admin/discounts/class-discount-codes-table.php:165
 #: includes/admin/discounts/discount-codes.php:76
 msgid "Percentage"
 msgstr "Prosent"
 
-#: includes/admin/discounts/class-discount-codes-table.php:166
+#: includes/admin/discounts/class-discount-codes-table.php:165
 msgid "Flat"
 msgstr "Kroner"
 
-#: includes/admin/discounts/class-discount-codes-table.php:171
+#: includes/admin/discounts/class-discount-codes-table.php:170
 #: includes/admin/settings/settings.php:94
 msgid "active"
 msgstr "aktivert"
 
-#: includes/admin/discounts/class-discount-codes-table.php:171
+#: includes/admin/discounts/class-discount-codes-table.php:170
 msgid "disabled"
 msgstr "deaktivert"
 
-#: includes/admin/discounts/class-discount-codes-table.php:173
+#: includes/admin/discounts/class-discount-codes-table.php:172
 msgid "expired"
 msgstr "utgått"
 
-#: includes/admin/discounts/class-discount-codes-table.php:186
+#: includes/admin/discounts/class-discount-codes-table.php:185
 #: includes/admin/discounts/class-discount-codes-table.php:194
 #: includes/class-rcp-cli.php:401 includes/class-rcp-cli.php:531
 msgid "yes"
 msgstr "ja"
 
-#: includes/admin/discounts/class-discount-codes-table.php:186
+#: includes/admin/discounts/class-discount-codes-table.php:185
 #: includes/admin/discounts/class-discount-codes-table.php:194
 #: includes/class-rcp-cli.php:401 includes/class-rcp-cli.php:531
 msgid "no"
@@ -1587,15 +1654,15 @@ msgid "none"
 msgstr "ingen"
 
 #: includes/admin/discounts/class-discount-codes-table.php:254
-#: includes/admin/memberships/edit-membership.php:96
-#: includes/admin/memberships/edit-membership.php:158
-#: includes/admin/memberships/edit-membership.php:175
-#: includes/admin/memberships/edit-membership.php:243
-#: includes/admin/memberships/edit-membership.php:263
-#: includes/admin/payments/class-payments-table.php:257
+#: includes/admin/memberships/edit-membership.php:95
+#: includes/admin/memberships/edit-membership.php:156
+#: includes/admin/memberships/edit-membership.php:173
+#: includes/admin/memberships/edit-membership.php:241
+#: includes/admin/memberships/edit-membership.php:261
+#: includes/admin/payments/class-payments-table.php:262
 #: includes/admin/reminders/subscription-reminders.php:77
 #: includes/admin/subscriptions/class-membership-levels-table.php:240
-#: includes/scripts.php:58 includes/user-page-columns.php:59
+#: includes/scripts.php:64 includes/user-page-columns.php:59
 msgid "Edit"
 msgstr "Endre"
 
@@ -1619,33 +1686,39 @@ msgstr "Aktiver"
 msgid "No discount codes found."
 msgstr "Ingen rabattkuponger er utstedt."
 
-#: includes/admin/discounts/class-discount-codes-table.php:386
+#: includes/admin/discounts/class-discount-codes-table.php:384
 #, fuzzy
 msgid "Discount code activated."
 msgid_plural "Discount codes activated."
 msgstr[0] "Kupong kode opprettet"
 msgstr[1] "Kupong kode opprettet"
 
-#: includes/admin/discounts/class-discount-codes-table.php:390
+#: includes/admin/discounts/class-discount-codes-table.php:388
 #, fuzzy
 msgid "Discount code deactivated."
 msgid_plural "Discount codes deactivated."
 msgstr[0] "Kupong kode opprettet"
 msgstr[1] "Kupong kode opprettet"
 
-#: includes/admin/discounts/class-discount-codes-table.php:394
+#: includes/admin/discounts/class-discount-codes-table.php:392
 #, fuzzy
 msgid "Discount code deleted."
 msgid_plural "Discount codes deleted."
 msgstr[0] "Kupong kode opprettet"
 msgstr[1] "Kupong kode opprettet"
 
-#: includes/admin/discounts/discount-actions.php:139
-#: includes/admin/discounts/discount-actions.php:171
+#: includes/admin/discounts/discount-actions.php:136
+#: includes/admin/discounts/discount-actions.php:168
 #: includes/admin/discounts/discount-actions.php:202
 #, fuzzy
 msgid "Please select a discount."
 msgstr "Vennligst velg minst et medlem å endre."
+
+#: includes/admin/discounts/discount-codes.php:32
+#, fuzzy
+#| msgid "Discount Codes"
+msgid "Search discount codes"
+msgstr "Rabattkoder"
 
 #: includes/admin/discounts/discount-codes.php:39
 msgid "Add New Discount"
@@ -1679,12 +1752,13 @@ msgstr "Mengde rabatt for denne rabattkoden."
 #: includes/admin/discounts/edit-discount.php:76
 msgid ""
 "Check this to make this discount only apply to the first payment in a "
-"membership. When this option is not enabled, the discount code will apply to "
-"all payments in a membership instead of just the initial payment."
+"membership. Note one-time discounts cannot be used in conjunction with free "
+"trials. When this option is not enabled, the discount code will apply to all "
+"payments in a membership instead of just the initial payment."
 msgstr ""
 
 #: includes/admin/discounts/discount-codes.php:115
-#: includes/admin/discounts/edit-discount.php:98
+#: includes/admin/discounts/edit-discount.php:95
 #, fuzzy
 msgid ""
 "The membership levels this discount code can be used for. Leave blank for "
@@ -1693,7 +1767,7 @@ msgstr ""
 "Maks antall ganger rabattkoden kan brukes. La stå tomt for ubegrenset antall."
 
 #: includes/admin/discounts/discount-codes.php:118
-#: includes/admin/discounts/edit-discount.php:101
+#: includes/admin/discounts/edit-discount.php:98
 #, fuzzy
 msgid ""
 "No membership levels created yet. This discount will be available to use "
@@ -1782,11 +1856,11 @@ msgstr " Beløp"
 msgid " The amount of this discount code."
 msgstr " Sum rabatt."
 
-#: includes/admin/discounts/edit-discount.php:108
+#: includes/admin/discounts/edit-discount.php:105
 msgid " Expiration date"
 msgstr " Utløpsdato"
 
-#: includes/admin/discounts/edit-discount.php:112
+#: includes/admin/discounts/edit-discount.php:109
 #, fuzzy
 msgid ""
 " Enter the expiration date for this discount code in the format of yyyy-mm-"
@@ -1795,27 +1869,27 @@ msgstr ""
 " Skriv inn utgangsdato i formatet yyyy-mm-dd. La stå tom dersom du ikke "
 "ønsker utgangsdato"
 
-#: includes/admin/discounts/edit-discount.php:117
+#: includes/admin/discounts/edit-discount.php:114
 msgid " Status"
 msgstr " Status"
 
-#: includes/admin/discounts/edit-discount.php:121
+#: includes/admin/discounts/edit-discount.php:118
 msgid " Active"
 msgstr " Aktiv"
 
-#: includes/admin/discounts/edit-discount.php:122
+#: includes/admin/discounts/edit-discount.php:119
 msgid " Disabled"
 msgstr " Avslått"
 
-#: includes/admin/discounts/edit-discount.php:124
+#: includes/admin/discounts/edit-discount.php:121
 msgid " The status of this discount code."
 msgstr " Status for denne kupongkode."
 
-#: includes/admin/discounts/edit-discount.php:129
+#: includes/admin/discounts/edit-discount.php:126
 msgid " Max Uses"
 msgstr " Kan brukes maksimalt"
 
-#: includes/admin/discounts/edit-discount.php:133
+#: includes/admin/discounts/edit-discount.php:130
 msgid ""
 " The maximum number of times this discount can be used. Leave blank for "
 "unlimited."
@@ -1823,7 +1897,7 @@ msgstr ""
 " Maks antall ganger rabattkoden kan brukes. La stå tomt for ubegrenset "
 "antall."
 
-#: includes/admin/discounts/edit-discount.php:142
+#: includes/admin/discounts/edit-discount.php:139
 msgid " Update Discount"
 msgstr " Oppdater Rabatt"
 
@@ -1846,20 +1920,21 @@ msgstr ""
 msgid "Choose the subscription to export memberships from"
 msgstr "Velg medlemsnivå du ønsker å eksportere fra"
 
-#: includes/admin/export.php:42 includes/admin/import/import-actions.php:341
+#: includes/admin/export.php:42 includes/admin/import/import-actions.php:344
 #: includes/admin/subscriptions/edit-subscription.php:148
 #: includes/admin/subscriptions/subscription-levels.php:175
-#: includes/misc-functions.php:1449
+#: includes/misc-functions.php:1457
 msgid "Active"
 msgstr "Aktiv"
 
-#: includes/admin/export.php:44 includes/admin/import/import-actions.php:344
-#: includes/misc-functions.php:1455
+#: includes/admin/export.php:44 includes/admin/import/import-actions.php:347
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1022
+#: includes/misc-functions.php:1463
 msgid "Expired"
 msgstr "Utgått"
 
-#: includes/admin/export.php:45 includes/admin/import/import-actions.php:343
-#: includes/misc-functions.php:1454
+#: includes/admin/export.php:45 includes/admin/import/import-actions.php:346
+#: includes/misc-functions.php:1462
 msgid "Cancelled"
 msgstr "Kansellert"
 
@@ -1976,7 +2051,7 @@ msgstr "Meldinger"
 #: includes/admin/help/help-menus-setup-old.php:97
 #: includes/gateways/class-rcp-payment-gateways.php:62
 #: includes/gateways/class-rcp-payment-gateways.php:67
-#: includes/gateways/class-rcp-payment-gateways.php:130
+#: includes/gateways/class-rcp-payment-gateways.php:154
 msgid "PayPal"
 msgstr ""
 
@@ -2018,7 +2093,7 @@ msgid "Editing Memberships"
 msgstr "Rediger medlemmer"
 
 #: includes/admin/help/help-menus-setup.php:72
-#: includes/admin/payments/class-payments-table.php:265
+#: includes/admin/payments/class-payments-table.php:270
 #, fuzzy
 msgid "Customer Details"
 msgstr "Medlemsdetaljer"
@@ -2066,8 +2141,7 @@ msgid ""
 "memberships table."
 msgstr ""
 
-#: includes/admin/help/help-menus.php:33
-#: includes/admin/help/help-menus.php:103
+#: includes/admin/help/help-menus.php:33 includes/admin/help/help-menus.php:103
 msgid "On this page, you can perform a variety of tasks, including:"
 msgstr ""
 
@@ -2906,13 +2980,13 @@ msgstr ""
 "nyttig for debugging i tilfelle noe ikke virker med PayPal integrasjonen."
 
 #: includes/admin/import/import-actions.php:27
-#: includes/admin/import/import-actions.php:212
+#: includes/admin/import/import-actions.php:215
 #, fuzzy
 msgid "Error: You do not have permission to perform this action."
 msgstr "Du har ikke tilgang til å gjennomføre handlingen."
 
 #: includes/admin/import/import-actions.php:37
-#: includes/admin/import/import-actions.php:219
+#: includes/admin/import/import-actions.php:222
 #, fuzzy
 msgid "Error: Nonce verification failed"
 msgstr "Nonce verifikasjon feilet."
@@ -2929,77 +3003,79 @@ msgstr ""
 msgid "Error: Missing import file. Please provide an import file."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:81
-msgid "Error: The file you uploaded does not appear to be a CSV file."
+#: includes/admin/import/import-actions.php:84
+#, php-format
+msgid ""
+"Error: The file you uploaded does not appear to be a CSV file. File type: %s"
 msgstr ""
 
-#: includes/admin/import/import-actions.php:88
+#: includes/admin/import/import-actions.php:91
 #, fuzzy
 msgid ""
 "Error: Something went wrong during the upload process, please try again."
 msgstr "Noe har gått galt, vennligst prøv igjen"
 
-#: includes/admin/import/import-actions.php:114
+#: includes/admin/import/import-actions.php:117
 #, fuzzy
 msgid "CSV Memberships Import"
 msgstr "Eksporter medlemmer"
 
-#: includes/admin/import/import-actions.php:115
+#: includes/admin/import/import-actions.php:118
 #, fuzzy, php-format
 msgid "Import memberships from file: %s"
 msgstr "Utløpt abonnement den "
 
-#: includes/admin/import/import-actions.php:119
+#: includes/admin/import/import-actions.php:122
 #, fuzzy
 msgid "CSV Payments Import"
 msgstr "Eksporter betalinger"
 
-#: includes/admin/import/import-actions.php:120
+#: includes/admin/import/import-actions.php:123
 #, php-format
 msgid "Import payments from file: %s"
 msgstr ""
 
-#: includes/admin/import/import-actions.php:124
+#: includes/admin/import/import-actions.php:127
 #, php-format
 msgid "CSV %s Import"
 msgstr ""
 
-#: includes/admin/import/import-actions.php:125
+#: includes/admin/import/import-actions.php:128
 #, php-format
 msgid "Import data from file: %s"
 msgstr ""
 
-#: includes/admin/import/import-actions.php:157
+#: includes/admin/import/import-actions.php:160
 #, fuzzy, php-format
 msgid "Error: %s"
 msgstr "Feil"
 
-#: includes/admin/import/import-actions.php:161
+#: includes/admin/import/import-actions.php:164
 #, fuzzy
 msgid "Error: Batch job creation failed."
 msgstr "PayPal pollett (token) opprettelse mislykket."
 
-#: includes/admin/import/import-actions.php:169
+#: includes/admin/import/import-actions.php:172
 msgid "Error: Unable to get batch job callback."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:226
+#: includes/admin/import/import-actions.php:229
 msgid "Error: Missing job ID."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:235
+#: includes/admin/import/import-actions.php:238
 msgid "Error: Unable to get batch job."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:243
+#: includes/admin/import/import-actions.php:246
 msgid "Error: Unable to get importer information."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:256
+#: includes/admin/import/import-actions.php:259
 msgid "Error: Missing job callback."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:319
+#: includes/admin/import/import-actions.php:322
 #: includes/admin/payments/edit-payment.php:56
 #: includes/admin/settings/settings.php:1569
 #: includes/admin/subscriptions/class-membership-levels-table.php:29
@@ -3007,68 +3083,68 @@ msgstr ""
 msgid "Membership Level"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/import/import-actions.php:325
-#: includes/admin/import/import-actions.php:340
+#: includes/admin/import/import-actions.php:328
+#: includes/admin/import/import-actions.php:343
 msgid "- Use CSV Column -"
 msgstr ""
 
-#: includes/admin/import/import-actions.php:331
+#: includes/admin/import/import-actions.php:334
 msgid ""
 "Select the membership level to add users to. Membership levels can also be "
 "specified in the CSV file."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:346
+#: includes/admin/import/import-actions.php:349
 msgid ""
 "Select the status to set for all imported memberships. Statuses can also be "
 "set in the CSV file."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:355
+#: includes/admin/import/import-actions.php:358
 msgid ""
 "Select the expiration date for all memberships. Leave blank if specified in "
 "the CSV file. If an expiration date is not provided in either place, it will "
 "be automatically calculated based on the selected membership level."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:361
+#: includes/admin/import/import-actions.php:364
 #, fuzzy
 msgid "Existing Customers"
 msgstr "Rediger medlemmer"
 
-#: includes/admin/import/import-actions.php:365
+#: includes/admin/import/import-actions.php:368
 #, fuzzy
 msgid "Add Additional Memberships"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/import/import-actions.php:366
+#: includes/admin/import/import-actions.php:369
 #, fuzzy
 msgid "Update Existing Memberships"
 msgstr "Rediger medlemmer"
 
-#: includes/admin/import/import-actions.php:368
+#: includes/admin/import/import-actions.php:371
 msgid ""
 "If importing a membership for a customer that already exists, you can either "
 "insert an additional membership record, or update/change the existing "
 "membership record."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:374
+#: includes/admin/import/import-actions.php:377
 #, fuzzy
 msgid "Disable Notification Emails"
 msgstr "Nonce verifikasjon feilet."
 
-#: includes/admin/import/import-actions.php:378
+#: includes/admin/import/import-actions.php:381
 msgid ""
 "Check on to disable customer and admin notification emails during the import "
 "process."
 msgstr ""
 
-#: includes/admin/import/import-actions.php:383
+#: includes/admin/import/import-actions.php:386
 msgid "Send \"Set Password\" Emails"
 msgstr ""
 
-#: includes/admin/import/import-actions.php:387
+#: includes/admin/import/import-actions.php:390
 msgid ""
 "If checked, new accounts will be sent an email inviting them to set a "
 "password. Existing accounts will not receive one."
@@ -3144,7 +3220,7 @@ msgid "Gateway Customer ID"
 msgstr ""
 
 #: includes/admin/import/import-functions.php:54
-#: includes/admin/memberships/class-memberships-table.php:587
+#: includes/admin/memberships/class-memberships-table.php:591
 #: includes/class-rcp-export-members.php:53
 #, fuzzy
 msgid "Gateway Subscription ID"
@@ -3271,7 +3347,7 @@ msgid "Is this user's subscription recurring?"
 msgstr "Skal brukerens medlemskap fornyes automatisk?"
 
 #: includes/admin/members/edit-member.php:159
-#: includes/admin/memberships/edit-membership.php:202
+#: includes/admin/memberships/edit-membership.php:200
 msgid ""
 "If checked, this member has a recurring subscription. Only customers with "
 "recurring memberships will be given the option to cancel their membership on "
@@ -3404,13 +3480,13 @@ msgid "No levels found"
 msgstr "Ingen brukere ble funnet"
 
 #: includes/admin/memberships/add-membership.php:74
-#: includes/admin/memberships/edit-membership.php:102
+#: includes/admin/memberships/edit-membership.php:100
 #, fuzzy
 msgid "Membership Status:"
 msgstr "Medlemsdetaljer"
 
 #: includes/admin/memberships/add-membership.php:89
-#: includes/admin/memberships/edit-membership.php:128
+#: includes/admin/memberships/edit-membership.php:126
 msgid "Billing Cycle:"
 msgstr ""
 
@@ -3433,7 +3509,7 @@ msgid "for renewals"
 msgstr ""
 
 #: includes/admin/memberships/add-membership.php:106
-#: includes/admin/memberships/edit-membership.php:136
+#: includes/admin/memberships/edit-membership.php:134
 msgid "Times Billed:"
 msgstr ""
 
@@ -3443,24 +3519,24 @@ msgid "Number of times this membership has been billed for so far."
 msgstr "Angi prisen for dette abonnementsnivå. Skriv inn 0 for gratis."
 
 #: includes/admin/memberships/add-membership.php:115
-#: includes/admin/memberships/edit-membership.php:152
+#: includes/admin/memberships/edit-membership.php:150
 msgid "Date Created:"
 msgstr ""
 
 #: includes/admin/memberships/add-membership.php:124
-#: includes/admin/memberships/edit-membership.php:164
+#: includes/admin/memberships/edit-membership.php:162
 #, fuzzy
 msgid "Expiration Date:"
 msgstr "Gyldig til dato"
 
 #: includes/admin/memberships/add-membership.php:130
-#: includes/admin/memberships/edit-membership.php:172
+#: includes/admin/memberships/edit-membership.php:170
 #, fuzzy
 msgid "Never expires"
 msgstr "Utgår aldri?"
 
 #: includes/admin/memberships/add-membership.php:135
-#: includes/admin/memberships/edit-membership.php:198
+#: includes/admin/memberships/edit-membership.php:196
 #, fuzzy
 msgid "Auto Renew:"
 msgstr "Forny automatisk"
@@ -3472,18 +3548,18 @@ msgid ""
 msgstr ""
 
 #: includes/admin/memberships/add-membership.php:144
-#: includes/admin/memberships/edit-membership.php:208
+#: includes/admin/memberships/edit-membership.php:206
 #, fuzzy
 msgid "Payment Method:"
 msgstr "Betalingen er slettet"
 
 #: includes/admin/memberships/add-membership.php:162
-#: includes/admin/memberships/edit-membership.php:228
+#: includes/admin/memberships/edit-membership.php:226
 msgid "Gateway Customer ID:"
 msgstr ""
 
 #: includes/admin/memberships/add-membership.php:170
-#: includes/admin/memberships/edit-membership.php:248
+#: includes/admin/memberships/edit-membership.php:246
 #, fuzzy
 msgid "Gateway Subscription ID:"
 msgstr "Oppdater abonnement"
@@ -3491,10 +3567,10 @@ msgstr "Oppdater abonnement"
 #: includes/admin/memberships/cancel-membership.php:28
 #: includes/admin/memberships/edit-membership.php:28
 #: includes/admin/memberships/membership-actions.php:160
-#: includes/admin/memberships/membership-actions.php:326
-#: includes/admin/memberships/membership-actions.php:374
-#: includes/admin/memberships/membership-actions.php:421
-#: includes/class-rcp-cli.php:315 includes/gateways/gateway-functions.php:300
+#: includes/admin/memberships/membership-actions.php:339
+#: includes/admin/memberships/membership-actions.php:387
+#: includes/admin/memberships/membership-actions.php:434
+#: includes/class-rcp-cli.php:315 includes/gateways/gateway-functions.php:353
 #: includes/gateways/twocheckout/functions.php:101
 #: includes/gateways/twocheckout/functions.php:107
 #, fuzzy
@@ -3540,23 +3616,13 @@ msgstr ""
 msgid "Edit Membership"
 msgstr "Endre Medlem"
 
-#: includes/admin/memberships/class-memberships-table.php:253
-#, fuzzy
-msgid "Yes"
-msgstr "År"
-
-#: includes/admin/memberships/class-memberships-table.php:253
-#, fuzzy
-msgid "No"
-msgstr "Ingen"
-
 #: includes/admin/memberships/class-memberships-table.php:287
 #, fuzzy
 msgid "No memberships found."
 msgstr "Ingen brukere ble funnet"
 
 #: includes/admin/memberships/class-memberships-table.php:299
-#: includes/admin/memberships/edit-membership.php:121
+#: includes/admin/memberships/edit-membership.php:119
 #, fuzzy
 msgid "Expire"
 msgstr "Utgått"
@@ -3592,44 +3658,44 @@ msgid "Membership(s) deleted."
 msgstr "Medlem oppdatert"
 
 #: includes/admin/memberships/class-memberships-table.php:539
-#: includes/admin/payments/class-payments-table.php:580
+#: includes/admin/payments/class-payments-table.php:605
 #, fuzzy
 msgid "Filter by membership level"
 msgstr "Legg til medlemskapsnivå"
 
 #: includes/admin/memberships/class-memberships-table.php:541
-#: includes/admin/payments/class-payments-table.php:582
-#: includes/admin/reports/reports-page.php:810
+#: includes/admin/payments/class-payments-table.php:607
+#: includes/admin/reports/reports-page.php:836
 #, fuzzy
 msgid "All Membership Levels"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/memberships/class-memberships-table.php:547
-#: includes/admin/payments/class-payments-table.php:589
-#: includes/admin/reports/reports-page.php:819
+#: includes/admin/memberships/class-memberships-table.php:551
+#: includes/admin/payments/class-payments-table.php:614
+#: includes/admin/reports/reports-page.php:856
 msgid "Filter"
 msgstr ""
 
-#: includes/admin/memberships/class-memberships-table.php:584
-#: includes/admin/payments/class-payments-table.php:626
+#: includes/admin/memberships/class-memberships-table.php:588
+#: includes/admin/payments/class-payments-table.php:651
 msgid "Choose a field to search"
 msgstr ""
 
-#: includes/admin/memberships/class-memberships-table.php:586
-#: includes/admin/payments/class-payments-table.php:629
+#: includes/admin/memberships/class-memberships-table.php:590
+#: includes/admin/payments/class-payments-table.php:654
 msgid "User Account (name, email, login)"
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:94
+#: includes/admin/memberships/edit-membership.php:93
 msgid "Warning: The subscription will be cancelled at the payment gateway."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:94
+#: includes/admin/memberships/edit-membership.php:93
 #, fuzzy
 msgid "Change Level"
 msgstr "Alle nivåer"
 
-#: includes/admin/memberships/edit-membership.php:113
+#: includes/admin/memberships/edit-membership.php:111
 #, fuzzy
 msgid ""
 "Active memberships have access to restricted content. Members with a status "
@@ -3641,53 +3707,59 @@ msgstr ""
 "med status som Kansellert kan fortsette å få tilgang til betalt innhold før "
 "utgangsdato for kontoen."
 
-#: includes/admin/memberships/edit-membership.php:116
+#: includes/admin/memberships/edit-membership.php:114
 msgid ""
 "Cancel membership and recurring billing. The customer will retain access "
 "until they reach the expiration date."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:116
+#: includes/admin/memberships/edit-membership.php:114
 msgid ""
 "Membership cannot be cancelled as it does not have a recurring subscription."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:121
+#: includes/admin/memberships/edit-membership.php:119
 msgid "Revoke the customer's access immediately"
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:141
+#: includes/admin/memberships/edit-membership.php:139
 #: templates/subscription.php:94
 #, fuzzy, php-format
 msgid "%d / Until Cancelled"
 msgstr "Kansellert"
 
-#: includes/admin/memberships/edit-membership.php:145
+#: includes/admin/memberships/edit-membership.php:143
 #: templates/subscription.php:98
 #, php-format
 msgid "%d / %d"
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:164
+#: includes/admin/memberships/edit-membership.php:162
 #, fuzzy
 msgid "Trialling Until:"
 msgstr "Prøveperiode"
 
-#: includes/admin/memberships/edit-membership.php:168
+#: includes/admin/memberships/edit-membership.php:166
 #, fuzzy
 msgid "Never Expires"
 msgstr "Utgår aldri?"
 
-#: includes/admin/memberships/edit-membership.php:181
+#: includes/admin/memberships/edit-membership.php:179
 msgid "Cancellation Date:"
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:270
+#: includes/admin/memberships/edit-membership.php:267
 #, fuzzy
-msgid "Upgraded From:"
+#| msgid "Subscription Key"
+msgid "Subscription Key:"
+msgstr "Medlemskode"
+
+#: includes/admin/memberships/edit-membership.php:276
+#, fuzzy
+msgid "Changed From:"
 msgstr "oppgrader nå"
 
-#: includes/admin/memberships/edit-membership.php:301
+#: includes/admin/memberships/edit-membership.php:307
 #, fuzzy
 msgid ""
 "Changing the expiration date will not affect when renewal payments are "
@@ -3695,63 +3767,87 @@ msgid ""
 msgstr ""
 "Kryss av denne for å fjerne epost som sendes ut når en betaling er mottatt."
 
-#: includes/admin/memberships/edit-membership.php:304
+#: includes/admin/memberships/edit-membership.php:310
 msgid ""
 "Changing the recurring indicator will not set up or remove a subscription "
 "with the gateway. This checkbox is for updating RCP records only."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:307
+#: includes/admin/memberships/edit-membership.php:313
 msgid ""
 "Changing the gateway subscription ID can result in renewals not being "
 "processed. Do this with caution."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:314
+#: includes/admin/memberships/edit-membership.php:320
 #, fuzzy
 msgid "Update Membership"
 msgstr "Ditt medlemskap"
 
-#: includes/admin/memberships/edit-membership.php:315
+#: includes/admin/memberships/edit-membership.php:321
 #, fuzzy
 msgid "Delete Membership"
 msgstr "Ditt medlemskap"
 
-#: includes/admin/memberships/edit-membership.php:321
+#: includes/admin/memberships/edit-membership.php:327
 #, fuzzy
 msgid "Payments:"
 msgstr "Betalinger"
 
-#: includes/admin/memberships/edit-membership.php:355
+#: includes/admin/memberships/edit-membership.php:361
 msgid "View all payments"
 msgstr "Se alle betalinger"
 
-#: includes/admin/memberships/edit-membership.php:371
+#: includes/admin/memberships/edit-membership.php:377
 msgid "Use this form to manually record a renewal payment."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:372
+#: includes/admin/memberships/edit-membership.php:378
 msgid ""
 "Note: this does not initiate a charge in your merchant processor. This "
 "should only be used for recording a missed payment or one that was manually "
 "collected."
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:376
+#: includes/admin/memberships/edit-membership.php:381
 #, fuzzy
 msgid "Amount:"
 msgstr "Sum"
 
-#: includes/admin/memberships/edit-membership.php:382
+#: includes/admin/memberships/edit-membership.php:385
 #, fuzzy
 msgid "Transaction ID:"
 msgstr "Transaksjons ID"
 
-#: includes/admin/memberships/edit-membership.php:391
+#: includes/admin/memberships/edit-membership.php:392
+#: includes/admin/payments/edit-payment.php:111
+#: includes/admin/payments/new-payment.php:67 includes/misc-functions.php:1468
+msgid "Complete"
+msgstr "Betalt"
+
+#: includes/admin/memberships/edit-membership.php:393
+#: includes/admin/payments/edit-payment.php:112
+#: includes/admin/payments/new-payment.php:68 includes/misc-functions.php:1469
+msgid "Failed"
+msgstr ""
+
+#: includes/admin/memberships/edit-membership.php:394
+#: includes/admin/payments/edit-payment.php:113
+#: includes/admin/payments/new-payment.php:69 includes/misc-functions.php:1470
+msgid "Refunded"
+msgstr "Tilbakebetalt"
+
+#: includes/admin/memberships/edit-membership.php:395
+#: includes/admin/payments/edit-payment.php:114
+#: includes/admin/payments/new-payment.php:70 includes/misc-functions.php:1467
+msgid "Abandoned"
+msgstr ""
+
+#: includes/admin/memberships/edit-membership.php:403
 msgid "Record Payment and Renew Membership"
 msgstr ""
 
-#: includes/admin/memberships/edit-membership.php:393
+#: includes/admin/memberships/edit-membership.php:405
 msgid "Record Payment Only"
 msgstr ""
 
@@ -3769,10 +3865,10 @@ msgid "Error adding membership record."
 msgstr ""
 
 #: includes/admin/memberships/membership-actions.php:152
-#: includes/admin/memberships/membership-actions.php:319
-#: includes/admin/memberships/membership-actions.php:366
-#: includes/admin/memberships/membership-actions.php:413
-#: includes/admin/memberships/membership-actions.php:462
+#: includes/admin/memberships/membership-actions.php:332
+#: includes/admin/memberships/membership-actions.php:379
+#: includes/admin/memberships/membership-actions.php:426
+#: includes/admin/memberships/membership-actions.php:489
 #, fuzzy
 msgid "Invalid membership ID."
 msgstr "Ugyldig epostadresse"
@@ -3782,7 +3878,7 @@ msgstr "Ugyldig epostadresse"
 msgid "Error changing membership level."
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/admin/memberships/membership-actions.php:428
+#: includes/admin/memberships/membership-actions.php:441
 #, fuzzy, php-format
 msgid "Membership cancelled via admin link by user %s (#%d)."
 msgstr "Abonnement kansellert via tilbakebetaling 2Checkout"
@@ -3916,57 +4012,69 @@ msgstr "Begrens dette innholdet"
 msgid "Payment"
 msgstr "Betalinger"
 
-#: includes/admin/payments/class-payments-table.php:143
+#: includes/admin/payments/class-payments-table.php:147
 #, php-format
 msgid "User #%d (deleted)"
 msgstr ""
 
-#: includes/admin/payments/class-payments-table.php:257
-#: includes/admin/payments/class-payments-table.php:302
+#: includes/admin/payments/class-payments-table.php:262
+#: includes/admin/payments/class-payments-table.php:307
 #, fuzzy
 msgid "Edit payment"
 msgstr "Rediger betaling"
 
-#: includes/admin/payments/class-payments-table.php:261
+#: includes/admin/payments/class-payments-table.php:266
 #, fuzzy
 msgid "View invoice"
 msgstr "Se faktura"
 
-#: includes/admin/payments/class-payments-table.php:265
+#: includes/admin/payments/class-payments-table.php:270
 #, fuzzy
 msgid "View customer details"
 msgstr "Medlemsdetaljer"
 
-#: includes/admin/payments/class-payments-table.php:273
+#: includes/admin/payments/class-payments-table.php:278
 #, fuzzy
 msgid "View all payments by this customer"
 msgstr "Se betalinger fra denne brukeren"
 
-#: includes/admin/payments/class-payments-table.php:273
+#: includes/admin/payments/class-payments-table.php:278
 #, fuzzy
 msgid "Customer Payments"
 msgstr "Sum for denne betalingen"
 
-#: includes/admin/payments/class-payments-table.php:277
+#: includes/admin/payments/class-payments-table.php:282
 #, fuzzy
 msgid "Delete payment"
 msgstr "Legg til betaling"
 
-#: includes/admin/payments/class-payments-table.php:562
+#: includes/admin/payments/class-payments-table.php:581
+#, fuzzy
+#| msgid "Payment Date"
+msgid "Start Date"
+msgstr "Betalingsdato"
+
+#: includes/admin/payments/class-payments-table.php:583
+#, fuzzy
+#| msgid "Date"
+msgid "End Date"
+msgstr "Dato"
+
+#: includes/admin/payments/class-payments-table.php:587
 msgid "Filter by gateway"
 msgstr ""
 
-#: includes/admin/payments/class-payments-table.php:564
+#: includes/admin/payments/class-payments-table.php:589
 #, fuzzy
 msgid "All Gateways"
 msgstr "Betalingsmuligheter"
 
-#: includes/admin/payments/class-payments-table.php:571
+#: includes/admin/payments/class-payments-table.php:596
 #, fuzzy
 msgid "Filter by transaction type"
 msgstr "Transaksjons ID"
 
-#: includes/admin/payments/class-payments-table.php:573
+#: includes/admin/payments/class-payments-table.php:598
 #, fuzzy
 msgid "All Types"
 msgstr "Alle år"
@@ -4034,26 +4142,6 @@ msgid ""
 "The transaction ID for this payment, if any. Click to view in merchant "
 "account:"
 msgstr "Transaksjons ID for denne betalingen, dersom det finnes"
-
-#: includes/admin/payments/edit-payment.php:111
-#: includes/admin/payments/new-payment.php:67 includes/misc-functions.php:1460
-msgid "Complete"
-msgstr "Betalt"
-
-#: includes/admin/payments/edit-payment.php:112
-#: includes/admin/payments/new-payment.php:68 includes/misc-functions.php:1461
-msgid "Failed"
-msgstr ""
-
-#: includes/admin/payments/edit-payment.php:113
-#: includes/admin/payments/new-payment.php:69 includes/misc-functions.php:1462
-msgid "Refunded"
-msgstr "Tilbakebetalt"
-
-#: includes/admin/payments/edit-payment.php:114
-#: includes/admin/payments/new-payment.php:70 includes/misc-functions.php:1459
-msgid "Abandoned"
-msgstr ""
 
 #: includes/admin/payments/edit-payment.php:116
 #: includes/admin/payments/new-payment.php:72
@@ -4205,7 +4293,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/reminders/subscription-reminders.php:46
-#: includes/class-rcp-reminders.php:100 includes/misc-functions.php:1464
+#: includes/class-rcp-reminders.php:100 includes/misc-functions.php:1472
 #, fuzzy
 msgid "Renewal"
 msgstr "Fornyelsesdato"
@@ -4230,7 +4318,7 @@ msgid "Enabled"
 msgstr "deaktivert"
 
 #: includes/admin/reminders/subscription-reminders.php:63
-#: includes/misc-functions.php:1469
+#: includes/misc-functions.php:1477
 msgid "Disabled"
 msgstr "Avslått"
 
@@ -4274,7 +4362,7 @@ msgstr "Du har ikke tilgang til å laste ned denne fakturaen"
 #: includes/admin/reminders/subscription-reminders.php:110
 #: includes/admin/reminders/subscription-reminders.php:167
 #: includes/admin/reminders/subscription-reminders.php:200
-#: includes/admin/settings/settings.php:2096
+#: includes/admin/settings/settings.php:2108
 #, fuzzy
 msgid "Nonce verification failed"
 msgstr "Nonce verifikasjon feilet."
@@ -4299,88 +4387,129 @@ msgstr ""
 msgid "You do not have permission to send test reminder notices"
 msgstr "Du har ikke tilgang til å laste ned denne fakturaen"
 
+#: includes/admin/reports/report-actions.php:30
+#, fuzzy
+msgid "Active Memberships"
+msgstr "Aktivt abonnements-epost"
+
+#: includes/admin/reports/report-actions.php:36
+#, fuzzy
+msgid "Expired Memberships"
+msgstr "Utgått medlemskap-epost"
+
+#: includes/admin/reports/report-actions.php:42
+#, fuzzy
+msgid "Cancelled Memberships"
+msgstr "Ditt medlemskap"
+
+#: includes/admin/reports/report-actions.php:48
+#, fuzzy
+msgid "Pending Memberships"
+msgstr "Legg til medlemskapsnivå"
+
 #: includes/admin/reports/reports-page.php:24
-#: includes/admin/reports/reports-page.php:202
+#: includes/admin/reports/reports-page.php:203
 msgid "Earnings"
 msgstr "Inntekter"
 
 #: includes/admin/reports/reports-page.php:25
-#: includes/admin/reports/reports-page.php:440
+#: includes/admin/reports/reports-page.php:441
 msgid "Refunds"
 msgstr "Tilbakebetalinger"
 
 #: includes/admin/reports/reports-page.php:26
-#: includes/admin/reports/reports-page.php:669
+#: includes/admin/reports/reports-page.php:670
 msgid "Signups"
 msgstr "Innmeldinger"
 
-#: includes/admin/reports/reports-page.php:267
+#: includes/admin/reports/reports-page.php:27
+#, fuzzy
+msgid "Membership Counts"
+msgstr "Medlemmer"
+
+#: includes/admin/reports/reports-page.php:268
 msgid "Earnings Report"
 msgstr "Inntektsrapport"
 
-#: includes/admin/reports/reports-page.php:273
+#: includes/admin/reports/reports-page.php:274
 msgid "Total earnings for period shown: "
 msgstr "Totalt inntjent i perioden vist: "
 
-#: includes/admin/reports/reports-page.php:505
+#: includes/admin/reports/reports-page.php:506
 msgid "Refunds Report"
 msgstr "Tilbakebetalingsrapport"
 
-#: includes/admin/reports/reports-page.php:511
+#: includes/admin/reports/reports-page.php:512
 msgid "Total refunds for period shown: "
 msgstr "Totalt tilbakebetalt for perioden: "
 
-#: includes/admin/reports/reports-page.php:730
+#: includes/admin/reports/reports-page.php:731
 msgid "Signups Report"
 msgstr "Innmeldingsrapport"
 
-#: includes/admin/reports/reports-page.php:736
+#: includes/admin/reports/reports-page.php:737
 msgid "Total signups for period shown: "
 msgstr "Totalt antall innmeldinger i perioden vist: "
 
-#: includes/admin/reports/reports-page.php:753
+#: includes/admin/reports/reports-page.php:754
+#, fuzzy
+msgid "Membership Counts Report"
+msgstr "Eksporter medlemmer"
+
+#: includes/admin/reports/reports-page.php:778
 msgid "This Week"
 msgstr "Inneværende uke"
 
-#: includes/admin/reports/reports-page.php:754
+#: includes/admin/reports/reports-page.php:779
 msgid "Last Week"
 msgstr "Forrige uke"
 
-#: includes/admin/reports/reports-page.php:755
+#: includes/admin/reports/reports-page.php:780
 msgid "This Month"
 msgstr "Inneværende måned"
 
-#: includes/admin/reports/reports-page.php:756
+#: includes/admin/reports/reports-page.php:781
 msgid "Last Month"
 msgstr "Forrige måned"
 
-#: includes/admin/reports/reports-page.php:757
+#: includes/admin/reports/reports-page.php:782
 msgid "This Quarter"
 msgstr "Inneværende kvartal"
 
-#: includes/admin/reports/reports-page.php:758
+#: includes/admin/reports/reports-page.php:783
 msgid "Last Quarter"
 msgstr "Forrige kvartal"
 
-#: includes/admin/reports/reports-page.php:759
+#: includes/admin/reports/reports-page.php:784
 msgid "This Year"
 msgstr "Inneværende år"
 
-#: includes/admin/reports/reports-page.php:760
+#: includes/admin/reports/reports-page.php:785
 msgid "Last Year"
 msgstr "Forrige år"
 
-#: includes/admin/reports/reports-page.php:761
+#: includes/admin/reports/reports-page.php:786
 msgid "Custom"
 msgstr "Egendefinert"
 
-#: includes/admin/reports/reports-page.php:784
+#: includes/admin/reports/reports-page.php:810
 msgid "From"
 msgstr "Fra"
 
-#: includes/admin/reports/reports-page.php:795
+#: includes/admin/reports/reports-page.php:821
 msgid "To"
 msgstr "Til"
+
+#: includes/admin/reports/reports-page.php:845
+#, fuzzy
+msgid "Filter by membership status"
+msgstr "Legg til medlemskapsnivå"
+
+#: includes/admin/reports/reports-page.php:847
+#, fuzzy
+#| msgid " Status"
+msgid "All Statuses"
+msgstr " Status"
 
 #: includes/admin/screen-options.php:35
 #, fuzzy
@@ -4404,9 +4533,9 @@ msgstr "Legg til medlemskapsnivå"
 #: includes/admin/settings/settings.php:38 includes/class-rcp-emails.php:255
 #: includes/email-functions.php:93 includes/email-functions.php:126
 #: includes/email-functions.php:160 includes/email-functions.php:193
-#: includes/email-functions.php:229 includes/email-functions.php:535
-#: includes/install.php:385 includes/install.php:399 includes/install.php:413
-#: includes/install.php:427 includes/install.php:442 includes/install.php:465
+#: includes/email-functions.php:229 includes/email-functions.php:567
+#: includes/install.php:372 includes/install.php:386 includes/install.php:400
+#: includes/install.php:414 includes/install.php:429 includes/install.php:452
 msgid "Hello"
 msgstr "Hei"
 
@@ -4642,6 +4771,11 @@ msgstr ""
 "Bruk Restrict Content Pro i Sandbox mode. Det gjør at du kan teste "
 "utvidelsen med testkontoer, inkludert betalingsløsninger."
 
+#: includes/admin/settings/settings.php:360
+msgid ""
+"Note: Sandbox mode is enabled via the RCP_GATEWAY_SANDBOX_MODE constant."
+msgstr ""
+
 #: includes/admin/settings/settings.php:361
 msgid ""
 "You just toggled the sandbox option. Save the settings using the Save "
@@ -4774,12 +4908,13 @@ msgid "PayPal API Credentials"
 msgstr "PayPal API legitimasjon (credentials)"
 
 #: includes/admin/settings/settings.php:469
-#, fuzzy
+#, fuzzy, php-format
 msgid ""
 "The PayPal API credentials are required in order to use PayPal Standard, "
-"PayPal Express, and PayPal Pro. Test API credentials can be obtained at <a "
-"href=\"http://docs.restrictcontentpro.com/article/1548-setting-up-paypal-"
-"sandbox-accounts\" target=\"_blank\">developer.paypal.com</a>."
+"PayPal Express, and PayPal Pro. Test API credentials can be obtained through "
+"<a href=\"%s\" target=\"_blank\">the PayPal developer website</a>. For more "
+"information, see our <a href=\"%s\" target=\"_blank\">documentation article</"
+"a>."
 msgstr ""
 "PayPal API legitimasjon er nødvendig for å bruke PayPal Express, PayPal Pro, "
 "og for å støtte avanserte abonnementskanselleringsvalg i PayPal Standard. "
@@ -5088,7 +5223,7 @@ msgstr ""
 msgid "Email Verification Subject"
 msgstr "Deaktiver IPN verifikasjon"
 
-#: includes/admin/settings/settings.php:812 includes/email-functions.php:568
+#: includes/admin/settings/settings.php:812 includes/email-functions.php:600
 #, fuzzy
 msgid "Please confirm your email address"
 msgstr "Bekreft betalingen"
@@ -5747,9 +5882,14 @@ msgid "Login Page"
 msgstr "Logg inn-side"
 
 #: includes/admin/settings/settings.php:1555
+#, fuzzy
+#| msgid ""
+#| "This is the page the default login URL redirects to, if the option above "
+#| "is checked. This should be the page that contains the [login_form] short "
+#| "code."
 msgid ""
 "This is the page the default login URL redirects to, if the option above is "
-"checked. This should be the page that contains the [login_form] short code."
+"checked. This page must contain the [login_form] shortcode."
 msgstr ""
 "Dette er siden standard logg inn URL videresender til, dersom valget ovenfor "
 "er krysset ut. Dette bør være en side som inneholder [login_form] shortcode."
@@ -5884,100 +6024,128 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/settings.php:1680
-msgid "Enable reCaptcha"
+#, fuzzy
+#| msgid "Enable reCaptcha"
+msgid "Enable reCAPTCHA"
 msgstr "Aktiver reCaptcha"
 
 #: includes/admin/settings/settings.php:1684
-msgid "Check this to enable reCaptcha on the registration form."
+#, fuzzy
+#| msgid "Check this to enable reCaptcha on the registration form."
+msgid "Check this to enable reCAPTCHA on the registration form."
 msgstr "Kryss av for å aktivere reCaptcha på innmeldingsskjemaet."
 
 #: includes/admin/settings/settings.php:1689
-msgid "reCaptcha Site Key"
+msgid "reCAPTCHA Version"
+msgstr ""
+
+#: includes/admin/settings/settings.php:1693
+msgid "reCAPTCHA v2"
+msgstr ""
+
+#: includes/admin/settings/settings.php:1694
+msgid "reCAPTCHA v3"
+msgstr ""
+
+#: includes/admin/settings/settings.php:1696
+msgid "Select the reCAPTCHA version that corresponds to your site key."
+msgstr ""
+
+#: includes/admin/settings/settings.php:1701
+#, fuzzy
+#| msgid "reCaptcha Site Key"
+msgid "reCAPTCHA Site Key"
 msgstr "reCaptcha Site Key"
 
-#: includes/admin/settings/settings.php:1693
-msgid "This your own personal reCaptcha Site key. Go to"
+#: includes/admin/settings/settings.php:1705
+#, fuzzy
+#| msgid "This your own personal reCaptcha Site key. Go to"
+msgid "This your own personal reCAPTCHA Site key. Go to"
 msgstr "Dette er din egen, personlige reCaptcha site key. Gå til"
 
-#: includes/admin/settings/settings.php:1693
-#: includes/admin/settings/settings.php:1702
+#: includes/admin/settings/settings.php:1705
+#: includes/admin/settings/settings.php:1714
 msgid "your account"
 msgstr "din konto"
 
-#: includes/admin/settings/settings.php:1693
+#: includes/admin/settings/settings.php:1705
 msgid "then click on your domain (or add a new one) to find your site key."
 msgstr ""
 "deretter klikk på ditt domene (eller legg til nytt) for å finne din site key."
 
-#: includes/admin/settings/settings.php:1698
-msgid "reCaptcha Secret Key"
+#: includes/admin/settings/settings.php:1710
+#, fuzzy
+#| msgid "reCaptcha Secret Key"
+msgid "reCAPTCHA Secret Key"
 msgstr "reCaptcha hemmelig nøkkel"
 
-#: includes/admin/settings/settings.php:1702
-msgid "This your own personal reCaptcha Secret key. Go to"
+#: includes/admin/settings/settings.php:1714
+#, fuzzy
+#| msgid "This your own personal reCaptcha Secret key. Go to"
+msgid "This your own personal reCAPTCHA Secret key. Go to"
 msgstr "Dette er din personlige reCaptcha hemmelig nøkkel. Gå til"
 
-#: includes/admin/settings/settings.php:1702
+#: includes/admin/settings/settings.php:1714
 msgid "then click on your domain (or add a new one) to find your secret key."
 msgstr ""
 "deretter klikk på ditt domene (eller legg til nytt) for å finne din "
 "hemmelige nøkkel."
 
-#: includes/admin/settings/settings.php:1707
+#: includes/admin/settings/settings.php:1719
 msgid "Enable Debug Mode"
 msgstr ""
 
-#: includes/admin/settings/settings.php:1711
+#: includes/admin/settings/settings.php:1723
 #, php-format
 msgid ""
 "Turn on error logging to help identify issues. Logs are kept in <a href=\"%s"
 "\">Restrict > Tools</a>."
 msgstr ""
 
-#: includes/admin/settings/settings.php:1716
+#: includes/admin/settings/settings.php:1728
 msgid "Opt into beta versions?"
 msgstr ""
 
-#: includes/admin/settings/settings.php:1720
+#: includes/admin/settings/settings.php:1732
 msgid ""
 "Check this box if you would like to receive update notifications for beta "
 "releases. When beta versions are available, an update notification will be "
 "shown in your Plugins page."
 msgstr ""
 
-#: includes/admin/settings/settings.php:1725
+#: includes/admin/settings/settings.php:1737
 msgid "Remove Data on Uninstall"
 msgstr ""
 
-#: includes/admin/settings/settings.php:1729
+#: includes/admin/settings/settings.php:1741
 msgid ""
 "Remove all saved data for Restrict Content Pro when the plugin is "
 "uninstalled."
 msgstr ""
 
-#: includes/admin/settings/settings.php:1740
+#: includes/admin/settings/settings.php:1752
 msgid "Save Options"
 msgstr "Lagre"
 
-#: includes/admin/settings/settings.php:1868
+#: includes/admin/settings/settings.php:1880
 #, php-format
 msgid "Your license key could not be activated. Error: %s"
 msgstr "Lisensnøkkelen kunne ikke bli aktivert. Error: %s"
 
-#: includes/admin/settings/settings.php:2092
+#: includes/admin/settings/settings.php:2104
 #, fuzzy
 msgid "You do not have permission to send test emails"
 msgstr "Du har ikke tilgang til å endre denne brukeren"
 
-#: includes/admin/settings/settings.php:2100
+#: includes/admin/settings/settings.php:2112
 msgid "No email template was provided"
 msgstr ""
 
-#: includes/admin/settings/settings.php:2172
+#: includes/admin/settings/settings.php:2184
 msgid "Test email not sent: email subject or message is blank."
 msgstr ""
 
-#: includes/admin/settings/settings.php:2218
+#: includes/admin/settings/settings.php:2230
 #, php-format
 msgid ""
 "There was an error getting your Stripe credentials. Please <a href=\"%s"
@@ -6014,8 +6182,8 @@ msgid "unlimited"
 msgstr "ubegrenset"
 
 #: includes/admin/subscriptions/class-membership-levels-table.php:164
-#: includes/memberships/class-rcp-membership.php:561
-#: includes/misc-functions.php:1456
+#: includes/memberships/class-rcp-membership.php:573
+#: includes/misc-functions.php:1464
 msgid "Free"
 msgstr "Gratis"
 
@@ -6195,7 +6363,7 @@ msgstr "Angi prisen for dette abonnementsnivå. Skriv inn 0 for gratis."
 
 #: includes/admin/subscriptions/edit-subscription.php:135
 #: includes/admin/subscriptions/subscription-levels.php:162
-#: includes/class-rcp-registration.php:129
+#: includes/class-rcp-registration.php:138
 msgid "Signup Fee"
 msgstr "Innmeldingsavgift"
 
@@ -6211,7 +6379,7 @@ msgstr ""
 
 #: includes/admin/subscriptions/edit-subscription.php:149
 #: includes/admin/subscriptions/subscription-levels.php:176
-#: includes/misc-functions.php:1450
+#: includes/misc-functions.php:1458
 msgid "Inactive"
 msgstr "Inaktivt"
 
@@ -6451,54 +6619,54 @@ msgstr "Ingen tilgjengelige abonnementer for din konto."
 msgid "Successfully processed %d/%d items. You may now leave the page."
 msgstr ""
 
-#: includes/batch/batch-functions.php:38
+#: includes/batch/batch-functions.php:39
 #, php-format
 msgid "You must supply a valid queue, name, and callback in %s"
 msgstr ""
 
-#: includes/batch/batch-functions.php:102
+#: includes/batch/batch-functions.php:109
 #, php-format
 msgid "Unable to add job %s to the %s queue. It already exists."
 msgstr ""
 
-#: includes/batch/batch-functions.php:119
+#: includes/batch/batch-functions.php:128
 #, php-format
 msgid ""
 "There was an error adding job: %s. Error message: %s If this issue persists, "
 "please contact the Restrict Content Pro support team."
 msgstr ""
 
-#: includes/batch/batch-functions.php:121
+#: includes/batch/batch-functions.php:130
 #, php-format
 msgid "Invalid job configuration: %s"
 msgstr ""
 
-#: includes/batch/batch-functions.php:125
+#: includes/batch/batch-functions.php:134
 msgid "Failed to add job to queue"
 msgstr ""
 
-#: includes/batch/batch-functions.php:239
+#: includes/batch/batch-functions.php:248
 #, fuzzy
 msgid "Invalid job ID."
 msgstr "Ugyldig"
 
-#: includes/batch/batch-functions.php:264
+#: includes/batch/batch-functions.php:273
 msgid ""
 "Restrict Content Pro needs to perform system maintenance. This maintenance "
 "is <strong>REQUIRED</strong>."
 msgstr ""
 
-#: includes/batch/batch-functions.php:265
+#: includes/batch/batch-functions.php:274
 #, php-format
 msgid "<a href=\"%s\">Click here</a> to learn more and start the upgrade."
 msgstr ""
 
-#: includes/batch/class-job.php:405
+#: includes/batch/class-job.php:440
 #, php-format
 msgid "Error processing %s - invalid callback."
 msgstr ""
 
-#: includes/batch/class-job.php:448
+#: includes/batch/class-job.php:485
 msgid ""
 "You must supply a valid name, description, and JobInterface callback when "
 "registering a batch job."
@@ -6530,57 +6698,67 @@ msgstr ""
 msgid "Error creating membership record for row #%d (user ID #%d)."
 msgstr ""
 
-#: includes/batch/csv-imports/class-import-memberships.php:134
+#: includes/batch/csv-imports/class-import-memberships.php:135
 #, php-format
 msgid "Error updating membership record #%d for row #%d."
 msgstr ""
 
-#: includes/batch/csv-imports/class-import-memberships.php:205
+#: includes/batch/csv-imports/class-import-memberships.php:229
 #, php-format
 msgid ""
 "Email address provided in the CSV does not match the user email on record "
 "for user ID #%d."
 msgstr ""
 
-#: includes/batch/csv-imports/class-import-memberships.php:209
+#: includes/batch/csv-imports/class-import-memberships.php:233
 #, php-format
 msgid ""
 "User login provided in the CSV does not match the user login on record for "
 "user ID #%d."
 msgstr ""
 
-#: includes/batch/csv-imports/class-import-memberships.php:271
+#: includes/batch/csv-imports/class-import-memberships.php:295
 msgid "Error creating or retrieving user account."
 msgstr ""
 
-#: includes/batch/csv-imports/class-import-memberships.php:307
+#: includes/batch/csv-imports/class-import-memberships.php:331
 #, fuzzy
 msgid "Unable to determine membership level."
 msgstr "Navnet på dette abonnementsnivået."
 
-#: includes/batch/v3/class-migrate-memberships.php:216
+#: includes/batch/v3/class-migrate-memberships.php:209
+#, fuzzy, php-format
+msgid ""
+"Skipped user #%d - unable to locate user account. Possible orphaned user "
+"meta."
+msgstr "Navnet på dette abonnementsnivået."
+
+#: includes/batch/v3/class-migrate-memberships.php:222
 #, fuzzy, php-format
 msgid "Skipped user #%d - unable to determine membership level."
 msgstr "Navnet på dette abonnementsnivået."
 
-#: includes/batch/v3/class-migrate-memberships.php:232
+#: includes/batch/v3/class-migrate-memberships.php:238
 #, fuzzy, php-format
 msgid "Skipped user #%d - unable to get membership level details for ID #%d."
 msgstr "Navnet på dette abonnementsnivået."
 
-#: includes/batch/v3/class-migrate-memberships.php:265
+#: includes/batch/v3/class-migrate-memberships.php:271
 #, php-format
 msgid "Error inserting customer record for user #%d."
 msgstr ""
 
-#: includes/batch/v3/class-migrate-memberships.php:400
+#: includes/batch/v3/class-migrate-memberships.php:406
 #, php-format
 msgid "Error inserting membership record for user #%d."
 msgstr ""
 
-#: includes/captcha-functions.php:58 includes/captcha-functions.php:76
-msgid "Please verify that you are not a robot"
-msgstr "Vennligst bekreft at du ikke er en robot"
+#: includes/captcha-functions.php:94 includes/captcha-functions.php:121
+#: includes/captcha-functions.php:139
+#, fuzzy
+#| msgid "Registration Page"
+msgid "Registration failed"
+msgstr "Innmeldingsside"
 
 #: includes/class-rcp-cli.php:62
 msgid ""
@@ -6801,14 +6979,6 @@ msgstr ""
 msgid "Gateway: %s"
 msgstr "Betalingsmuligheter"
 
-#: includes/class-rcp-discounts.php:827
-msgid "Please enter a discount amount containing numbers only."
-msgstr "Vennligst skriv inn rabattsum med kun tall."
-
-#: includes/class-rcp-discounts.php:835
-msgid "Percentage discounts must be whole numbers between 1 and 100."
-msgstr "Prosentvise rabatter må være i hele nummer mellom 1 og 100."
-
 #: includes/class-rcp-emails.php:224
 msgid "Default Template"
 msgstr ""
@@ -6877,19 +7047,35 @@ msgid "The URL to the member's most recent invoice"
 msgstr ""
 
 #: includes/class-rcp-emails.php:530
-msgid "The discount code that was used with the most recent payment"
+msgid "The URL to renew the membership associated with the email being sent"
 msgstr ""
 
 #: includes/class-rcp-emails.php:535
-msgid "The member&#8217;s ID number"
+msgid ""
+"The URL to change (upgrade/downgrade) the membership associated with the "
+"email being sent"
 msgstr ""
 
 #: includes/class-rcp-emails.php:540
+msgid ""
+"The URL to the \"Update Billing Card\" page for the latest payment "
+"(recommended for use in the Renewal Payment Failed email)"
+msgstr ""
+
+#: includes/class-rcp-emails.php:545
+msgid "The discount code that was used with the most recent payment"
+msgstr ""
+
+#: includes/class-rcp-emails.php:550
+msgid "The member&#8217;s ID number"
+msgstr ""
+
+#: includes/class-rcp-emails.php:555
 #, fuzzy
 msgid "The name of this website"
 msgstr "Rabattnavn"
 
-#: includes/class-rcp-emails.php:545
+#: includes/class-rcp-emails.php:560
 msgid "The email verification URL, only for the Email Verification template"
 msgstr ""
 
@@ -6924,18 +7110,18 @@ msgid "Subscription Name"
 msgstr "Medlemskode"
 
 #: includes/class-rcp-export-payments.php:43
-#: templates/paypal-express-confirm.php:40
+#: templates/paypal-express-confirm.php:41
 msgid "Subtotal"
 msgstr ""
 
 #: includes/class-rcp-export-payments.php:44
-#: templates/paypal-express-confirm.php:59
+#: templates/paypal-express-confirm.php:60
 #, fuzzy
 msgid "Credits"
 msgstr "Innmeldingskreditt"
 
 #: includes/class-rcp-export-payments.php:45
-#: templates/paypal-express-confirm.php:53
+#: templates/paypal-express-confirm.php:54
 msgid "Fees"
 msgstr ""
 
@@ -6946,8 +7132,8 @@ msgid "Discount Amount"
 msgstr "Rabattkupong"
 
 #: includes/class-rcp-export-payments.php:50
-#: includes/deprecated/functions.php:601 includes/member-functions.php:178
-#: includes/member-functions.php:195
+#: includes/deprecated/functions.php:601 includes/member-functions.php:241
+#: includes/member-functions.php:258
 msgid "Payment Type"
 msgstr "Betalingstype"
 
@@ -6965,7 +7151,7 @@ msgid ""
 "duration greater than zero."
 msgstr ""
 
-#: includes/class-rcp-registration.php:129
+#: includes/class-rcp-registration.php:138
 msgid "Signup Credit"
 msgstr "Innmeldingskreditt"
 
@@ -7079,12 +7265,12 @@ msgstr "Tre måneder før utløp"
 msgid "Your Subscription is About to Expire"
 msgstr "abonnement har utløpt"
 
-#: includes/class-rcp-reminders.php:310
+#: includes/class-rcp-reminders.php:314
 #, php-format
 msgid "%s notice was emailed to the member - %s."
 msgstr ""
 
-#: includes/class-rcp-reminders.php:457
+#: includes/class-rcp-reminders.php:461
 msgid ""
 "**THIS IS A DEFAULT TEST MESSAGE - Notice message was not retrieved.**\n"
 "\n"
@@ -7094,12 +7280,12 @@ msgid ""
 "%."
 msgstr ""
 
-#: includes/class-rcp-reminders.php:459
+#: includes/class-rcp-reminders.php:463
 msgid "Default Subject Message - Your Subscription is About to Renew or Expire"
 msgstr ""
 
-#: includes/class-restrict-content-pro.php:107
-#: includes/class-restrict-content-pro.php:118
+#: includes/class-restrict-content-pro.php:122
+#: includes/class-restrict-content-pro.php:133
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -7120,9 +7306,14 @@ msgstr ""
 msgid "Your account is pending email verification."
 msgstr "Kontoen din venter på verifisering av en administrator."
 
-#: includes/customers/class-rcp-customer.php:541
+#: includes/customers/class-rcp-customer.php:570
 msgid "Email successfully verified."
 msgstr ""
+
+#: includes/customers/customer-actions.php:33
+#, fuzzy, php-format
+msgid "Free trial used via membership \"%s\" (#%d)."
+msgstr "Nytt prøveabonnement den "
 
 #: includes/deprecated/class-wp-logging.php:71
 msgid "Logs"
@@ -7184,8 +7375,8 @@ msgstr "To måneder før utløp"
 msgid "Three months before expiration"
 msgstr "Tre måneder før utløp"
 
-#: includes/deprecated/functions.php:600 includes/member-functions.php:177
-#: includes/member-functions.php:194 templates/paypal-express-confirm.php:39
+#: includes/deprecated/functions.php:600 includes/member-functions.php:240
+#: includes/member-functions.php:257 templates/paypal-express-confirm.php:40
 msgid "Subscription"
 msgstr "Medlemskap"
 
@@ -7193,36 +7384,123 @@ msgstr "Medlemskap"
 msgid "No payments recorded"
 msgstr "Ingen betalinger registrert"
 
+#: includes/deprecated/functions.php:1913
+#: includes/deprecated/functions.php:1930
+#: includes/deprecated/functions.php:1947
+#: includes/deprecated/functions.php:1963
+#: includes/deprecated/functions.php:1979
+#: includes/deprecated/functions.php:2135
+#: includes/deprecated/functions.php:2152
+#: includes/deprecated/functions.php:2168
+#: includes/deprecated/functions.php:2184
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:674
+#: includes/gateways/stripe/functions.php:250
+#: includes/gateways/stripe/functions.php:267
+#: includes/gateways/stripe/functions.php:284
+#: includes/gateways/stripe/functions.php:300
+#: includes/gateways/stripe/functions.php:316
+msgid "An error occurred"
+msgstr "En feil oppstod"
+
+#: includes/deprecated/functions.php:1915
+#: includes/deprecated/functions.php:1932
+#: includes/deprecated/functions.php:1949
+#: includes/deprecated/functions.php:1965
+#: includes/deprecated/functions.php:1981
+#: includes/deprecated/functions.php:2137
+#: includes/deprecated/functions.php:2154
+#: includes/deprecated/functions.php:2170
+#: includes/deprecated/functions.php:2186
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:677
+#: includes/gateways/stripe/functions.php:252
+#: includes/gateways/stripe/functions.php:269
+#: includes/gateways/stripe/functions.php:286
+#: includes/gateways/stripe/functions.php:302
+#: includes/gateways/stripe/functions.php:318
+#, php-format
+msgid "Error code: %s"
+msgstr "Feilkode: %s"
+
+#: includes/deprecated/functions.php:1992
+#: includes/deprecated/functions.php:2197
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:130
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:243
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:308
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:153
+#: includes/gateways/stripe/functions.php:329
+msgid "An unidentified error occurred."
+msgstr "En uidentifisert feil oppstod."
+
+#: includes/deprecated/functions.php:2322
+#: includes/gateways/twocheckout/functions.php:95
+msgid "Unable to find customer from member ID."
+msgstr ""
+
+#: includes/deprecated/functions.php:2373
+msgid ""
+"The Braintree payment gateway in Restrict Content Pro requires PHP version "
+"5.4 or later. Please contact your web host and request that your version be "
+"upgraded to 5.4 or later. Your site will be unable to take Braintree "
+"payments until PHP is upgraded."
+msgstr ""
+
+#: includes/discounts/class-rcp-discount.php:138
+#, php-format
+msgid "Can't get property %s"
+msgstr ""
+
+#: includes/discounts/discount-functions.php:213
+#, fuzzy
+msgid "Please enter a discount code."
+msgstr "Vennligst velg minst et medlem å endre."
+
+#: includes/discounts/discount-functions.php:244
+#, fuzzy
+#| msgid "The amount of this discount code."
+msgid "Failed to insert new discount code."
+msgstr "Mengde rabatt for denne rabattkoden."
+
+#: includes/discounts/discount-functions.php:273
+#, fuzzy
+msgid "Invalid discount ID."
+msgstr "Ugyldig brukernavn"
+
+#: includes/discounts/discount-functions.php:322
+#, fuzzy
+#| msgid "The amount of this discount code."
+msgid "Failed to update discount code."
+msgstr "Mengde rabatt for denne rabattkoden."
+
 #: includes/email-functions.php:93 includes/email-functions.php:126
 #: includes/email-functions.php:160
 msgid "is now subscribed to"
 msgstr "abonnerer nå på"
 
 #: includes/email-functions.php:93 includes/email-functions.php:126
-#: includes/email-functions.php:160 includes/email-functions.php:535
+#: includes/email-functions.php:160 includes/email-functions.php:567
 #, fuzzy
 msgid "Membership level"
 msgstr "Legg til medlemskapsnivå"
 
 #: includes/email-functions.php:95 includes/email-functions.php:128
 #: includes/email-functions.php:162 includes/email-functions.php:195
-#: includes/email-functions.php:231 includes/email-functions.php:537
-#: includes/install.php:388 includes/install.php:402 includes/install.php:416
-#: includes/install.php:431 includes/install.php:445 includes/install.php:467
+#: includes/email-functions.php:231 includes/email-functions.php:569
+#: includes/install.php:375 includes/install.php:389 includes/install.php:403
+#: includes/install.php:418 includes/install.php:432 includes/install.php:454
 msgid "Thank you"
 msgstr "Tusen takk"
 
-#: includes/email-functions.php:99 includes/install.php:384
+#: includes/email-functions.php:99 includes/install.php:371
 #, fuzzy, php-format
 msgid "New membership on %s"
 msgstr "Nytt medlemskap på "
 
-#: includes/email-functions.php:132 includes/install.php:398
+#: includes/email-functions.php:132 includes/install.php:385
 #, fuzzy, php-format
 msgid "New free membership on %s"
 msgstr "Ny, gratis abonnemenent den "
 
-#: includes/email-functions.php:166 includes/install.php:412
+#: includes/email-functions.php:166 includes/install.php:399
 #, fuzzy, php-format
 msgid "New trial membership on %s"
 msgstr "Nytt prøveabonnement den "
@@ -7237,7 +7515,7 @@ msgstr "har stoppet abonnementet"
 msgid "Their membership level was"
 msgstr "Deres abonnementsnivå var"
 
-#: includes/email-functions.php:199 includes/install.php:426
+#: includes/email-functions.php:199 includes/install.php:413
 #, fuzzy, php-format
 msgid "Cancelled membership on %s"
 msgstr "Stoppet abonnementet på "
@@ -7247,36 +7525,40 @@ msgstr "Stoppet abonnementet på "
 msgid "membership has expired"
 msgstr "abonnement har utløpt"
 
-#: includes/email-functions.php:235 includes/install.php:441
+#: includes/email-functions.php:235 includes/install.php:428
 #, fuzzy, php-format
 msgid "Expired membership on %s"
 msgstr "Utløpt abonnement den "
 
-#: includes/email-functions.php:535
+#: includes/email-functions.php:567
 msgid "just submitted a manual payment on"
 msgstr ""
 
-#: includes/email-functions.php:538
+#: includes/email-functions.php:570
 #, fuzzy, php-format
 msgid "New manual payment on %s"
 msgstr "Se alle betalinger"
 
-#: includes/email-functions.php:576
+#: includes/email-functions.php:608
 msgid "Verification email sent to member."
 msgstr ""
 
-#: includes/gateways/braintree/functions.php:125
-#: includes/gateways/twocheckout/functions.php:95
-msgid "Unable to find customer from member ID."
-msgstr ""
+#: includes/gateways/braintree/functions.php:212
+#, fuzzy
+msgid "Missing payment method nonce."
+msgstr "Oppdater betaling"
 
-#: includes/gateways/braintree/functions.php:235
-msgid ""
-"The Braintree payment gateway in Restrict Content Pro requires PHP version "
-"5.4 or later. Please contact your web host and request that your version be "
-"upgraded to 5.4 or later. Your site will be unable to take Braintree "
-"payments until PHP is upgraded."
-msgstr ""
+#: includes/gateways/braintree/functions.php:218
+#, fuzzy
+#| msgid "Add Subscription"
+msgid "Invalid subscription."
+msgstr "Legg til medlemskap"
+
+#: includes/gateways/braintree/functions.php:252
+#, fuzzy, php-format
+#| msgid "An error occurred"
+msgid "An error occurred: %s"
+msgstr "En feil oppstod"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:80
 msgid ""
@@ -7314,40 +7596,36 @@ msgid "Payment flagged as fraudulent in 2Checkout"
 msgstr "Betaling flagget som uredelig i 2Checkout"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:447
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:255
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:256
 msgid "The security code you have entered is invalid"
 msgstr "Sikkerhetskoden du har lagt inn er ugyldig"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:451
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:235
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:236
 msgid "The address you have entered is invalid"
 msgstr "Adressen du har lagt inn er ugyldig"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:455
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:239
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:240
 msgid "The city you have entered is invalid"
 msgstr "Byen du la inn er ugyldig"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:459
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:243
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:244
 msgid "The state you have entered is invalid"
 msgstr "Fylket du la inn er ugyldig"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:463
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:247
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:248
 msgid "The country you have entered is invalid"
 msgstr "Landet du la inn er ugyldig"
 
 #: includes/gateways/class-rcp-payment-gateway-2checkout.php:467
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:259
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:260
 msgid "The zip / postal code you have entered is invalid"
 msgstr "Postnummeret du la inn er ugyldig"
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:74
-msgid "Credit card information incomplete."
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:88
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:91
 #, fuzzy
 msgid ""
 "Missing Braintree payment nonce. Please try again. Contact support if the "
@@ -7356,7 +7634,7 @@ msgstr ""
 "Mangler 2Checkout token, vennligst prøv igjen eller kontakt support hvis "
 "problemet fortsetter."
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:166
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:168
 #, fuzzy
 msgid ""
 "Unable to locate or create customer record. Please try again. Contact "
@@ -7365,86 +7643,76 @@ msgstr ""
 "Mangler 2Checkout token, vennligst prøv igjen eller kontakt support hvis "
 "problemet fortsetter."
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:191
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:202
-#, fuzzy
-msgid ""
-"There was an error saving your payment information. Please try again. "
-"Contact support if the problem persists."
-msgstr ""
-"Mangler 2Checkout token, vennligst prøv igjen eller kontakt support hvis "
-"problemet fortsetter."
-
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:230
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:198
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:250
 msgid "Braintree Credit Card Initial Payment"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:239
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:275
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:305
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:215
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:302
 #, php-format
 msgid "There was a problem processing your payment. Message: %s"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:326
-#, php-format
-msgid "An error occurred. Please contact the site administrator: %s."
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:329
-#, fuzzy, php-format
-msgid "Error message: %s"
-msgstr "Feilmelding:"
-
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:344
-msgid "Braintree Credit Card One Time"
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:526
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:462
 #, fuzzy
 msgid "Subscription cancelled in Braintree via webhook."
 msgstr "Medlemskap avsluttet i 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:561
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:497
 #, fuzzy
 msgid "Subscription started in Braintree"
 msgstr "Abonnement startet i 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:588
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:524
 #, fuzzy, php-format
 msgid "Payment %s collected in Braintree"
 msgstr "Betaling mislyktes"
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:620
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:558
 #, fuzzy
 msgid "Subscription expired in Braintree"
 msgstr "abonnement har utløpt"
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:633
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:571
 msgid "Trial ended in Braintree"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:653
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:591
 #, fuzzy, php-format
 msgid "Subscription %s started in Braintree"
 msgstr "Abonnement startet i 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-braintree.php:670
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:608
 #, fuzzy
 msgid "Subscription went past due in Braintree"
 msgstr "Medlemskap gjenopptatt i 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:130
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:243
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:308
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:152
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:392
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:479
-#: includes/gateways/stripe/functions.php:335
-#: includes/gateways/stripe/functions.php:495
-#: includes/gateways/stripe/functions.php:698
-msgid "An unidentified error occurred."
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:657
+msgid "Failed to create client token."
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:690
+#, fuzzy
+#| msgid "You are already registered and have an active subscription."
+msgid "You do not have an active subscription."
+msgstr "Du er allerede registrert og har et aktivt medlemskap."
+
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:701
+#, fuzzy, php-format
+#| msgid "An unidentified error occurred."
+msgid "An unexpected error occurred: %s"
 msgstr "En uidentifisert feil oppstod."
+
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:736
+#, fuzzy
+msgid "Please wait..."
+msgstr "Vennligst vent . . . "
+
+#: includes/gateways/class-rcp-payment-gateway-braintree.php:738
+#, fuzzy
+msgid "Please try a new payment method."
+msgstr "Oppdater betaling"
 
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:146
 msgid "PayPal token creation failed."
@@ -7453,27 +7721,27 @@ msgstr "PayPal pollett (token) opprettelse mislykket."
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:147
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:257
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:322
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:170
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:171
 msgid "Error message:"
 msgstr "Feilmelding:"
 
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:148
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:258
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:323
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:171
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:172
 msgid "Error code:"
 msgstr "Feilkode:"
 
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:163
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:272
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:351
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:202
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:356
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:203
 #: includes/gateways/paypal/functions.php:271
 msgid "Something has gone wrong, please try again"
 msgstr "Noe har gått galt, vennligst prøv igjen"
 
 #: includes/gateways/class-rcp-payment-gateway-paypal-express.php:179
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:231
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:232
 msgid ""
 "You have not configured PayPal API access. Please configure it in Restrict "
 "&rarr; Settings"
@@ -7486,64 +7754,65 @@ msgstr ""
 msgid "PayPal payment processing failed."
 msgstr "PayPal betalingsprosess feilet."
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:380
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:385
 msgid "Invalid response code from PayPal"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:381
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:386
 #, php-format
 msgid "An unexpected PayPal error occurred. Error message: %s."
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:538
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:545
 #: includes/gateways/class-rcp-payment-gateway-paypal.php:415
 #, fuzzy, php-format
 msgid "Transaction ID %s failed in PayPal."
 msgstr "Transaksjons ID for denne betalingen, dersom det finnes"
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:545
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:552
 #: includes/gateways/class-rcp-payment-gateway-paypal.php:422
 msgid "unknown"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:546
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:553
 #: includes/gateways/class-rcp-payment-gateway-paypal.php:423
 #, php-format
 msgid "Transaction ID %s is pending in PayPal for reason: %s"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:578
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:585
 msgid "Initial payment failed in PayPal Express."
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:580
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:587
 #, fuzzy
 msgid "Initial payment failed."
 msgstr "PayPal betalingsprosess feilet."
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:592
+#: includes/gateways/class-rcp-payment-gateway-paypal-express.php:599
 #, fuzzy
 msgid "Membership cancelled via PayPal Express IPN."
 msgstr "Abonnement kansellert via tilbakebetaling 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:169
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:170
 msgid "PayPal subscription creation failed."
 msgstr "PayPal abonnementsopprettelse feilet."
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:251
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:252
 msgid "The card number you have entered is invalid"
 msgstr "Kortnummeret du la inn er ugyldig"
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:263
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:900
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:264
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1102
+#: includes/scripts.php:238
 msgid "The card holder name you have entered is invalid"
 msgstr "Kortholderens navn stemmer ikke"
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:267
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:268
 msgid "The card expiration month you have entered is invalid"
 msgstr "Utløpsmåneden på kortet stemmer ikke"
 
-#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:271
+#: includes/gateways/class-rcp-payment-gateway-paypal-pro.php:272
 msgid "The card expiration year you have entered is invalid"
 msgstr "Utløpsåret på kortet stemmer ikke"
 
@@ -7559,91 +7828,93 @@ msgstr ""
 msgid "Membership cancelled via PayPal Standard IPN."
 msgstr "Abonnement kansellert via tilbakebetaling 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-stripe-checkout.php:81
-#: includes/shortcodes.php:343
-msgid "Start Trial"
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateway-stripe-checkout.php:81
-#: includes/install.php:241 includes/scripts.php:216
-#: includes/shortcodes.php:343 templates/register-single.php:191
-#: templates/register.php:215
-msgid "Register"
-msgstr "Registrer"
-
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:81
-msgid ""
-"Missing Stripe token, please try again or contact support if the issue "
-"persists."
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:512
-msgid "An error occurred, please contact the site administrator: "
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:557
-#: includes/gateways/stripe/functions.php:256
-#: includes/gateways/stripe/functions.php:273
-#: includes/gateways/stripe/functions.php:290
-#: includes/gateways/stripe/functions.php:306
-#: includes/gateways/stripe/functions.php:322
-#: includes/gateways/stripe/functions.php:416
-#: includes/gateways/stripe/functions.php:433
-#: includes/gateways/stripe/functions.php:450
-#: includes/gateways/stripe/functions.php:466
-#: includes/gateways/stripe/functions.php:482
-#: includes/gateways/stripe/functions.php:636
-#: includes/gateways/stripe/functions.php:653
-#: includes/gateways/stripe/functions.php:669
-#: includes/gateways/stripe/functions.php:685
-msgid "An error occurred"
-msgstr "En feil oppstod"
-
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:560
-#: includes/gateways/stripe/functions.php:258
-#: includes/gateways/stripe/functions.php:275
-#: includes/gateways/stripe/functions.php:292
-#: includes/gateways/stripe/functions.php:308
-#: includes/gateways/stripe/functions.php:324
-#: includes/gateways/stripe/functions.php:418
-#: includes/gateways/stripe/functions.php:435
-#: includes/gateways/stripe/functions.php:452
-#: includes/gateways/stripe/functions.php:468
-#: includes/gateways/stripe/functions.php:484
-#: includes/gateways/stripe/functions.php:638
-#: includes/gateways/stripe/functions.php:655
-#: includes/gateways/stripe/functions.php:671
-#: includes/gateways/stripe/functions.php:687
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:78
 #, php-format
-msgid "Error code: %s"
-msgstr "Feilkode: %s"
+msgid "Error creating Stripe customer: %s"
+msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:834
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:223
+#, fuzzy
+#| msgid ""
+#| "Missing 2Checkout token, please try again or contact support if the issue "
+#| "persists."
+msgid ""
+"Missing Stripe payment intent, please try again or contact support if the "
+"issue persists."
+msgstr ""
+"Mangler 2Checkout token, vennligst prøv igjen eller kontakt support hvis "
+"problemet fortsetter."
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:245
+#, php-format
+msgid "User ID: %d - User Email: %s - Membership: %s"
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:607
+#, fuzzy
+msgid "An unknown error has occurred."
+msgstr "En uidentifisert feil oppstod."
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:633
+#, fuzzy, php-format
+msgid "An error has occurred (code: %s; message: %s)."
+msgstr "En uidentifisert feil oppstod."
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:943
 #, fuzzy
 msgid "Membership cancelled via Stripe webhook."
 msgstr "Abonnement kansellert via tilbakebetaling 2Checkout"
 
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:875
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1008
+#: templates/card-update-form.php:35
+#, fuzzy
+#| msgid "Pending"
+msgid "ending in"
+msgstr "Venter"
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1011
+#: templates/card-update-form.php:38
+#, fuzzy
+#| msgid "expired"
+msgid "expires"
+msgstr "utgått"
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1037
+#: templates/card-update-form.php:65
+#, fuzzy
+msgid "Add New Card"
+msgstr "Legg til nytt abonnementsnivå"
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1048
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1076
 #: templates/card-form-full.php:302 templates/card-form.php:31
-#: templates/card-update-form.php:41
+#: templates/card-update-form-fields.php:23
 msgid "Name on Card"
 msgstr "Navn på kortet"
 
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:880
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1053
 #, fuzzy
 msgid "Credit Card"
 msgstr "Kortbetaling"
 
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:904
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1106
 msgid ""
 "Missing Stripe test keys. Please enter your test keys to use Stripe in "
 "Sandbox Mode."
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateway-stripe.php:908
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1110
 msgid ""
 "Missing Stripe live keys. Please enter your live keys to use Stripe in Live "
 "Mode."
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1307
+msgid "Missing plan name or price."
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateway-stripe.php:1327
+msgid "Empty plan ID."
 msgstr ""
 
 #: includes/gateways/class-rcp-payment-gateways.php:57
@@ -7660,10 +7931,9 @@ msgid "PayPal Express"
 msgstr ""
 
 #: includes/gateways/class-rcp-payment-gateways.php:72
-#: includes/gateways/class-rcp-payment-gateways.php:77
 #: includes/gateways/class-rcp-payment-gateways.php:82
-#: includes/gateways/class-rcp-payment-gateways.php:87
-#: includes/gateways/class-rcp-payment-gateways.php:92
+#: includes/gateways/class-rcp-payment-gateways.php:93
+#: includes/gateways/class-rcp-payment-gateways.php:103
 msgid "Credit / Debit Card"
 msgstr "Kortbetaling"
 
@@ -7671,23 +7941,58 @@ msgstr "Kortbetaling"
 msgid "PayPal Pro"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateways.php:78
+#: includes/gateways/class-rcp-payment-gateways.php:83
 msgid "Stripe"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateways.php:83
-msgid "Stripe Checkout"
-msgstr ""
-
-#: includes/gateways/class-rcp-payment-gateways.php:88
+#: includes/gateways/class-rcp-payment-gateways.php:94
 msgid "2Checkout"
 msgstr ""
 
-#: includes/gateways/class-rcp-payment-gateways.php:93
+#: includes/gateways/class-rcp-payment-gateways.php:104
 msgid "Braintree"
 msgstr ""
 
-#: includes/gateways/gateway-functions.php:309
+#: includes/gateways/class-rcp-payment-gateways.php:235
+#, php-format
+msgid ""
+"<strong>Test mode is enabled.</strong> You can use the following card "
+"details for %s test transactions:"
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateways.php:237
+#, fuzzy, php-format
+msgid "Number: %s"
+msgstr "Etternavn"
+
+#: includes/gateways/class-rcp-payment-gateways.php:239
+#, php-format
+msgid "CVC: %s"
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateways.php:241
+#, fuzzy
+#| msgid "Expiration date"
+msgid "Expiration: any future date"
+msgstr "Gyldig til dato"
+
+#: includes/gateways/class-rcp-payment-gateways.php:243
+#, php-format
+msgid "Zip: %s"
+msgstr ""
+
+#: includes/gateways/class-rcp-payment-gateways.php:247
+#, php-format
+msgid ""
+"For more test card numbers visit the <a href=\"%s\" target=\"_blank\">%s "
+"documentation page</a>."
+msgstr ""
+
+#: includes/gateways/gateway-functions.php:152
+msgid "Ajax payment is not supported by this payment method."
+msgstr ""
+
+#: includes/gateways/gateway-functions.php:362
 msgid "Your account does not support updating your billing card"
 msgstr "Kontoen din støtter ikke oppdatering av betalingskort"
 
@@ -7704,9 +8009,196 @@ msgstr "Feil ved oppdatering av abonnement"
 msgid "PayPal cancellation failed - no API access."
 msgstr "PayPal pollett (token) opprettelse mislykket."
 
-#: includes/gateways/stripe/functions.php:224
-msgid "Missing Stripe token"
+#: includes/gateways/stripe/functions.php:145
+#, fuzzy
+#| msgid ""
+#| "Are you sure you want to delete this payment? This action is "
+#| "irreversible. Proceed?"
+msgid "Are you sure you want to delete this payment method?"
 msgstr ""
+"Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
+"tilbake. Fortsette?"
+
+#: includes/gateways/stripe/functions.php:146
+#, fuzzy
+#| msgid "Please enter a username"
+msgid "Please enter a card holder name"
+msgstr "Skriv inn et brukernavn"
+
+#: includes/gateways/stripe/functions.php:147 includes/scripts.php:229
+msgid "Please Wait . . . "
+msgstr "Vennligst vent . . . "
+
+#: includes/gateways/stripe/functions.php:163
+#, php-format
+msgid ""
+"You have an overdue invoice for %s. Please update your card details to "
+"complete your payment."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:194
+msgid "Missing Stripe setup intent."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:503
+#, fuzzy
+msgid "User is not a customer."
+msgstr "Vennligst velg minst et medlem å endre."
+
+#: includes/gateways/stripe/functions.php:511
+#, fuzzy
+msgid "User is not a Stripe customer."
+msgstr "Vennligst velg minst et medlem å endre."
+
+#: includes/gateways/stripe/functions.php:527
+msgid "Missing Stripe secret key."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:538
+#, fuzzy
+msgid "User does not have any saved payment methods."
+msgstr "Du har ingen betalte fakturaer."
+
+#: includes/gateways/stripe/functions.php:749
+#: includes/registration-functions.php:522
+#, fuzzy
+msgid "Missing payment ID."
+msgstr "Rediger abonnementer"
+
+#: includes/gateways/stripe/functions.php:761
+#, fuzzy
+#| msgid "Invalid username"
+msgid "Invalid payment."
+msgstr "Ugyldig brukernavn"
+
+#: includes/gateways/stripe/functions.php:771
+msgid "Unknown error"
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:820
+#, fuzzy
+msgid "Missing membership ID."
+msgstr "Ditt medlemskap"
+
+#: includes/gateways/stripe/functions.php:827
+#, fuzzy
+msgid "Missing gateway subscription ID."
+msgstr "Rediger abonnementer"
+
+#: includes/gateways/stripe/functions.php:887
+#, fuzzy
+msgid "Invalid Stripe customer ID."
+msgstr "Ugyldig brukernavn"
+
+#: includes/gateways/stripe/functions.php:926
+#, fuzzy
+#| msgid "Error updating subscription"
+msgid "Error creating setup intent."
+msgstr "Feil ved oppdatering av abonnement"
+
+#: includes/gateways/stripe/functions.php:984
+#, fuzzy
+msgid "Missing payment method ID."
+msgstr "Oppdater betaling"
+
+#: includes/gateways/stripe/functions.php:992
+#, fuzzy
+msgid "Invalid or unknown Stripe customer ID."
+msgstr "Ugyldig brukernavn"
+
+#: includes/gateways/stripe/functions.php:1032
+#, fuzzy
+#| msgid "An error occurred"
+msgid "An unknown error occurred."
+msgstr "En feil oppstod"
+
+#: includes/gateways/stripe/functions.php:1081
+msgid "Payment gateway connection error."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1082
+msgid "The card has been declined."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1083
+#, fuzzy
+#| msgid "Please enter a valid email address"
+msgid ""
+"Invalid email address. Please enter a valid email address and try again."
+msgstr "Angi en gyldig epostadresse"
+
+#: includes/gateways/stripe/functions.php:1084
+msgid ""
+"This card has expired. Please try again with a different payment method."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1085
+msgid ""
+"The supplied billing address is incorrect. Please check the card's address "
+"or try again with a different card."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1086
+msgid ""
+"The card's security code is incorrect. Please check the security code or try "
+"again with a different card."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1087
+#: includes/gateways/stripe/functions.php:1088
+msgid ""
+"The card number is incorrect. Please check the card number or try again with "
+"a different card."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1089
+#: includes/gateways/stripe/functions.php:1090
+msgid ""
+"The card's postal code is incorrect. Please check the postal code or try "
+"again with a different card."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1091
+msgid ""
+"The card's security code is invalid. Please check the security code or try "
+"again with a different card."
+msgstr ""
+
+#: includes/gateways/stripe/functions.php:1092
+#, fuzzy
+#| msgid "The card expiration month you have entered is invalid"
+msgid "The card's expiration month is incorrect."
+msgstr "Utløpsmåneden på kortet stemmer ikke"
+
+#: includes/gateways/stripe/functions.php:1093
+#, fuzzy
+#| msgid "The card expiration year you have entered is invalid"
+msgid "The card's expiration year is incorrect."
+msgstr "Utløpsåret på kortet stemmer ikke"
+
+#: includes/gateways/stripe/functions.php:1094
+#, fuzzy
+#| msgid "Payment creation failed"
+msgid "Authentication failure."
+msgstr "Betaling mislyktes"
+
+#: includes/gateways/stripe/functions.php:1095
+#, fuzzy
+#| msgid "The discount you entered is invalid"
+msgid "This payment method is invalid."
+msgstr "Kupongkoden er ugyldig"
+
+#: includes/gateways/stripe/functions.php:1096
+#, fuzzy
+#| msgid "Payment update failed"
+msgid "Payment attempt failed."
+msgstr "Oppdatering av betaling mislytes"
+
+#: includes/gateways/stripe/functions.php:1097
+#, fuzzy
+#| msgid "Payment update failed"
+msgid "Setup attempt failed."
+msgstr "Oppdatering av betaling mislytes"
 
 #: includes/gateways/twocheckout/functions.php:27
 msgid "The 2Checkout API username and password must be defined"
@@ -7716,11 +8208,16 @@ msgstr ""
 msgid "Unexpected error cancelling 2Checkout payment profile."
 msgstr ""
 
-#: includes/install.php:253
+#: includes/install.php:228 includes/scripts.php:228
+#: templates/register-single.php:191 templates/register.php:215
+msgid "Register"
+msgstr "Registrer"
+
+#: includes/install.php:240
 msgid "Welcome"
 msgstr "Velkommen"
 
-#: includes/install.php:254
+#: includes/install.php:241
 msgid ""
 "Welcome! This is your success page where members are redirected after "
 "completing their registration."
@@ -7728,142 +8225,142 @@ msgstr ""
 "Velkommen! Dette er siden medlemmene blir videresendt til etter suksessfull "
 "innmelding."
 
-#: includes/install.php:279
+#: includes/install.php:266
 msgid "Your Membership"
 msgstr "Ditt medlemskap"
 
-#: includes/install.php:306
+#: includes/install.php:293
 msgid "Edit Your Profile"
 msgstr "Rediger profil"
 
-#: includes/install.php:333
+#: includes/install.php:320
 msgid "Update Billing Card"
 msgstr "Oppdater betalingskort"
 
-#: includes/install.php:371
+#: includes/install.php:358
 #, fuzzy
 msgid "Please verify your email address"
 msgstr "Bekreft betalingen"
 
-#: includes/install.php:372
+#: includes/install.php:359
 #, php-format
 msgid "Hi %s,"
 msgstr ""
 
-#: includes/install.php:373
+#: includes/install.php:360
 #, fuzzy
 msgid "Please click here to verify your email address:"
 msgstr "Bekreft betalingen"
 
-#: includes/install.php:378 includes/install.php:392 includes/install.php:406
+#: includes/install.php:365 includes/install.php:379 includes/install.php:393
 #, fuzzy, php-format
 msgid "Your %s membership has been activated"
 msgstr "Medlemskapet er lagt til"
 
-#: includes/install.php:379 includes/install.php:393 includes/install.php:407
-#: includes/install.php:421 includes/install.php:436 includes/install.php:450
-#: includes/install.php:458
+#: includes/install.php:366 includes/install.php:380 includes/install.php:394
+#: includes/install.php:408 includes/install.php:423 includes/install.php:437
+#: includes/install.php:445
 #, fuzzy
 msgid "Hi %displayname%,"
 msgstr "Navn som vises"
 
-#: includes/install.php:380 includes/install.php:394 includes/install.php:408
+#: includes/install.php:367 includes/install.php:381 includes/install.php:395
 #, fuzzy, php-format
 msgid "Your %s membership has been activated."
 msgstr "Medlemskapet er lagt til"
 
-#: includes/install.php:386 includes/install.php:400 includes/install.php:414
+#: includes/install.php:373 includes/install.php:387 includes/install.php:401
 #, php-format
 msgid "%s (%s) is now a member of %s"
 msgstr ""
 
-#: includes/install.php:387 includes/install.php:401 includes/install.php:415
+#: includes/install.php:374 includes/install.php:388 includes/install.php:402
 #, fuzzy, php-format
 msgid "Membership level: %s"
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/install.php:420
+#: includes/install.php:407
 #, fuzzy, php-format
 msgid "Your %s membership has been cancelled"
 msgstr "Medlemskapet er lagt til"
 
-#: includes/install.php:422
+#: includes/install.php:409
 #, fuzzy, php-format
 msgid ""
 "Your %s membership has been cancelled. You will retain access to content "
 "until %s."
 msgstr "Medlemskapet er avsluttet."
 
-#: includes/install.php:428
+#: includes/install.php:415
 #, fuzzy, php-format
 msgid "%s (%s) has cancelled their membership to %s"
 msgstr "har stoppet abonnementet"
 
-#: includes/install.php:429 includes/install.php:444
+#: includes/install.php:416 includes/install.php:431
 #, fuzzy, php-format
 msgid "Their membership level was: %s"
 msgstr "Deres abonnementsnivå var"
 
-#: includes/install.php:430
+#: includes/install.php:417
 #, php-format
 msgid "They will retain access until: %s"
 msgstr ""
 
-#: includes/install.php:435
+#: includes/install.php:422
 #, fuzzy, php-format
 msgid "Your %s membership has expired"
 msgstr "abonnement har utløpt"
 
-#: includes/install.php:437
+#: includes/install.php:424
 #, fuzzy, php-format
 msgid "Your %s membership has expired."
 msgstr "abonnement har utløpt"
 
-#: includes/install.php:443
+#: includes/install.php:430
 #, fuzzy, php-format
 msgid "%s's (%s) membership has expired."
 msgstr "abonnement har utløpt"
 
-#: includes/install.php:449
+#: includes/install.php:436
 #, fuzzy, php-format
 msgid "Your %s payment has been received"
 msgstr ""
 "Kryss av denne for å fjerne epost som sendes ut når en betaling er mottatt."
 
-#: includes/install.php:451
+#: includes/install.php:438
 #, fuzzy, php-format
 msgid "Your %s payment has been received."
 msgstr ""
 "Kryss av denne for å fjerne epost som sendes ut når en betaling er mottatt."
 
-#: includes/install.php:452
+#: includes/install.php:439
 #, fuzzy
 msgid "Payment Amount: "
 msgstr "Betalingsdato:"
 
-#: includes/install.php:453
+#: includes/install.php:440
 #, fuzzy
 msgid "Invoice: "
 msgstr "Faktura #"
 
-#: includes/install.php:457
+#: includes/install.php:444
 #, php-format
 msgid "Your %s payment could not be processed"
 msgstr ""
 
-#: includes/install.php:459
+#: includes/install.php:446
 #, php-format
 msgid ""
 "Your %s renewal payment could not be processed. Please log in and update "
 "your billing information so we can reattempt payment."
 msgstr ""
 
-#: includes/install.php:464
+#: includes/install.php:451
 #, fuzzy, php-format
 msgid "Renewal payment failed on %s"
 msgstr "Betaling mottatt-epost"
 
-#: includes/install.php:466
+#: includes/install.php:453
 #, php-format
 msgid "%s's (%s) renewal payment failed to be processed."
 msgstr ""
@@ -7919,11 +8416,11 @@ msgstr "Medlem avslått"
 msgid "Member approved"
 msgstr "Medlem godkjent"
 
-#: includes/invoice-functions.php:70
+#: includes/invoice-functions.php:68
 msgid "This payment record does not exist"
 msgstr "Betalingen finnes ikke"
 
-#: includes/invoice-functions.php:74
+#: includes/invoice-functions.php:72
 msgid "You do not have permission to download this invoice"
 msgstr "Du har ikke tilgang til å laste ned denne fakturaen"
 
@@ -7931,7 +8428,7 @@ msgstr "Du har ikke tilgang til å laste ned denne fakturaen"
 msgid "Invalid username or email"
 msgstr "Ugyldig brukernavn eller e-postadresse"
 
-#: includes/login-functions.php:86 includes/registration-functions.php:569
+#: includes/login-functions.php:86 includes/registration-functions.php:749
 msgid "Please enter a password"
 msgstr "Passord"
 
@@ -7984,114 +8481,124 @@ msgstr "Eposten kunne ikke bli sendt."
 msgid "Possible reason: your host may have disabled the mail() function."
 msgstr "Mulig årsak: leverandøren kan ha skrudd av mail() funksjon."
 
-#: includes/member-functions.php:407
+#: includes/member-functions.php:470
 msgid "Please enter a valid email address"
 msgstr "Angi en gyldig epostadresse"
 
-#: includes/member-functions.php:412
+#: includes/member-functions.php:475
 msgid "The email you entered belongs to another user. Please use another."
 msgstr "Eposten du skrev tilhører en annen bruker. Vennligst bruk en annen."
 
-#: includes/member-functions.php:418
+#: includes/member-functions.php:481
 msgid "The passwords you entered do not match. Please try again."
 msgstr "Passordet du skrev inn stemmer ikke overens. Vennligst prøv igjen."
 
-#: includes/member-functions.php:443
+#: includes/member-functions.php:506
 msgid "There was an error updating your profile. Please try again."
 msgstr ""
 "Det skjedde en feil ved oppdatering av din bruker. Vennligst prøv igjen."
 
-#: includes/member-functions.php:477
+#: includes/member-functions.php:540
 msgid "Please enter a password, and confirm it"
 msgstr "Skriv inn et passord, og bekreft det"
 
-#: includes/member-functions.php:481 includes/registration-functions.php:573
+#: includes/member-functions.php:544 includes/registration-functions.php:753
 msgid "Passwords do not match"
 msgstr "Passordene stemmer ikke overens"
 
-#: includes/member-functions.php:848
+#: includes/member-functions.php:919
 #, php-format
 msgid "Recurring charge failed in %s."
 msgstr ""
 
-#: includes/member-functions.php:851
+#: includes/member-functions.php:922
 #, php-format
 msgid " Event ID: %s"
 msgstr ""
 
-#: includes/member-functions.php:879
+#: includes/member-functions.php:950
 #, fuzzy, php-format
 msgid "%s subscription started."
 msgstr "abonnement har utløpt"
 
-#: includes/member-functions.php:884
+#: includes/member-functions.php:955
 #, fuzzy, php-format
 msgid "%s subscription renewed."
 msgstr "Nytt medlemskap på "
 
-#: includes/member-functions.php:889
+#: includes/member-functions.php:960
 #, fuzzy, php-format
 msgid "Subscription changed from %s to %s."
 msgstr "Utløpsdatoen er endret fra %s til %s"
 
-#: includes/memberships/class-rcp-membership.php:328
+#: includes/membership-counts/membership-count-functions.php:89
+#, fuzzy
+msgid "You must specify a membership level ID."
+msgstr "Du har ikke opprettet et medlemskap ennå"
+
+#: includes/membership-counts/membership-count-functions.php:96
+#, fuzzy
+msgid "Failed to add a new membership count entry."
+msgstr "Navnet på dette abonnementsnivået."
+
+#: includes/memberships/class-rcp-membership.php:340
 #, fuzzy, php-format
 msgid "%s changed from %s to %s."
 msgstr "Medlemstatus endret fra %s til %s"
 
-#: includes/memberships/class-rcp-membership.php:577
+#: includes/memberships/class-rcp-membership.php:589
 #, php-format
 msgid "%1$s initially, then %2$s every %4$s"
 msgid_plural "%s initially, then %s every %d %s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/memberships/class-rcp-membership.php:1587
+#: includes/memberships/class-rcp-membership.php:1622
 #, fuzzy
 msgid "Membership activated."
 msgstr "Medlemskontoer er oppdatert"
 
-#: includes/memberships/class-rcp-membership.php:1783
+#: includes/memberships/class-rcp-membership.php:1825
 #, fuzzy
 msgid "Membership renewed."
 msgstr "Legg til medlemskapsnivå"
 
-#: includes/memberships/class-rcp-membership.php:2018
+#: includes/memberships/class-rcp-membership.php:2060
 #, php-format
 msgid "%s payment plan completed. Membership expiring immediately."
 msgstr ""
 
-#: includes/memberships/class-rcp-membership.php:2027
+#: includes/memberships/class-rcp-membership.php:2069
 #, php-format
 msgid "%s payment plan completed. Granted lifetime membership access."
 msgstr ""
 
-#: includes/memberships/class-rcp-membership.php:2035
+#: includes/memberships/class-rcp-membership.php:2077
 #, php-format
 msgid ""
 "%s payment plan completed. Membership will expire at end of current term."
 msgstr ""
 
-#: includes/memberships/class-rcp-membership.php:2079
+#: includes/memberships/class-rcp-membership.php:2121
 #, fuzzy
 msgid "Membership disabled."
 msgstr "Medlem oppdatert"
 
-#: includes/memberships/class-rcp-membership.php:2270
+#: includes/memberships/class-rcp-membership.php:2314
 msgid "Membership is not eligible for payment profile cancellation."
 msgstr ""
 
-#: includes/memberships/class-rcp-membership.php:2292
+#: includes/memberships/class-rcp-membership.php:2336
 #, fuzzy
 msgid "Missing subscription ID."
 msgstr "Rediger abonnementer"
 
-#: includes/memberships/class-rcp-membership.php:2373
+#: includes/memberships/class-rcp-membership.php:2417
 #, php-format
 msgid "Failed cancelling payment profile. Error code: %s; Error Message: %s."
 msgstr ""
 
-#: includes/memberships/membership-actions.php:70
+#: includes/memberships/membership-actions.php:68
 #, fuzzy, php-format
 msgid "Membership cancelled by customer %s (#%d)."
 msgstr "Medlemskap avsluttet i 2Checkout"
@@ -8101,125 +8608,125 @@ msgstr "Medlemskap avsluttet i 2Checkout"
 msgid "Membership changed from %s (ID #%d) to %s (ID #%d)."
 msgstr "Medlemstatus endret fra %s til %s"
 
-#: includes/misc-functions.php:171
+#: includes/misc-functions.php:185
 msgid "US Dollars (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:172
+#: includes/misc-functions.php:186
 msgid "Euros (&#8364;)"
 msgstr ""
 
-#: includes/misc-functions.php:173
+#: includes/misc-functions.php:187
 msgid "Pounds Sterling (&#163;)"
 msgstr ""
 
-#: includes/misc-functions.php:174
+#: includes/misc-functions.php:188
 msgid "Australian Dollars (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:175
+#: includes/misc-functions.php:189
 msgid "Brazilian Real (&#82;&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:176
+#: includes/misc-functions.php:190
 msgid "Canadian Dollars (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:177
+#: includes/misc-functions.php:191
 msgid "Czech Koruna (&#75;&#269;)"
 msgstr ""
 
-#: includes/misc-functions.php:178
+#: includes/misc-functions.php:192
 msgid "Danish Krone (&#107;&#114;)"
 msgstr ""
 
-#: includes/misc-functions.php:179
+#: includes/misc-functions.php:193
 msgid "Hong Kong Dollar (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:180
+#: includes/misc-functions.php:194
 msgid "Hungarian Forint (&#70;&#116;)"
 msgstr ""
 
-#: includes/misc-functions.php:181
+#: includes/misc-functions.php:195
 msgid "Iranian Rial (&#65020;)"
 msgstr ""
 
-#: includes/misc-functions.php:182
+#: includes/misc-functions.php:196
 msgid "Israeli Shekel (&#8362;)"
 msgstr ""
 
-#: includes/misc-functions.php:183
+#: includes/misc-functions.php:197
 msgid "Japanese Yen (&#165;)"
 msgstr ""
 
-#: includes/misc-functions.php:184
+#: includes/misc-functions.php:198
 msgid "Malaysian Ringgits (&#82;&#77;)"
 msgstr ""
 
-#: includes/misc-functions.php:185
+#: includes/misc-functions.php:199
 msgid "Mexican Peso (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:186
+#: includes/misc-functions.php:200
 msgid "New Zealand Dollar (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:187
+#: includes/misc-functions.php:201
 msgid "Norwegian Krone (&#107;&#114;)"
 msgstr ""
 
-#: includes/misc-functions.php:188
+#: includes/misc-functions.php:202
 msgid "Philippine Pesos (&#8369;)"
 msgstr ""
 
-#: includes/misc-functions.php:189
+#: includes/misc-functions.php:203
 msgid "Polish Zloty (&#122;&#322;)"
 msgstr ""
 
-#: includes/misc-functions.php:190
+#: includes/misc-functions.php:204
 msgid "Russian Rubles (&#1088;&#1091;&#1073;)"
 msgstr ""
 
-#: includes/misc-functions.php:191
+#: includes/misc-functions.php:205
 msgid "Singapore Dollar (&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:192
+#: includes/misc-functions.php:206
 msgid "Swedish Krona (&#107;&#114;)"
 msgstr ""
 
-#: includes/misc-functions.php:193
+#: includes/misc-functions.php:207
 msgid "Swiss Franc (&#67;&#72;&#70;)"
 msgstr ""
 
-#: includes/misc-functions.php:194
+#: includes/misc-functions.php:208
 msgid "Taiwan New Dollars (&#78;&#84;&#36;)"
 msgstr ""
 
-#: includes/misc-functions.php:195
+#: includes/misc-functions.php:209
 msgid "Thai Baht (&#3647;)"
 msgstr ""
 
-#: includes/misc-functions.php:196
+#: includes/misc-functions.php:210
 msgid "Turkish Lira (&#8356;)"
 msgstr ""
 
-#: includes/misc-functions.php:1463
+#: includes/misc-functions.php:1471
 #, fuzzy
 msgid "New"
 msgstr "Legg til nytt abonnementsnivå"
 
-#: includes/misc-functions.php:1465
+#: includes/misc-functions.php:1473
 #, fuzzy
 msgid "Upgrade"
 msgstr "oppgrader nå"
 
-#: includes/misc-functions.php:1466
+#: includes/misc-functions.php:1474
 msgid "Downgrade"
 msgstr ""
 
-#: includes/misc-functions.php:1498
+#: includes/misc-functions.php:1506
 msgid "This content is restricted to subscribers"
 msgstr "Dette innholdet er kun tilgjengelig for medlemmer"
 
@@ -8230,120 +8737,131 @@ msgid ""
 "Gateway: %s; Type: %s."
 msgstr ""
 
-#: includes/registration-functions.php:77
+#: includes/registration-functions.php:29
+#, fuzzy
+#| msgid "There was an error updating your profile. Please try again."
+msgid "An authentication error occurred. Please try again."
+msgstr ""
+"Det skjedde en feil ved oppdatering av din bruker. Vennligst prøv igjen."
+
+#: includes/registration-functions.php:83
 #, fuzzy
 msgid "Please choose a membership level"
 msgstr "Velg et medlemskap som passer deg"
 
-#: includes/registration-functions.php:82
+#: includes/registration-functions.php:88
 msgid "You may only sign up for a free trial once"
 msgstr "Du kan bare registrere deg for gratis prøve 1 gang"
 
-#: includes/registration-functions.php:92
+#: includes/registration-functions.php:98
 msgid "You can only use the discount code once"
 msgstr "Du kan bare bruke kupongkoden 1 gang"
 
-#: includes/registration-functions.php:97
+#: includes/registration-functions.php:103
 msgid "The discount you entered is invalid"
 msgstr "Kupongkoden er ugyldig"
 
-#: includes/registration-functions.php:113
+#: includes/registration-functions.php:119
 msgid "You must agree to the terms and conditions"
 msgstr ""
 
-#: includes/registration-functions.php:118
+#: includes/registration-functions.php:124
 msgid "You must agree to the privacy policy"
 msgstr ""
 
-#: includes/registration-functions.php:194
+#: includes/registration-functions.php:206
 msgid "Failed to create customer record"
 msgstr ""
 
-#: includes/registration-functions.php:299
+#: includes/registration-functions.php:335
 #, php-format
 msgid "Upgraded from %s (membership #%d)."
 msgstr ""
 
-#: includes/registration-functions.php:544
+#: includes/registration-functions.php:535
+msgid "Invalid payment. Please try again."
+msgstr ""
+
+#: includes/registration-functions.php:724
 #, php-format
 msgid ""
 "This username is already in use. If this is your username, please <a href="
 "\"%s\">log in</a> and try again."
 msgstr ""
 
-#: includes/registration-functions.php:550
+#: includes/registration-functions.php:730
 msgid "Invalid username"
 msgstr "Ugyldig brukernavn"
 
-#: includes/registration-functions.php:554
+#: includes/registration-functions.php:734
 msgid "Please enter a username"
 msgstr "Skriv inn et brukernavn"
 
-#: includes/registration-functions.php:558
+#: includes/registration-functions.php:738
 msgid "Invalid email"
 msgstr "Ugyldig epostadresse"
 
-#: includes/registration-functions.php:563
+#: includes/registration-functions.php:743
 #, php-format
 msgid ""
 "This email address is already in use. If this is your email address, please "
 "<a href=\"%s\">log in</a> and try again."
 msgstr ""
 
-#: includes/registration-functions.php:814
-#: includes/registration-functions.php:877
+#: includes/registration-functions.php:994
+#: includes/registration-functions.php:1057
 #: templates/register-total-details.php:38 templates/register.php:93
 msgid "free"
 msgstr "gratis"
 
-#: includes/registration-functions.php:824
+#: includes/registration-functions.php:1004
 #, php-format
 msgid "Free trial - %s"
 msgstr ""
 
-#: includes/registration-functions.php:874
+#: includes/registration-functions.php:1054
 #, php-format
 msgid " every %s %s"
 msgstr " hver %s %s"
 
-#: includes/registration-functions.php:1061
+#: includes/registration-functions.php:1255
 #, fuzzy
 msgid "Renew"
 msgstr "Fornyelsesdato"
 
-#: includes/registration-functions.php:1065
+#: includes/registration-functions.php:1259
 #, fuzzy
 msgid "Change"
 msgstr "Lagre endringer"
 
-#: includes/registration-functions.php:1070
+#: includes/registration-functions.php:1264
 msgid "or"
 msgstr ""
 
-#: includes/registration-functions.php:1080
+#: includes/registration-functions.php:1274
 #, fuzzy
 msgid "You are signing up for a new membership."
 msgstr "Du har ingen betalte fakturaer."
 
-#: includes/registration-functions.php:1080
+#: includes/registration-functions.php:1274
 #, fuzzy
 msgid "Click here to renew or change an existing membership instead."
 msgstr ""
 "<a href=\"%s\">Logg inn</a> om du allerede er medlem. Du kan også endre "
 "kontoen når du er logget inn."
 
-#: includes/registration-functions.php:1136
+#: includes/registration-functions.php:1330
 #, php-format
 msgid ""
 "You are changing your \"%s\" membership. <a href=\"%s\">Click here to sign "
 "up for an additional membership instead.</a>"
 msgstr ""
 
-#: includes/registration-functions.php:1169
+#: includes/registration-functions.php:1363
 msgid "Proration Credit"
 msgstr "Tilgode på kontoen"
 
-#: includes/registration-functions.php:1214
+#: includes/registration-functions.php:1408
 #, fuzzy, php-format
 msgid ""
 "If you upgrade or downgrade your account, the new membership will be "
@@ -8352,11 +8870,17 @@ msgstr ""
 "Om du oppgraderer eller nedgraderer kontoen din, kommer vi til å trekke fra "
 "%s på betalingen ettersom du har dette tillgode."
 
-#: includes/scripts.php:60
+#: includes/registration-functions.php:1973
+#: includes/registration-functions.php:1974
+#, fuzzy
+msgid "Next Renewal Due"
+msgstr "Gyldig til dato"
+
+#: includes/scripts.php:66
 msgid "Are you sure you wish to cancel this member's subscription?"
 msgstr "Er du sikker på at du ønsker å stoppe medlemskapet?"
 
-#: includes/scripts.php:61
+#: includes/scripts.php:67
 #, fuzzy
 msgid ""
 "Are you sure you want to delete this customer? This action is irreversible. "
@@ -8365,7 +8889,7 @@ msgstr ""
 "Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
 "tilbake. Fortsette?"
 
-#: includes/scripts.php:62
+#: includes/scripts.php:68
 #, fuzzy
 msgid ""
 "Are you sure you want to delete this membership? This action is "
@@ -8374,7 +8898,7 @@ msgstr ""
 "Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
 "tilbake. Fortsette?"
 
-#: includes/scripts.php:63
+#: includes/scripts.php:69
 msgid ""
 "If you delete this subscription, all members registered with this level will "
 "be canceled. Proceed?"
@@ -8382,7 +8906,7 @@ msgstr ""
 "Dersom du sletter dette abonnementet kanselleres alle abonnementer blant "
 "medlemmer som er registrert. Fortsett?"
 
-#: includes/scripts.php:64
+#: includes/scripts.php:70
 msgid ""
 "Are you sure you want to delete this payment? This action is irreversible. "
 "Proceed?"
@@ -8390,7 +8914,7 @@ msgstr ""
 "Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
 "tilbake. Fortsette?"
 
-#: includes/scripts.php:65
+#: includes/scripts.php:71
 #, fuzzy
 msgid ""
 "Are you sure you want to delete this discount? This action is irreversible. "
@@ -8399,7 +8923,7 @@ msgstr ""
 "Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
 "tilbake. Fortsette?"
 
-#: includes/scripts.php:66
+#: includes/scripts.php:72
 #, fuzzy
 msgid ""
 "Are you sure you want to delete this reminder email? This action is "
@@ -8408,7 +8932,7 @@ msgstr ""
 "Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
 "tilbake. Fortsette?"
 
-#: includes/scripts.php:67
+#: includes/scripts.php:73
 #, fuzzy
 msgid ""
 "Are you sure you want to expire this membership? The customer will lose "
@@ -8417,56 +8941,70 @@ msgstr ""
 "Er du sikker på at du ønsker å slette denne betalingen? Du kan ikke gå "
 "tilbake. Fortsette?"
 
-#: includes/scripts.php:68
+#: includes/scripts.php:74
 msgid ""
 "Are you sure you want to change the membership level? The subscription will "
 "be cancelled at the payment gateway and this customer will not be "
 "automatically billed again."
 msgstr ""
 
-#: includes/scripts.php:68
+#: includes/scripts.php:74
 #, fuzzy
 msgid "Are you sure you want to change the membership level?"
 msgstr "Er du sikker på at du ønsker å stoppe medlemskapet?"
 
-#: includes/scripts.php:69
+#: includes/scripts.php:75
 msgid "You must choose a username"
 msgstr "Du må angi brukernavn"
 
-#: includes/scripts.php:72
+#: includes/scripts.php:78
 msgid "Use as Logo"
 msgstr "Bruk som logo"
 
-#: includes/scripts.php:73
+#: includes/scripts.php:79
 msgid "Choose a Logo"
 msgstr "Velg logo"
 
-#: includes/scripts.php:75
+#: includes/scripts.php:81
 #, fuzzy
 msgid "Cancel subscription at gateway"
 msgstr "Stoppet abonnementet på "
 
-#: includes/scripts.php:86
+#: includes/scripts.php:92
 msgid "Job failed to complete successfully."
 msgstr ""
 
-#: includes/scripts.php:87
+#: includes/scripts.php:93
 msgid "Try again."
 msgstr ""
 
-#: includes/scripts.php:92
+#: includes/scripts.php:98
 msgid ""
 "Unfortunately your browser is not compatible with this kind of file upload. "
 "Please upgrade your browser."
 msgstr ""
 
-#: includes/scripts.php:217
-msgid "Please Wait . . . "
-msgstr "Vennligst vent . . . "
-
-#: includes/scripts.php:218
+#: includes/scripts.php:230 includes/shortcodes.php:893
 msgid "Submit Payment"
 msgstr "Betal"
+
+#: includes/scripts.php:236
+#, fuzzy
+#| msgid ""
+#| "Missing 2Checkout token, please try again or contact support if the issue "
+#| "persists."
+msgid ""
+"An unexpected error has occurred. Please try again or contact support if the "
+"issue persists."
+msgstr ""
+"Mangler 2Checkout token, vennligst prøv igjen eller kontakt support hvis "
+"problemet fortsetter."
+
+#: includes/scripts.php:237
+#, fuzzy
+#| msgid "Please enter a valid email address"
+msgid "Please enter your card details."
+msgstr "Angi en gyldig epostadresse"
 
 #: includes/shortcodes.php:243
 #, fuzzy
@@ -8501,27 +9039,59 @@ msgstr "Du er allerede registrert og har et aktivt medlemskap."
 msgid "Register New Account"
 msgstr "Registrer ny konto"
 
-#: includes/shortcodes.php:342
+#: includes/shortcodes.php:351
 #, php-format
 msgid "Join %s"
 msgstr "Bli med %s"
 
-#: includes/shortcodes.php:370
+#: includes/shortcodes.php:352
+msgid "Start Trial"
+msgstr ""
+
+#: includes/shortcodes.php:352
+#, php-format
+msgid "Pay %s"
+msgstr ""
+
+#: includes/shortcodes.php:385
 msgid "You are already subscribed."
 msgstr "Du har allerede et aktivt abonnement."
 
-#: includes/shortcodes.php:577
+#: includes/shortcodes.php:603
 msgid "Billing card updated successfully"
 msgstr "Betalingskort oppdatert"
 
-#: includes/shortcodes.php:586
+#: includes/shortcodes.php:612
 msgid "Billing card could not be updated, please try again."
 msgstr "Betalingskort kunne ikke oppdateres. Prøv igjen."
 
-#: includes/shortcodes.php:724
+#: includes/shortcodes.php:633
+msgid ""
+"Updating billing card details is not supported by your chosen payment method."
+msgstr ""
+
+#: includes/shortcodes.php:637
+msgid "Your billing details can be updated from inside your PayPal account."
+msgstr ""
+
+#: includes/shortcodes.php:774
 #, fuzzy
 msgid "Please wait . . . "
 msgstr "Vennligst vent . . . "
+
+#: includes/shortcodes.php:820
+msgid "Close"
+msgstr ""
+
+#: includes/shortcodes.php:850 templates/register-single.php:149
+#: templates/register.php:174
+msgid "I agree to the terms and conditions"
+msgstr ""
+
+#: includes/shortcodes.php:875 templates/register-single.php:174
+#: templates/register.php:199
+msgid "I agree to the privacy policy"
+msgstr ""
 
 #: includes/subscription-functions.php:330
 msgid "Days"
@@ -8562,7 +9132,7 @@ msgstr "Medlemskapet er avsluttet."
 msgid "Your profile has been updated successfully."
 msgstr "Din profil har blitt oppdatert."
 
-#: includes/template-functions.php:244
+#: includes/template-functions.php:249
 #, php-format
 msgid ""
 "Your account is pending email verification. <a href=\"%s\">Click here to re-"
@@ -8613,12 +9183,12 @@ msgid "Restrict Content Pro Requirements"
 msgstr "Restrict Content Pro innstillinger"
 
 #: templates/card-form-full.php:20 templates/card-form.php:19
-#: templates/card-update-form.php:48
+#: templates/card-update-form-fields.php:30
 msgid "Card Number"
 msgstr "Kortnummer"
 
 #: templates/card-form-full.php:24 templates/card-form.php:23
-#: templates/card-update-form.php:52
+#: templates/card-update-form-fields.php:34
 msgid "Card CVC"
 msgstr "Kortets CVC kode (se kortets bakside)"
 
@@ -8640,32 +9210,26 @@ msgid "Country"
 msgstr "Land"
 
 #: templates/card-form-full.php:298 templates/card-form.php:27
-#: templates/card-update-form.php:56
+#: templates/card-update-form-fields.php:38
 msgid "Card ZIP or Postal Code"
 msgstr "Ditt postnummer"
 
 #: templates/card-form-full.php:306 templates/card-form.php:35
-#: templates/card-update-form.php:60
+#: templates/card-update-form-fields.php:42
 msgid "Expiration (MM/YYYY)"
 msgstr "Gyldig til dato (MM/ÅÅÅÅ)"
 
-#: templates/card-update-form.php:26
+#: templates/card-update-form.php:28
 msgid "Your Cards"
 msgstr "Dine betalingskort"
 
-#: templates/card-update-form.php:31
-msgid "Type:"
-msgstr ""
+#: templates/card-update-form.php:42
+#, fuzzy
+#| msgid "Currency"
+msgid "current"
+msgstr "Valuta"
 
-#: templates/card-update-form.php:32
-msgid "Last 4:"
-msgstr "Siste 4 sifre:"
-
-#: templates/card-update-form.php:33
-msgid "Exp:"
-msgstr "Utløpsdato (mm/åå)"
-
-#: templates/card-update-form.php:81
+#: templates/card-update-form.php:83
 msgid "Update Card"
 msgstr "Oppdater kort"
 
@@ -8685,8 +9249,7 @@ msgstr "Bekreft passord"
 msgid "Change Password"
 msgstr "Endre passord"
 
-#: templates/invoice.php:24 templates/invoice.php:267
-#: templates/invoice.php:277
+#: templates/invoice.php:24 templates/invoice.php:267 templates/invoice.php:277
 #, php-format
 msgid "Invoice %s"
 msgstr "Faktura %s"
@@ -8695,7 +9258,7 @@ msgstr "Faktura %s"
 msgid "Bill To:"
 msgstr "Mottaker:"
 
-#: templates/invoice.php:346 templates/paypal-express-confirm.php:52
+#: templates/invoice.php:346 templates/paypal-express-confirm.php:53
 msgid "Fees:"
 msgstr ""
 
@@ -8703,11 +9266,11 @@ msgstr ""
 msgid "Subtotal:"
 msgstr ""
 
-#: templates/invoice.php:360 templates/paypal-express-confirm.php:58
+#: templates/invoice.php:360 templates/paypal-express-confirm.php:59
 msgid "Credits:"
 msgstr ""
 
-#: templates/invoice.php:368 templates/paypal-express-confirm.php:46
+#: templates/invoice.php:368 templates/paypal-express-confirm.php:47
 #, fuzzy
 msgid "Discount:"
 msgstr "Rabatter"
@@ -8741,10 +9304,11 @@ msgstr "Medlemskapet er avsluttet."
 msgid " You may now log in."
 msgstr ""
 
-#: templates/login.php:33 templates/register-single.php:51
-#: templates/register.php:46
-msgid "Username"
-msgstr "Brukernavn"
+#: templates/login.php:33
+#, fuzzy
+#| msgid "Username or E-mail:"
+msgid "Username or Email"
+msgstr "Skriv inn ditt brukernavn eller e-postadresse:"
 
 #: templates/login.php:37 templates/register-single.php:67
 #: templates/register.php:62
@@ -8780,42 +9344,42 @@ msgstr "Send meg nytt passord"
 msgid "Check your e-mail for the confirmation link."
 msgstr "Sjekk din e-postadresse for videre instrukser."
 
-#: templates/paypal-express-confirm.php:25
+#: templates/paypal-express-confirm.php:26
 msgid "Please confirm your payment"
 msgstr "Bekreft betalingen"
 
-#: templates/paypal-express-confirm.php:27
+#: templates/paypal-express-confirm.php:28
 msgid "PayPal Status:"
 msgstr ""
 
-#: templates/paypal-express-confirm.php:47
+#: templates/paypal-express-confirm.php:48
 #: templates/register-total-details.php:50
 #, fuzzy
 msgid "Discount"
 msgstr "Rabatter"
 
-#: templates/paypal-express-confirm.php:63
+#: templates/paypal-express-confirm.php:64
 #, fuzzy
 msgid "Total Today:"
 msgstr "Totalt"
 
-#: templates/paypal-express-confirm.php:64
+#: templates/paypal-express-confirm.php:65
 #: templates/register-total-details.php:75
 #: templates/register-total-details.php:76
 msgid "Total Today"
 msgstr "Totalt"
 
-#: templates/paypal-express-confirm.php:69
+#: templates/paypal-express-confirm.php:70
 #, fuzzy, php-format
 msgid "Total Recurring Per %s:"
 msgstr "Pris per %s"
 
-#: templates/paypal-express-confirm.php:71
+#: templates/paypal-express-confirm.php:72
 #, fuzzy, php-format
 msgid "Total Recurring Every %s %s:"
 msgstr "Kostnad hver %s %s"
 
-#: templates/paypal-express-confirm.php:87
+#: templates/paypal-express-confirm.php:88
 msgid "Confirm"
 msgstr "Bekreft"
 
@@ -8850,6 +9414,10 @@ msgstr ""
 "<a href=\"%s\">Logg inn</a> om du allerede er medlem. Du kan også endre "
 "kontoen når du er logget inn."
 
+#: templates/register-single.php:51 templates/register.php:46
+msgid "Username"
+msgstr "Brukernavn"
+
 #: templates/register-single.php:71 templates/register.php:66
 msgid "Password Again"
 msgstr "Skriv passord på nytt"
@@ -8869,14 +9437,6 @@ msgstr "Bruk"
 #: templates/register-single.php:110 templates/register.php:137
 msgid "Choose Your Payment Method"
 msgstr "Velg betalingsmetode"
-
-#: templates/register-single.php:149 templates/register.php:174
-msgid "I agree to the terms and conditions"
-msgstr ""
-
-#: templates/register-single.php:174 templates/register.php:199
-msgid "I agree to the privacy policy"
-msgstr ""
 
 #: templates/register-total-details.php:44
 msgid "Discounts and Fees"
@@ -8986,28 +9546,45 @@ msgstr "Faktura #"
 msgid "Payment Status"
 msgstr "Betalingsstatus:"
 
-#: templates/subscription.php:201
+#: templates/subscription.php:203
+#, fuzzy
+msgid "Retry Payment"
+msgstr "Søk blant betalinger"
+
+#: templates/subscription.php:203
+#, fuzzy
+#| msgid "Create Payment"
+msgid "Complete Payment"
+msgstr "Legg til betaling"
+
+#: templates/subscription.php:206
 msgid "View Receipt"
 msgstr "Se faktura"
 
-#: templates/subscription.php:207
+#: templates/subscription.php:212
 msgid "You have not made any payments."
 msgstr "Du har ingen betalte fakturaer."
 
-#, fuzzy
-#~| msgid "Discount Codes"
-#~ msgid "View all discount codes"
-#~ msgstr "Rabattkoder"
+#~ msgid "Please verify that you are not a robot"
+#~ msgstr "Vennligst bekreft at du ikke er en robot"
 
 #, fuzzy
-#~| msgid "The amount of this discount code."
-#~ msgid "View active discount codes"
-#~ msgstr "Mengde rabatt for denne rabattkoden."
+#~ msgid ""
+#~ "There was an error saving your payment information. Please try again. "
+#~ "Contact support if the problem persists."
+#~ msgstr ""
+#~ "Mangler 2Checkout token, vennligst prøv igjen eller kontakt support hvis "
+#~ "problemet fortsetter."
 
 #, fuzzy
-#~| msgid "The amount of this discount code."
-#~ msgid "View inactive discount codes"
-#~ msgstr "Mengde rabatt for denne rabattkoden."
+#~ msgid "Error message: %s"
+#~ msgstr "Feilmelding:"
+
+#~ msgid "Last 4:"
+#~ msgstr "Siste 4 sifre:"
+
+#~ msgid "Exp:"
+#~ msgstr "Utløpsdato (mm/åå)"
 
 #, fuzzy
 #~| msgid "The subscription levels this discount code can be used for."
@@ -9387,9 +9964,6 @@ msgstr "Du har ingen betalte fakturaer."
 
 #~ msgid "Edit Subscription"
 #~ msgstr "Endre medlemskap"
-
-#~ msgid "Add Subscription"
-#~ msgstr "Legg til medlemskap"
 
 #~ msgid ""
 #~ "Your version of PHP is below the minimum version of PHP required by "

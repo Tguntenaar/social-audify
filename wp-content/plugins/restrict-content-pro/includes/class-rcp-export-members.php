@@ -92,9 +92,9 @@ class RCP_Members_Export extends RCP_Export {
 				 * @var RCP_Membership $membership
 				 */
 
-				$member = new RCP_Member( $membership->get_customer()->get_user_id() ); // for backwards compatibility
+				$member = new RCP_Member( $membership->get_user_id() ); // for backwards compatibility
 
-				$discounts = get_user_meta( $membership->get_customer()->get_user_id(), 'rcp_user_discounts', true );
+				$discounts = get_user_meta( $membership->get_user_id(), 'rcp_user_discounts', true );
 				if( ! empty( $discounts ) && is_array( $discounts ) && ! $discounts instanceof stdClass ) {
 					foreach( $discounts as $key => $code ) {
 						if( ! is_string( $code ) ) {
@@ -106,7 +106,7 @@ class RCP_Members_Export extends RCP_Export {
 
 				$membership_data = array(
 					'id'                    => $membership->get_id(),
-					'user_id'               => $membership->get_customer()->get_user_id(),
+					'user_id'               => $membership->get_user_id(),
 					'user_login'            => $member->user_login,
 					'user_email'            => $member->user_email,
 					'first_name'            => $member->first_name,

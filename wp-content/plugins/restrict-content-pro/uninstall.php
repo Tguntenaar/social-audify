@@ -101,4 +101,7 @@ if( isset( $rcp_options['remove_data_on_uninstall'] ) ) {
 		$queue_table->uninstall();
 	}
 
+	// Delete database versions from options table.
+	$wpdb->query( "DELETE FROM $wpdb->options WHERE option_name LIKE 'wpdb\_rcp\_%'" );
+
 }

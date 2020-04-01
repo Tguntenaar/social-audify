@@ -10,37 +10,6 @@
  */
 
 /**
- * Determines if a member is a Braintree customer.
- *
- * @deprecated 3.0 Use `rcp_is_braintree_membership()` instead.
- * @see rcp_is_braintree_membership()
- *
- * @since  2.8
- * @param  int  $member_id The ID of the user to check
- * @return bool True if the member is a Braintree customer, false if not.
-*/
-function rcp_is_braintree_subscriber( $member_id = 0 ) {
-
-	if ( empty( $member_id ) ) {
-		$member_id = get_current_user_id();
-	}
-
-	$ret = false;
-
-	$customer = rcp_get_customer_by_user_id( $member_id );
-
-	if ( ! empty( $customer ) ) {
-		$membership = rcp_get_customer_single_membership( $customer->get_id() );
-
-		if ( ! empty( $membership ) ) {
-			$ret = rcp_is_braintree_membership( $membership );
-		}
-	}
-
-	return (bool) apply_filters( 'rcp_is_braintree_subscriber', $ret, $member_id );
-}
-
-/**
  * Determines if a membership is Braintree subscription.
  *
  * @param int|RCP_Membership $membership_object_or_id Membership ID or object.
@@ -107,29 +76,6 @@ function rcp_has_braintree_api_access() {
 
 	return false;
 }
-/**
- * Cancels a Braintree subscriber.
- *
- * @deprecated 3.0 Use `rcp_braintree_cancel_membership()` instead.
- * @see rcp_braintree_cancel_membership()
- *
- * @since 2.8
- * @param int $member_id The member ID to cancel.
- * @return bool|WP_Error
- */
-function rcp_braintree_cancel_member( $member_id = 0 ) {
-
-	$customer = rcp_get_customer_by_user_id( $member_id );
-
-	if ( empty( $customer ) ) {
-		return new WP_Error( 'rcp_braintree_error', __( 'Unable to find customer from member ID.', 'rcp' ) );
-	}
-
-	$membership = rcp_get_customer_single_membership( $customer->get_id() );
-
-	return rcp_braintree_cancel_membership( $membership->get_gateway_subscription_id() );
-
-}
 
 /**
  * Cancel a Braintree membership by subscription ID.
@@ -162,13 +108,15 @@ function rcp_braintree_cancel_membership( $subscription_id ) {
 
 	require_once RCP_PLUGIN_DIR . 'includes/libraries/braintree/lib/Braintree.php';
 
-	Braintree_Configuration::environment( $environment );
-	Braintree_Configuration::merchantId( $merchant_id );
-	Braintree_Configuration::publicKey( $public_key );
-	Braintree_Configuration::privateKey( $private_key );
+	$gateway = new Braintree\Gateway( array(
+		'environment' => $environment,
+		'merchantId'  => $merchant_id,
+		'publicKey'   => $public_key,
+		'privateKey'  => $private_key
+	) );
 
 	try {
-		$result = Braintree_Subscription::cancel( $subscription_id );
+		$result = $gateway->subscription()->cancel( $subscription_id );
 
 		if ( ! $result->success ) {
 
@@ -224,16 +172,85 @@ add_action( 'init', function() {
 }, -100000 ); // Must run before rcp_process_gateway_webooks which is hooked on -99999
 
 /**
- * Displays an admin notice if the PHP version requirement isn't met.
+ * Add JS to the update card form
  *
- * @since 2.8
+ * @since 3.3
  * @return void
  */
-function rcp_braintree_php_version_check() {
+function rcp_braintree_update_card_form_js() {
+	global $rcp_membership;
 
-	if ( current_user_can( 'rcp_manage_settings' ) && version_compare( PHP_VERSION, '5.4', '<' ) && array_key_exists( 'braintree', rcp_get_enabled_payment_gateways() ) ) {
-		echo '<div class="error"><p>' . __( 'The Braintree payment gateway in Restrict Content Pro requires PHP version 5.4 or later. Please contact your web host and request that your version be upgraded to 5.4 or later. Your site will be unable to take Braintree payments until PHP is upgraded.', 'rcp' ) . '</p></div>';
+	if ( ! rcp_is_braintree_membership( $rcp_membership ) || ! rcp_has_braintree_api_access() ) {
+		return;
+	}
+
+	$gateway = new RCP_Payment_Gateway_Braintree();
+	$gateway->scripts();
+
+}
+add_action( 'rcp_before_update_billing_card_form', 'rcp_braintree_update_card_form_js' );
+
+/**
+ * Update the billing card for a given membership
+ *
+ * @param RCP_Membership $membership
+ *
+ * @since 3.3
+ * @return void
+ */
+function rcp_braintree_update_membership_billing_card( $membership ) {
+
+	if ( ! $membership instanceof RCP_Membership ) {
+		return;
+	}
+
+	if ( ! rcp_is_braintree_membership( $membership ) ) {
+		return;
+	}
+
+	if ( empty( $_POST['payment_method_nonce'] ) ) {
+		wp_die( __( 'Missing payment method nonce.', 'rcp' ) );
+	}
+
+	$subscription_id = $membership->get_gateway_subscription_id();
+
+	if ( empty( $subscription_id ) ) {
+		wp_die( __( 'Invalid subscription.', 'rcp' ) );
+	}
+
+	global $rcp_options;
+
+	if ( rcp_is_sandbox() ) {
+		$merchant_id = ! empty( $rcp_options['braintree_sandbox_merchantId'] ) ? sanitize_text_field( $rcp_options['braintree_sandbox_merchantId'] ) : '';
+		$public_key  = ! empty( $rcp_options['braintree_sandbox_publicKey'] ) ? sanitize_text_field( $rcp_options['braintree_sandbox_publicKey'] ) : '';
+		$private_key = ! empty( $rcp_options['braintree_sandbox_privateKey'] ) ? sanitize_text_field( $rcp_options['braintree_sandbox_privateKey'] ) : '';
+		$environment = 'sandbox';
+
+	} else {
+		$merchant_id = ! empty( $rcp_options['braintree_live_merchantId'] ) ? sanitize_text_field( $rcp_options['braintree_live_merchantId'] ) : '';
+		$public_key  = ! empty( $rcp_options['braintree_live_publicKey'] ) ? sanitize_text_field( $rcp_options['braintree_live_publicKey'] ) : '';
+		$private_key = ! empty( $rcp_options['braintree_live_privateKey'] ) ? sanitize_text_field( $rcp_options['braintree_live_privateKey'] ) : '';
+		$environment = 'production';
+	}
+
+	require_once RCP_PLUGIN_DIR . 'includes/libraries/braintree/lib/Braintree.php';
+
+	$gateway = new Braintree\Gateway( array(
+		'environment' => $environment,
+		'merchantId'  => $merchant_id,
+		'publicKey'   => $public_key,
+		'privateKey'  => $private_key
+	) );
+
+	try {
+		$gateway->subscription()->update( $subscription_id, array(
+			'paymentMethodNonce' => sanitize_text_field( $_POST['payment_method_nonce'] )
+		) );
+
+		wp_redirect( add_query_arg( 'card', 'updated' ) ); exit;
+	} catch ( \Exception $e ) {
+		wp_die( sprintf( __( 'An error occurred: %s', 'rcp' ), $e->getMessage() ) );
 	}
 
 }
-add_action( 'admin_notices', 'rcp_braintree_php_version_check' );
+add_action( 'rcp_update_membership_billing_card', 'rcp_braintree_update_membership_billing_card' );

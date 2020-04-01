@@ -322,12 +322,20 @@ function rcp_register_form_stripe_checkout( $atts, $content = '' ) {
 	$membership   = ! empty( $customer ) ? rcp_get_customer_single_membership( $customer->get_id() ) : false;
 	$user         = wp_get_current_user();
 	$subscription = rcp_get_subscription_details( $atts['id'] );
-	$amount       = $subscription->price + $subscription->fee;
+	$amount       = $subscription->price;
 	$has_trialed  = ! empty( $customer ) ? $customer->has_trialed() : false;
 	$is_trial     = ! empty( $subscription->trial_duration ) && ! empty( $subscription->trial_duration_unit ) && ! $has_trialed;
 
 	if( ! empty( $membership ) ) {
-		$amount -= $membership->get_prorate_credit_amount();
+		if ( $membership->get_object_id() != $atts['id'] ) {
+			// Only add the signup fee if this is not a renewal.
+			$amount += $subscription->fee;
+
+			// Only add prorate credit if this is not a renewal & multiple memberships are disabled.
+			if ( ! rcp_multiple_memberships_enabled() ) {
+				$amount -= $membership->get_prorate_credit_amount();
+			}
+		}
 	}
 
 	if( $amount < 0 || $is_trial ) {
@@ -337,10 +345,11 @@ function rcp_register_form_stripe_checkout( $atts, $content = '' ) {
 	$data = wp_parse_args( $atts, array(
 		'id'                     => 0,
 		'data-key'               => $key,
-		'data-name'              => $subscription->name,
-		'data-description'       => $subscription->description,
+		'data-level-id'          => absint( $subscription->id ),
+		'data-name'              => stripslashes( $subscription->name ),
+		'data-description'       => stripslashes( $subscription->description ),
 		'data-label'             => sprintf( __( 'Join %s', 'rcp' ), $subscription->name ),
-		'data-panel-label'       => $is_trial ? __( 'Start Trial', 'rcp' ) : __( 'Register', 'rcp' ),
+		'data-panel-label'       => empty( $amount ) ? __( 'Start Trial', 'rcp' ) : sprintf( __( 'Pay %s', 'rcp' ), rcp_currency_filter( $amount ) ),
 		'data-amount'            => $amount * rcp_stripe_get_currency_multiplier(),
 		'data-locale'            => 'auto',
 		'data-allow-remember-me' => true,
@@ -355,35 +364,48 @@ function rcp_register_form_stripe_checkout( $atts, $content = '' ) {
 		$data['data-image'] = $image;
 	}
 
+	/**
+	 * Filters the Stripe Checkout data. This is basically irrelevant now, but keeping it for backwards compatibility.
+	 *
+	 * @param array $data
+	 */
 	$data = apply_filters( 'rcp_stripe_checkout_data', $data );
 
-	global $rcp_load_css;
+	global $rcp_load_css, $rcp_load_scripts;
 
 	// set this to true so the CSS is loaded. Used for styling error messages.
-	$rcp_load_css = true;
+	$rcp_load_css     = true;
+	$rcp_load_scripts = true;
 	rcp_show_error_messages( 'register' );
 
 	ob_start();
 
-	if( ! empty( $membership ) && $membership->get_object_id() == $subscription->id && $membership->is_active() ) : ?>
+	if( ! empty( $membership ) && $membership->get_object_id() == $subscription->id && ! $membership->can_renew() ) : ?>
 
 		<div class="rcp-stripe-checkout-notice"><?php _e( 'You are already subscribed.', 'rcp' ); ?></div>
 
 	<?php else :
-		if( ! has_action( 'wp_footer', 'rcp_stripe_checkout_shortcode_scripts' ) ) {
-			add_action( 'wp_footer', 'rcp_stripe_checkout_shortcode_scripts' );
+		// Load modal HTML.
+		if ( ! has_action( 'wp_footer', 'rcp_insert_modal_wrapper' ) ) {
+			add_action( 'wp_footer', 'rcp_insert_modal_wrapper' );
 		}
+
+		// Load stripe.js stuff
+		$stripe_gateway = new RCP_Payment_Gateway_Stripe();
+		$stripe_gateway->scripts();
 		?>
-		<form action="" method="post">
+		<div class="rcp-stripe-register" <?php foreach( $data as $label => $value ) { printf( ' %s="%s" ', esc_attr( sanitize_html_class( $label ) ), esc_attr( $value ) ); } ?>>
 			<?php do_action( 'register_form_stripe_fields', $data ); ?>
-			<script src="https://checkout.stripe.com/checkout.js" class="stripe-button" <?php foreach( $data as $label => $value ) { printf( ' %s="%s" ', esc_attr( $label ), esc_attr( $value ) ); } ?> ></script>
-			<input type="hidden" name="rcp_level" value="<?php echo $subscription->id ?>" />
-			<input type="hidden" name="rcp_register_nonce" value="<?php echo wp_create_nonce('rcp-register-nonce' ); ?>"/>
-			<input type="hidden" name="rcp_gateway" value="stripe_checkout"/>
-			<input type="hidden" name="rcp_stripe_checkout" value="1"/>
-		</form>
+			<button type="button" class="rcp-stripe-register-submit-button"><?php echo esc_attr( $data['data-label'] ); ?></button>
+		</div>
 	<?php endif;
 
+	/**
+	 * Filters the shortcode HTML.
+	 *
+	 * @param string $content Final shortcode HTML.
+	 * @param array  $atts    Shortcode attributes.
+	 */
 	return apply_filters( 'register_form_stripe', ob_get_clean(), $atts );
 }
 add_shortcode( 'register_form_stripe', 'rcp_register_form_stripe_checkout' );
@@ -562,7 +584,7 @@ function rcp_update_billing_card_shortcode( $atts, $content = null ) {
 		 * Membership can be found and the billing card can be updated.
 		 */
 
-		if ( $membership->get_customer()->get_user_id() != get_current_user_id() ) {
+		if ( $membership->get_user_id() != get_current_user_id() ) {
 			return __( 'You do not have permission to perform this action.', 'rcp' );
 		}
 
@@ -725,6 +747,8 @@ add_shortcode( 'user_expiration', 'rcp_user_expiration_shortcode' );
  * Loads the scripts for the Stripe Checkout shortcode.
  * Hooked into wp_footer via rcp_register_form_stripe_checkout().
  *
+ * @deprecated 3.2
+ *
  * @since 2.9.11
  */
 function rcp_stripe_checkout_shortcode_scripts() {
@@ -772,5 +796,106 @@ function rcp_stripe_checkout_shortcode_scripts() {
 		} );
 
 	</script>
+	<?php
+}
+
+/**
+ * Add the modal HTML to the footer so we can populate and display it when the trigger button is clicked.
+ *
+ * @see rcp_register_form_stripe_checkout()
+ *
+ * @since 3.2
+ * @return void
+ */
+function rcp_insert_modal_wrapper() {
+	global $rcp_options;
+
+	$stripe_gateway = new RCP_Payment_Gateway_Stripe();
+	?>
+	<div class="rcp-modal-wrapper">
+		<div class="rcp-modal" style="display: none;">
+			<form id="rcp_registration_form" class="rcp_form" method="POST">
+				<div class="rcp-modal-inner">
+					<div class="rcp-modal-header">
+						<span class="rcp-modal-close" aria-label="<?php esc_attr_e( 'Close', 'rcp' ); ?>" role="button">&times;</span>
+						<div class="rcp-modal-membership-details">
+							<p class="rcp-modal-membership-name" style="display: none;"></p>
+							<p class="rcp-modal-membership-description" style="display: none;"></p>
+						</div>
+					</div>
+
+					<div class="rcp-modal-body">
+						<?php if ( ! is_user_logged_in() ) : ?>
+							<fieldset class="rcp_user_fieldset">
+								<p id="rcp_user_email_wrap">
+									<label for="rcp_user_email"><?php echo apply_filters ( 'rcp_registration_email_label', __( 'Email', 'rcp' ) ); ?></label>
+									<input name="rcp_user_email" id="rcp_user_email" class="required" type="text" value="<?php echo ! empty( $_POST['rcp_user_email'] ) ? esc_attr( $_POST['rcp_user_email'] ) : ''; ?>" />
+							</fieldset>
+						<?php endif; ?>
+						<?php echo $stripe_gateway->fields(); ?>
+
+						<?php if ( ! empty( $rcp_options['enable_terms'] ) ) : ?>
+							<fieldset class="rcp_agree_to_terms_fieldset">
+								<p id="rcp_agree_to_terms_wrap">
+									<input type="checkbox" id="rcp_agree_to_terms" name="rcp_agree_to_terms" value="1">
+									<label for="rcp_agree_to_terms">
+										<?php
+										if ( ! empty( $rcp_options['terms_link'] ) ) {
+											echo '<a href="' . esc_url( $rcp_options['terms_link'] ) . '" target="_blank">';
+										}
+
+										if ( ! empty( $rcp_options['terms_label'] ) ) {
+											echo $rcp_options['terms_label'];
+										} else {
+											_e( 'I agree to the terms and conditions', 'rcp' );
+										}
+
+										if ( ! empty( $rcp_options['terms_link'] ) ) {
+											echo '</a>';
+										}
+										?>
+									</label>
+								</p>
+							</fieldset>
+						<?php endif; ?>
+
+						<?php if ( ! empty( $rcp_options['enable_privacy_policy'] ) ) : ?>
+							<fieldset class="rcp_agree_to_privacy_policy_fieldset">
+								<p id="rcp_agree_to_privacy_policy_wrap">
+									<input type="checkbox" id="rcp_agree_to_privacy_policy" name="rcp_agree_to_privacy_policy" value="1">
+									<label for="rcp_agree_to_privacy_policy">
+										<?php
+										if ( ! empty( $rcp_options['privacy_policy_link'] ) ) {
+											echo '<a href="' . esc_url( $rcp_options['privacy_policy_link'] ) . '" target="_blank">';
+										}
+
+										if ( ! empty( $rcp_options['privacy_policy_label'] ) ) {
+											echo $rcp_options['privacy_policy_label'];
+										} else {
+											_e( 'I agree to the privacy policy', 'rcp' );
+										}
+
+										if ( ! empty( $rcp_options['privacy_policy_link'] ) ) {
+											echo '</a>';
+										}
+										?>
+									</label>
+								</p>
+							</fieldset>
+						<?php endif; ?>
+
+						<input type="hidden" id="rcp-stripe-checkout-level-id" name="rcp_level" value="0" />
+						<input type="hidden" name="rcp_register_nonce" value="<?php echo esc_attr( wp_create_nonce( 'rcp-register-nonce' ) ); ?>"/>
+						<input type="hidden" name="rcp_gateway" value="stripe"/>
+						<input type="hidden" name="rcp_stripe_checkout" value="1"/>
+
+						<p id="rcp_submit_wrap">
+							<input type="submit" id="rcp_submit" class="rcp-modal-submit" value="<?php esc_attr_e( 'Submit Payment', 'rcp' ); ?>" />
+						</p>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 	<?php
 }

@@ -325,17 +325,24 @@ class RCP_Member_Tests extends WP_UnitTestCase {
 
 		$this->membership->set_expiration_date( $expiration );
 		$this->assertEquals( $expiration, $this->membership->get_expiration_date( false ) );
-		$this->assertEquals( date( 'Y-n-d', strtotime( '+1 month' ) ), date( 'Y-n-d', $this->membership->get_expiration_time() ) );
+
+		$expected_expiration = date( 'Y-m-d', strtotime( '+1 month' ) );
+		// If we're on the 29th, 30th, or 31st, then we expect the first day of the following month.
+		if ( in_array( date( 'd' ), array( 29, 30, 31 ) ) ) {
+			$expected_expiration = date( 'Y-m-01', strtotime( '+2 months' ) );
+		}
+
+		$this->assertEquals( $expected_expiration, date( 'Y-m-d', $this->membership->get_expiration_time() ) );
 
 		// Now manually set expiration to last day of the month to force a date "walk".
 		// See https://github.com/pippinsplugins/restrict-content-pro/issues/239
 
-		$this->membership->set_expiration_date( date( 'Y-n-d 23:59:59', strtotime( 'October 31, 2019' ) ) );
+		$this->membership->set_expiration_date( date( 'Y-n-d 23:59:59', strtotime( 'October 31, 2040' ) ) );
 		$this->membership->set_status( 'active' );
 
 		$expiration = $this->membership->calculate_expiration();
 		$this->membership->set_expiration_date( $expiration );
-		$this->assertEquals( '2019-12-01 23:59:59', date( 'Y-n-d H:i:s', $this->membership->get_expiration_time() ) );
+		$this->assertEquals( '2040-12-01 23:59:59', date( 'Y-n-d H:i:s', $this->membership->get_expiration_time() ) );
 
 		// Now test a one-day subscription
 		$this->membership->set_object_id( $this->level_id_3 );
@@ -343,6 +350,26 @@ class RCP_Member_Tests extends WP_UnitTestCase {
 		$expiration = rcp_calculate_subscription_expiration( $this->level_id_3, false );
 		$this->membership->set_expiration_date( $expiration );
 		$this->assertEquals( date( 'Y-n-d 23:59:59', strtotime( '+1 day' ) ), date( 'Y-n-d H:i:s', $this->membership->get_expiration_time() ) );
+
+	}
+
+	/**
+	 * If an expiration date is at the end of the year, the renewal date should "walk" to February 1st of the
+	 * next year.
+	 *
+	 * Current expiration: 2040-12-30
+	 * Renewal expiration: 2041-02-01
+	 *
+	 * @covers RCP_Membership::calculate_expiration
+	 */
+	function test_expiration_date_walk_end_of_year() {
+
+		$this->membership->set_expiration_date( date( '2040-12-30 23:59:59' ) );
+		$this->membership->set_status( 'active' );
+
+		$calculated_expiration = $this->membership->calculate_expiration( false );
+
+		$this->assertEquals( '2041-02-01', date( 'Y-m-d', strtotime( $calculated_expiration ) ) );
 
 	}
 
@@ -414,7 +441,14 @@ class RCP_Member_Tests extends WP_UnitTestCase {
 		$this->membership->renew();
 
 		$this->assertFalse( $this->membership->is_expired() );
-		$this->assertEquals( date_i18n( get_option( 'date_format' ), strtotime( '+1 month' ) ), $this->membership->get_expiration_date() );
+
+		$expected_expiration = date( 'Y-m-d', strtotime( '+1 month' ) );
+		// If we're on the 29th, 30th, or 31st, then we expect the first day of the following month.
+		if ( in_array( date( 'd' ), array( 29, 30, 31 ) ) ) {
+			$expected_expiration = date( 'Y-m-01', strtotime( '+2 months' ) );
+		}
+
+		$this->assertEquals( $expected_expiration, date( 'Y-m-d', strtotime( $this->membership->get_expiration_date( false ) ) ) );
 
 	}
 

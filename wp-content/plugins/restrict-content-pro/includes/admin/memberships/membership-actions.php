@@ -120,6 +120,11 @@ function rcp_process_add_membership() {
 		wp_die( __( 'Error adding membership record.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 500 ) );
 	}
 
+	$membership = rcp_get_membership( $membership_id );
+	if ( $membership instanceof RCP_Membership ) {
+		$membership->add_note( sprintf( __( 'Membership manually created by %s.', 'rcp' ), $current_user->user_login ) );
+	}
+
 	$redirect = add_query_arg( 'rcp_message', 'membership_updated', rcp_get_memberships_admin_page( array(
 		'membership_id' => urlencode( $membership_id ),
 		'view'          => 'edit'
@@ -232,7 +237,20 @@ function rcp_process_edit_membership() {
 		switch ( $status ) {
 			case 'cancelled' :
 				if ( $membership->can_cancel() ) {
-					$membership->cancel_payment_profile();
+					$cancelled = $membership->cancel_payment_profile();
+
+					if ( is_wp_error( $cancelled ) ) {
+						// Bail if cancellation failed.
+						$redirect = add_query_arg( array(
+							'rcp_message'                => 'membership_cancellation_failed',
+							'rcp_cancel_failure_message' => urlencode( $cancelled->get_error_message() )
+						), rcp_get_memberships_admin_page( array(
+							'membership_id' => urlencode( $membership_id ),
+							'view'          => 'edit'
+						) ) );
+						wp_safe_redirect( $redirect );
+						exit;
+					}
 				} else {
 					$membership->cancel();
 				}
@@ -283,7 +301,10 @@ function rcp_process_edit_membership() {
 		$args['gateway_subscription_id'] = sanitize_text_field( $gateway_subscription_id );
 	}
 
-	$membership->update( $args );
+	if ( ! empty( $args ) ) {
+		$membership->update( $args );
+		$membership->add_note( sprintf( __( 'Membership edited by %s.', 'rcp' ), $current_user->user_login ) );
+	}
 
 	$redirect = add_query_arg( 'rcp_message', 'membership_updated', rcp_get_memberships_admin_page( array(
 		'membership_id' => urlencode( $membership_id ),
@@ -429,7 +450,21 @@ function rcp_process_cancel_membership() {
 
 	// Cancel gateway subscription.
 	if ( $membership->can_cancel() ) {
-		$membership->cancel_payment_profile();
+		$cancelled = $membership->cancel_payment_profile();
+
+		if ( is_wp_error( $cancelled ) ) {
+			// Bail and show error if cancellation failed.
+			$redirect = add_query_arg( array(
+				'rcp_message'                => 'membership_cancellation_failed',
+				'rcp_cancel_failure_message' => urlencode( $cancelled->get_error_message() )
+			), rcp_get_memberships_admin_page( array(
+				'membership_id' => urlencode( $membership_id ),
+				'view'          => 'edit'
+			) ) );
+
+			wp_safe_redirect( $redirect );
+			exit;
+		}
 	} else {
 		$membership->cancel();
 	}
@@ -481,9 +516,12 @@ function rcp_process_add_membership_payment() {
 	 */
 	global $rcp_payments_db;
 
+	$membership_level = rcp_get_subscription_details( $membership->get_object_id() );
+
 	$data = array(
 		'amount'           => ! empty( $_POST['amount'] ) ? sanitize_text_field( $_POST['amount'] ) : 0.00,
-		'user_id'          => $membership->get_customer()->get_user_id(),
+		'subtotal'         => isset( $membership_level->price ) ? sanitize_text_field( $membership_level->price ) : 0.00,
+		'user_id'          => $membership->get_user_id(),
 		'customer_id'      => $membership->get_customer()->get_id(),
 		'membership_id'    => $membership->get_id(),
 		'date'             => date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
@@ -493,6 +531,8 @@ function rcp_process_add_membership_payment() {
 		'subscription_key' => $membership->get_subscription_key(),
 		'transaction_id'   => sanitize_text_field( $transaction_id ),
 		'status'           => ! empty( $_POST['status'] ) ? sanitize_text_field( $_POST['status'] ) : 'complete',
+		'object_id'        => $membership->get_object_id(),
+		'object_type'      => 'subscription'
 	);
 
 	$add = $rcp_payments_db->insert( $data );

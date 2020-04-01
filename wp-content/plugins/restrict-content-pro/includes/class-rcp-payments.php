@@ -661,7 +661,9 @@ class RCP_Payments {
 
 		foreach ( $payments as $key => $payment ) {
 
-			$payment = $this->backfill_payment_data( $payment );
+			if ( '*' === $fields ) {
+				$payment = $this->backfill_payment_data( $payment );
+			}
 
 			$payments[ $key ] = $payment;
 
@@ -711,25 +713,25 @@ class RCP_Payments {
 		}
 
 		/** Backfill empty subtotal */
-		if ( $payment->subtotal === "" ) {
+		if ( ! property_exists( $payment, 'subtotal' ) || '' === $payment->subtotal || null === $payment->subtotal ) {
 			$payment->subtotal          = $payment->amount;
 			$data_to_update['subtotal'] = $payment->amount;
 		}
 
 		/** Backfill empty credits */
-		if ( $payment->credits === "" ) {
+		if ( ! property_exists( $payment, 'credits' ) || '' === $payment->credits || null === $payment->credits ) {
 			$payment->credits          = 0;
 			$data_to_update['credits'] = 0;
 		}
 
 		/** Backfill empty fees */
-		if ( $payment->fees === "" ) {
+		if ( ! property_exists( $payment, 'fees' ) || '' === $payment->fees || null === $payment->fees ) {
 			$payment->fees          = 0;
 			$data_to_update['fees'] = 0;
 		}
 
 		/** Backfill empty discount_amount */
-		if ( $payment->discount_amount === "" ) {
+		if ( ! property_exists( $payment, 'discount_amount' ) || '' === $payment->discount_amount || null === $payment->discount_amount ) {
 			$payment->discount_amount          = 0;
 			$data_to_update['discount_amount'] = 0;
 		}
@@ -765,6 +767,7 @@ class RCP_Payments {
 
 		$defaults = array(
 			'user_id'          => 0,
+			'date'             => array(),
 			'status'           => '',
 			's'                => '',
 			'object_id'        => '',
@@ -789,6 +792,49 @@ class RCP_Payments {
 
 			$where .= " AND `user_id` IN( {$user_ids} ) ";
 
+		}
+
+		// Setup the date query
+		if( ! empty( $args['date'] ) && is_array( $args['date'] ) ) {
+
+			if ( ! empty( $args['date']['start'] ) || ! empty( $args['date']['end'] ) ) {
+
+				if ( ! empty( $args['date']['start'] ) ) {
+
+					$start    = date( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
+					$where   .= " AND `date` >= %s";
+					$values[] = $start;
+
+				}
+
+				if ( ! empty( $args['date']['end'] ) ) {
+
+					$end    = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
+					$where   .= " AND `date` <= %s";
+					$values[] = $end;
+
+				}
+
+			} else {
+
+				$day        = ! empty( $args['date']['day'] ) ? absint( $args['date']['day'] ) : null;
+				$month      = ! empty( $args['date']['month'] ) ? absint( $args['date']['month'] ) : null;
+				$year       = ! empty( $args['date']['year'] ) ? absint( $args['date']['year'] ) : null;
+				$date_where = '';
+
+				$date_where .= ! is_null( $year ) ? $year . " = YEAR ( date ) " : '';
+
+				if ( ! is_null( $month ) ) {
+					$date_where = $month . " = MONTH ( date ) AND " . $date_where;
+				}
+
+				if ( ! is_null( $day ) ) {
+					$date_where = $day . " = DAY ( date ) AND " . $date_where;
+				}
+
+				$where .= " AND (" . $date_where . ")";
+
+			}
 		}
 
 		// Filter by status

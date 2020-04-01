@@ -55,6 +55,10 @@ $notice        = ! $new_notice ? $notices->get_notice( $notice_id ) : $default;
 					</select>
 
 					<p class="description"><?php _e( 'Is this a renewal notice or an expiration notice?', 'rcp' ); ?></p>
+					<p class="description">
+						<?php _e( '<strong>Expiration notices</strong> are sent to "active" and "cancelled" memberships that <strong>do not</strong> have auto renew enabled. They can be used to inform customers that their memberships will not be automatically renewed and they will need to do a manual renewal to retain access to their content.', 'rcp' ); ?> <br>
+						<?php _e( '<strong>Reminder notices</strong> are sent to "active" memberships that <strong>do</strong> have auto renew enabled. They can be used to inform customers that their memberships will be automatically renewed and give them a chance to cancel if they do not wish to continue.', 'rcp' ); ?>
+					</p>
 				</td>
 			</tr>
 			<tr>

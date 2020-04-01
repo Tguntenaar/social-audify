@@ -225,6 +225,8 @@ function rcp_get_membership_counts( $args = array() ) {
 function rcp_add_membership( $data = array() ) {
 
 	$defaults = array(
+		'customer_id'      => 0,
+		'user_id'          => null,
 		'object_id'        => 0,
 		'object_type'      => 'membership',
 		'currency'         => rcp_get_currency(),
@@ -254,6 +256,11 @@ function rcp_add_membership( $data = array() ) {
 	$has_trial        = ! empty( $membership_level->trial_duration ) || ( empty( $membership_level->price ) && ! empty( $membership_level->duration ) );
 	$set_trial        = ( $has_trial && ! $customer->has_trialed() );
 	$expiration_date  = ! empty( $data['object_id'] ) ? rcp_calculate_subscription_expiration( $data['object_id'], $set_trial ) : '';
+
+	// Populate user_id if not provided.
+	if ( empty( $data['user_id'] ) && $customer instanceof RCP_Customer ) {
+		$data['user_id'] = $customer->get_user_id();
+	}
 
 	// Convert "free" status to "active".
 	if ( ! empty( $data['status'] ) && 'free' === $data['status'] ) {
@@ -499,7 +506,7 @@ function rcp_get_membership_cancel_url( $membership_id ) {
 	/**
 	 * @deprecated 3.0 Use `rcp_membership_cancel_url` instead.
 	 */
-	$url = apply_filters( 'rcp_member_cancel_url', $url, $membership->get_customer()->get_user_id() );
+	$url = apply_filters( 'rcp_member_cancel_url', $url, $membership->get_user_id() );
 
 	/**
 	 * Filters the membership cancel URL.

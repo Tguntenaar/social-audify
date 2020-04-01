@@ -175,7 +175,15 @@ function rcp_member_levels_page() {
 										<option value="active"><?php _e('Active', 'rcp'); ?></option>
 										<option value="inactive"><?php _e('Inactive', 'rcp'); ?></option>
 									</select>
-									<p class="description"><?php _e('Members may only sign up for active membership levels.', 'rcp'); ?></p>
+									<p class="description">
+										<?php
+										printf(
+											__('Inactive membership levels do not appear on the %s shortcode page. Learn more about membership level statuses in <a href="%s" target="_blank">our documentation article</a>.', 'rcp'),
+											'[register_form]',
+											esc_url( 'https://docs.restrictcontentpro.com/article/2257-active-vs-inactive-membership-levels' )
+										);
+										?>
+									</p>
 								</td>
 							</tr>
 							<tr class="form-field">

@@ -29,10 +29,6 @@
 	display: inline;
 }
 
-.rcp_options_form input.regular-text {
-	border: 1px solid #DFDFDF;
-}
-
 #tab_container .tab_content {
 	position: relative;
 }
