@@ -57,14 +57,12 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
       'post_title'     => preg_replace( '/\.[^.]+$/', '', $new_file_name ),
       'post_content'   => '',
       'post_status'    => 'inherit'
-    ), $new_file_path, 0, True);
+    ), $new_file_path, 0, true);
   } catch (\Throwable $th) {
     echo "test";
     var_dump($th);
   }
 
-
-  
   var_dump($new_file_path);
   var_dump($new_file_mime);
   var_dump($new_file_name);
