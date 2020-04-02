@@ -60,7 +60,7 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
 		'post_title'     => preg_replace( '/\.[^.]+$/', '', $new_file_name ),
 		'post_content'   => '',
 		'post_status'    => 'inherit'
-  ), $new_file_path, 0, True);
+  ), $false, 0, True);
   
   var_dump($upload_id);
   // TODO:
