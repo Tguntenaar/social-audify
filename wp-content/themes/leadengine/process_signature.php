@@ -57,7 +57,8 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
 		'post_content'   => '',
 		'post_status'    => 'inherit'
   ), $new_file_path );
- 
+  
+  var_dump($upload_id);
   // TODO:
 	// wp_generate_attachment_metadata() won't work if you do not include this file
 	// require_once( ABSPATH . 'wp-admin/includes/image.php' );
@@ -68,5 +69,5 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
 
 	// Show the uploaded file in browser
   // wp_redirect( $wordpress_upload_dir['baseurl'] . '/signatures'. '/' . basename( $new_file_path ) );
-  wp_redirect( "https://". $_SERVER["HTTP_HOST"] . "/profile-page/#mail-settings");
+  // wp_redirect( "https://". $_SERVER["HTTP_HOST"] . "/profile-page/#mail-settings");
 }

@@ -161,7 +161,7 @@
           </div>
 
           <div class="profile-page-blocks">
-            <h3 class="h3-fix">Mail signature</h3>
+            <h3 class="h3-fix">Upload signature image</h3>
             
             <form action="<?php echo get_stylesheet_directory_uri() ?>/process_signature.php" method="post" enctype="multipart/form-data">
               <?php 
@@ -182,7 +182,7 @@
               <?php endif; ?>
               <input class="button" style="margin-top: 20px" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>
               <div style="clear:both; margin-bottom: 25px;"></div>
-              <button id="delete-signature">Delete</button>
+              <button type="button" id="delete-signature">Delete</button>
               <input type="submit" name="submit" value="Submit" />
             </form>
             <br/>
