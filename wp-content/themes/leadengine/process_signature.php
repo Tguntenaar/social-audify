@@ -49,28 +49,24 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
     $force_delete = true;
     wp_delete_attachment($user->signature, $force_delete);
   } 
-  try {
-    
-    $upload_id = wp_insert_attachment( array(
-      'guid'           => $new_file_path, 
-      'post_mime_type' => $new_file_mime,
-      'post_title'     => preg_replace( '/\.[^.]+$/', '', $new_file_name ),
-      'post_content'   => '',
-      'post_status'    => 'inherit'
-    ), $new_file_path, 0, true);
-  } catch (\Throwable $th) {
-    echo "test";
-    var_dump($th);
-  }
 
-  var_dump($new_file_path);
-  var_dump($new_file_mime);
-  var_dump($new_file_name);
-  var_dump($upload_id);
+    
+  $upload_id = wp_insert_attachment( array(
+    'guid'           => $new_file_path, 
+    'post_mime_type' => $new_file_mime,
+    'post_title'     => preg_replace( '/\.[^.]+$/', '', $new_file_name ),
+    'post_content'   => '',
+    'post_status'    => 'inherit'
+  ), $new_file_path, 0, true);
+
+  // var_dump($new_file_path);
+  // var_dump($new_file_mime);
+  // var_dump($new_file_name);
+  // var_dump($upload_id);
 
   $user->update("User", "signature", $upload_id);
 
 	// Show the uploaded file in browser
   // wp_redirect( $wordpress_upload_dir['baseurl'] . '/signatures'. '/' . basename( $new_file_path ) );
-  // wp_redirect( "https://". $_SERVER["HTTP_HOST"] . "/profile-page/#mail-settings");
+  wp_redirect( "https://". $_SERVER["HTTP_HOST"] . "/profile-page/#mail-settings");
 }
