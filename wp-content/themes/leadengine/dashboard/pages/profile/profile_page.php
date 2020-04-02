@@ -182,8 +182,8 @@
               <?php endif; ?>
               <input class="button" style="margin-top: 20px" type="file" name="mail-signature" size="25" accept="image/png,image/jpg" required/>
               <div style="clear:both; margin-bottom: 25px;"></div>
-              <button type="button" id="delete-signature">Delete</button>
               <input type="submit" name="submit" value="Submit" />
+              <button type="button" id="delete-signature">Delete</button>
             </form>
             <br/>
           </div>

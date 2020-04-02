@@ -49,26 +49,27 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
     $force_delete = true;
     wp_delete_attachment($user->signature, $force_delete);
   } 
+  try {
+    
+    $upload_id = wp_insert_attachment( array(
+      'guid'           => $new_file_path, 
+      'post_mime_type' => $new_file_mime,
+      'post_title'     => preg_replace( '/\.[^.]+$/', '', $new_file_name ),
+      'post_content'   => '',
+      'post_status'    => 'inherit'
+    ), $new_file_path, 0, True);
+  } catch (\Throwable $th) {
+    echo "test";
+    var_dump($th);
+  }
 
+
+  
   var_dump($new_file_path);
   var_dump($new_file_mime);
   var_dump($new_file_name);
-
-	$upload_id = wp_insert_attachment( array(
-		'guid'           => $new_file_path, 
-		'post_mime_type' => $new_file_mime,
-		'post_title'     => preg_replace( '/\.[^.]+$/', '', $new_file_name ),
-		'post_content'   => '',
-		'post_status'    => 'inherit'
-  ), False, 0, True);
-  
   var_dump($upload_id);
-  // TODO:
-	// wp_generate_attachment_metadata() won't work if you do not include this file
-	// require_once( ABSPATH . 'wp-admin/includes/image.php' );
-	// Generate and save the attachment metas into the database
-	// wp_update_attachment_metadata( $upload_id, wp_generate_attachment_metadata( $upload_id, $new_file_path ) );
-  
+
   $user->update("User", "signature", $upload_id);
 
 	// Show the uploaded file in browser
