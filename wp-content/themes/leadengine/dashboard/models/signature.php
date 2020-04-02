@@ -59,24 +59,31 @@ class signature
     $image_html = $this->img_url ?
       "<td style='padding-top: 20px; padding-bottom: 20px; padding-right: 20px; font-size: 10pt; font-family: Arial; width: 125px' vAlign='middle'>
         <img src='{$this->img_url}' alt='upload company logo' width='250' id='signature-img'></td>" : '';
+    $facebook_string = ($this->facebook != "") ? "<a href='{$this->facebook}'><i style='color:{$this->color}' class='fab fa-facebook-square'></i></a>&nbsp;" : "";
+    $instagram_string = ($this->instagram != "") ? "<a href='{$this->instagram}'><i style='color:{$this->color}' class='fab fa-instagram'></i></a>&nbsp;" : "";
+    $website_string = ($this->website != "") ? "<a href='{$this->website}'><i style='color:{$this->color}' class='fas fa-globe'></i></a>&nbsp;" : "";
+    $linkedin_string = ($this->linkedin != "") ? "<a href='{$this->linkedin}'><i style='color:{$this->color}' class='fab fa-linkedin'></i></a>" : "";
+    
+    $website_string_2 = ($this->website != "") ? "<span style='color:{$this->color}'><strong>w:</strong></span>
+    <a style='text-decoration:none; color:#000000' href='{$this->website}'>{$website_label}</a><br>" : "";
 
+    $mobile_string = ($this->mobile_phone_number != "") ? "<span style='color: {$this->color}'><strong>m:</strong></span> {$this->mobile_phone_number}</span><br><br>" : "";
     return "
       <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.3.1/css/all.css' integrity='sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU' crossorigin='anonymous'>
       <table style='border-collapse: collapse; border-spacing: 0; width: 525px' cellSpacing='0' cellPadding='0'>
         <tbody>
           <tr cellspacing='0' cellpadding='0' style='padding:0!important;'>{$image_html}
-            <td cellspacing='0' cellpadding='0' style='padding-top: 20px; padding-bottom: 20px;  vertical-align: middle !important; 
+            <td cellspacing='0' cellpadding='0' style='vertical-align: middle !important; 
                 display: table-cell; font-size: 10pt; font-family: Arial; width: 400px; padding-left: 20px; border-left: {$this->color} 1px solid' valign='top'>
               <strong style='font-size: 11pt'><span style='color: {$this->color}'>{$this->first_name} {$this->last_name}</strong> | {$this->jobtitle}<br><br>
               <span style='color:{$this->color}'>{$this->company}</span><br>
               <span style='color:{$this->color}'><strong>e: </strong></span>{$this->email}<br>
-              <span style='color:{$this->color}'><strong>w:</strong></span>
-                <a style='text-decoration:none; color:#000000' href='{$this->website}'>{$website_label}</a><br>
-              <span style='color: {$this->color}'><strong>m:</strong></span> {$this->mobile_phone_number}</span><br><br>
-              <a href='{$this->facebook}'><i style='color:{$this->color}' class='fab fa-facebook-square'></i></a>&nbsp;
-              <a href='{$this->instagram}'><i style='color:{$this->color}' class='fab fa-instagram'></i></a>&nbsp;
-              <a href='{$this->website}'><i style='color:{$this->color}' class='fas fa-globe'></i></a>&nbsp;
-              <a href='{$this->linkedin}'><i style='color:{$this->color}' class='fab fa-linkedin'></i></a>
+              {$website_string_2}
+              {$mobile_string}
+              {$facebook_string}
+              {$instagram_string}
+              {$website_string}
+              {$linkedin_string}
             </td>
           </tr>
         </tbody>
