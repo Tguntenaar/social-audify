@@ -50,6 +50,10 @@ if( move_uploaded_file( $signature['tmp_name'], $new_file_path ) ) {
     wp_delete_attachment($user->signature, $force_delete);
   } 
 
+  var_dump($new_file_path);
+  var_dump($new_file_mime);
+  var_dump($new_file_name);
+
 	$upload_id = wp_insert_attachment( array(
 		'guid'           => $new_file_path, 
 		'post_mime_type' => $new_file_mime,
