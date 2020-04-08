@@ -148,7 +148,7 @@
                   <!-- </div> -->
                   <span style="font-weight: 500; display: block; margin-left: 0px;" class="radio-label">To:</span>
                   <input class="subject-line" type="text" name="user_mail"  placeholder="example@mail.com" id="recipient_email" value="<?php echo $user->email?>" style="margin-top:10px;">
-                  <button type="button" class="create-button-client" id="send-mail">Send test mail</button>
+                  <button type="button" class="create-button-client" id="send-mail">Send test mail</button><span id="mail-send-status" style="padding-left:20px"></span>
                 </div>
               </div>
               <div class="mail-components">
@@ -213,14 +213,24 @@
     });
 
     $('#send-mail').click(function() {
+      $('#mail-send-status').html("<div class='lds-dual-ring'></div>"); 
       $.ajax({
         type: "POST",
         url: ajaxurl,
         data: { 'action': "test_mail",
                 "mail": $("#recipient_email").val(),
                 "mailcount": $("input[name=mail]:checked").val() },
-        success: logResponse,
-        error: logResponse,
+        success: function(response) {
+          logResponse(response);
+          $('#mail-send-status').text('Mail send');
+          $('#mail-send-status').css({'color':'green'});
+         
+        },
+        error: function(response) {
+          logResponse(response);
+          $('#mail-send-status').text('Mail failed to send');
+          $('#mail-send-status').css({'color':'red'});
+        },
       });
     });
 
