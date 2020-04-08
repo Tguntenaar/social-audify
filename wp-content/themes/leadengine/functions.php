@@ -1195,21 +1195,21 @@ function pw_rcp_add_user_fields()
 
       <tr valign="top">
         <th scope="row" valign="top">
-          <label for="rcp_website"><?php _e('Website Url', 'rcp'); ?></label>
-        </th>
-        <td>
-          <input name="rcp_website" id="rcp_website" type="text" value="<?php echo esc_attr($website); ?>" />
-          <p class="description"><?php _e('The member\'s website url', 'rcp'); ?></p>
-        </td>
-      </tr>
-
-      <tr valign="top">
-        <th scope="row" valign="top">
           <label for="rcp_jobtitle"><?php _e('The member\'s job title', 'rcp'); ?></label>
         </th>
         <td>
           <input name="rcp_jobtitle" id="rcp_jobtitle" type="text" value="<?php echo esc_attr($jobtitle); ?>" />
           <p class="description"><?php _e('The member\'s job title', 'rcp'); ?></p>
+        </td>
+      </tr>
+
+      <tr valign="top">
+        <th scope="row" valign="top">
+          <label for="rcp_website"><?php _e('Website Url', 'rcp'); ?></label>
+        </th>
+        <td>
+          <input name="rcp_website" id="rcp_website" type="text" value="<?php echo esc_attr($website); ?>" />
+          <p class="description"><?php _e('The member\'s website url', 'rcp'); ?></p>
         </td>
       </tr>
 
@@ -1337,10 +1337,6 @@ function pw_rcp_add_user_fields()
         update_user_meta($user_id, 'rcp_calendar', sanitize_text_field($_POST['rcp_calendar']));
       }
 
-      if (!empty($_POST['rcp_website'])) {
-        update_user_meta($user_id, 'rcp_website', sanitize_text_field($_POST['rcp_website']));
-      }
-
       if (!empty($_POST['rcp_btw_number'])) {
         $vat_number = isset($_POST['rcp_btw_number']) ? $_POST['rcp_btw_number'] : "";
         $vat_number = str_replace(array(' ', '.', '-', ',', ', '), '', trim($vat_number));
@@ -1365,6 +1361,7 @@ function pw_rcp_add_user_fields()
         update_user_meta($user_id, 'rcp_country', sanitize_text_field($_POST['rcp_country']));
       }
 
+      update_user_meta($user_id, 'rcp_website', sanitize_text_field($_POST['rcp_website']));
       update_user_meta($user_id, 'rcp_company', sanitize_text_field($_POST['rcp_company']));
       update_user_meta($user_id, 'rcp_jobtitle', sanitize_text_field($_POST['rcp_jobtitle']));
       update_user_meta($user_id, 'rcp_facebook', sanitize_text_field($_POST['rcp_facebook']));
