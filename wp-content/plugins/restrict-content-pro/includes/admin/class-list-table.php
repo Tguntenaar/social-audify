@@ -261,7 +261,7 @@ abstract class List_Table extends \WP_List_Table {
 		if ( ! empty( $counts ) ) {
 			foreach ( $counts as $status => $count ) {
 				$count_url = add_query_arg( array(
-					'status' => $status,
+					'status' => urlencode( $status ),
 					'paged'  => false,
 				), $url );
 

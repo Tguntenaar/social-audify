@@ -11,6 +11,10 @@
 
 class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 
+	/**
+	 * @var Braintree\Gateway
+	 */
+	protected $braintree;
 	protected $merchantId;
 	protected $publicKey;
 	protected $privateKey;
@@ -36,6 +40,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 		$this->supports[] = 'fees';
 		$this->supports[] = 'trial';
 		$this->supports[] = 'gateway-submits-form';
+		$this->supports[] = 'card-updates';
 
 		if ( $this->test_mode ) {
 			$this->merchantId    = ! empty( $rcp_options['braintree_sandbox_merchantId'] ) ? sanitize_text_field( $rcp_options['braintree_sandbox_merchantId'] ) : '';
@@ -53,10 +58,12 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 
 		require_once RCP_PLUGIN_DIR . 'includes/libraries/braintree/lib/Braintree.php';
 
-		Braintree_Configuration::environment( $this->environment );
-		Braintree_Configuration::merchantId( $this->merchantId );
-		Braintree_Configuration::publicKey( $this->publicKey );
-		Braintree_Configuration::privateKey( $this->privateKey );
+		$this->braintree = new Braintree\Gateway( array(
+			'environment' => $this->environment,
+			'merchantId'  => $this->merchantId,
+			'publicKey'   => $this->publicKey,
+			'privateKey'  => $this->privateKey
+		) );
 
 	}
 
@@ -69,11 +76,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 	 * @uses rcp_errors()
 	 * @return void
 	 */
-	public function validate_fields() {
-		if ( empty( $_POST['rcp_braintree_fields_completed'] ) ) {
-			rcp_errors()->add( 'missing_card_info', __( 'Credit card information incomplete.', 'rcp' ), 'register' );
-		}
-	}
+	public function validate_fields() {}
 
 	/**
 	 * Processes a registration payment.
@@ -90,12 +93,13 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 			);
 		}
 
+		$payment_method_nonce = $_POST['payment_method_nonce'];
+
 		/**
 		 * @var RCP_Payments $rcp_payments_db
 		 */
 		global $rcp_payments_db;
 
-		$paid     = false;
 		$txn_args = array();
 		$member   = new RCP_Member( $this->user_id ); // For backwards compatibility only.
 		$user     = get_userdata( $this->user_id );
@@ -112,7 +116,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 
 		if ( $payment_profile_id ) {
 			try {
-				$customer = Braintree_Customer::find( $payment_profile_id );
+				$customer = $this->braintree->customer()->find( $payment_profile_id );
 			} catch ( Braintree_Exception_NotFound $e ) {
 				$customer = false;
 			} catch ( Exception $e ) {
@@ -122,7 +126,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 
 		if ( ! $customer ) {
 			// Search for existing customer by ID.
-			$collection = Braintree_Customer::search( array(
+			$collection = $this->braintree->customer()->search( array(
 				Braintree_CustomerSearch::id()->is( 'bt_' . $this->user_id )
 			) );
 
@@ -139,18 +143,16 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 		if ( ! $customer ) {
 
 			try {
-				$result = Braintree_Customer::create(
-					array(
-						'id'                 => 'bt_' . $this->user_id,
-						'firstName'          => ! empty( $user->first_name ) ? sanitize_text_field( $user->first_name ) : '',
-						'lastName'           => ! empty( $user->last_name ) ? sanitize_text_field( $user->last_name ) : '',
-						'email'              => $user->user_email,
-						'riskData'           => array(
-							'customerBrowser' => $_SERVER['HTTP_USER_AGENT'],
-							'customerIp'      => rcp_get_ip()
-						)
+				$result = $this->braintree->customer()->create( array(
+					'id'                 => 'bt_' . $this->user_id,
+					'firstName'          => ! empty( $user->first_name ) ? sanitize_text_field( $user->first_name ) : '',
+					'lastName'           => ! empty( $user->last_name ) ? sanitize_text_field( $user->last_name ) : '',
+					'email'              => $user->user_email,
+					'riskData'           => array(
+						'customerBrowser' => $_SERVER['HTTP_USER_AGENT'],
+						'customerIp'      => rcp_get_ip()
 					)
-				);
+				) );
 
 				if ( $result->success && $result->customer ) {
 					$customer = $result->customer;
@@ -169,37 +171,83 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 		// Set the customer ID.
 		$this->membership->set_gateway_customer_id( $customer->id );
 
-		/**
-		 * Save the customer's payment method.
-		 */
-		try {
+		$payment_method_token = false;
 
-			$payment_method = Braintree_PaymentMethod::create( array(
-				'customerId'         => $customer->id,
-				'paymentMethodNonce' => $_POST['payment_method_nonce'],
-				'options'            => array(
-					'makeDefault' => true
-				)
-			) );
+		if ( $this->initial_amount > 0 ) {
 
-			if ( $payment_method->success ) {
+			/**
+			 * Always process a one-time payment for the first transaction.
+			 */
+			try {
+				$single_payment = $this->braintree->transaction()->sale( array(
+					'amount'             => $this->initial_amount,
+					'customerId'         => $customer->id,
+					'paymentMethodNonce' => $payment_method_nonce,
+					'options'            => array(
+						'submitForSettlement'   => true,
+						'storeInVaultOnSuccess' => true
+					)
+				) );
 
-				$payment_token = $payment_method->paymentMethod->token;
+				if ( $single_payment->success ) {
 
-			} else {
+					$payment_method_token = $single_payment->transaction->creditCardDetails->token;
 
-				$this->handle_processing_error( new Exception( __( 'There was an error saving your payment information. Please try again. Contact support if the problem persists.', 'rcp' ) ) );
+					$rcp_payments_db->update( $this->payment->id, array(
+						'date'           => date( 'Y-m-d g:i:s', time() ),
+						'payment_type'   => __( 'Braintree Credit Card Initial Payment', 'rcp' ),
+						'transaction_id' => $single_payment->transaction->id,
+						'status'         => 'complete'
+					) );
 
+					/**
+					 * Triggers when a gateway payment is completed.
+					 *
+					 * @param RCP_Member                    $member     Deprecated member object.
+					 * @param int                           $payment_id ID of the payment record in RCP.
+					 * @param RCP_Payment_Gateway_Braintree $this       Gateway object.
+					 */
+					do_action( 'rcp_gateway_payment_processed', $member, $this->payment->id, $this );
+
+				} else {
+					throw new Exception( sprintf( __( 'There was a problem processing your payment. Message: %s', 'rcp' ), $single_payment->message ) );
+				}
+
+			} catch ( Exception $e ) {
+				$this->handle_processing_error( $e );
 			}
 
-		} catch ( Exception $e ) {
+		} elseif ( empty( $this->initial_amount ) && $this->auto_renew ) {
 
-			$this->handle_processing_error( $e );
+			/**
+			 * Vault the payment method.
+			 *
+			 * Setting up a subscription requires a vaulted payment method first.
+			 * This is done automatically when doing a one-time transaction, so we only need to do this
+			 * separately if we haven't done a one-time charge.
+			 */
+			try {
+				$vaulted_payment_method = $this->braintree->paymentMethod()->create( array(
+					'customerId'         => $customer->id,
+					'paymentMethodNonce' => $payment_method_nonce
+				) );
 
-		}
+				if ( $vaulted_payment_method->success && isset( $vaulted_payment_method->paymentMethod->token ) ) {
+					$payment_method_token = $vaulted_payment_method->paymentMethod->token;
+				}
 
-		if ( empty( $payment_token ) ) {
-			$this->handle_processing_error( new Exception( __( 'There was an error saving your payment information. Please try again. Contact support if the problem persists.', 'rcp' ) ) );
+			} catch ( Exception $e ) {
+				$error = sprintf( 'Braintree Gateway: Error occurred while vaulting the payment method. Message: %s', $e->getMessage() );
+				rcp_log( $error, true );
+				$this->membership->add_note( $error );
+			}
+
+			// Complete the pending payment.
+			$rcp_payments_db->update( $this->payment->id, array(
+				'date'           => date( 'Y-m-d g:i:s', time() ),
+				'payment_type'   => __( 'Braintree Credit Card Initial Payment', 'rcp' ),
+				'status'         => 'complete'
+			) );
 
 		}
 
@@ -208,169 +256,57 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 		 */
 		if ( $this->auto_renew ) {
 
-			/**
-			 * Process signup fees and one-time discounts as a separate payment.
-			 */
-			if ( $this->initial_amount != $this->amount && $this->initial_amount > 0 ) {
+			try {
 
-				try {
-					$single_payment = Braintree_Transaction::sale( array(
-						'amount'             => $this->initial_amount,
-						'customerId'         => $customer->id,
-						'paymentMethodToken' => $payment_token,
-						'options'            => array(
-							'submitForSettlement' => true
-						)
-					) );
-
-					if ( $single_payment->success ) {
-
-						$rcp_payments_db->update( $this->payment->id, array(
-							'date'           => date( 'Y-m-d g:i:s', time() ),
-							'payment_type'   => __( 'Braintree Credit Card Initial Payment', 'rcp' ),
-							'transaction_id' => $single_payment->transaction->id,
-							'status'         => 'complete'
-						) );
-
-
-					} else {
-						$this->handle_processing_error(
-							new Exception(
-								sprintf( __( 'There was a problem processing your payment. Message: %s', 'rcp' ), $single_payment->message )
-							)
-						);
-					}
-
-				} catch ( Exception $e ) {
-
-					$this->handle_processing_error( $e );
-
+				// Failure if we don't have a token.
+				if ( empty( $payment_method_token ) ) {
+					throw new Exception( __( 'Missing payment method token.', 'rcp' ) );
 				}
 
-			}
+				$txn_args['planId'] = $this->subscription_data['subscription_id'];
+				$txn_args['price']  = $this->amount;
 
-			$txn_args['planId']             = $this->subscription_data['subscription_id'];
-			$txn_args['price']              = $this->amount;
-			$txn_args['paymentMethodToken'] = $payment_token;
+				if ( $this->is_3d_secure_enabled() ) {
+					// If 3D secure is enabled, we need a nonce from the vaulted payment method.
+					$nonce_result                   = $this->braintree->paymentMethodNonce()->create( $payment_method_token );
+					$txn_args['paymentMethodNonce'] = $nonce_result->paymentMethodNonce->nonce;
+				} else {
+					// Otherwise we can use a token, which doesn't have 3D secure data.
+					$txn_args['paymentMethodToken'] = $payment_method_token;
+				}
 
-			/**
-			 * If this subscription is using a one-time discount code or
-			 * a signup fee, we need to start the subscription at the end
-			 * of the first period.
-			 */
-			if ( ! empty( $this->subscription_start_date ) ) {
-				$txn_args['firstBillingDate'] = new DateTime( $this->subscription_start_date );
-			} elseif ( $this->initial_amount != $this->amount ) {
-				$txn_args['firstBillingDate'] = date( 'Y-m-d g:i:s', strtotime( '+ ' . $this->subscription_data['length'] . ' ' . $this->subscription_data['length_unit'] ) );
-			}
+				/**
+				 * Start the subscription at the end of the trial period (if applicable) or the end of the first billing period.
+				 */
+				if ( ! empty( $this->subscription_start_date ) ) {
+					$txn_args['firstBillingDate'] = $this->subscription_start_date;
+				} else {
+					// Now set the firstBillingDate to the expiration date of the membership, modified to current time instead of 23:59.
+					$timezone     = get_option( 'timezone_string' );
+					$timezone     = ! empty( $timezone ) ? $timezone : 'UTC';
+					$datetime     = new DateTime( $this->membership->calculate_expiration( true ), new DateTimeZone( $timezone ) );
+					$current_time = getdate( current_time( 'timestamp' ) );
+					$datetime->setTime( $current_time['hours'], $current_time['minutes'], $current_time['seconds'] );
+					$txn_args['firstBillingDate'] = $datetime->format( 'Y-m-d g:i:s' );
+				}
 
-			try {
-				$result = Braintree_Subscription::create( $txn_args );
+				rcp_log( sprintf( 'Braintree Gateway: Creating subscription with start date: %s', $txn_args['firstBillingDate'] ) );
+
+				$result = $this->braintree->subscription()->create( $txn_args );
 
 				if ( $result->success ) {
-					$paid = true;
+					$this->membership->set_gateway_subscription_id( $result->subscription->id );
 				} else {
-					$this->handle_processing_error(
-						new Exception(
-							sprintf( __( 'There was a problem processing your payment. Message: %s', 'rcp' ), $result->message )
-						)
-					);
+					throw new Exception( sprintf( __( 'Failed to create the subscription. Message: %s.', 'rcp' ), esc_html( $result->message ) ) );
 				}
 
 			} catch ( Exception $e ) {
-
-				$this->handle_processing_error( $e );
+				$error = sprintf( 'Braintree Gateway: Error occurred while creating the subscription. Message: %s', $e->getMessage() );
+				rcp_log( $error, true );
+				$this->membership->add_note( $error );
+				$this->membership->set_recurring( false );
 			}
 
-		}
-
-		/**
-		 * Process a one-time payment.
-		 */
-		if ( ! $this->auto_renew ) {
-
-			$txn_args['customerId']                     = $customer->id;
-			$txn_args['amount']                         = $this->initial_amount;
-			$txn_args['paymentMethodToken']             = $payment_token;
-			$txn_args['options']['submitForSettlement'] = true;
-
-			try {
-				$result = Braintree_Transaction::sale( $txn_args );
-
-				if ( $result->success ) {
-					$paid = true;
-				} else {
-					$this->handle_processing_error(
-						new Exception(
-							sprintf( __( 'There was a problem processing your payment. Message: %s', 'rcp' ), $result->message )
-						)
-					);
-				}
-
-			} catch ( Exception $e ) {
-
-				$this->handle_processing_error( $e );
-			}
-
-		}
-
-		/**
-		 * Handle any errors that may have happened.
-		 * If $result->success is not true, we very likely
-		 * received a Braintree\Result\Error object, which will
-		 * contain the reason for the error.
-		 * Example error: Plan ID is invalid.
-		 */
-		if ( empty( $result ) || empty( $result->success ) ) {
-
-			$message = sprintf( __( 'An error occurred. Please contact the site administrator: %s.', 'rcp' ), make_clickable( get_bloginfo( 'admin_email' ) ) ) . PHP_EOL;
-
-			if ( ! empty( $result->message ) ) {
-				$message .= sprintf( __( 'Error message: %s', 'rcp' ), $result->message ) . PHP_EOL;
-			}
-
-			$this->handle_processing_error( new Exception( $message ) );
-
-		}
-
-		/**
-		 * Record the one-time payment and adjust the member properties.
-		 */
-		if ( $paid && ! $this->auto_renew ) {
-
-			// Log the one-time payment and activate the subscription.
-			$rcp_payments_db->update( $this->payment->id, array(
-				'date'           => date( 'Y-m-d g:i:s', time() ),
-				'payment_type'   => __( 'Braintree Credit Card One Time', 'rcp' ),
-				'transaction_id' => $result->transaction->id,
-				'status'         => 'complete'
-			) );
-
-			do_action( 'rcp_gateway_payment_processed', $member, $this->payment->id, $this );
-
-		}
-
-		if ( $paid && $this->auto_renew ) {
-
-			$this->membership->set_gateway_subscription_id( $result->subscription->id );
-
-			/**
-			 * Complete the payment if this is a trial. This also activates the membership.
-			 * Braintree does not send a webhook when a new trial
-			 * subscription is created.
-			 */
-			if ( ! $this->initial_amount > 0 ) {
-
-				$rcp_payments_db->update( $this->payment->id, array(
-					'payment_type'   => 'Braintree Credit Card',
-					'status'         => 'complete'
-				) );
-
-			}
-
-			/**
-			 * All other recurring subscriptions are activated in the webhook.
-			 */
 		}
 
 		wp_redirect( $this->return_url ); exit;
@@ -386,7 +322,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 
 		if ( isset( $_GET['bt_challenge'] ) ) {
 			try {
-				$verify = Braintree_WebhookNotification::verify( $_GET['bt_challenge'] );
+				$verify = $this->braintree->webhookNotification()->verify( $_GET['bt_challenge'] );
 				die( $verify );
 			} catch ( Exception $e ) {
 				rcp_log( 'Exiting Braintree webhook - verification failed.', true );
@@ -404,7 +340,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 		$data = false;
 
 		try {
-			$data = Braintree_WebhookNotification::parse( $_POST['bt_signature'], $_POST['bt_payload'] );
+			$data = $this->braintree->webhookNotification()->parse( $_POST['bt_signature'], $_POST['bt_payload'] );
 		} catch ( Exception $e ) {
 			rcp_log( 'Exiting Braintree webhook - invalid signature.', true );
 
@@ -443,7 +379,6 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 		 * For backwards compatibility with the old Braintree add-on,
 		 * find a user with this subscription ID stored in the meta
 		 * `rcp_recurring_payment_id`.
-		 * @todo is this actually a good method?
 		 */
 		if ( empty( $this->membership ) && ! empty( $data->subscription->id ) ) {
 
@@ -474,7 +409,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 			die( 'no membership found' );
 		}
 
-		$member = new RCP_Member( $this->membership->get_customer()->get_user_id() ); // for backwards compat
+		$member = new RCP_Member( $this->membership->get_user_id() ); // for backwards compat
 
 		rcp_log( sprintf( 'Processing webhook for membership #%d.', $this->membership->get_id() ) );
 
@@ -552,7 +487,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 					// First payment on a new membership.
 
 					$rcp_payments->update( $pending_payment_id, array(
-						'date'             => date_i18n( $transaction->createdAt->format( 'Y-m-d g:i:s' ) ),
+						'date'             => date( $transaction->createdAt->format( 'Y-m-d g:i:s' ) ),
 						'payment_type'     => 'Braintree Credit Card',
 						'transaction_id'   => $transaction->id,
 					    'status'           => 'complete'
@@ -569,10 +504,10 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 					$this->membership->renew( true, 'active', $data->subscription->paidThroughDate->format( 'Y-m-d 23:59:59' ) );
 
 					$payment_id = $rcp_payments->insert( array(
-						'date'             => date_i18n( $transaction->createdAt->format( 'Y-m-d g:i:s' ) ),
+						'date'             => date( $transaction->createdAt->format( 'Y-m-d g:i:s' ) ),
 						'payment_type'     => 'Braintree Credit Card',
 						'transaction_type' => 'renewal',
-						'user_id'          => $this->membership->get_customer()->get_user_id(),
+						'user_id'          => $this->membership->get_user_id(),
 						'customer_id'      => $this->membership->get_customer_id(),
 						'membership_id'    => $this->membership->get_id(),
 						'amount'           => $transaction->amount,
@@ -602,6 +537,8 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 			 */
 			case 'subscription_charged_unsuccessfully':
 				rcp_log( 'Processing Braintree subscription_charged_unsuccessfully webhook.' );
+
+				do_action( 'rcp_recurring_payment_failed', $member, $this );
 
 				die( 'subscription_charged_unsuccessfully' );
 				break;
@@ -644,7 +581,7 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 
 				if ( ! empty( $pending_payment_id ) ) {
 					$rcp_payments->update( $pending_payment_id, array(
-						'date'             => date_i18n( $transaction->createdAt->format( 'Y-m-d g:i:s' ) ),
+						'date'             => $transaction->createdAt->format( 'Y-m-d g:i:s' ),
 						'payment_type'     => 'Braintree Credit Card',
 						'transaction_id'   => $transaction->id,
 					    'status'           => 'complete'
@@ -693,111 +630,209 @@ class RCP_Payment_Gateway_Braintree extends RCP_Payment_Gateway {
 	}
 
 	/**
-	 * Outputs the credit card fields and related javascript.
+	 * Load the registration fields
+	 *
+	 * Outputs a placeholder for the Drop-in UI and a hidden field for the client token.
+	 *
+	 * @return string
 	 */
 	public function fields() {
 		ob_start();
-		rcp_get_template_part( 'card-form' );
+
+		$args     = array();
+		$customer = rcp_get_customer();
+
+		if ( ! empty( $customer ) ) {
+			$braintree_customer_id = rcp_get_customer_gateway_id( $customer->get_id(), 'braintree' );
+
+			if ( ! empty( $braintree_customer_id ) ) {
+				$args['customerId'] = $braintree_customer_id;
+			}
+		}
+
+		try {
+			$token = $this->braintree->clientToken()->generate( $args );
+		} catch ( Exception $e ) {
+			return __( 'Failed to create client token.', 'rcp' );
+		}
 		?>
-
-		<input type="hidden" id="rcp-braintree-client-token" name="rcp-braintree-client-token" value="<?php echo esc_attr( Braintree_ClientToken::generate() ); ?>" />
-
-		<script type="text/javascript">
-
-			var rcp_form = document.getElementById("rcp_registration_form");
-
-			/**
-			 * Braintree requires data-braintree-name attributes on the inputs.
-			 * Let's add them and remove the name attribute to prevent card
-			 * data from being submitted to the server.
-			 */
-			var card_number = rcp_form.querySelector("[name='rcp_card_number']");
-			var card_cvc    = rcp_form.querySelector("[name='rcp_card_cvc']");
-			var card_zip    = rcp_form.querySelector("[name='rcp_card_zip']");
-			var card_name   = rcp_form.querySelector("[name='rcp_card_name']");
-			var card_month  = rcp_form.querySelector("[name='rcp_card_exp_month']");
-			var card_year   = rcp_form.querySelector("[name='rcp_card_exp_year']");
-
-			card_number.setAttribute('data-braintree-name', 'number');
-			card_number.removeAttribute('name');
-
-			card_cvc.setAttribute('data-braintree-name', 'cvv');
-			card_cvc.removeAttribute('name');
-
-			card_zip.setAttribute('data-braintree-name', 'postal_code');
-			card_zip.removeAttribute('name');
-
-			card_name.setAttribute('data-braintree-name', 'cardholder_name');
-			card_name.removeAttribute('name');
-
-			card_month.setAttribute('data-braintree-name', 'expiration_month');
-			card_month.removeAttribute('name');
-
-			card_year.setAttribute('data-braintree-name', 'expiration_year');
-			card_year.removeAttribute('name');
-
-			// Check that the credit card fields are filled.
-			rcp_form.querySelector("#rcp_submit").addEventListener("click", function(event) {
-				event.preventDefault();
-				if ( card_number.value && card_cvc.value && card_zip.value && card_name.value && card_month.value && card_year.value ) {
-					rcp_form.insertAdjacentHTML("beforeend", "<input name='rcp_braintree_fields_completed' type='hidden' value='true' />");
-				}
-			});
-
-			jQuery('body').off('rcp_register_form_submission').on('rcp_register_form_submission', function rcp_braintree_register_form_submission_handler(event, response, form_id) {
-
-				if ( response.gateway.slug !== 'braintree' ) {
-					return;
-				}
-
-				event.preventDefault();
-
-				/*
-				 * Create token if the amount due today is greater than $0, or if the recurring
-				 * amount is greater than $0 and auto renew is enabled.
-				 */
-				if( response.total > 0 || ( response.recurring_total > 0 && true == response.auto_renew ) ) {
-
-					var token = rcp_form.querySelector( '#rcp-braintree-client-token' ).value;
-
-					braintree.setup( token, 'custom', {
-
-						id: 'rcp_registration_form',
-						onReady: function ( response ) {
-							var client = new braintree.api.Client( {clientToken: token} );
-							client.tokenizeCard( {
-								number: rcp_form.querySelector( "[data-braintree-name='number']" ).value,
-								expirationDate: rcp_form.querySelector( "[data-braintree-name='expiration_month']" ).value + '/' + rcp_form.querySelector( "[data-braintree-name='expiration_year']" ).value,
-								cvv: rcp_form.querySelector( "[data-braintree-name='cvv']" ).value,
-								billingAddress: {
-									postalCode: rcp_form.querySelector( "[data-braintree-name='postal_code']" ).value
-								}
-							}, function ( err, nonce ) {
-								rcp_form.querySelector( "[name='payment_method_nonce']" ).value = nonce;
-								rcp_form.submit();
-							} );
-						},
-						onError: function ( response ) {
-							//@todo
-							console.log( 'onError' );
-							console.log( response );
-						}
-
-					} );
-
-				}
-
-			});
-		</script>
+		<div id="rcp-braintree-dropin-container"></div>
+		<div id="rcp-braintree-dropin-errors"></div>
+		<input type="hidden" id="rcp-braintree-client-token" name="rcp-braintree-client-token" value="<?php echo esc_attr( $token ); ?>" />
 		<?php
 		return ob_get_clean();
+	}
+
+	/**
+	 * Load fields for the Update Billing Card form
+	 *
+	 * Outputs a placeholder for the Drop-in UI and a hidden field for the client token.
+	 *
+	 * @access public
+	 * @since  3.3
+	 * @return void
+	 */
+	public function update_card_fields() {
+
+		global $rcp_membership;
+
+		$args = array();
+
+		if ( ! $rcp_membership instanceof RCP_Membership ) {
+			return; // @todo message?
+		}
+
+		$braintree_customer_id     = $rcp_membership->get_gateway_customer_id();
+		$braintree_subscription_id = $rcp_membership->get_gateway_subscription_id();
+
+		if ( empty( $braintree_customer_id ) || empty( $braintree_subscription_id ) ) {
+			echo '<p>' . __( 'You do not have an active subscription.', 'rcp' ) . '</p>';
+			return;
+		}
+
+		if ( ! empty( $braintree_customer_id ) ) {
+			$args['customerId'] = $braintree_customer_id;
+		}
+
+		try {
+			$token = $this->braintree->clientToken()->generate( $args );
+		} catch ( Exception $e ) {
+			echo '<p>' . sprintf( __( 'An unexpected error occurred: %s', 'rcp' ), esc_html( $e->getMessage() ) ) . '</p>';
+			return;
+		}
+		?>
+		<div id="rcp-braintree-dropin-container"></div>
+		<div id="rcp-braintree-dropin-errors"></div>
+		<input type="hidden" id="rcp-braintree-client-token" name="rcp-braintree-client-token" value="<?php echo esc_attr( $token ); ?>"/>
+		<input type="hidden" id="rcp-braintree-recurring-amount" value="<?php echo esc_attr( $rcp_membership->get_recurring_amount() ); ?>"/>
+		<?php
+
 	}
 
 	/**
 	 * Loads the Braintree javascript library.
 	 */
 	public function scripts() {
-		wp_enqueue_script( 'rcp-braintree', 'https://js.braintreegateway.com/js/braintree-2.32.1.min.js' );
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+		wp_enqueue_script( 'rcp-braintree-dropin', 'https://js.braintreegateway.com/web/dropin/1.20.0/js/dropin.min.js' );
+		wp_enqueue_script( 'rcp-braintree-3d-secure', 'https://js.braintreegateway.com/web/3.50.1/js/three-d-secure.min.js' );
+
+		wp_enqueue_script(
+			'rcp-braintree',
+			RCP_PLUGIN_URL . 'includes/gateways/braintree/js/braintree' . $suffix . '.js',
+			array(
+				'jquery',
+				'rcp-braintree-dropin',
+				'rcp-braintree-3d-secure'
+			),
+			RCP_PLUGIN_VERSION
+		);
+
+		wp_localize_script( 'rcp-braintree', 'rcp_braintree_script_options', array(
+			'dropin_ui_config'       => $this->get_dropin_ui_config(),
+			'payment_method_options' => $this->get_payment_method_options(),
+			'please_wait'            => esc_html__( 'Please wait...', 'rcp' ),
+			'user_email'             => is_user_logged_in() ? wp_get_current_user()->user_email : '',
+			'try_new_payment'        => __( 'Please try a new payment method.', 'rcp' )
+		) );
+	}
+
+	/**
+	 * Determines whether or not 3D secure is enabled on the merchant account.
+	 *
+	 * @since 3.3
+	 * @return bool
+	 */
+	protected function is_3d_secure_enabled() {
+
+		try {
+			$token = $this->braintree->clientToken()->generate();
+
+			if ( empty( $token ) ) {
+				throw new Exception();
+			}
+
+			$data = json_decode( base64_decode( $token ) );
+
+			if ( empty( $data ) || empty( $data->threeDSecureEnabled ) ) {
+				throw new Exception();
+			}
+
+			$enabled = true;
+		} catch ( Exception $e ) {
+			$enabled = false;
+		}
+
+		return $enabled;
+
+	}
+
+	/**
+	 * Get drop-in UI default configuration.
+	 *
+	 * @link  https://braintree.github.io/braintree-web-drop-in/docs/current/module-braintree-web-drop-in.html#.create
+	 *
+	 * @since 3.3
+	 * @return array
+	 */
+	protected function get_dropin_ui_config() {
+
+		$config = array(
+			'container'    => '#rcp-braintree-dropin-container',
+			'locale'       => get_locale(),
+			'threeDSecure' => $this->is_3d_secure_enabled()
+		);
+
+		/**
+		 * Filters the default drop-in UI configuration.
+		 *
+		 * @since 3.3
+		 */
+		$config = apply_filters( 'rcp_braintree_dropin_ui_config', $config );
+
+		return $config;
+
+	}
+
+	/**
+	 * Get default options for `requestPaymentMethod()` call.
+	 *
+	 * @link  https://braintree.github.io/braintree-web-drop-in/docs/current/Dropin.html#requestPaymentMethod
+	 *
+	 * @since 3.3
+	 * @return array
+	 */
+	protected function get_payment_method_options() {
+
+		$options = array();
+
+		if ( $this->is_3d_secure_enabled() ) {
+			$options['threeDSecure'] = array(
+				'amount'                => 0.00,
+				// This gets set in the JavaScript.
+				'email'                 => is_user_logged_in() ? wp_get_current_user()->user_email : '',
+				// If user is not logged in, JS will set this.
+				'additionalInformation' => array(
+					'productCode'       => 'DIG',
+					// Digital product
+					'deliveryTimeframe' => '01',
+					// Immediate delivery
+					'deliveryEmail'     => is_user_logged_in() ? wp_get_current_user()->user_email : '',
+					// If user is not logged in, JS will set this.
+				)
+			);
+		}
+
+		/**
+		 * Filters the payment method options.
+		 *
+		 * @since 3.3
+		 */
+		$options = apply_filters( 'rcp_braintree_payment_method_options', $options );
+
+		return $options;
+
 	}
 
 }

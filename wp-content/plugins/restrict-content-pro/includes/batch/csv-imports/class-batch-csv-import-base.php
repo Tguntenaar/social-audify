@@ -247,7 +247,18 @@ class RCP_Batch_Callback_CSV_Import_Base extends Abstract_Job_Callback {
 					break;
 				}
 
-				$rows[] = $row;
+				/*
+				 * The first real row number will be `0`, which isn't user friendly for most people. So we add `+2` to
+				 * achieve the following:
+				 *
+				 * 1. First, start at `1` instead of `0`.
+				 * 2. Account for the header, which should be row #1. The first actual value starts at #2.
+				 *
+				 * This just improves row number display during error logging.
+				 */
+				$adjusted_row_number = $row_number + 2;
+
+				$rows[ $adjusted_row_number ] = $row;
 
 				$i ++;
 

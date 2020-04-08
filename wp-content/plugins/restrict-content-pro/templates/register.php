@@ -42,7 +42,7 @@ rcp_show_error_messages( 'register' ); ?>
 	<?php do_action( 'rcp_before_register_form_fields' ); ?>
 
 	<fieldset class="rcp_user_fieldset">
-		<p id="rcp_user_login_wrap" style="margin-top: 40px;">
+		<p id="rcp_user_login_wrap">
 			<label for="rcp_user_login"><?php echo apply_filters ( 'rcp_registration_username_label', __( 'Username', 'rcp' ) ); ?></label>
 			<input name="rcp_user_login" id="rcp_user_login" class="required" type="text" <?php if( isset( $_POST['rcp_user_login'] ) ) { echo 'value="' . esc_attr( $_POST['rcp_user_login'] ) . '"'; } ?>/>
 		</p>
@@ -74,7 +74,7 @@ rcp_show_error_messages( 'register' ); ?>
 
 	<?php do_action( 'rcp_before_subscription_form_fields' ); ?>
 
-	<fieldset class="rcp_subscription_fieldset" style="margin-top: 0px !important;">
+	<fieldset class="rcp_subscription_fieldset">
 	<?php
 	$levels = rcp_get_subscription_levels( 'active' );
 	$i      = 0;
@@ -212,19 +212,6 @@ rcp_show_error_messages( 'register' ); ?>
 
 	<p id="rcp_submit_wrap">
 		<input type="hidden" name="rcp_register_nonce" value="<?php echo wp_create_nonce('rcp-register-nonce' ); ?>"/>
-		<input type="submit" style="width: 170px;" name="rcp_submit_registration" id="rcp_submit" class="rcp-button" value="<?php esc_attr_e( apply_filters ( 'rcp_registration_register_button', __( 'Register', 'rcp' ) ) ); ?>"/>
+		<input type="submit" name="rcp_submit_registration" id="rcp_submit" class="rcp-button" value="<?php esc_attr_e( apply_filters ( 'rcp_registration_register_button', __( 'Register', 'rcp' ) ) ); ?>"/>
 	</p>
 </form>
-
-<!-- Check if VAT number is filled in. -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-$('#rcp_subscription_level_1').click(function() {
-
-	if($("#rcp_btw_number").val() == "") {
-		alert("Please fill in a valid VAT number to get the discount.");
-		$("#rcp_subscription_level_2").click();
-	}
-
-});
-</script>

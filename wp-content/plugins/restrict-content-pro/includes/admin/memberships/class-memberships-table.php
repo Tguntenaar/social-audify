@@ -119,8 +119,10 @@ class Memberships_Table extends List_Table {
 		 * Backwards compatibility: show content of custom columns from old action hook.
 		 */
 		if ( 'custom' == $column_name && has_action( 'rcp_members_page_table_column' ) ) {
+			$customer = $membership->get_customer();
+			$user_id  = $customer instanceof \RCP_Customer ? $customer->get_user_id() : 0;
 			ob_start();
-			do_action( 'rcp_members_page_table_column', $membership->get_customer()->get_user_id() );
+			do_action( 'rcp_members_page_table_column', $user_id );
 			$column_content = ob_get_clean();
 
 			$value = wp_strip_all_tags( $column_content );
@@ -167,37 +169,50 @@ class Memberships_Table extends List_Table {
 	public function column_customer( $membership ) {
 
 		$membership_id       = $membership->get_id();
-		$user_id             = $membership->get_customer()->get_user_id();
-		$user                = get_userdata( $user_id );
-		$display_name        = ! empty( $user->display_name ) ? $user->display_name : $user->user_login;
+		$customer            = $membership->get_customer();
+		$user_id             = $customer instanceof \RCP_Customer ? $customer->get_user_id() : 0;
+		$user                = ! empty( $user_id ) ? get_userdata( $user_id ) : false;
+
+		if ( $user instanceof \WP_User ) {
+			$display_name = ! empty( $user->display_name ) ? $user->display_name : $user->user_login;
+		} else {
+			$display_name = __( '(Unknown)', 'rcp' );
+		}
+
 		$edit_membership_url = rcp_get_memberships_admin_page( array(
 			'membership_id' => absint( $membership_id ),
 			'view'          => 'edit'
 		) );
-		$edit_customer_url   = rcp_get_customers_admin_page( array(
-			'customer_id' => $membership->get_customer()->get_id(),
+		$edit_customer_url   = $customer instanceof \RCP_Customer ? rcp_get_customers_admin_page( array(
+			'customer_id' => $customer->get_id(),
 			'view'        => 'edit'
-		) );
+		) ) : '';
 		$cancel_url          = wp_nonce_url( add_query_arg( array(
 			'rcp-action'    => 'cancel_membership',
-			'membership_id' => $membership_id
+			'membership_id' => urlencode( $membership_id )
 		), $this->get_base_url() ), 'cancel_membership' );
 
 		$actions = array(
 			'edit_membership' => '<a href="' . esc_url( $edit_membership_url ) . '">' . __( 'Edit Membership', 'rcp' ) . '</a>',
-			'edit_customer'   => '<a href="' . esc_url( $edit_customer_url ) . '">' . __( 'Edit Customer', 'rcp' ) . '</a>',
-			'membership_id'   => '<span class="rcp-id-col">' . sprintf( __( 'ID: %d', 'rcp' ), $membership_id ) . '</span>'
 		);
 
-		if ( $membership->can_cancel() ) {
-			$actions['cancel'] = '<a href="' . esc_url( $cancel_url ) . '">' . __( 'Cancel', 'rcp' ) . '</a>';
+		// Only add Edit Customer link if we have a customer.
+		if ( ! empty( $edit_customer_url ) ) {
+			$actions['edit_customer'] = '<a href="' . esc_url( $edit_customer_url ) . '">' . __( 'Edit Customer', 'rcp' ) . '</a>';
 		}
+
+		if ( $membership->can_cancel() ) {
+			$actions['cancel'] = '<a href="' . esc_url( $cancel_url ) . '" class="rcp_cancel">' . __( 'Cancel', 'rcp' ) . '</a>';
+		}
+
+		// Membership ID goes last.
+		$actions['membership_id'] = '<span class="rcp-id-col">' . sprintf( __( 'ID: %d', 'rcp' ), $membership_id ) . '</span>';
 
 		ob_start();
 		/**
 		 * @deprecated 3.0 Use `rcp_memberships_list_table_row_actions` instead.
 		 */
-		do_action( 'rcp_member_row_actions', $membership->get_customer()->get_user_id() );
+		do_action( 'rcp_member_row_actions', $user_id );
 		$custom_row_actions = ob_get_clean();
 		if ( $custom_row_actions ) {
 			$actions['custom_row_actions'] = $custom_row_actions;

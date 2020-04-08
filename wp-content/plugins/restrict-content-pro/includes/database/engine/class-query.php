@@ -1896,7 +1896,7 @@ class Query extends Base {
 		foreach ( $item as $key => $value ) {
 
 			// Always strip slashes from all values
-			$value    = stripslashes( $value );
+			$value    = is_null( $value ) ? null : stripslashes( $value );
 
 			// Get callback for column
 			$callback = $this->get_column_field( array( 'name' => $key ), 'validate' );

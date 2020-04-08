@@ -102,8 +102,7 @@ function rcp_calculate_subscription_expiration( $id, $set_trial = false ) {
 
 	if( $membership_level->duration > 0 ) {
 
-		$current_time       = current_time( 'timestamp' );
-		$last_day           = cal_days_in_month( CAL_GREGORIAN, date( 'n', $current_time ), date( 'Y', $current_time ) );
+		$current_time = current_time( 'timestamp' );
 
 		if ( $set_trial && ! empty( $membership_level->trial_duration ) ) {
 			$expiration_unit   = $membership_level->trial_duration_unit;
@@ -113,10 +112,30 @@ function rcp_calculate_subscription_expiration( $id, $set_trial = false ) {
 			$expiration_length = $membership_level->duration;
 		}
 
-		$expiration_date    = date( 'Y-m-d H:i:s', strtotime( '+' . $expiration_length . ' ' . $expiration_unit . ' 23:59:59', current_time( 'timestamp' ) ) );
+		$expiration_timestamp = strtotime( '+' . $expiration_length . ' ' . $expiration_unit . ' 23:59:59', $current_time );
+		$expiration_date      = date( 'Y-m-d H:i:s', $expiration_timestamp );
 
-		if( date( 'j', $current_time ) == $last_day && 'day' != $expiration_unit ) {
-			$expiration_date = date( 'Y-m-d H:i:s', strtotime( $expiration_date . ' +2 days', current_time( 'timestamp' ) ) );
+		$extension_days = array( '29', '30', '31' );
+
+		if ( in_array( date( 'j', $expiration_timestamp ), $extension_days ) && 'month' === $expiration_unit ) {
+			/*
+			 * Here we extend the expiration date by 1-3 days in order to account for "walking" payment dates in PayPal.
+			 *
+			 * See https://github.com/pippinsplugins/restrict-content-pro/issues/239
+			 */
+
+			$month = date( 'n', $expiration_timestamp );
+
+			if ( $month < 12 ) {
+				$month += 1;
+				$year  = date( 'Y', $expiration_timestamp );
+			} else {
+				$month = 1;
+				$year  = date( 'Y', $expiration_timestamp ) + 1;
+			}
+
+			$timestamp       = mktime( 0, 0, 0, $month, 1, $year );
+			$expiration_date = date( 'Y-m-d 23:59:59', $timestamp );
 		}
 
 	}
@@ -456,8 +475,6 @@ function rcp_show_subscription_level( $level_id = 0, $user_id = 0 ) {
 			( $sub_price == '0' && $membership_level == $level_id )
 			||
 			( empty( $sub_length->duration ) && $membership_level == $level_id && ! empty( $membership ) && $membership->is_active() )
-			||
-			( ! empty( $trial_duration ) && $used_trial && ( $membership_level == $level_id && 'active' == $membership->get_status() ) )
 			||
 			( ! empty( $membership ) && $membership->is_active() && ! $membership->upgrade_possible() && $membership_level != $level_id )
 			||

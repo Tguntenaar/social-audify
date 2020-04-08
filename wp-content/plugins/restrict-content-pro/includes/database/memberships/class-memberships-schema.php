@@ -52,6 +52,16 @@ class Memberships extends Schema {
 			'default'  => '0'
 		),
 
+		// user_id
+		array(
+			'name'       => 'user_id',
+			'type'       => 'bigint',
+			'length'     => '20',
+			'unsigned'   => true,
+			'default'    => null,
+			'allow_null' => true
+		),
+
 		// object_id
 		array(
 			'name'       => 'object_id',
@@ -103,6 +113,15 @@ class Memberships extends Schema {
 			'type'       => 'datetime',
 			'default'    => '0000-00-00 00:00:00',
 			'created'    => true,
+			'date_query' => true,
+			'sortable'   => true
+		),
+
+		// activated_date
+		array(
+			'name'       => 'activated_date',
+			'type'       => 'datetime',
+			'default'    => '0000-00-00 00:00:00',
 			'date_query' => true,
 			'sortable'   => true
 		),

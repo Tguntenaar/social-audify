@@ -110,3 +110,28 @@ function rcp_redirect_from_wp_login() {
 	}
 }
 add_action( 'login_form_login', 'rcp_redirect_from_wp_login' );
+
+/**
+ * If "Redirect Default Login URL" is enabled then we filter the lost password URL to use
+ * the designated login page instead.
+ *
+ * @param string $lostpassword_url
+ * @param string $redirect
+ *
+ * @since 3.2.2
+ * @return string
+ */
+function rcp_filter_lostpassword_url( $lostpassword_url, $redirect ) {
+
+	global $rcp_options;
+
+	if ( empty( $rcp_options['hijack_login_url'] ) || empty( $rcp_options['login_redirect'] ) ) {
+		return $lostpassword_url;
+	}
+
+	$lostpassword_url = add_query_arg( 'rcp_action', 'lostpassword', get_permalink( $rcp_options['login_redirect'] ) );
+
+	return $lostpassword_url;
+
+}
+add_filter( 'lostpassword_url', 'rcp_filter_lostpassword_url', 10, 2 );

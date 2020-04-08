@@ -29,16 +29,16 @@ global $rcp_login_form_args; ?>
 		<?php do_action( 'rcp_before_login_form_fields' ); ?>
 
 		<fieldset class="rcp_login_data">
-			<p style="margin-top: 70px;">
-				<label for="rcp_user_login"><?php _e( 'Username', 'rcp' ); ?></label>
+			<p>
+				<label for="rcp_user_login"><?php _e( 'Username or Email', 'rcp' ); ?></label>
 				<input name="rcp_user_login" id="rcp_user_login" class="required" type="text"/>
 			</p>
-			<p style="margin-top:-20px">
+			<p>
 				<label for="rcp_user_pass"><?php _e( 'Password', 'rcp' ); ?></label>
 				<input name="rcp_user_pass" id="rcp_user_pass" class="required" type="password"/>
 			</p>
 			<?php do_action( 'rcp_login_form_fields_before_submit' ); ?>
-			<p style="margin-top: -50px;">
+			<p>
 				<input type="checkbox" name="rcp_user_remember" id="rcp_user_remember" value="1"/>
 				<label for="rcp_user_remember"><?php _e( 'Remember me', 'rcp' ); ?></label>
 			</p>

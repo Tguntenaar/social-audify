@@ -279,14 +279,7 @@ Your subscription for %subscription_name% will renew on %expiration%.';
 						continue;
 					}
 
-					// Ensure an expiration notice isn't sent to a still-trialling membership.
-					if ( $type == 'expiration' && $membership->is_trialing() ) {
-						rcp_log( sprintf( 'Skipping membership #%d - expiration reminder but user is still trialing.', $membership->get_id() ) );
-
-						continue;
-					}
-
-					$user_id = $membership->get_customer()->get_user_id();
+					$user_id = $membership->get_user_id();
 					$user    = get_userdata( $user_id );
 
 					$sent_time = rcp_get_membership_meta( $membership->get_id(), '_reminder_sent_' . $notice_id, true );
@@ -332,7 +325,7 @@ Your subscription for %subscription_name% will renew on %expiration%.';
 	 *
 	 * @access public
 	 * @since  2.9
-	 * @return array|false Subscribers whose subscriptions are renewing or expiring within the defined period. False if
+	 * @return RCP_Membership[]|false Subscribers whose subscriptions are renewing or expiring within the defined period. False if
 	 *                     none are found.
 	 */
 	public function get_reminder_subscriptions( $period = '+1month', $type = 'renewal', $levels = 'all' ) {
@@ -357,9 +350,10 @@ Your subscription for %subscription_name% will renew on %expiration%.';
 			case 'renewal' :
 				$args['status']          = 'active';
 				$args['auto_renew']      = 1;
-				$args['expiration_date'] = array(
-					'after'  => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) ),
-					'before' => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) + ( DAY_IN_SECONDS - 1 ) )
+				$args['expiration_date_query'] = array(
+					'after'     => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) ),
+					'before'    => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) + ( DAY_IN_SECONDS - 1 ) ),
+					'inclusive' => true
 				);
 				break;
 
@@ -372,9 +366,10 @@ Your subscription for %subscription_name% will renew on %expiration%.';
 					$args['status__in'] = array( 'active', 'cancelled' );
 				}
 
-				$args['expiration_date'] = array(
-					'after'  => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) ),
-					'before' => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) + ( DAY_IN_SECONDS - 1 ) )
+				$args['expiration_date_query'] = array(
+					'after'     => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) ),
+					'before'    => date( 'Y-m-d H:i:s', strtotime( $period . ' midnight', current_time( 'timestamp' ) ) + ( DAY_IN_SECONDS - 1 ) ),
+					'inclusive' => true
 				);
 				break;
 

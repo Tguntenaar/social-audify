@@ -29,6 +29,13 @@ class RCP_Membership {
 	protected $customer_id = 0;
 
 	/**
+	 * ID of the user this membership belongs to.
+	 *
+	 * @var int|null
+	 */
+	protected $user_id = null;
+
+	/**
 	 * Corresponding customer object.
 	 *
 	 * @var RCP_Customer
@@ -83,6 +90,14 @@ class RCP_Membership {
 	 * @var string
 	 */
 	protected $created_date = '0000-00-00 00:00:00';
+
+	/**
+	 * Date the membership was activated
+	 *
+	 * @var string
+	 * @since 3.3.1
+	 */
+	protected $activated_date = '';
 
 	/**
 	 * Last day of the trial. If no trial then this will be blank.
@@ -252,6 +267,7 @@ class RCP_Membership {
 		foreach ( $vars as $key => $value ) {
 			switch ( $key ) {
 				case 'created_date' :
+				case 'activated_date' :
 				case 'trial_end_date' :
 				case 'renewed_date' :
 				case 'cancellation_date' :
@@ -394,16 +410,47 @@ class RCP_Membership {
 	}
 
 	/**
+	 * Get the ID of the corresponding user.
+	 *
+	 * @access public
+	 * @since 3.3.4
+	 * @return int|null
+	 */
+	public function get_user_id() {
+
+		if ( ! is_null( $this->user_id ) ) {
+			return absint( $this->user_id );
+		}
+
+		$customer = $this->get_customer();
+
+		if ( $customer instanceof RCP_Customer ) {
+			$user_id = $customer->get_user_id();
+
+			if ( ! empty( $user_id ) ) {
+				$this->update( array(
+					'user_id' => absint( $user_id )
+				) );
+			}
+		}
+
+		return $this->user_id;
+
+	}
+
+	/**
 	 * Get the deprecated RCP_Member object for this customer.
 	 *
 	 * @access private
 	 * @since  3.0
-	 * @return RCP_Member
+	 * @return RCP_Member|false
 	 */
 	private function get_member() {
 
-		if ( ! is_object( $this->member ) ) {
-			$this->member = $this->get_customer()->get_member();
+		if ( ! isset( $this->member ) ) {
+			$customer = $this->get_customer();
+
+			$this->member = $customer instanceof RCP_Customer ? $customer->get_member() : false;
 		}
 
 		return $this->member;
@@ -421,7 +468,10 @@ class RCP_Membership {
 		$object_id = $this->object_id;
 
 		if ( has_filter( 'rcp_member_get_subscription_id' ) ) {
-			$object_id = apply_filters( 'rcp_member_get_subscription_id', $object_id, $this->get_member()->ID, $this->get_member() );
+			$member  = $this->get_member();
+			$user_id = $member instanceof RCP_Member ? $member->ID : 0;
+
+			$object_id = apply_filters( 'rcp_member_get_subscription_id', $object_id, $user_id, $member );
 		}
 
 		return $object_id;
@@ -439,10 +489,12 @@ class RCP_Membership {
 	public function set_object_id( $object_id ) {
 
 		if ( has_action( 'rcp_member_pre_set_subscription_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_pre_set_object_id` instead.
 			 */
-			do_action( 'rcp_member_pre_set_subscription_id', $object_id, $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_pre_set_subscription_id', $object_id, $this->get_user_id(), $member );
 		}
 
 		$this->update( array( 'object_id' => absint( $object_id ) ) );
@@ -460,10 +512,12 @@ class RCP_Membership {
 		 */
 
 		if ( has_action( 'rcp_member_post_set_subscription_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_transition_membership_object_id` instead.
 			 */
-			do_action( 'rcp_member_post_set_subscription_id', $object_id, $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_post_set_subscription_id', $object_id, $this->get_user_id(), $member );
 		}
 
 	}
@@ -604,10 +658,12 @@ class RCP_Membership {
 		$status = $this->status;
 
 		if ( has_filter( 'rcp_member_get_status' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_status` instead.
 			 */
-			$status = apply_filters( 'rcp_member_get_status', $status, $this->get_member()->ID, $this->get_member() );
+			$status = apply_filters( 'rcp_member_get_status', $status, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -640,10 +696,12 @@ class RCP_Membership {
 		$old_status = $this->get_status();
 
 		if ( has_filter( 'rcp_set_status_value' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_set_membership_status_value` instead.
 			 */
-			$new_status = apply_filters( 'rcp_set_status_value', $new_status, $this->get_member()->ID, $old_status, $this->get_member() );
+			$new_status = apply_filters( 'rcp_set_status_value', $new_status, $this->get_user_id(), $old_status, $member );
 		}
 
 		/**
@@ -681,7 +739,11 @@ class RCP_Membership {
 			 */
 
 			if ( 'expired' != $new_status ) {
-				delete_user_meta( $this->get_customer()->get_user_id(), '_rcp_expired_email_sent' );
+				$user_id = $this->get_user_id();
+
+				if ( ! empty( $user_id ) ) {
+					delete_user_meta( $user_id, '_rcp_expired_email_sent' );
+				}
 			}
 
 			if ( 'cancelled' == $new_status ) {
@@ -715,10 +777,12 @@ class RCP_Membership {
 		}
 
 		if ( has_filter( 'rcp_member_get_expiration_date' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_expiration_date` instead.
 			 */
-			$expiration = apply_filters( 'rcp_member_get_expiration_date', $expiration, $this->get_member()->ID, $this->get_member(), $formatted, false );
+			$expiration = apply_filters( 'rcp_member_get_expiration_date', $expiration, $this->get_user_id(), $member, $formatted, false );
 		}
 
 		/**
@@ -750,10 +814,12 @@ class RCP_Membership {
 		$timestamp  = ( $expiration && 'none' != $expiration ) ? strtotime( $expiration, current_time( 'timestamp' ) ) : false;
 
 		if ( has_filter( 'rcp_member_get_expiration_time' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_expiration_time` instead.
 			 */
-			$timestamp = apply_filters( 'rcp_member_get_expiration_time', $timestamp, $this->get_member()->ID, $this->get_member() );
+			$timestamp = apply_filters( 'rcp_member_get_expiration_time', $timestamp, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -810,7 +876,7 @@ class RCP_Membership {
 			/**
 			 * @deprecated 3.0 Use `rcp_transition_membership_expiration_date` instead.
 			 */
-			do_action( 'rcp_set_expiration_date', $this->get_member()->ID, $new_date, $old_date );
+			do_action( 'rcp_set_expiration_date', $this->get_user_id(), $new_date, $old_date );
 		}
 
 		$ret = $updated;
@@ -860,7 +926,7 @@ class RCP_Membership {
 
 			$extension_days = array( '29', '30', '31' );
 
-			if ( in_array( date( 'j', $expire_timestamp ), $extension_days ) && 'day' !== $membership_level->duration_unit ) {
+			if ( in_array( date( 'j', $expire_timestamp ), $extension_days ) && 'month' === $membership_level->duration_unit ) {
 
 				/*
 				 * Here we extend the expiration date by 1-3 days in order to account for "walking" payment dates in PayPal.
@@ -872,15 +938,13 @@ class RCP_Membership {
 
 				if ( $month < 12 ) {
 					$month += 1;
-					$year  = date( 'Y' );
+					$year  = date( 'Y', $expire_timestamp );
 				} else {
 					$month = 1;
-					$year  = date( 'Y' ) + 1;
+					$year  = date( 'Y', $expire_timestamp ) + 1;
 				}
 
-				$timestamp = mktime( 0, 0, 0, $month, 1, $year );
-
-				$expiration = date( 'Y-m-d 23:59:59', $timestamp );
+				$expire_timestamp = mktime( 0, 0, 0, $month, 1, $year );
 			}
 
 			$expiration = date( 'Y-m-d 23:59:59', $expire_timestamp );
@@ -892,10 +956,12 @@ class RCP_Membership {
 		}
 
 		if ( has_filter( 'rcp_member_calculated_expiration' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_calculated_expiration_date` instead.
 			 */
-			$expiration = apply_filters( 'rcp_member_calculated_expiration', $expiration, $this->get_member()->ID, $this->get_member() );
+			$expiration = apply_filters( 'rcp_member_calculated_expiration', $expiration, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -931,6 +997,26 @@ class RCP_Membership {
 		}
 
 		return $created_date;
+	}
+
+	/**
+	 * Get the date this membership was activated
+	 *
+	 * @access public
+	 * @since  3.3.1
+	 * @return string
+	 */
+	public function get_activated_date() {
+
+		// Backfill activated date with created date.
+		if ( empty( $this->activated_date ) && $this->is_active() && $this->get_created_date( false ) ) {
+			$this->update( array(
+				'activated_date' => $this->get_created_date( false )
+			) );
+		}
+
+		return $this->activated_date;
+
 	}
 
 	/**
@@ -974,14 +1060,16 @@ class RCP_Membership {
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_is_trialing` instead.
 			 */
-			$is_trialing = apply_filters( 'rcp_is_trialing', $is_trialing, $this->get_member()->ID );
+			$is_trialing = apply_filters( 'rcp_is_trialing', $is_trialing, $this->get_user_id() );
 		}
 
 		if ( has_filter( 'rcp_member_is_trialing' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_is_trialing` instead.
 			 */
-			$is_trialing = apply_filters( 'rcp_member_is_trialing', $is_trialing, $this->get_member()->ID, $this->get_member() );
+			$is_trialing = apply_filters( 'rcp_member_is_trialing', $is_trialing, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -1013,6 +1101,8 @@ class RCP_Membership {
 		$renewed_date = $this->renewed_date;
 
 		if ( has_filter( 'rcp_get_renewed_date' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * Filters the renewal date.
 			 *
@@ -1021,7 +1111,7 @@ class RCP_Membership {
 			 * @param int    $object_id    ID of the associated object.
 			 * @param        $member       RCP_Member Deprecated member object.
 			 */
-			$renewed_date = apply_filters( 'rcp_get_renewed_date', $renewed_date, $this->get_member()->ID, $this->get_object_id(), $this->get_member() );
+			$renewed_date = apply_filters( 'rcp_get_renewed_date', $renewed_date, $this->get_user_id(), $this->get_object_id(), $member );
 		}
 
 		if ( $formatted && ! empty( $renewed_date ) ) {
@@ -1052,7 +1142,9 @@ class RCP_Membership {
 		) );
 
 		if ( has_action( 'rcp_set_renewed_date' ) ) {
-			do_action( 'rcp_set_renewed_date', $this->get_member()->ID, $date, $this->get_member() );
+			$member = $this->get_member();
+
+			do_action( 'rcp_set_renewed_date', $this->get_user_id(), $member );
 		}
 
 		return $updated;
@@ -1127,10 +1219,12 @@ class RCP_Membership {
 		}
 
 		if ( has_filter( 'rcp_is_active' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_is_active` instead.
 			 */
-			$is_active = apply_filters( 'rcp_is_active', $is_active, $this->get_member()->ID, $this->get_member() );
+			$is_active = apply_filters( 'rcp_is_active', $is_active, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -1206,10 +1300,12 @@ class RCP_Membership {
 		}
 
 		if ( has_filter( 'rcp_member_is_expired' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_is_expired` instead.
 			 */
-			$is_expired = apply_filters( 'rcp_member_is_expired', $is_expired, $this->get_member()->ID, $this->get_member() );
+			$is_expired = apply_filters( 'rcp_member_is_expired', $is_expired, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -1239,10 +1335,12 @@ class RCP_Membership {
 		$is_recurring = ! empty( $this->auto_renew );
 
 		if ( has_filter( 'rcp_member_is_recurring' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_is_recurring` instead.
 			 */
-			$is_recurring = apply_filters( 'rcp_member_is_recurring', $is_recurring, $this->get_member()->ID, $this->get_member() );
+			$is_recurring = apply_filters( 'rcp_member_is_recurring', $is_recurring, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -1271,7 +1369,7 @@ class RCP_Membership {
 	 */
 	public function set_recurring( $is_recurring = true ) {
 
-		rcp_log( sprintf( 'Updating recurring status for membership #%d. Customer ID: %d; Previous: %s; New: %s', $this->get_id(), $this->get_customer()->get_id(), var_export( $this->is_recurring(), true ), var_export( $is_recurring, true ) ) );
+		rcp_log( sprintf( 'Updating recurring status for membership #%d. Customer ID: %d; Previous: %s; New: %s', $this->get_id(), $this->get_customer_id(), var_export( $this->is_recurring(), true ), var_export( $is_recurring, true ) ) );
 
 		$this->update( array( 'auto_renew' => (int) $is_recurring ) );
 
@@ -1288,10 +1386,12 @@ class RCP_Membership {
 		 */
 
 		if ( has_action( 'rcp_member_set_recurring' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_transition_membership_auto_renew` instead.
 			 */
-			do_action( 'rcp_member_set_recurring', $is_recurring, $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_set_recurring', $is_recurring, $this->get_user_id(), $member );
 		}
 
 	}
@@ -1304,6 +1404,13 @@ class RCP_Membership {
 	 * @return string
 	 */
 	public function get_gateway() {
+
+		if ( 'stripe_checkout' === $this->gateway ) {
+			$this->update( array(
+				'gateway' => 'stripe'
+			) );
+		}
+
 		return $this->gateway;
 	}
 
@@ -1319,10 +1426,12 @@ class RCP_Membership {
 		$customer_id = $this->gateway_customer_id;
 
 		if ( has_filter( 'rcp_member_get_payment_profile_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_gateway_customer_id` instead.
 			 */
-			$customer_id = apply_filters( 'rcp_member_get_payment_profile_id', $customer_id, $this->get_member()->ID, $this->get_member() );
+			$customer_id = apply_filters( 'rcp_member_get_payment_profile_id', $customer_id, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -1354,10 +1463,12 @@ class RCP_Membership {
 		$customer_id = trim( $customer_id );
 
 		if ( has_action( 'rcp_member_pre_set_profile_payment_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_pre_set_gateway_customer_id` instead.
 			 */
-			do_action( 'rcp_member_pre_set_profile_payment_id', $this->get_member()->ID, $customer_id, $this->get_member() );
+			do_action( 'rcp_member_pre_set_profile_payment_id', $this->get_user_id(), $customer_id, $member );
 		}
 
 		$this->update( array( 'gateway_customer_id' => $customer_id ) );
@@ -1375,10 +1486,12 @@ class RCP_Membership {
 		 */
 
 		if ( has_action( 'rcp_member_post_set_profile_payment_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_transition_membership_gateway_customer_id` instead.
 			 */
-			do_action( 'rcp_member_post_set_profile_payment_id', $this->get_member()->ID, $customer_id, $this->get_member() );
+			do_action( 'rcp_member_post_set_profile_payment_id', $this->get_user_id(), $customer_id, $member );
 		}
 
 	}
@@ -1395,10 +1508,12 @@ class RCP_Membership {
 		$subscription_id = $this->gateway_subscription_id;
 
 		if ( has_filter( 'rcp_member_get_merchant_subscription_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_gateway_subscription_id` instead.
 			 */
-			$subscription_id = apply_filters( 'rcp_member_get_merchant_subscription_id', $subscription_id, $this->get_member()->ID, $this->get_member() );
+			$subscription_id = apply_filters( 'rcp_member_get_merchant_subscription_id', $subscription_id, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -1430,10 +1545,12 @@ class RCP_Membership {
 		$subscription_id = trim( $subscription_id );
 
 		if ( has_action( 'rcp_member_pre_set_merchant_subscription_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_pre_set_gateway_subscription_id` instead.
 			 */
-			do_action( 'rcp_member_pre_set_merchant_subscription_id', $this->get_member()->ID, $subscription_id, $this->get_member() );
+			do_action( 'rcp_member_pre_set_merchant_subscription_id', $this->get_user_id(), $subscription_id, $member );
 		}
 
 		$this->update( array( 'gateway_subscription_id' => $subscription_id ) );
@@ -1451,10 +1568,12 @@ class RCP_Membership {
 		 */
 
 		if ( has_action( 'rcp_member_post_set_merchant_subscription_id' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_transition_membership_gateway_subscription_id` instead.
 			 */
-			do_action( 'rcp_member_post_set_merchant_subscription_id', $this->get_member()->ID, $subscription_id, $this->get_member() );
+			do_action( 'rcp_member_post_set_merchant_subscription_id', $this->get_user_id(), $subscription_id, $member );
 		}
 
 	}
@@ -1471,10 +1590,12 @@ class RCP_Membership {
 		$subscription_key = $this->subscription_key;
 
 		if ( has_filter( 'rcp_member_get_subscription_key' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0
 			 */
-			apply_filters( 'rcp_member_get_subscription_key', $subscription_key, $this->get_member()->ID, $this->get_member() );
+			apply_filters( 'rcp_member_get_subscription_key', $subscription_key, $this->get_user_id(), $member );
 		}
 
 		return $subscription_key;
@@ -1499,19 +1620,23 @@ class RCP_Membership {
 		$subscription_key = trim( $subscription_key );
 
 		if ( has_action( 'rcp_member_pre_set_subscription_key' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0
 			 */
-			do_action( 'rcp_member_pre_set_subscription_key', $subscription_key, $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_pre_set_subscription_key', $subscription_key, $this->get_user_id(), $member );
 		}
 
 		$this->update( array( 'subscription_key', $subscription_key ) );
 
 		if ( has_action( 'rcp_member_post_set_subscription_key' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0
 			 */
-			do_action( 'rcp_member_post_set_subscription_key', $subscription_key, $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_post_set_subscription_key', $subscription_key, $this->get_user_id(), $member );
 		}
 
 	}
@@ -1520,7 +1645,7 @@ class RCP_Membership {
 	 * Determines whether or not this membership was upgraded to another one.
 	 *
 	 * @access public
-	 * @since 3.0.4
+	 * @since  3.0.4
 	 * @return int|false ID of the membership this one was upgraded to, or false if it wasn't upgraded.
 	 */
 	public function was_upgraded() {
@@ -1592,6 +1717,13 @@ class RCP_Membership {
 
 		$this->add_note( __( 'Membership activated.', 'rcp' ) );
 
+		// Set the activation date.
+		if ( empty( $this->get_activated_date() ) ) {
+			$this->update( array(
+				'activated_date' => current_time( 'mysql' )
+			) );
+		}
+
 		if ( 'active' != $this->get_status() ) {
 			$this->set_status( 'active' );
 		}
@@ -1619,7 +1751,7 @@ class RCP_Membership {
 	 * Add the membership level's assigned user role to the customer's account.
 	 *
 	 * @access public
-	 * @since 3.0.5
+	 * @since  3.0.5
 	 * @return void
 	 */
 	private function add_user_role() {
@@ -1627,9 +1759,10 @@ class RCP_Membership {
 		$old_role         = get_option( 'default_role', 'subscriber' );
 		$membership_level = rcp_get_subscription_details( $this->get_object_id() );
 		$role             = ! empty( $membership_level->role ) ? $membership_level->role : get_option( 'default_role', 'subscriber' );
-		$user             = new WP_User( $this->get_customer()->get_user_id() );
+		$user_id          = $this->get_user_id();
+		$user             = ! empty( $user_id ) ? new WP_User( $user_id ) : false;
 
-		if ( in_array( $role, $user->roles ) ) {
+		if ( ! $user instanceof WP_User || in_array( $role, $user->roles ) ) {
 			return;
 		}
 
@@ -1681,15 +1814,17 @@ class RCP_Membership {
 			 */
 			$can_renew_deactivated = apply_filters( 'rcp_can_renew_deactivated_membership_levels', false );
 
-			if ( 'active' != $details->status && ! $can_renew_deactivated ) {
+			if ( empty( $details ) || ( 'active' != $details->status && ! $can_renew_deactivated ) ) {
 				$can_renew = false;
 			}
 		}
 
+		$customer = $this->get_customer();
+
 		/**
 		 * @deprecated 3.0
 		 */
-		$can_renew = apply_filters( 'rcp_member_can_renew', $can_renew, $this->get_customer()->get_user_id() );
+		$can_renew = apply_filters( 'rcp_member_can_renew', $can_renew, $this->get_user_id() );
 
 		/**
 		 * Filters whether or not the membership can be renewed.
@@ -1709,9 +1844,9 @@ class RCP_Membership {
 	 *
 	 * Does NOT handle payment processing for the renewal. This should be called after receiving a renewal payment.
 	 *
-	 * @param  bool   $recurring  Whether or not the membership is recurring.
-	 * @param  string $status     Membership status.
-	 * @param  string $expiration Membership expiration date in MySQL format.
+	 * @param bool   $recurring  Whether or not the membership is recurring.
+	 * @param string $status     Membership status.
+	 * @param string $expiration Membership expiration date in MySQL format.
 	 *
 	 * @access public
 	 * @since  3.0
@@ -1741,7 +1876,7 @@ class RCP_Membership {
 				/**
 				 * @deprecated 3.0 Use `rcp_membership_renewal_expiration_date` instead.
 				 */
-				$expiration = apply_filters( 'rcp_member_renewal_expiration', $expiration, $membership_level, $this->get_member()->ID );
+				$expiration = apply_filters( 'rcp_member_renewal_expiration', $expiration, $membership_level, $this->get_user_id() );
 			}
 
 			/**
@@ -1761,7 +1896,7 @@ class RCP_Membership {
 			/**
 			 * deprecated 3.0 Use `rcp_membership_pre_renew` instead.
 			 */
-			do_action( 'rcp_member_pre_renew', $this->get_member()->ID, $expiration, $this->get_member() );
+			do_action( 'rcp_member_pre_renew', $this->get_user_id(), $expiration, $this->get_member() );
 		}
 
 		/**
@@ -1788,13 +1923,17 @@ class RCP_Membership {
 
 		$this->add_note( __( 'Membership renewed.', 'rcp' ) );
 
-		delete_user_meta( $this->get_customer()->get_user_id(), '_rcp_expired_email_sent' );
+		if ( $this->get_user_id() ) {
+			delete_user_meta( $this->get_user_id(), '_rcp_expired_email_sent' );
+		}
 
 		if ( has_action( 'rcp_member_post_renew' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_post_renew` instead.
 			 */
-			do_action( 'rcp_member_post_renew', $this->get_member()->ID, $expiration, $this->get_member() );
+			do_action( 'rcp_member_post_renew', $this->get_user_id(), $expiration, $member );
 		}
 
 		/**
@@ -1829,7 +1968,7 @@ class RCP_Membership {
 			/**
 			 * @deprecated 3.0
 			 */
-			$upgrade_possible = (bool) apply_filters( 'rcp_can_upgrade_subscription', $upgrade_possible, $this->get_customer()->get_user_id() );
+			$upgrade_possible = (bool) apply_filters( 'rcp_can_upgrade_subscription', $upgrade_possible, $this->get_user_id() );
 		}
 
 		return $upgrade_possible;
@@ -1851,7 +1990,7 @@ class RCP_Membership {
 			/**
 			 * @deprecated 3.0
 			 */
-			$has_upgrade_path = apply_filters( 'rcp_has_upgrade_path', $has_upgrade_path, $this->get_customer()->get_user_id() );
+			$has_upgrade_path = apply_filters( 'rcp_has_upgrade_path', $has_upgrade_path, $this->get_user_id() );
 		}
 
 		return $has_upgrade_path;
@@ -1874,7 +2013,7 @@ class RCP_Membership {
 		// Remove the user's current subscription from the list.
 		foreach ( $membership_levels as $key => $membership_level ) {
 			if ( $current_membership_level == $membership_level->id ) {
-				unset( $membership_levels[$key] );
+				unset( $membership_levels[ $key ] );
 			}
 		}
 
@@ -1884,7 +2023,7 @@ class RCP_Membership {
 			/**
 			 * @deprecated 3.0
 			 */
-			$membership_levels = apply_filters( 'rcp_get_upgrade_paths', $membership_levels, $this->get_customer()->get_user_id() );
+			$membership_levels = apply_filters( 'rcp_get_upgrade_paths', $membership_levels, $this->get_user_id() );
 		}
 
 		/**
@@ -1906,12 +2045,7 @@ class RCP_Membership {
 	 * @return bool
 	 */
 	public function has_payment_plan() {
-
-		$membership_level = rcp_get_subscription_details( $this->get_object_id() );
-		$renew_times      = ! empty( $membership_level->maximum_renewals ) ? $membership_level->maximum_renewals : 0;
-
-		return $renew_times > 0;
-
+		return $this->get_maximum_renewals() > 0;
 	}
 
 	/**
@@ -2102,8 +2236,11 @@ class RCP_Membership {
 		$old_role         = get_option( 'default_role', 'subscriber' );
 		$membership_level = rcp_get_subscription_details( $this->get_object_id() );
 		$old_role         = ! empty( $membership_level->role ) ? $membership_level->role : $old_role;
-		$user             = new WP_User( $this->get_customer()->get_user_id() );
-		$user->remove_role( $old_role );
+		$user_id          = $this->get_user_id();
+		$user             = ! empty( $user_id ) ? new WP_User( $user_id ) : false;
+		if ( $user instanceof WP_User ) {
+			$user->remove_role( $old_role );
+		}
 
 		/**
 		 * Runs after the membership has been disabled.
@@ -2122,7 +2259,7 @@ class RCP_Membership {
 	 *
 	 *        - The membership is re-granted access to associated content (provided membership is still active).
 	 *        - The customer is able to view this membership again and renew if desired.
-	 *        - The user role is reapplied to the account.
+	 *        - The user role is reapplied to the account (provided membership is still active).
 	 *
 	 * @access public
 	 * @since  3.0
@@ -2130,12 +2267,14 @@ class RCP_Membership {
 	 */
 	public function enable() {
 
-		$this->update( array( 'disabled' => null ) );
+		$this->update( array( 'disabled' => 0 ) );
 
 		/**
 		 * Add associated user role.
 		 */
-		$this->add_user_role();
+		if ( $this->is_active() ) {
+			$this->add_user_role();
+		}
 
 	}
 
@@ -2156,10 +2295,12 @@ class RCP_Membership {
 		}
 
 		if ( has_action( 'rcp_member_pre_cancel' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_pre_cancel` instead.
 			 */
-			do_action( 'rcp_member_pre_cancel', $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_pre_cancel', $this->get_user_id(), $member );
 		}
 
 		/**
@@ -2176,10 +2317,12 @@ class RCP_Membership {
 		$this->set_status( 'cancelled' );
 
 		if ( has_action( 'rcp_member_post_cancel' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_post_cancel` instead.
 			 */
-			do_action( 'rcp_member_post_cancel', $this->get_member()->ID, $this->get_member() );
+			do_action( 'rcp_member_post_cancel', $this->get_user_id(), $member );
 		}
 
 		/**
@@ -2236,7 +2379,7 @@ class RCP_Membership {
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_can_cancel` instead.
 			 */
-			$can_cancel = apply_filters( 'rcp_member_can_cancel', $can_cancel, $this->get_member()->ID );
+			$can_cancel = apply_filters( 'rcp_member_can_cancel', $can_cancel, $this->get_user_id() );
 		}
 
 		/**
@@ -2250,7 +2393,22 @@ class RCP_Membership {
 		 */
 		$can_cancel = apply_filters( 'rcp_membership_can_cancel', $can_cancel, $this->get_id(), $this );
 
-		rcp_log( sprintf( '"Can cancel" status for membership #%d: %s.', $this->get_id(), var_export( $can_cancel, true ) ) );
+		if ( $can_cancel ) {
+			rcp_log( sprintf( '"Can cancel" status for membership #%d: %s.', $this->get_id(), var_export( $can_cancel, true ) ) );
+		} else {
+			// If cancellation is not available, let's try to find out why.
+			if ( ! $this->is_recurring() ) {
+				$reason = 'membership not recurring';
+			} elseif ( 'active' !== $this->get_status() ) {
+				$reason = 'membership not active';
+			} elseif ( ! $this->is_paid() ) {
+				$reason = 'membership not paid';
+			} else {
+				$reason = 'unknown';
+			}
+
+			rcp_log( sprintf( '"Can cancel" status for membership #%d: %s. Reason: %s.', $this->get_id(), var_export( $can_cancel, true ), $reason ) );
+		}
 
 		return $can_cancel;
 
@@ -2293,7 +2451,7 @@ class RCP_Membership {
 					$success = true;
 				}
 			} else {
-				rcp_log( sprintf( 'Failed to cancel Stripe payment profile for membership #%d. Missing payment profile ID.' ) );
+				rcp_log( sprintf( 'Failed to cancel Stripe payment profile for membership #%d. Missing payment profile ID.', $this->get_id() ) );
 
 				$success = new WP_Error( 'missing_payment_profile_id', __( 'Missing subscription ID.', 'rcp' ) );
 			}
@@ -2520,12 +2678,16 @@ class RCP_Membership {
 
 		// Check post user role restrictions. User needs at least one of the selected roles.
 		if ( $can_access && ! empty( $user_level ) && 'all' != strtolower( $user_level[0] ) ) {
-			foreach ( $user_level as $role ) {
-				if ( user_can( $this->get_customer()->get_user_id(), strtolower( $role ) ) ) {
-					$can_access = true;
-					break;
-				} else {
-					$can_access = false;
+			$user_id  = $this->get_user_id();
+
+			if ( ! empty( $user_id ) ) {
+				foreach ( $user_level as $role ) {
+					if ( user_can( $user_id, strtolower( $role ) ) ) {
+						$can_access = true;
+						break;
+					} else {
+						$can_access = false;
+					}
 				}
 			}
 		}
@@ -2771,10 +2933,12 @@ class RCP_Membership {
 		$discount = floatval( $discount );
 
 		if ( has_filter( 'rcp_member_prorate_credit' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_prorate_credit` instead.
 			 */
-			$discount = apply_filters( 'rcp_member_prorate_credit', $discount, $this->get_member()->ID, $this->get_member() );
+			$discount = apply_filters( 'rcp_member_prorate_credit', $discount, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -2830,10 +2994,12 @@ class RCP_Membership {
 		$card_details = array();
 
 		if ( has_filter( 'rcp_get_card_details' ) ) {
+			$member = $this->get_member();
+
 			/**
 			 * @deprecated 3.0 Use `rcp_membership_get_card_details` instead.
 			 */
-			$card_details = apply_filters( 'rcp_get_card_details', $card_details, $this->get_member()->ID, $this->get_member() );
+			$card_details = apply_filters( 'rcp_get_card_details', $card_details, $this->get_user_id(), $member );
 		}
 
 		/**
@@ -2861,19 +3027,13 @@ class RCP_Membership {
 	 */
 	public function can_update_billing_card() {
 
-		$can_update = false;
-
-		if ( rcp_is_stripe_membership( $this ) ) {
-			$can_update = true;
-		} elseif ( rcp_is_paypal_membership( $this ) && 'paypal_pro' == $this->get_gateway() && rcp_has_paypal_api_access() ) {
-			$can_update = true;
-		}
+		$can_update = rcp_gateway_supports( $this->get_gateway(), 'card-updates' );
 
 		if ( has_filter( 'rcp_member_can_update_billing_card' ) ) {
 			/**
 			 * @deprecated 3.0
 			 */
-			$can_update = apply_filters( 'rcp_member_can_update_billing_card', $can_update, $this->get_customer()->get_user_id() );
+			$can_update = apply_filters( 'rcp_member_can_update_billing_card', $can_update, $this->get_user_id() );
 		}
 
 		/**

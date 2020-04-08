@@ -96,5 +96,14 @@ if ( ! rcp_is_registration() ) {
 			</tr>
 		<?php endif; ?>
 
+		<?php
+		/**
+		 * Insert content at the end of the table footer.
+		 *
+		 * @since 3.3
+		 */
+		do_action( 'rcp_register_total_details_footer_bottom' );
+		?>
+
 	</tfoot>
 </table>

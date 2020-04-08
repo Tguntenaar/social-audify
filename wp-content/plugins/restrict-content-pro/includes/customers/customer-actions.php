@@ -35,3 +35,34 @@ function rcp_set_customer_trialing_flag( $old_status, $membership_id ) {
 
 }
 add_action( 'rcp_transition_membership_status_active', 'rcp_set_customer_trialing_flag', 10, 2 );
+
+/**
+ * Sets the email verification key when a customer's "email_verification" status is set to "pending".
+ *
+ * @param string $old_status  Old email verification status value.
+ * @param string $new_status  New email verification status value.
+ * @param int    $customer_id ID of the customer that was updated.
+ *
+ * @since 3.3.9
+ * @return void
+ */
+function rcp_set_pending_email_verification_key( $old_status, $new_status, $customer_id ) {
+
+	if ( 'pending' !== $new_status ) {
+		return;
+	}
+
+	$customer = rcp_get_customer( $customer_id );
+
+	if ( ! $customer instanceof RCP_Customer ) {
+		return;
+	}
+
+	// Set flag.
+	update_user_meta( $customer->get_user_id(), 'rcp_pending_email_verification', strtolower( md5( uniqid() ) ) );
+
+	// Send email.
+	rcp_send_email_verification( $customer->get_user_id() );
+
+}
+add_action( 'rcp_transition_customer_email_verification', 'rcp_set_pending_email_verification_key', 10, 3 );

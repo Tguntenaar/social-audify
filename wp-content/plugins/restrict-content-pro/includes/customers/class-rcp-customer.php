@@ -598,7 +598,7 @@ class RCP_Customer {
 	 *
 	 * @access public
 	 * @since  3.0
-	 * @return array
+	 * @return RCP_Membership[]
 	 */
 	public function get_memberships( $args = array() ) {
 
@@ -691,6 +691,7 @@ class RCP_Customer {
 	public function add_membership( $args = array() ) {
 
 		$args['customer_id'] = $this->get_id();
+		$args['user_id']     = $this->get_user_id();
 
 		return rcp_add_membership( $args );
 

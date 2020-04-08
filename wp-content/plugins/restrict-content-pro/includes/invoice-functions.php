@@ -22,9 +22,7 @@ function rcp_get_invoice_url( $payment_id = 0 ) {
 		return false;
 	}
 
-	$base = is_admin() ? admin_url( 'index.php' ) : home_url();
-
-	return add_query_arg( array( 'payment_id' => $payment_id, 'rcp-action' => 'download_invoice' ), $base );
+	return add_query_arg( array( 'payment_id' => urlencode( $payment_id ), 'rcp-action' => 'download_invoice' ), home_url() );
 }
 
 /**

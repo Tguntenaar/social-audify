@@ -19,11 +19,12 @@ function rcp_reports_page() {
 	$current_page = admin_url( 'admin.php?page=rcp-reports' );
 	$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'earnings';
 	?>
-	<div class="wrap">
+	<div id="rcp-reports-wrap" class="wrap" data-nonce="<?php echo esc_attr( wp_create_nonce( 'rcp_load_reports' ) ); ?>">
 		<h2 class="nav-tab-wrapper">
 			<a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'earnings' ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'earnings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Earnings', 'rcp' ); ?></a>
 			<a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'refunds' ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'refunds' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Refunds', 'rcp' ); ?></a>
 			<a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'signups' ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'signups' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Signups', 'rcp' ); ?></a>
+			<a href="<?php echo esc_url( add_query_arg( array( 'tab' => 'membership_counts' ), $current_page ) ); ?>" class="nav-tab <?php echo $active_tab == 'membership_counts' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Membership Counts', 'rcp' ); ?></a>
 			<?php do_action( 'rcp_reports_tabs' ); ?>
 		</h2>
 
@@ -743,6 +744,30 @@ function rcp_signups_graph() {
 add_action( 'rcp_reports_tab_signups', 'rcp_signups_graph' );
 
 /**
+ * Displays the membership counts graph
+ *
+ * @since 3.3
+ */
+function rcp_membership_counts_graph() {
+
+	?>
+	<h1><?php _e( 'Membership Counts Report', 'rcp' ); ?></h1>
+	<div class="metabox-holder" style="padding-top: 0;">
+		<div class="postbox">
+			<div class="inside">
+				<?php rcp_reports_graph_controls(); ?>
+				<div id="rcp-membership-counts-graph">
+					<canvas id="rcp-membership-counts-graph-canvas"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php
+
+}
+add_action( 'rcp_reports_tab_membership_counts', 'rcp_membership_counts_graph' );
+
+/**
  * Show report graph date filters
  *
  * @since 1.8
@@ -761,10 +786,11 @@ function rcp_reports_graph_controls() {
 		'other'			=> __( 'Custom', 'rcp' )
 	) );
 
-	$dates          = rcp_get_report_dates();
-	$display        = $dates['range'] == 'other' ? '' : 'style="display:none;"';
-	$active_tab     = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'earnings';
-	$selected_level = isset( $_GET['subscription'] ) ? absint( $_GET['subscription'] ) : false;
+	$dates           = rcp_get_report_dates();
+	$display         = $dates['range'] == 'other' ? '' : 'style="display:none;"';
+	$active_tab      = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'earnings';
+	$selected_level  = isset( $_GET['subscription'] ) ? absint( $_GET['subscription'] ) : false;
+	$selected_status = isset( $_GET['membership_status'] ) ? wp_strip_all_tags( $_GET['membership_status'] ) : '';
 	?>
 	<form id="rcp-graphs-filter" method="get">
 		<div class="tablenav top">
@@ -787,29 +813,40 @@ function rcp_reports_graph_controls() {
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_start'] ); ?>><?php echo rcp_get_month_name( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
-					<select id="rcp-graphs-year" name="year">
+					<select id="rcp-graphs-year-start" name="year">
 						<?php for ( $i = 2007; $i <= date( 'Y' ); $i++ ) : ?>
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year'] ); ?>><?php echo $i; ?></option>
 						<?php endfor; ?>
 					</select>
 					<span><?php _e( 'To', 'rcp' ); ?>&nbsp;</span>
-					<select id="rcp-graphs-month-start" name="m_end">
+					<select id="rcp-graphs-month-end" name="m_end">
 						<?php for ( $i = 1; $i <= 12; $i++ ) : ?>
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['m_end'] ); ?>><?php echo rcp_get_month_name( $i ); ?></option>
 						<?php endfor; ?>
 					</select>
-					<select id="rcp-graphs-year" name="year_end">
+					<select id="rcp-graphs-year-end" name="year_end">
 						<?php for ( $i = 2007; $i <= date( 'Y' ); $i++ ) : ?>
 							<option value="<?php echo absint( $i ); ?>" <?php selected( $i, $dates['year_end'] ); ?>><?php echo $i; ?></option>
 						<?php endfor; ?>
 					</select>
 				</div>
 
-				<?php if( 'earnings' == $active_tab ) : $levels = rcp_get_subscription_levels(); ?>
+				<?php if( in_array( $active_tab, array( 'earnings', 'membership_counts' ) ) ) : $levels = rcp_get_subscription_levels(); ?>
 					<select id="rcp-graphs-subscriptions" name="subscription">
 						<option value="0"><?php _e( 'All Membership Levels', 'rcp' ); ?></option>
 						<?php foreach( $levels as $level ) : ?>
 							<option value="<?php echo $level->id; ?>"<?php selected( $selected_level, $level->id ); ?>><?php echo $level->name; ?></option>
+						<?php endforeach; ?>
+					</select>
+				<?php endif; ?>
+
+				<?php if( in_array( $active_tab, array( 'membership_counts' ) ) ) :
+					$statuses = array( 'active', 'expired', 'cancelled', 'pending' ); ?>
+					<label for="rcp-graphs-membership-status" class="screen-reader-text"><?php _e( 'Filter by membership status', 'rcp' ); ?></label>
+					<select id="rcp-graphs-membership-status" name="membership_status">
+						<option value=""><?php _e( 'All Statuses', 'rcp' ); ?></option>
+						<?php foreach( $statuses as $status ) : ?>
+							<option value="<?php echo esc_attr( $status ); ?>"<?php selected( $selected_status, $status ); ?>><?php echo esc_html( rcp_get_status_label( $status ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				<?php endif; ?>
@@ -832,7 +869,7 @@ function rcp_reports_graph_controls() {
  * @since 1.8
  * @return array
  */
-function rcp_get_report_dates() {
+function rcp_get_report_dates( $args = array() ) {
 
 	$dates = array();
 
@@ -841,13 +878,15 @@ function rcp_get_report_dates() {
 
 	$current_time = current_time( 'timestamp' );
 
-	$dates['range']      = isset( $_GET['range'] )   ? $_GET['range']   : 'this_month';
-	$dates['year']       = isset( $_GET['year'] )    ? $_GET['year']    : date( 'Y' );
-	$dates['year_end']   = isset( $_GET['year_end'] )? $_GET['year_end']: date( 'Y' );
-	$dates['m_start']    = isset( $_GET['m_start'] ) ? $_GET['m_start'] : 1;
-	$dates['m_end']      = isset( $_GET['m_end'] )   ? $_GET['m_end']   : 12;
-	$dates['day']        = isset( $_GET['day'] )     ? $_GET['day']     : 1;
-	$dates['day_end']    = isset( $_GET['day_end'] ) ? $_GET['day_end'] : cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+	$dates['range']      = isset( $_REQUEST['range'] )   ? $_REQUEST['range']   : 'this_month';
+	$dates['year']       = isset( $_REQUEST['year'] )    ? $_REQUEST['year']    : date( 'Y' );
+	$dates['year_end']   = isset( $_REQUEST['year_end'] )? $_REQUEST['year_end']: date( 'Y' );
+	$dates['m_start']    = isset( $_REQUEST['m_start'] ) ? $_REQUEST['m_start'] : 1;
+	$dates['m_end']      = isset( $_REQUEST['m_end'] )   ? $_REQUEST['m_end']   : 12;
+	$dates['day']        = isset( $_REQUEST['day'] )     ? $_REQUEST['day']     : 1;
+	$dates['day_end']    = isset( $_REQUEST['day_end'] ) ? $_REQUEST['day_end'] : cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+
+	$dates = wp_parse_args( $args, $dates );
 
 	// Modify dates based on predefined ranges
 	switch ( $dates['range'] ) :
@@ -1023,6 +1062,59 @@ function rcp_parse_report_dates() {
 
 	$dates = rcp_get_report_dates();
 
-	wp_safe_redirect( add_query_arg( $dates, admin_url( 'admin.php?page=rcp-reports' ) ) ); exit;
+	wp_safe_redirect( add_query_arg( array_map( 'urlencode', $dates ), admin_url( 'admin.php?page=rcp-reports' ) ) ); exit;
 }
 add_action( 'admin_init', 'rcp_parse_report_dates' );
+
+/**
+ * Get an array of dates to use in report queries based on the selected date range.
+ *
+ * @param array $args
+ *
+ * @since 3.3
+ * @return array()
+ */
+function rcp_get_graph_dates_by_range() {
+
+	$dates = array();
+
+	$date_parameters = rcp_get_report_dates();
+
+	/**
+	 * If `$daily` is false, then monthly interval is used.
+	 */
+	$daily = false;
+
+	$daily_ranges = array( 'today', 'this_week', 'last_week', 'this_month', 'last_month' );
+
+	// Determine if we want daily or monthly increments.
+	if ( in_array( $date_parameters['range'], $daily_ranges ) ) {
+		$daily = true;
+	} elseif ( 'other' === $date_parameters['range'] ) {
+		if ( $date_parameters['m_end'] - $date_parameters['m_start'] < 2 && $date_parameters['year_end'] <= $date_parameters['year'] ) {
+			$daily = true;
+		}
+	}
+
+	$interval = $daily ? 'P1D' : 'P1M';
+	$interval = 'P1D';
+
+	try {
+		$start_date = new DateTime( sprintf( '%d-%d-%d', $date_parameters['year'], $date_parameters['m_start'], $date_parameters['day'] ) );
+		$end_date   = new DateTime( sprintf( '%d-%d-%d', $date_parameters['year_end'], $date_parameters['m_end'], $date_parameters['day_end'] ) );
+
+		// Include the last date.
+		$end_date->modify( '+1 day' );
+
+		$period = new DatePeriod( $start_date, new DateInterval( $interval ), $end_date );
+
+		foreach ( $period as $datetime ) {
+			$dates[] = $datetime->format( 'Y-m-d' );
+		}
+	} catch ( \Exception $e ) {
+
+	}
+
+	return $dates;
+
+}

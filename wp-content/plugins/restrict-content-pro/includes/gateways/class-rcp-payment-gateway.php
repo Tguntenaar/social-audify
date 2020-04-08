@@ -20,6 +20,8 @@ class RCP_Payment_Gateway {
 	 *      recurring (recurring payments)
 	 *      fees (setup fees)
 	 *      trial (free trials)
+	 *      ajax-payment (payment processing via ajax)
+	 *      card-updates (update billing card for subscriptions)
 	 *
 	 * @var array
 	 * @access public
@@ -245,7 +247,7 @@ class RCP_Payment_Gateway {
 			$this->user_name               = $subscription_data['user_name'];
 			$this->currency                = $subscription_data['currency'];
 			$this->amount                  = round( $subscription_data['recurring_price'], 2 );
-			$this->initial_amount          = round( $subscription_data['price'] + $subscription_data['fee'], 2 );
+			$this->initial_amount          = round( $subscription_data['initial_price'], 2 );
 			$this->discount                = $subscription_data['discount'];
 			$this->discount_code           = $subscription_data['discount_code'];
 			$this->length                  = $subscription_data['length'];
@@ -304,6 +306,22 @@ class RCP_Payment_Gateway {
 	}
 
 	/**
+	 * Process signup via ajax
+	 *
+	 * Optionally, payment can be processed (in whole or in part) via ajax.
+	 *
+	 * If successful, return `true` or an array of field keys/values to add to the registration form as hidden fields.
+	 *
+	 * If failure, return `WP_Error`.
+	 *
+	 * @since 3.2
+	 * @return true|array|WP_Error
+	 */
+	public function process_ajax_signup() {
+		return true;
+	}
+
+	/**
 	 * Process registration
 	 *
 	 * This is where you process the actual payment. If non-recurring, you'll want to use
@@ -352,6 +370,17 @@ class RCP_Payment_Gateway {
 
 		*/
 
+	}
+
+	/**
+	 * Load fields for the Update Billing Card form
+	 *
+	 * @access public
+	 * @since 3.3
+	 * @return void
+	 */
+	public function update_card_fields() {
+		rcp_get_template_part( 'card-update-form-fields' );
 	}
 
 	/**

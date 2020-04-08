@@ -16,18 +16,18 @@
  * @return void
  */
 function rcp_options_install( $network_wide = false ) {
-   	global $wpdb, $rcp_db_name, $rcp_db_version, $rcp_discounts_db_name, $rcp_discounts_db_version,
-   	$rcp_payments_db_name, $rcp_payments_db_version;
+	global $wpdb, $rcp_db_name, $rcp_db_version, $rcp_discounts_db_name, $rcp_discounts_db_version,
+		   $rcp_payments_db_name, $rcp_payments_db_version;
 
-   	$rcp_options = get_option( 'rcp_settings', array() );
+	$rcp_options = get_option( 'rcp_settings', array() );
 
-   	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 	/**
-   	 * If the plugin is being network activated, create the tables
-   	 * on the shutdown hook. Otherwise do it now.
-   	 * @see https://github.com/restrictcontentpro/restrict-content-pro/issues/669
-   	 */
+	 * If the plugin is being network activated, create the tables
+	 * on the shutdown hook. Otherwise do it now.
+	 * @see https://github.com/restrictcontentpro/restrict-content-pro/issues/669
+	 */
 	if ( $network_wide ) {
 		add_action( 'shutdown', 'rcp_create_tables' );
 	} else {
@@ -145,24 +145,9 @@ function rcp_create_tables() {
 	@dbDelta( $sql );
 
 	// create the RCP discounts database table
-	$rcp_discounts_db_name = rcp_get_discounts_db_name();
-	$sql = "CREATE TABLE {$rcp_discounts_db_name} (
-		id bigint(9) NOT NULL AUTO_INCREMENT,
-		name tinytext NOT NULL,
-		description longtext NOT NULL,
-		amount tinytext NOT NULL,
-		unit tinytext NOT NULL,
-		code tinytext NOT NULL,
-		use_count mediumint NOT NULL,
-		max_uses mediumint NOT NULL,
-		status tinytext NOT NULL,
-		expiration mediumtext NOT NULL,
-		membership_level_ids text NOT NULL,
-		one_time smallint NOT NULL DEFAULT 0,
-		PRIMARY KEY id (id)
-		) CHARACTER SET utf8 COLLATE utf8_general_ci;";
-
-	@dbDelta( $sql );
+	if ( ! restrict_content_pro()->discounts_table->exists() ) {
+		restrict_content_pro()->discounts_table->install();
+	}
 
 	// create the RCP payments database table
 	$rcp_payments_db_name = rcp_get_payments_db_name();
@@ -232,6 +217,8 @@ function rcp_create_pages() {
 
 	global $rcp_options, $wpdb;
 
+	$author_id = current_user_can( 'edit_others_pages' ) ? get_current_user_id() : 1;
+
 	// Checks if the purchase page option exists
 	if ( ! isset( $rcp_options['registration_page'] ) ) {
 
@@ -241,7 +228,7 @@ function rcp_create_pages() {
 				'post_title'     => __( 'Register', 'rcp' ),
 				'post_content'   => '[register_form]',
 				'post_status'    => 'publish',
-				'post_author'    => 1,
+				'post_author'    => $author_id,
 				'post_type'      => 'page',
 				'comment_status' => 'closed'
 			)
@@ -253,7 +240,7 @@ function rcp_create_pages() {
 				'post_title'     => __( 'Welcome', 'rcp' ),
 				'post_content'   => __( 'Welcome! This is your success page where members are redirected after completing their registration.', 'rcp' ),
 				'post_status'    => 'publish',
-				'post_author'    => 1,
+				'post_author'    => $author_id,
 				'post_parent'    => $register,
 				'post_type'      => 'page',
 				'comment_status' => 'closed'
@@ -279,7 +266,7 @@ function rcp_create_pages() {
 					'post_title'     => __( 'Your Membership', 'rcp' ),
 					'post_content'   => '[subscription_details]',
 					'post_status'    => 'publish',
-					'post_author'    => 1,
+					'post_author'    => $author_id,
 					'post_parent'    => $rcp_options['registration_page'],
 					'post_type'      => 'page',
 					'comment_status' => 'closed'
@@ -306,7 +293,7 @@ function rcp_create_pages() {
 					'post_title'     => __( 'Edit Your Profile', 'rcp' ),
 					'post_content'   => '[rcp_profile_editor]',
 					'post_status'    => 'publish',
-					'post_author'    => 1,
+					'post_author'    => $author_id,
 					'post_parent'    => $rcp_options['registration_page'],
 					'post_type'      => 'page',
 					'comment_status' => 'closed'
@@ -333,7 +320,7 @@ function rcp_create_pages() {
 					'post_title'     => __( 'Update Billing Card', 'rcp' ),
 					'post_content'   => '[rcp_update_card]',
 					'post_status'    => 'publish',
-					'post_author'    => 1,
+					'post_author'    => $author_id,
 					'post_parent'    => $rcp_options['registration_page'],
 					'post_type'      => 'page',
 					'comment_status' => 'closed'

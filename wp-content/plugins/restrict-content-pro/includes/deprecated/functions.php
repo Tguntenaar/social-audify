@@ -969,8 +969,9 @@ function rcp_is_expired( $user_id = 0 ) {
 /**
  * Checks whether a user has an active subscription
  *
- * @deprecated 3.0 Use `rcp_membership_is_active()` instead.
- * @see rcp_membership_is_active()
+ * @deprecated 3.0 Use `rcp_user_has_paid_membership()` or `rcp_user_has_active_membership()` instead.
+ * @see rcp_user_has_paid_membership()
+ * @see rcp_user_has_active_membership()
  *
  * @param int $user_id The ID of the user to return the subscription level of, or 0 for current user.
  *
@@ -982,9 +983,7 @@ function rcp_is_active( $user_id = 0 ) {
 		$user_id = get_current_user_id();
 	}
 
-	$member = new RCP_Member( $user_id );
-
-	return $member->is_active();
+	return rcp_user_has_paid_membership( $user_id );
 
 }
 
@@ -1440,6 +1439,10 @@ function rcp_get_user_payments( $user_id = 0, $args = array() ) {
 		$user_id = get_current_user_id();
 	}
 
+	if ( empty( $user_id ) ) {
+		return array();
+	}
+
 	$args = wp_parse_args( $args, array(
 		'user_id' => $user_id
 	) );
@@ -1761,3 +1764,613 @@ function rcp_update_expired_member_role( $status, $member_id, $old_status, $memb
 	}
 }
 //add_action( 'rcp_set_status', 'rcp_update_expired_member_role', 10, 4 );
+
+/**
+ * Determine if a member is a Stripe subscriber
+ *
+ * @deprecated 3.0 Use `rcp_is_stripe_membership()` instead.
+ * @see rcp_is_stripe_membership()
+ *
+ * @param int $user_id The ID of the user to check
+ *
+ * @since       2.1
+ * @access      public
+ * @return      bool
+ */
+function rcp_is_stripe_subscriber( $user_id = 0 ) {
+
+	if( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	$ret = false;
+
+	$customer = rcp_get_customer_by_user_id( $user_id );
+
+	if ( ! empty( $customer ) ) {
+		$membership = rcp_get_customer_single_membership( $customer->get_id() );
+
+		if ( ! empty( $membership ) ) {
+			$ret = rcp_is_stripe_membership( $membership );
+		}
+	}
+
+	return (bool) apply_filters( 'rcp_is_stripe_subscriber', $ret, $user_id );
+}
+
+/**
+ * Process an update card form request
+ *
+ * @deprecated 3.0 Use `rcp_stripe_update_membership_billing_card()` instead.
+ * @see rcp_stripe_update_membership_billing_card()
+ *
+ * @param int        $member_id  ID of the member.
+ * @param RCP_Member $member_obj Member object.
+ *
+ * @access      private
+ * @since       2.1
+ * @return      void
+ */
+function rcp_stripe_update_billing_card( $member_id, $member_obj ) {
+
+	if( empty( $member_id ) ) {
+		return;
+	}
+
+	if( ! is_a( $member_obj, 'RCP_Member' ) ) {
+		return;
+	}
+
+	$customer = rcp_get_customer_by_user_id( $member_id );
+
+	if ( empty( $customer ) ) {
+		return;
+	}
+
+	$membership = rcp_get_customer_single_membership( $customer->get_id() );
+
+	if ( empty( $membership ) ) {
+		return;
+	}
+
+	rcp_stripe_update_membership_billing_card( $membership );
+
+}
+//add_action( 'rcp_update_billing_card', 'rcp_stripe_update_billing_card', 10, 2 );
+
+/**
+ * Create discount code in Stripe when one is created in RCP
+ *
+ * @deprecated 3.2 Coupons are no longer synced.
+ *
+ * @param array $args
+ *
+ * @access      private
+ * @since       2.1
+ * @return      void
+ */
+function rcp_stripe_create_discount( $args ) {
+
+	if( ! is_admin() ) {
+		return;
+	}
+
+	if( function_exists( 'rcp_stripe_add_discount' ) ) {
+		return; // Old Stripe gateway is active
+	}
+
+	if( ! rcp_is_gateway_enabled( 'stripe' ) ) {
+		return;
+	}
+
+	global $rcp_options;
+
+	if( ! class_exists( 'Stripe\Stripe' ) ) {
+		require_once RCP_PLUGIN_DIR . 'includes/libraries/stripe/init.php';
+	}
+
+	if ( rcp_is_sandbox() ) {
+		$secret_key = isset( $rcp_options['stripe_test_secret'] ) ? trim( $rcp_options['stripe_test_secret'] ) : '';
+	} else {
+		$secret_key = isset( $rcp_options['stripe_live_secret'] ) ? trim( $rcp_options['stripe_live_secret'] ) : '';
+	}
+
+	if( empty( $secret_key ) ) {
+		return;
+	}
+
+	\Stripe\Stripe::setApiKey( $secret_key );
+
+	try {
+
+		if ( $args['unit'] == '%' ) {
+			$coupon_args = array(
+				"percent_off" => sanitize_text_field( $args['amount'] ),
+				"duration"    => "forever",
+				"id"          => sanitize_text_field( $args['code'] ),
+				"name"        => sanitize_text_field( $args['name'] ),
+				"currency"    => strtolower( rcp_get_currency() )
+			);
+
+		} else {
+			$coupon_args = array(
+				"amount_off" => sanitize_text_field( $args['amount'] ) * rcp_stripe_get_currency_multiplier(),
+				"duration"   => "forever",
+				"id"         => sanitize_text_field( $args['code'] ),
+				"name"       => sanitize_text_field( $args['name'] ),
+				"currency"   => strtolower( rcp_get_currency() )
+			);
+		}
+
+		\Stripe\Coupon::create( $coupon_args );
+
+	} catch ( \Stripe\Error\Card $e ) {
+
+		$body = $e->getJsonBody();
+		$err  = $body['error'];
+
+		$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+		if( isset( $err['code'] ) ) {
+			$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+		}
+		$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+		$error .= "<p>Message: " . $err['message'] . "</p>";
+
+		wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+		exit;
+
+	} catch (\Stripe\Error\InvalidRequest $e) {
+
+		// Invalid parameters were supplied to Stripe's API
+		$body = $e->getJsonBody();
+		$err  = $body['error'];
+
+		$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+		if( isset( $err['code'] ) ) {
+			$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+		}
+		$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+		$error .= "<p>Message: " . $err['message'] . "</p>";
+
+		wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+	} catch (\Stripe\Error\Authentication $e) {
+
+		// Authentication with Stripe's API failed
+		// (maybe you changed API keys recently)
+
+		$body = $e->getJsonBody();
+		$err  = $body['error'];
+
+		$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+		if( isset( $err['code'] ) ) {
+			$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+		}
+		$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+		$error .= "<p>Message: " . $err['message'] . "</p>";
+
+		wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+	} catch (\Stripe\Error\ApiConnection $e) {
+
+		// Network communication with Stripe failed
+
+		$body = $e->getJsonBody();
+		$err  = $body['error'];
+
+		$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+		if( isset( $err['code'] ) ) {
+			$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+		}
+		$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+		$error .= "<p>Message: " . $err['message'] . "</p>";
+
+		wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+	} catch (\Stripe\Error\Base $e) {
+
+		// Display a very generic error to the user
+
+		$body = $e->getJsonBody();
+		$err  = $body['error'];
+
+		$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+		if( isset( $err['code'] ) ) {
+			$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+		}
+		$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+		$error .= "<p>Message: " . $err['message'] . "</p>";
+
+		wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+	} catch (Exception $e) {
+
+		// Something else happened, completely unrelated to Stripe
+
+		$error = '<p>' . __( 'An unidentified error occurred.', 'rcp' ) . '</p>';
+		$error .= print_r( $e, true );
+
+		wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+	}
+
+}
+//add_action( 'rcp_pre_add_discount', 'rcp_stripe_create_discount' );
+
+/**
+ * Update a discount in Stripe when a local code is updated
+ *
+ * @deprecated 3.2 Coupons are no longer synced.
+ *
+ * @param int $discount_id The id of the discount being updated
+ * @param array $args The array of discount args
+ *              array(
+ *					'name',
+ *					'description',
+ *					'amount',
+ *					'unit',
+ *					'code',
+ *					'status',
+ *					'expiration',
+ *					'max_uses',
+ *					'subscription_id'
+ *				)
+ *
+ * @access      private
+ * @since       2.1
+ * @return      void
+ */
+function rcp_stripe_update_discount( $discount_id, $args ) {
+
+	if( ! is_admin() ) {
+		return;
+	}
+
+	// bail if the discount id or args are empty
+	if ( empty( $discount_id ) || empty( $args )  )
+		return;
+
+	if( function_exists( 'rcp_stripe_add_discount' ) ) {
+		return; // Old Stripe gateway is active
+	}
+
+	if( ! rcp_is_gateway_enabled( 'stripe' ) ) {
+		return;
+	}
+
+	global $rcp_options;
+
+	if( ! class_exists( 'Stripe\Stripe' ) ) {
+		require_once RCP_PLUGIN_DIR . 'includes/libraries/stripe/init.php';
+	}
+
+	if ( ! empty( $_REQUEST['deactivate_discount'] ) || ! empty( $_REQUEST['activate_discount'] ) ) {
+		return;
+	}
+
+	if ( rcp_is_sandbox() ) {
+		$secret_key = isset( $rcp_options['stripe_test_secret'] ) ? trim( $rcp_options['stripe_test_secret'] ) : '';
+	} else {
+		$secret_key = isset( $rcp_options['stripe_live_secret'] ) ? trim( $rcp_options['stripe_live_secret'] ) : '';
+	}
+
+	if( empty( $secret_key ) ) {
+		return;
+	}
+
+	\Stripe\Stripe::setApiKey( $secret_key );
+
+	$discount_details = rcp_get_discount_details( $discount_id );
+	$discount_name    = $discount_details->code;
+
+	if ( ! rcp_stripe_does_coupon_exists( $discount_name ) ) {
+
+		try {
+
+			if ( $args['unit'] == '%' ) {
+				$coupon_args = array(
+					"percent_off" => sanitize_text_field( $args['amount'] ),
+					"duration"    => "forever",
+					"id"          => sanitize_text_field( $discount_name ),
+					"name"        => sanitize_text_field( $args['name'] ),
+					"currency"    => strtolower( rcp_get_currency() )
+				);
+			} else {
+				$coupon_args = array(
+					"amount_off" => sanitize_text_field( $args['amount'] ) * rcp_stripe_get_currency_multiplier(),
+					"duration"   => "forever",
+					"id"         => sanitize_text_field( $discount_name ),
+					"name"       => sanitize_text_field( $args['name'] ),
+					"currency"   => strtolower( rcp_get_currency() )
+				);
+			}
+
+			\Stripe\Coupon::create( $coupon_args );
+
+		} catch ( Exception $e ) {
+			wp_die( '<pre>' . $e . '</pre>', __( 'Error', 'rcp' ) );
+		}
+
+	} else {
+
+		// first delete the discount in Stripe
+		try {
+			$cpn = \Stripe\Coupon::retrieve( $discount_name );
+			$cpn->delete();
+		} catch ( Exception $e ) {
+			wp_die( '<pre>' . $e . '</pre>', __( 'Error', 'rcp' ) );
+		}
+
+		// now add a new one. This is a fake "update"
+		try {
+
+			if ( $args['unit'] == '%' ) {
+				$coupon_args = array(
+					"percent_off" => sanitize_text_field( $args['amount'] ),
+					"duration"    => "forever",
+					"id"          => sanitize_text_field( $discount_name ),
+					"name"        => sanitize_text_field( $args['name'] ),
+					"currency"    => strtolower( rcp_get_currency() )
+				);
+			} else {
+				$coupon_args = array(
+					"amount_off" => sanitize_text_field( $args['amount'] ) * rcp_stripe_get_currency_multiplier(),
+					"duration"   => "forever",
+					"id"         => sanitize_text_field( $discount_name ),
+					"name"       => sanitize_text_field( $args['name'] ),
+					"currency"   => strtolower( rcp_get_currency() )
+				);
+			}
+
+			\Stripe\Coupon::create( $coupon_args );
+
+		} catch (\Stripe\Error\InvalidRequest $e) {
+
+			// Invalid parameters were supplied to Stripe's API
+			$body = $e->getJsonBody();
+			$err  = $body['error'];
+
+			$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+			if( isset( $err['code'] ) ) {
+				$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+			}
+			$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+			$error .= "<p>Message: " . $err['message'] . "</p>";
+
+			wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+		} catch (\Stripe\Error\Authentication $e) {
+
+			// Authentication with Stripe's API failed
+			// (maybe you changed API keys recently)
+
+			$body = $e->getJsonBody();
+			$err  = $body['error'];
+
+			$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+			if( isset( $err['code'] ) ) {
+				$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+			}
+			$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+			$error .= "<p>Message: " . $err['message'] . "</p>";
+
+			wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+		} catch (\Stripe\Error\ApiConnection $e) {
+
+			// Network communication with Stripe failed
+
+			$body = $e->getJsonBody();
+			$err  = $body['error'];
+
+			$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+			if( isset( $err['code'] ) ) {
+				$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+			}
+			$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+			$error .= "<p>Message: " . $err['message'] . "</p>";
+
+			wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+		} catch (\Stripe\Error\Base $e) {
+
+			// Display a very generic error to the user
+
+			$body = $e->getJsonBody();
+			$err  = $body['error'];
+
+			$error = '<h4>' . __( 'An error occurred', 'rcp' ) . '</h4>';
+			if( isset( $err['code'] ) ) {
+				$error .= '<p>' . sprintf( __( 'Error code: %s', 'rcp' ), $err['code'] ) . '</p>';
+			}
+			$error .= "<p>Status: " . $e->getHttpStatus() ."</p>";
+			$error .= "<p>Message: " . $err['message'] . "</p>";
+
+			wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+		} catch (Exception $e) {
+
+			// Something else happened, completely unrelated to Stripe
+
+			$error = '<p>' . __( 'An unidentified error occurred.', 'rcp' ) . '</p>';
+			$error .= print_r( $e, true );
+
+			wp_die( $error, __( 'Error', 'rcp' ), array( 'response' => 401 ) );
+
+		}
+	}
+}
+//add_action( 'rcp_edit_discount', 'rcp_stripe_update_discount', 10, 2 );
+
+/**
+ * Check if a coupone exists in Stripe
+ *
+ * @deprecated 3.2
+ *
+ * @param string $code Discount code.
+ *
+ * @access      private
+ * @since       2.1
+ * @return      bool|void
+ */
+function rcp_stripe_does_coupon_exists( $code ) {
+	global $rcp_options;
+
+	if( ! class_exists( 'Stripe\Stripe' ) ) {
+		require_once RCP_PLUGIN_DIR . 'includes/libraries/stripe/init.php';
+	}
+
+	if ( rcp_is_sandbox() ) {
+		$secret_key = isset( $rcp_options['stripe_test_secret'] ) ? trim( $rcp_options['stripe_test_secret'] ) : '';
+	} else {
+		$secret_key = isset( $rcp_options['stripe_live_secret'] ) ? trim( $rcp_options['stripe_live_secret'] ) : '';
+	}
+
+	if( empty( $secret_key ) ) {
+		return;
+	}
+
+	\Stripe\Stripe::setApiKey( $secret_key );
+	try {
+		\Stripe\Coupon::retrieve( $code );
+		$exists = true;
+	} catch ( Exception $e ) {
+		$exists = false;
+	}
+
+	return $exists;
+}
+
+/**
+ * Query Stripe API to get customer's card details
+ *
+ * @deprecated 3.2 In favour of `rcp_stripe_get_membership_card_details()`
+ * @see        rcp_stripe_get_membership_card_details()
+ *
+ * @param array      $cards     Array of card information.
+ * @param int        $member_id ID of the member.
+ * @param RCP_Member $member    RCP member object.
+ *
+ * @since 2.5
+ * @return array
+ */
+function rcp_stripe_get_card_details( $cards, $member_id, $member ) {
+
+	global $rcp_options;
+
+	if( ! rcp_is_stripe_subscriber( $member_id ) ) {
+		return $cards;
+	}
+
+	if( ! class_exists( 'Stripe\Stripe' ) ) {
+		require_once RCP_PLUGIN_DIR . 'includes/libraries/stripe/init.php';
+	}
+
+	if ( rcp_is_sandbox() ) {
+		$secret_key = isset( $rcp_options['stripe_test_secret'] ) ? trim( $rcp_options['stripe_test_secret'] ) : '';
+	} else {
+		$secret_key = isset( $rcp_options['stripe_live_secret'] ) ? trim( $rcp_options['stripe_live_secret'] ) : '';
+	}
+
+	if( empty( $secret_key ) ) {
+		return $cards;
+	}
+
+	\Stripe\Stripe::setApiKey( $secret_key );
+
+	try {
+
+		$customer = \Stripe\Customer::retrieve( $member->get_payment_profile_id() );
+		$default  = \Stripe\PaymentMethod::retrieve( $customer->invoice_settings->default_payment_method );
+
+		if ( 'card' === $default->type ) {
+			$cards['stripe']['name']      = $default->billing_details->name;
+			$cards['stripe']['type']      = $default->card->brand;
+			$cards['stripe']['zip']       = $default->billing_details->address->postal_code;
+			$cards['stripe']['exp_month'] = $default->card->exp_month;
+			$cards['stripe']['exp_year']  = $default->card->exp_year;
+			$cards['stripe']['last4']     = $default->card->last4;
+		}
+
+	} catch ( Exception $e ) {
+
+	}
+
+	return $cards;
+
+}
+
+//add_filter( 'rcp_get_card_details', 'rcp_stripe_get_card_details', 10, 3 );
+
+/**
+ * Cancels a Braintree subscriber.
+ *
+ * @deprecated 3.0 Use `rcp_braintree_cancel_membership()` instead.
+ * @see rcp_braintree_cancel_membership()
+ *
+ * @since 2.8
+ * @param int $member_id The member ID to cancel.
+ * @return bool|WP_Error
+ */
+function rcp_braintree_cancel_member( $member_id = 0 ) {
+
+	$customer = rcp_get_customer_by_user_id( $member_id );
+
+	if ( empty( $customer ) ) {
+		return new WP_Error( 'rcp_braintree_error', __( 'Unable to find customer from member ID.', 'rcp' ) );
+	}
+
+	$membership = rcp_get_customer_single_membership( $customer->get_id() );
+
+	return rcp_braintree_cancel_membership( $membership->get_gateway_subscription_id() );
+
+}
+
+/**
+ * Determines if a member is a Braintree customer.
+ *
+ * @deprecated 3.0 Use `rcp_is_braintree_membership()` instead.
+ * @see rcp_is_braintree_membership()
+ *
+ * @since  2.8
+ * @param  int  $member_id The ID of the user to check
+ * @return bool True if the member is a Braintree customer, false if not.
+ */
+function rcp_is_braintree_subscriber( $member_id = 0 ) {
+
+	if ( empty( $member_id ) ) {
+		$member_id = get_current_user_id();
+	}
+
+	$ret = false;
+
+	$customer = rcp_get_customer_by_user_id( $member_id );
+
+	if ( ! empty( $customer ) ) {
+		$membership = rcp_get_customer_single_membership( $customer->get_id() );
+
+		if ( ! empty( $membership ) ) {
+			$ret = rcp_is_braintree_membership( $membership );
+		}
+	}
+
+	return (bool) apply_filters( 'rcp_is_braintree_subscriber', $ret, $member_id );
+}
+
+/**
+ * Displays an admin notice if the PHP version requirement isn't met.
+ *
+ * @deprecated 3.3 RCP core now requires PHP 5.6+ anyway.
+ *
+ * @since 2.8
+ * @return void
+ */
+function rcp_braintree_php_version_check() {
+
+	if ( current_user_can( 'rcp_manage_settings' ) && version_compare( PHP_VERSION, '5.4', '<' ) && array_key_exists( 'braintree', rcp_get_enabled_payment_gateways() ) ) {
+		echo '<div class="error"><p>' . __( 'The Braintree payment gateway in Restrict Content Pro requires PHP version 5.4 or later. Please contact your web host and request that your version be upgraded to 5.4 or later. Your site will be unable to take Braintree payments until PHP is upgraded.', 'rcp' ) . '</p></div>';
+	}
+
+}
+add_action( 'admin_notices', 'rcp_braintree_php_version_check' );

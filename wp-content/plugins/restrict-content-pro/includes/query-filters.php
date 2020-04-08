@@ -55,6 +55,9 @@ function rcp_hide_premium_posts( $query ) {
 		$post_ids                 = array_unique( array_merge( $premium_ids, $term_restricted_post_ids ) );
 
 		if( $post_ids ) {
+			$existing_not_in = is_array( $query->get( 'post__not_in' ) ) ? $query->get( 'post__not_in' ) : array();
+			$post_ids        = array_unique( array_merge( $post_ids, $existing_not_in ) );
+
 			$query->set( 'post__not_in', $post_ids );
 		}
 	}

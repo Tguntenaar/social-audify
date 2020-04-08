@@ -60,7 +60,7 @@ function rcp_check_for_expired_users() {
 
 	$args = array(
 		'expiration_date_query' => array(
-			'after'  => '0000-00-00 00:00:00',
+			'after'  => date( 'Y-m-d H:i:s', strtotime( '-1 month' ) ),
 			'before' => current_time( 'mysql' )
 		),
 		'status' => array( 'active', 'cancelled' ),
@@ -138,6 +138,22 @@ function rcp_check_member_counts() {
 
 	rcp_log( 'Starting rcp_check_member_counts() cron job.', true );
 
+	$entries_today = rcp_get_membership_count_entries( array(
+		'number'             => 1,
+		'date_created_query' => array(
+			'year'  => date( 'Y' ),
+			'month' => date( 'm' ),
+			'day'   => date( 'd' )
+		)
+	) );
+
+	// Bail if we've already added entries today.
+	if ( ! empty( $entries_today ) ) {
+		rcp_log( 'Exiting rcp_check_member_counts() - counts have already been added today.', true );
+
+		return;
+	}
+
 	global $rcp_levels_db;
 	$levels = $rcp_levels_db->get_levels();
 
@@ -148,6 +164,13 @@ function rcp_check_member_counts() {
 	$statuses = array( 'active', 'pending', 'cancelled', 'expired', 'free' );
 
 	foreach( $levels as $level ) {
+
+		$counts = array(
+			'active'    => 0,
+			'pending'   => 0,
+			'cancelled' => 0,
+			'expired'   => 0
+		);
 
 		foreach( $statuses as $status ) {
 			$key = $level->id . '_' . $status . '_member_count';
@@ -164,7 +187,17 @@ function rcp_check_member_counts() {
 
 			$rcp_levels_db->update_meta( $level->id, $key, $count );
 
+			$counts[ $status ] = $count;
+
 		}
+
+		rcp_add_membership_count_entry( array(
+			'level_id'        => absint( $level->id ),
+			'active_count'    => $counts['active'],
+			'pending_count'   => $counts['pending'],
+			'cancelled_count' => $counts['cancelled'],
+			'expired_count'   => $counts['expired']
+		) );
 
 	}
 }

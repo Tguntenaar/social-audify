@@ -90,6 +90,9 @@
 .rcp_current_cards_fieldset span {
 	display: block;
 }
+div#rcp_card_name_wrap, div#rcp_card_wrap {
+	margin-bottom: 10px;
+}
 
 .rcp-total td,
 .rcp-recurring-total td {
@@ -102,6 +105,12 @@
 }
 #order_summary tfoot th {
 	text-align: right;
+}
+
+#rcp-sandbox-gateway-test-cards {
+	background: #f4f4f4;
+	margin: 0 0 1.5em;
+	padding: 1em;
 }
 
 /* Input Fields
@@ -214,14 +223,6 @@ p.rcp_success {
 /* Stripe Elements
 -------------------------------------------------------------- */
 
-.StripeElement {
-	box-sizing: border-box;
-	height: 40px;
-	padding: 10px 12px;
-	border: 1px solid #ccc;
-	background-color: white;
-}
-
 .StripeElement--focus {
 	border-color: #aaa;
 }
@@ -236,4 +237,89 @@ p.rcp_success {
 
 #rcp-card-element-errors:not(:empty) {
 	margin-top: 10px;
+}
+
+/* Stripe Checkout Modal
+-------------------------------------------------------------- */
+
+.rcp-modal-wrapper {
+	display: none;
+	position: fixed;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba( 0, 0, 0, .6 );
+	z-index: 999;
+	padding: 5% 0 0;
+	overflow-y: scroll;
+	transition: display 0.5s ease;
+	-webkit-transition: display 0.5s ease;
+	-moz-transition: display 0.5s ease;
+}
+
+.rcp-register-form-modal-wrapper {
+	z-index: 1999 !important; /* On top of blockUI */
+}
+
+.rcp-modal {
+	background: #f5f5f7;
+	box-shadow: 0 12px 30px 0 rgba(0,0,0,.5), inset 0 1px 0 0 hsla(0,0%,100%,.65);
+	margin: 0 auto;
+	border-radius: 6px;
+	padding: 0;
+	position: relative;
+	max-width: 450px;
+}
+
+.rcp-modal-inner {
+	padding: 0 0 36px;
+}
+
+.rcp-modal-header {
+	background: #e8e9eb;
+	border-top-left-radius: 6px;
+	border-top-right-radius: 6px;
+	padding: 12px 36px;
+	position: relative;
+	text-align: center;
+}
+
+.rcp-modal-close {
+	background: #b7b7b7;
+	border-radius: 50%;
+	color: white;
+	cursor: pointer;
+	font-size: 20px;
+	font-weight: bold;
+	line-height: 25px;
+	height: 25px;
+	width: 25px;
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	text-align: center;
+}
+
+.rcp-modal-membership-name {
+	font-weight: bold;
+}
+
+.rcp-modal-body {
+	margin: 20px 36px 0;
+}
+
+.rcp-modal-body input[type="text"] {
+	display: block;
+	width: 100%;
+}
+
+.rcp-modal #rcp_card_wrap label {
+	display: none;
+}
+
+.rcp-modal-submit {
+	display: block;
+	text-align: center;
+	width: 100%;
 }

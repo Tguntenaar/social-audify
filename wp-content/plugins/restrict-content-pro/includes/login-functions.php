@@ -28,7 +28,7 @@ function rcp_get_login_url( $redirect = '' ) {
 
 	if( isset( $rcp_options['hijack_login_url'] ) && ! empty( $rcp_options['login_redirect'] ) ) {
 
-		$url = add_query_arg( 'redirect', $redirect, get_permalink( absint( $rcp_options['login_redirect'] ) ) );
+		$url = add_query_arg( 'redirect', urlencode( $redirect ), get_permalink( absint( $rcp_options['login_redirect'] ) ) );
 
 	} else {
 
@@ -231,7 +231,7 @@ function rcp_retrieve_password() {
 		return rcp_errors();
 	}
 
-	if ( !$user_data ) {
+	if ( ! isset( $user_data ) ) {
 		rcp_errors()->add('invalidcombo', __('Invalid username or e-mail.', 'rcp' ), 'lostpassword');
 		return rcp_errors();
 	}
@@ -240,31 +240,13 @@ function rcp_retrieve_password() {
 	$user_login = $user_data->user_login;
 	$user_email = $user_data->user_email;
 
-	$allow = apply_filters( 'allow_password_reset', true, $user_data->ID );
+	$key = get_password_reset_key( $user_data );
 
-	if ( ! $allow ) {
-		rcp_errors()->add( 'no_password_reset', __( 'Password reset is not allowed for this user', 'rcp' ), 'lostpassword' );
+	if ( is_wp_error( $key ) ) {
+		rcp_errors()->add( $key->get_error_code(), $key->get_error_message() );
+
 		return rcp_errors();
-	} elseif ( is_wp_error( $allow ) ) {
-		return $allow;
 	}
-
-	// Generate something random for a password reset key.
-	$key = wp_generate_password( 20, false );
-
-	// Now insert the key, hashed, into the DB.
-	if ( empty( $wp_hasher ) ) {
-		require_once ABSPATH . WPINC . '/class-phpass.php';
-		$wp_hasher = new PasswordHash( 8, true );
-	}
-	if ($wp_db_version >= 32814) {
-		// 4.3 or later
-		$hashed = time() . ':' . $wp_hasher->HashPassword( $key );
-	} else {
-		$hashed = $wp_hasher->HashPassword( $key );
-	}
-
-	$wpdb->update( $wpdb->users, array( 'user_activation_key' => $hashed ), array( 'user_login' => $user_login ) );
 
 	$message = __('Someone requested that the password be reset for the following account:', 'rcp') . "\r\n\r\n";
 	$message .= network_home_url( '/' ) . "\r\n\r\n";

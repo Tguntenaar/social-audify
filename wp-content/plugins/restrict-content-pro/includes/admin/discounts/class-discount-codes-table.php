@@ -10,6 +10,8 @@
 
 namespace RCP\Admin;
 
+use \RCP_Discount;
+
 /**
  * Class Discount_Codes_Table
  *
@@ -103,9 +105,6 @@ class Discount_Codes_Table extends List_Table {
 	 * @return array
 	 */
 	public function get_sortable_columns() {
-		return array();
-
-		// @todo At some point we'll use the following:
 		return array(
 			'name'       => array( 'name', false ),
 			'code'       => array( 'code', false ),
@@ -127,8 +126,8 @@ class Discount_Codes_Table extends List_Table {
 	/**
 	 * This function renders any other columns in the list table.
 	 *
-	 * @param object $discount    Discount code object object.
-	 * @param string $column_name The name of the column
+	 * @param RCP_Discount $discount    Discount code object object.
+	 * @param string       $column_name The name of the column
 	 *
 	 * @since 3.1
 	 * @return string Column Name
@@ -140,15 +139,15 @@ class Discount_Codes_Table extends List_Table {
 		switch ( $column_name ) {
 
 			case 'description' :
-				$value = stripslashes( $discount->description );
+				$value = $discount->get_description();
 				break;
 
 			case 'code' :
-				$value = esc_html( $discount->code );
+				$value = esc_html( $discount->get_code() );
 				break;
 
 			case 'membership_levels' :
-				$membership_levels = maybe_unserialize( $discount->membership_level_ids );
+				$membership_levels = $discount->get_membership_level_ids();
 				if ( is_array( $membership_levels ) && count( $membership_levels ) > 1 ) {
 					$value = __( 'Multiple Levels', 'rcp' );
 				} elseif ( is_array( $membership_levels ) && 1 === count( $membership_levels ) ) {
@@ -159,39 +158,40 @@ class Discount_Codes_Table extends List_Table {
 				break;
 
 			case 'amount' :
-				$value = rcp_discount_sign_filter( $discount->amount, $discount->unit );
+				$value = rcp_discount_sign_filter( $discount->get_amount(), $discount->get_unit() );
 				break;
 
 			case 'type' :
-				$value = '%' == $discount->unit ? __( 'Percentage', 'rcp' ) : __( 'Flat', 'rcp' );
+				$value = '%' == $discount->get_unit() ? __( 'Percentage', 'rcp' ) : __( 'Flat', 'rcp' );
 				break;
 
 			case 'status' :
-				if ( rcp_is_discount_not_expired( $discount->id ) ) {
-					$value = 'active' === $discount->status ? __( 'active', 'rcp' ) : __( 'disabled', 'rcp' );
+				if ( rcp_is_discount_not_expired( $discount->get_id() ) ) {
+					$value = 'active' === $discount->get_status() ? __( 'active', 'rcp' ) : __( 'disabled', 'rcp' );
 				} else {
 					$value = __( 'expired', 'rcp' );
 				}
 				break;
 
 			case 'use_count' :
-				if ( $discount->max_uses > 0 ) {
-					$value = absint( $discount->use_count ) . '/' . absint( $discount->max_uses );
+				if ( $discount->get_max_uses() > 0 ) {
+					$value = absint( $discount->get_use_count() ) . '/' . absint( $discount->get_max_uses() );
 				} else {
-					$value = absint( $discount->use_count );
+					$value = absint( $discount->get_use_count() );
 				}
 				break;
 
 			case 'uses_left' :
-				$value = rcp_discount_has_uses_left( $discount->id ) ? __( 'yes', 'rcp' ) : __( 'no', 'rcp' );
+				$value = rcp_discount_has_uses_left( $discount->get_id() ) ? __( 'yes', 'rcp' ) : __( 'no', 'rcp' );
 				break;
 
 			case 'expiration' :
-				$value = ! empty( $discount->expiration ) ? date_i18n( 'Y-m-d H:i:s', strtotime( $discount->expiration, current_time( 'timestamp' ) ) ) : __( 'none', 'rcp' );
+				$expiration = $discount->get_expiration();
+				$value      = ! empty( $expiration ) ? date_i18n( 'Y-m-d H:i:s', strtotime( $expiration, current_time( 'timestamp' ) ) ) : __( 'none', 'rcp' );
 				break;
 
 			case 'one_time' :
-				$value = ! empty( $discount->one_time ) ? __( 'yes', 'rcp' ) : __( 'no', 'rcp' );
+				$value = $discount->is_one_time() ? __( 'yes', 'rcp' ) : __( 'no', 'rcp' );
 				break;
 
 		}
@@ -201,7 +201,7 @@ class Discount_Codes_Table extends List_Table {
 		 */
 		if ( 'custom' == $column_name && has_action( 'rcp_discounts_page_table_column' ) ) {
 			ob_start();
-			do_action( 'rcp_discounts_page_table_column', $discount->id );
+			do_action( 'rcp_discounts_page_table_column', $discount->get_id() );
 			$column_content = ob_get_clean();
 
 			$value = wp_strip_all_tags( $column_content );
@@ -240,42 +240,42 @@ class Discount_Codes_Table extends List_Table {
 	/**
 	 * Render the "Name" column.
 	 *
-	 * @param object $discount
+	 * @param RCP_Discount $discount
 	 *
 	 * @since 3.1
 	 * @return string
 	 */
 	public function column_name( $discount ) {
 
-		$edit_discount_url = add_query_arg( 'edit_discount', $discount->id, $this->get_base_url() );
+		$edit_discount_url = add_query_arg( 'edit_discount', urlencode( $discount->get_id() ), $this->get_base_url() );
 
 		// Edit discount.
 		$actions = array(
 			'edit' => '<a href="' . esc_url( $edit_discount_url ) . '">' . __( 'Edit', 'rcp' ) . '</a>',
 		);
 
-		if ( 'active' == $discount->status ) {
+		if ( 'active' == $discount->get_status() ) {
 			// Deactivate discount.
 			$actions['deactivate'] = '<a href="' . esc_url( wp_nonce_url( add_query_arg( array(
 					'rcp-action'  => 'deactivate_discount',
-					'discount_id' => $discount->id
+					'discount_id' => urlencode( $discount->get_id() )
 				), $this->get_base_url() ), 'rcp-deactivate-discount' ) ) . '">' . __( 'Deactivate', 'rcp' ) . '</a>';
 		} else {
 			// Activate discount.
 			$actions['activate'] = '<a href="' . esc_url( wp_nonce_url( add_query_arg( array(
 					'rcp-action'  => 'activate_discount',
-					'discount_id' => $discount->id
+					'discount_id' => urlencode( $discount->get_id() )
 				), $this->get_base_url() ), 'rcp-activate-discount' ) ) . '">' . __( 'Activate', 'rcp' ) . '</a>';
 		}
 
 		// Delete discount.
 		$actions['delete'] = '<span class="trash"><a href="' . esc_url( wp_nonce_url( add_query_arg( array(
 				'rcp-action'  => 'delete_discount_code',
-				'discount_id' => $discount->id
+				'discount_id' => urlencode( $discount->get_id() )
 			), $this->get_base_url() ), 'rcp-delete-discount' ) ) . '" class="rcp_delete_discount">' . __( 'Delete', 'rcp' ) . '</a></span>';
 
 		// Discount ID.
-		$actions['discount_id'] = '<span class="id rcp-id-col">' . sprintf( __( 'ID: %d', 'rcp' ), $discount->id ) . '</span>';
+		$actions['discount_id'] = '<span class="id rcp-id-col">' . sprintf( __( 'ID: %d', 'rcp' ), $discount->get_id() ) . '</span>';
 
 		/**
 		 * Filters the row actions.
@@ -287,7 +287,7 @@ class Discount_Codes_Table extends List_Table {
 		 */
 		$actions = apply_filters( 'rcp_discount_codes_list_table_row_actions', $actions, $discount );
 
-		$final = '<strong><a class="row-title" href="' . esc_url( $edit_discount_url ) . '">' . esc_html( $discount->name ) . '</a></strong>';
+		$final = '<strong><a class="row-title" href="' . esc_url( $edit_discount_url ) . '">' . esc_html( $discount->get_name() ) . '</a></strong>';
 
 		if ( current_user_can( 'rcp_manage_discounts' ) ) {
 			$final .= $this->row_actions( $actions );
@@ -345,20 +345,18 @@ class Discount_Codes_Table extends List_Table {
 			return;
 		}
 
-		$discounts = new \RCP_Discounts();
-
 		foreach ( $ids as $discount_id ) {
 			switch ( $this->current_action() ) {
 				case 'activate':
-					$discounts->update( $discount_id, array( 'status' => 'active' ) );
+					rcp_update_discount( absint( $discount_id ), array( 'status' => 'active' ) );
 					break;
 
 				case 'deactivate':
-					$discounts->update( $discount_id, array( 'status' => 'disabled' ) );
+					rcp_update_discount( absint( $discount_id ), array( 'status' => 'disabled' ) );
 					break;
 
 				case 'delete':
-					$discounts->delete( $discount_id );
+					rcp_delete_discount( absint( $discount_id ) );
 					break;
 			}
 		}
@@ -410,12 +408,10 @@ class Discount_Codes_Table extends List_Table {
 	 * @return void
 	 */
 	public function get_counts() {
-		$discounts = new \RCP_Discounts();
-
 		$this->counts = array(
-			'total'    => $discounts->count(),
-			'active'   => $discounts->count( array( 'status' => 'active' ) ),
-			'inactive' => $discounts->count( array( 'status' => 'disabled' ) )
+			'total'    => rcp_count_discounts(),
+			'active'   => rcp_count_discounts( array( 'status' => 'active' ) ),
+			'inactive' => rcp_count_discounts( array( 'status' => 'disabled' ) )
 		);
 	}
 
@@ -425,28 +421,29 @@ class Discount_Codes_Table extends List_Table {
 	 * @param bool $count Whether or not to get discount code objects (false) or just count the total number (true).
 	 *
 	 * @since 3.1
-	 * @return array|int
+	 * @return RCP_Discount[]|int
 	 */
 	public function discounts_data( $count = false ) {
 
-		$discounts = new \RCP_Discounts();
-
-		$status = $this->get_status();
-		if ( 'inactive' == $status ) {
-			$status = 'disabled';
-		}
-
 		$args = array(
-			'number' => $this->per_page,
-			'offset' => $this->get_offset(),
-			'status' => $status,
+			'number'  => $this->per_page,
+			'offset'  => $this->get_offset(),
+			'status'  => $this->get_status(),
+			'search'  => $this->get_search(),
+			'orderby' => $this->get_request_var( 'orderby', 'date_modified' ),
+			'order'   => strtoupper( $this->get_request_var( 'order', 'DESC' ) )
 		);
 
-		if ( $count ) {
-			return $discounts->count( $args );
+		// Use `disabled` instead of `inactive`.
+		if ( 'inactive' === $args['status'] ) {
+			$args['status'] = 'disabled';
 		}
 
-		return $discounts->get_discounts( $args );
+		if ( $count ) {
+			return rcp_count_discounts( $args );
+		}
+
+		return rcp_get_discounts( $args );
 	}
 
 	/**

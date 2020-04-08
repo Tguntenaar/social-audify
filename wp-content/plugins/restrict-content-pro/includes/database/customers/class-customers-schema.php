@@ -64,9 +64,10 @@ class Customers extends Schema {
 
 		// email_verification
 		array(
-			'name'    => 'email_verification',
-			'type'    => 'enum(\'verified\', \'pending\', \'none\')',
-			'default' => 'none',
+			'name'       => 'email_verification',
+			'type'       => 'enum(\'verified\', \'pending\', \'none\')',
+			'default'    => 'none',
+			'transition' => true
 		),
 
 		// last_login

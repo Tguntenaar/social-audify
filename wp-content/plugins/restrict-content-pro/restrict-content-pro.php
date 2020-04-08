@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Restrict Content Pro
- * Plugin URL: https://restrictcontentpro.com
+ * Plugin URI: https://restrictcontentpro.com
  * Description: Set up a complete membership system for your WordPress site and deliver premium content to your members. Unlimited membership packages, membership management, discount codes, registration / login forms, and more.
- * Version: 3.1.2
+ * Version: 3.3.9
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
  * Contributors: mordauk

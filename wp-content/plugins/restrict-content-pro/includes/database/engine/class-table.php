@@ -165,6 +165,18 @@ if ( ! class_exists( '\\RCP\\Database\\Tables\\Base' ) ) :
 		 */
 		public function switch_blog( $site_id = 0 ) {
 
+			remove_action( 'switch_blog', array( $this, 'switch_blog' ) );
+
+			/*
+			 * Bail if the new site's database tables haven't been installed yet.
+			 * This prevents errors when using `get_blog_option` below.
+			 */
+			if ( function_exists( 'wp_is_site_initialized' ) && ! wp_is_site_initialized( $site_id ) ) {
+				return;
+			}
+
+			add_action( 'switch_blog', array( $this, 'switch_blog' ) );
+
 			// Update DB version based on the current site
 			if ( ! $this->is_global() ) {
 				$this->db_version = get_blog_option( $site_id, $this->db_version_key, false );

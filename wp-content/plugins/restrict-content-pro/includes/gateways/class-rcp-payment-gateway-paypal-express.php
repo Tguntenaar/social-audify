@@ -95,7 +95,7 @@ class RCP_Payment_Gateway_PayPal_Express extends RCP_Payment_Gateway {
 			'PAYMENTREQUEST_0_CUSTOM'        => $this->user_id . '|' . absint( $this->membership->get_id() ),
 			'PAYMENTREQUEST_0_NOTIFYURL'     => add_query_arg( 'listener', 'EIPN', home_url( 'index.php' ) ),
 			'EMAIL'                          => $this->email,
-			'RETURNURL'                      => add_query_arg( array( 'rcp-confirm' => 'paypal_express', 'membership_id' => $this->membership->get_id() ), get_permalink( $rcp_options['registration_page'] ) ),
+			'RETURNURL'                      => add_query_arg( array( 'rcp-confirm' => 'paypal_express', 'membership_id' => urlencode( $this->membership->get_id() ) ), get_permalink( $rcp_options['registration_page'] ) ),
 			'CANCELURL'                      => $cancel_url,
 			'REQCONFIRMSHIPPING'             => 0,
 			'NOSHIPPING'                     => 1,
@@ -332,7 +332,7 @@ class RCP_Payment_Gateway_PayPal_Express extends RCP_Payment_Gateway {
 							'payment_type'     => 'PayPal Express One Time',
 							'subscription_key' => $membership->get_subscription_key(),
 							'amount'           => $body['PAYMENTINFO_0_AMT'],
-							'user_id'          => $membership->get_customer()->get_user_id(),
+							'user_id'          => $membership->get_user_id(),
 							'transaction_id'   => $body['PAYMENTINFO_0_TRANSACTIONID'],
 							'status'           => 'complete'
 						);
@@ -425,13 +425,15 @@ class RCP_Payment_Gateway_PayPal_Express extends RCP_Payment_Gateway {
 			die( 'no membership found' );
 		}
 
+		$this->membership = $membership;
+
 		rcp_log( sprintf( 'Processing IPN for membership #%d.', $membership->get_id() ) );
 
 		if ( empty( $user_id ) ) {
-			$user_id = $membership->get_customer()->get_user_id();
+			$user_id = $membership->get_user_id();
 		}
 
-		$member = new RCP_Member( $membership->get_customer()->get_user_id() ); // for backwards compatibility
+		$member = new RCP_Member( $membership->get_user_id() ); // for backwards compatibility
 
 		$membership_level_id = $membership->get_object_id();
 
@@ -614,7 +616,7 @@ class RCP_Payment_Gateway_PayPal_Express extends RCP_Payment_Gateway {
 
 			rcp_log( 'Processing PayPal Express recurring_payment_failed or recurring_payment_suspended_due_to_max_failed_payment IPN.' );
 
-				if( 'cancelled' !== $membership->get_status() ) {
+				if( ! in_array( $membership->get_status(), array( 'cancelled', 'expired' ) ) ) {
 
 					$membership->set_status( 'expired' );
 

@@ -81,7 +81,7 @@ final class Customers extends Table {
 	protected function __201908151() {
 
 		// Look for column
-		$result = $this->column_exists( 'renewed_date' );
+		$result = $this->column_exists( 'has_trialed' );
 
 		// Maybe add column
 		if ( false === $result ) {

@@ -69,6 +69,39 @@ function rcp_settings_menu() {
 add_action( 'admin_menu', 'rcp_settings_menu' );
 
 /**
+ * Determines whether or not the current page is an RCP admin page.
+ *
+ * @since 3.3.7
+ * @return bool
+ */
+function rcp_is_rcp_admin_page() {
+
+	$screen = get_current_screen();
+
+	global $rcp_members_page, $rcp_customers_page, $rcp_subscriptions_page, $rcp_discounts_page, $rcp_payments_page, $rcp_reports_page, $rcp_settings_page, $rcp_export_page, $rcp_help_page, $rcp_tools_page;
+	$pages = array( $rcp_members_page, $rcp_customers_page, $rcp_subscriptions_page, $rcp_discounts_page, $rcp_payments_page, $rcp_reports_page, $rcp_settings_page, $rcp_export_page, $rcp_tools_page, $rcp_help_page );
+
+	$pages[] = 'post';
+
+	if( false !== strpos( $screen->base, 'rcp-restrict-post-type' ) ) {
+		$pages[] = $screen->base;
+	}
+
+	$is_admin = in_array( $screen->base, $pages );
+
+	/**
+	 * Filters whether or not the current page is an RCP admin page.
+	 *
+	 * @param bool      $is_admin
+	 * @param WP_Screen $screen
+	 *
+	 * @since 3.3.7
+	 */
+	return apply_filters( 'rcp_is_rcp_admin_page', $is_admin, $screen );
+
+}
+
+/**
  * Returns the URL to the memberships page.
  *
  * @param array $args Query args to add.

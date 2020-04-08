@@ -30,27 +30,48 @@ class RCP_Discount_Tests extends WP_UnitTestCase {
 			'max_uses'   => 2
 		);
 
-		$this->discount_id = $this->db->insert( $args );
+		$this->discount_id = rcp_add_discount( $args );
 
 	}
 
+	/**
+	 * Format a discount amount
+	 *      Percentage, integer
+	 *
+	 * @covers ::rcp_sanitize_discount_amount()
+	 */
 	function test_format_amount() {
-		$formatted_amount = $this->db->format_amount( '10', '%' );
+		$formatted_amount = rcp_sanitize_discount_amount( '10', '%' );
 		$this->assertEquals( '10', $formatted_amount );
 	}
 
+	/**
+	 * Format a discount amount
+	 *      Percentage, decimal
+	 *      Flat, decimal
+	 *
+	 * @covers ::rcp_sanitize_discount_amount()
+	 */
 	function test_format_amount_decimal() {
-		$formatted_amount = $this->db->format_amount( '10.25', '%' );
+		$formatted_amount = rcp_sanitize_discount_amount( '10.25', '%' );
 		$this->assertTrue( is_wp_error( $formatted_amount ) );
 
-		$formatted_amount = $this->db->format_amount( '10.25', 'flat' );
+		$formatted_amount = rcp_sanitize_discount_amount( '10.25', 'flat' );
 		$this->assertEquals( '10.25', $formatted_amount );
 	}
 
+	/**
+	 * @covers ::rcp_has_discounts()
+	 */
 	function test_has_discounts() {
 		$this->assertTrue( rcp_has_discounts() );
 	}
 
+	/**
+	 * Insert a new discount
+	 *
+	 * @covers ::rcp_add_discount()
+	 */
 	function test_insert_discount() {
 
 		$args = array(
@@ -59,157 +80,262 @@ class RCP_Discount_Tests extends WP_UnitTestCase {
 			'status' => 'active',
 			'amount' => '10',
 		);
-		$discount_id = $this->db->insert( $args );
+
+		$discount_id = rcp_add_discount( $args );
 
 		$this->assertGreaterThan( 1, $discount_id );
 
 	}
 
+	/**
+	 * Update an existing discount
+	 *
+	 * @covers ::rcp_update_discount()
+	 */
 	function test_update_discount() {
 
-		$updated = $this->db->update( $this->discount_id, array( 'name' => 'Updated Code', 'amount' => '10' ) );
+		$updated = rcp_update_discount( $this->discount_id, array(
+			'name'   => 'Updated Code',
+			'amount' => '10'
+		) );
+
 		$this->assertTrue( $updated );
 
-		$discount = $this->db->get_discount( $this->discount_id );
-		$this->assertEquals( 'Updated Code', $discount->name );
+		$discount = rcp_get_discount( $this->discount_id );
+
+		$this->assertEquals( 'Updated Code', $discount->get_name() );
 
 	}
 
+	/**
+	 * Get a discount
+	 *
+	 * @covers ::rcp_get_discount()
+	 */
 	function test_get_discount() {
 
-		$discount = $this->db->get_discount( $this->discount_id );
+		$discount = rcp_get_discount( $this->discount_id );
 
 		$this->assertNotEmpty( $discount );
-		$this->assertEquals( 'Test Code', $discount->name );
-		$this->assertEquals( 'test', $discount->code );
-		$this->assertEquals( 'active', $discount->status );
-		$this->assertEquals( '10', $discount->amount );
+		$this->assertEquals( 'Test Code', $discount->get_name() );
+		$this->assertEquals( 'test', $discount->get_code() );
+		$this->assertEquals( 'active', $discount->get_status() );
+		$this->assertEquals( '10', $discount->get_amount() );
 
 	}
 
+	/**
+	 * Get a discount code by its code
+	 *
+	 * @covers ::rcp_get_discount_by()
+	 */
 	function test_get_by() {
 
-		$discount = $this->db->get_by( 'code', 'test' );
+		$discount = rcp_get_discount_by( 'code', 'test' );
 
 		$this->assertNotEmpty( $discount );
-		$this->assertEquals( 'Test Code', $discount->name );
-		$this->assertEquals( 'test', $discount->code );
-		$this->assertEquals( 'active', $discount->status );
-		$this->assertEquals( '10', $discount->amount );
+		$this->assertEquals( 'Test Code', $discount->get_name() );
+		$this->assertEquals( 'test', $discount->get_code() );
+		$this->assertEquals( 'active', $discount->get_status() );
+		$this->assertEquals( '10', $discount->get_amount() );
 
 	}
 
+	/**
+	 * Get a discount's status
+	 *
+	 * @covers RCP_Discount::get_status
+	 */
 	function test_get_status() {
-		$this->assertEquals( 'active', $this->db->get_status( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertEquals( 'active', $discount->get_status() );
 	}
 
+	/**
+	 * Get a discount amount
+	 *
+	 * @covers RCP_Discount::get_amount
+	 */
 	function test_get_amount() {
-		$this->assertEquals( '10', $this->db->get_amount( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertEquals( '10', $discount->get_amount() );
 	}
 
+	/**
+	 * Get use count
+	 *
+	 * @covers RCP_Discount::get_use_count
+	 * @covers RCP_Discount::increment_use_count
+	 */
 	function test_get_uses() {
-		$this->assertEquals( 0, $this->db->get_uses( $this->discount_id ) );
-		$this->db->increase_uses( $this->discount_id );
-		$this->assertEquals( 1, $this->db->get_uses( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+
+		$this->assertEquals( 0, $discount->get_use_count() );
+
+		$discount->increment_use_count();
+
+		$this->assertEquals( 1, $discount->get_use_count() );
 	}
 
+	/**
+	 * Get the maximum number of uses
+	 *
+	 * @covers RCP_Discount::get_max_uses
+	 */
 	function test_get_max_uses() {
-		$this->assertEquals( 2, $this->db->get_max_uses( $this->discount_id ) );
-	}
-
-	function test_get_subscription_id() {
-		$this->assertEquals( 0, $this->db->get_subscription_id( $this->discount_id ) );
-	}
-
-	function test_has_subscription_id() {
-		$this->assertFalse( $this->db->has_subscription_id( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertEquals( 2, $discount->get_max_uses() );
 	}
 
 	/**
 	 * A new discount code should not have any membership level ids assigned by default.
 	 *
-	 * @covers RCP_Discounts::get_membership_level_ids()
+	 * @covers RCP_Discount::get_membership_level_ids()
 	 * @since 3.0
 	 */
 	function test_get_membership_level_ids() {
-		$this->assertEmpty( $this->db->get_membership_level_ids( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertEmpty( $discount->get_membership_level_ids() );
 	}
 
 	/**
 	 * A new discount code should not have any membership level ids assigned by default.
 	 *
-	 * @covers RCP_Discounts::has_membership_level_ids()
+	 * @covers RCP_Discount::has_membership_level_ids()
 	 * @since 3.0
 	 */
 	function test_has_membership_level_ids() {
-		$this->assertFalse( $this->db->has_membership_level_ids( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertFalse( $discount->has_membership_level_ids() );
 	}
 
+	/**
+	 * Get expiration date
+	 *
+	 * @covers RCP_Discount::get_expiration
+	 */
 	function test_get_expiration() {
-		$this->assertEquals( '2024-10-10 12:12:50', $this->db->get_expiration( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertEquals( '2024-10-10 12:12:50', $discount->get_expiration() );
 	}
 
-	function test_get_type() {
-		$this->assertEquals( '%', $this->db->get_type( $this->discount_id ) );
+	/**
+	 * Get unit
+	 *
+	 * @covers RCP_Discount::get_unit
+	 */
+	function test_get_unit() {
+		$discount = rcp_get_discount( $this->discount_id );
+		$this->assertEquals( '%', $discount->get_unit() );
 	}
 
+	/**
+	 * Delete a discount
+	 *
+	 * @covers ::rcp_delete_discount()
+	 */
 	function test_delete() {
 
-		$this->db->delete( $this->discount_id );
-		$discount = $this->db->get_discount( $this->discount_id );
+		$deleted = rcp_delete_discount( $this->discount_id );
+		$this->assertEquals( 1, $deleted );
+		wp_cache_flush(); // @todo Tests were failing without this.. should look into it.
+		$discount = rcp_get_discount( $this->discount_id );
 		$this->assertEmpty( $discount );
 	}
 
+	/**
+	 * Max out a discount, then ensure it's maxed out.
+	 *
+	 * @covers RCP_Discount::is_maxed_out
+	 */
 	function test_is_maxed_out() {
 
-		$this->assertFalse( $this->db->is_maxed_out( $this->discount_id ) );
-		$this->db->increase_uses( $this->discount_id );
-		$this->db->increase_uses( $this->discount_id );
-		$this->assertTrue( $this->db->is_maxed_out( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
+
+		$this->assertFalse( $discount->is_maxed_out() );
+
+		$discount->increment_use_count();
+		$discount->increment_use_count();
+
+		$this->assertTrue( $discount->is_maxed_out() );
 
 	}
 
+	/**
+	 * Expire a discount and ensure it's expired.
+	 *
+	 * @covers RCP_Discount::is_expired
+	 */
 	function test_is_expired() {
 
-		$this->assertFalse( $this->db->is_expired( $this->discount_id ) );
+		$discount = rcp_get_discount( $this->discount_id );
 
-		$updated = $this->db->update( $this->discount_id, array( 'expiration' => '2012-10-10 00:00:00' ) );
+		$this->assertFalse( $discount->is_expired() );
 
-		$this->assertTrue( $this->db->is_expired( $this->discount_id ) );
+		rcp_update_discount( $this->discount_id, array( 'expiration' => '2012-10-10 00:00:00' ) );
+
+		$discount = rcp_get_discount( $this->discount_id );
+
+		$this->assertTrue( $discount->is_expired() );
 	}
 
+	/**
+	 * User's discount code history
+	 *
+	 * @covers RCP_Discount::store_for_user
+	 * @covers ::rcp_user_has_used_discount()
+	 */
 	function test_user_has_used() {
 
-		$this->assertFalse( $this->db->user_has_used( 1, 'test' ) );
+		$this->assertFalse( rcp_user_has_used_discount( 1, 'test' ) );
 
-		$this->db->add_to_user( 1, 'test' );
+		$discount = rcp_get_discount_by( 'code', 'test' );
+		$discount->store_for_user( 1 );
 
-		$this->assertTrue( $this->db->user_has_used( 1, 'test' ) );
+		$this->assertTrue( rcp_user_has_used_discount( 1, 'test' ) );
 	}
 
+	/**
+	 * @covers ::rcp_discount_sign_filter()
+	 */
 	function test_format_discount() {
 
-		$this->assertEquals( '&#36;10.00', $this->db->format_discount( 10, 'flat' ) );
-		$this->assertEquals( '10%', $this->db->format_discount( 10, '%' ) );
+		$this->assertEquals( '&#36;10.00', rcp_discount_sign_filter( 10, 'flat' ) );
+		$this->assertEquals( '10%', rcp_discount_sign_filter( 10, '%' ) );
 	}
 
+	/**
+	 * @covers ::rcp_get_discounted_price()
+	 */
 	function test_calc_discounted_price() {
 
-		$this->assertEquals( 90, $this->db->calc_discounted_price( 100, 10, '%' ) );
-		$this->assertEquals( 450, $this->db->calc_discounted_price( 500, 10, '%' ) );
+		$this->assertEquals( 90, rcp_get_discounted_price( 100, 10, '%' ) );
+		$this->assertEquals( 450, rcp_get_discounted_price( 500, 10, '%' ) );
 
-		$this->assertEquals( 90, $this->db->calc_discounted_price( 100, 10, 'flat' ) );
+		$this->assertEquals( 90, rcp_get_discounted_price( 100, 10, 'flat' ) );
 	}
 
+	/**
+	 * Discounted price
+	 *      High base price, flat discount amount
+	 *
+	 * @covers ::rcp_get_discounted_price()
+	 */
 	function test_calc_discounted_price_with_high_price_and_flat_discount() {
 
-		$this->assertEquals( 1979, $this->db->calc_discounted_price( 1999, 20, 'flat' ) );
+		$this->assertEquals( 1979, rcp_get_discounted_price( 1999, 20, 'flat', false ) );
 
 	}
 
+	/**
+	 * Discounted price
+	 *      High base price, percentage discount amount
+	 *
+	 * @covers ::rcp_get_discounted_price()
+	 */
 	function test_calc_discounted_price_with_high_price_and_percentage_discount() {
 
-		$this->assertEquals( 1599.2, $this->db->calc_discounted_price( 1999, 20, '%' ) );
+		$this->assertEquals( 1599.2, rcp_get_discounted_price( 1999, 20, '%', false ) );
 
 	}
 

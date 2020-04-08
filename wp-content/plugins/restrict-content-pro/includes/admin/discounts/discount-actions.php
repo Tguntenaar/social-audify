@@ -28,30 +28,30 @@ function rcp_process_add_discount() {
 		wp_die( __( 'You do not have permission to perform this action.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 403 ) );
 	}
 
-	$discounts = new RCP_Discounts();
-
-	// Setup unsanitized data
+	// Setup data
 	$data = array(
-		'name'                 => $_POST['name'],
-		'description'          => $_POST['description'],
-		'amount'               => $_POST['amount'],
+		'name'                 => sanitize_text_field( $_POST['name'] ),
+		'description'          => wp_kses_post( $_POST['description'] ),
+		'amount'               => sanitize_text_field( $_POST['amount'] ),
 		'unit'                 => isset( $_POST['unit'] ) && $_POST['unit'] == '%' ? '%' : 'flat',
-		'code'                 => $_POST['code'],
+		'code'                 => sanitize_text_field( $_POST['code'] ),
 		'status'               => 'active',
-		'expiration'           => $_POST['expiration'],
-		'max_uses'             => $_POST['max'],
-		'membership_level_ids' => isset( $_POST['membership_levels'] ) ? $_POST['membership_levels'] : array(),
-		'one_time'             => ! empty( $_POST['one_time'] ) ? 1 : 0,
+		'expiration'           => sanitize_text_field( $_POST['expiration'] ),
+		'max_uses'             => absint( $_POST['max'] ),
+		'membership_level_ids' => ( ! empty( $_POST['membership_levels'] ) && is_array( $_POST['membership_levels'] ) ) ? array_map( 'absint', $_POST['membership_levels'] ) : array(),
+		'one_time'             => ! empty( $_POST['one_time'] ) ? 1 : 0
 	);
 
-	$add = $discounts->insert( $data );
+	$add = rcp_add_discount( $data );
 
 	if ( is_wp_error( $add ) ) {
 		rcp_log( sprintf( 'Error creating new discount code: %s', $add->get_error_message() ), true );
-		wp_die( $add );
-	}
-
-	if ( $add ) {
+		$error_code = ( 'discount' === substr( $add->get_error_code(), 0, 8 ) ) ? $add->get_error_code() : 'discount_' . $add->get_error_code();
+		$url = add_query_arg( array(
+			'rcp_message'   => urlencode( $error_code ),
+			'discount_code' => urlencode( strtolower( $data['code'] ) )
+		), admin_url( 'admin.php?page=rcp-discounts' ) );
+	} elseif ( $add ) {
 		rcp_log( sprintf( 'Successfully added discount #%d.', $add ) );
 		$url = admin_url( 'admin.php?page=rcp-discounts&rcp_message=discount_added' );
 	} else {
@@ -81,27 +81,24 @@ function rcp_process_edit_discount() {
 		wp_die( __( 'You do not have permission to perform this action.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 403 ) );
 	}
 
-	$discounts = new RCP_Discounts();
-
-	// Setup unsanitized data
+	// Setup data
 	$data = array(
-		'name'                 => $_POST['name'],
-		'description'          => $_POST['description'],
-		'amount'               => $_POST['amount'],
+		'name'                 => sanitize_text_field( $_POST['name'] ),
+		'description'          => wp_kses_post( $_POST['description'] ),
+		'amount'               => sanitize_text_field( $_POST['amount'] ),
 		'unit'                 => isset( $_POST['unit'] ) && $_POST['unit'] == '%' ? '%' : 'flat',
-		'code'                 => $_POST['code'],
-		'status'               => $_POST['status'],
-		'expiration'           => $_POST['expiration'],
-		'max_uses'             => $_POST['max'],
-		'membership_level_ids' => isset( $_POST['membership_levels'] ) ? $_POST['membership_levels'] : array(),
+		'code'                 => sanitize_text_field( $_POST['code'] ),
+		'status'               => 'active' == $_POST['status'] ? 'active' : 'disabled',
+		'expiration'           => sanitize_text_field( $_POST['expiration'] ),
+		'max_uses'             => absint( $_POST['max'] ),
+		'membership_level_ids' => ( ! empty( $_POST['membership_levels'] ) && is_array( $_POST['membership_levels'] ) ) ? array_map( 'absint', $_POST['membership_levels'] ) : array(),
 		'one_time'             => ! empty( $_POST['one_time'] ) ? 1 : 0,
 	);
 
-	$update = $discounts->update( $_POST['discount_id'], $data );
+	$update = rcp_update_discount( absint( $_POST['discount_id'] ), $data );
 
 	if ( is_wp_error( $update ) ) {
-		rcp_log( sprintf( 'Error editing discount code #%d: %s', $_POST['discount_id'], $update->get_error_message() ), true );
-
+		rcp_log( sprintf( 'Error updating discount code: %s', $update->get_error_message() ), true );
 		wp_die( $update );
 	}
 
@@ -140,8 +137,8 @@ function rcp_process_delete_discount() {
 	}
 
 	$discount_id = absint( $_GET['discount_id'] );
-	$discounts   = new RCP_Discounts();
-	$discounts->delete( $discount_id );
+
+	rcp_delete_discount( $discount_id );
 
 	rcp_log( sprintf( 'Deleted discount #%d.', $discount_id ) );
 
@@ -171,10 +168,13 @@ function rcp_process_activate_discount() {
 		wp_die( __( 'Please select a discount.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 400 ) );
 	}
 
-	$discounts = new RCP_Discounts();
-	$discounts->update( absint( $_GET['discount_id'] ), array( 'status' => 'active' ) );
+	$discount_id = absint( $_GET['discount_id'] );
 
-	rcp_log( sprintf( 'Successfully activated discount #%d.', $_GET['discount_id'] ) );
+	rcp_update_discount( $discount_id, array(
+		'status' => 'active'
+	) );
+
+	rcp_log( sprintf( 'Successfully activated discount #%d.', $discount_id ) );
 
 	wp_safe_redirect( add_query_arg( 'rcp_message', 'discount_activated', 'admin.php?page=rcp-discounts' ) );
 	exit;
@@ -202,10 +202,13 @@ function rcp_process_deactivate_discount() {
 		wp_die( __( 'Please select a discount.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 400 ) );
 	}
 
-	$discounts = new RCP_Discounts();
-	$discounts->update( absint( $_GET['discount_id'] ), array( 'status' => 'disabled' ) );
+	$discount_id = absint( $_GET['discount_id'] );
 
-	rcp_log( sprintf( 'Successfully deactivated discount #%d.', $_GET['discount_id'] ) );
+	rcp_update_discount( $discount_id, array(
+		'status' => 'disabled'
+	) );
+
+	rcp_log( sprintf( 'Successfully deactivated discount #%d.', $discount_id ) );
 
 	wp_safe_redirect( add_query_arg( 'rcp_message', 'discount_deactivated', 'admin.php?page=rcp-discounts' ) );
 	exit;

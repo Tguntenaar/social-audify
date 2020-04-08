@@ -28,9 +28,10 @@ if ( $membership->is_disabled() ) {
 	wp_die( __( 'Invalid membership.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 403 ) );
 }
 
-$user             = get_userdata( $membership->get_customer()->get_user_id() );
+$customer         = $membership->get_customer();
+$user             = $customer instanceof RCP_Customer ? get_userdata( $customer->get_user_id() ) : false;
 $membership_level = rcp_get_subscription_details( $membership->get_object_id() );
-$created_date     = date( 'Y-m-d', strtotime( $membership->get_created_date( false ), current_time( 'timestamp' ) ) );
+$created_date     = date( 'Y-m-d H:i:s', strtotime( $membership->get_created_date( false ), current_time( 'timestamp' ) ) );
 $expiration_date  = date( 'Y-m-d', strtotime( $membership->get_expiration_date( false ), current_time( 'timestamp' ) ) );
 
 // Action URLs.
@@ -76,7 +77,11 @@ $payments = $membership->get_payments( array( 'number' => 5 ) );
 								<label for="tablecell"><?php _e( 'Customer:', 'rcp' ); ?></label>
 							</th>
 							<td>
-								<a href="<?php echo esc_url( rcp_get_customers_admin_page( array( 'customer_id' => $membership->get_customer()->get_id(), 'view' => 'edit' ) ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
+								<?php if ( $customer instanceof RCP_Customer && $user instanceof WP_User ) : ?>
+									<a href="<?php echo esc_url( rcp_get_customers_admin_page( array( 'customer_id' => $customer->get_id(), 'view' => 'edit' ) ) ); ?>"><?php echo ! empty( $user->display_name ) ? esc_html( $user->display_name ) : esc_html( $user->user_login ); ?></a>
+								<?php else : ?>
+									<?php _e( '(Unknown)', 'rcp' ); ?>
+								<?php endif; ?>
 							</td>
 						</tr>
 						<tr>
@@ -85,16 +90,14 @@ $payments = $membership->get_payments( array( 'number' => 5 ) );
 							</th>
 							<td>
 								<span class="rcp-current-membership-level"><?php echo $membership->get_membership_level_name(); ?></span>
-								<?php if ( $membership->has_upgrade_path() ) : ?>
-									<select name="object_id" id="rcp-membership-level" class="hidden">
-										<?php foreach ( rcp_get_subscription_levels() as $level ) : ?>
-											<option value="<?php echo esc_attr( $level->id ); ?>" <?php selected( $level->id, $membership->get_object_id() ); ?>><?php echo esc_html( $level->name ); ?></option>
-										<?php endforeach; ?>
-									</select>
-									<input type="submit" name="rcp_change_membership_level" class="button hidden" id="rcp-change-membership-level-button" title="<?php echo $membership->is_recurring() ? esc_attr__( 'Warning: The subscription will be cancelled at the payment gateway.', 'rcp' ) : ''; ?>" value="<?php esc_attr_e( 'Change Level', 'rcp' ); ?>">
-									<span>&nbsp;&ndash;&nbsp;</span>
-									<a href="#" id="rcp-edit-membership-level"><?php _e( 'Edit', 'rcp' ); ?></a>
-								<?php endif; ?>
+								<select name="object_id" id="rcp-membership-level" class="hidden">
+									<?php foreach ( rcp_get_subscription_levels() as $level ) : ?>
+										<option value="<?php echo esc_attr( $level->id ); ?>" <?php selected( $level->id, $membership->get_object_id() ); ?>><?php echo esc_html( $level->name ); ?></option>
+									<?php endforeach; ?>
+								</select>
+								<input type="submit" name="rcp_change_membership_level" class="button hidden" id="rcp-change-membership-level-button" title="<?php echo $membership->is_recurring() ? esc_attr__( 'Warning: The subscription will be cancelled at the payment gateway.', 'rcp' ) : ''; ?>" value="<?php esc_attr_e( 'Change Level', 'rcp' ); ?>">
+								<span>&nbsp;&ndash;&nbsp;</span>
+								<a href="#" id="rcp-edit-membership-level"><?php _e( 'Edit', 'rcp' ); ?></a>
 							</td>
 						</tr>
 						<tr>
@@ -264,10 +267,18 @@ $payments = $membership->get_payments( array( 'number' => 5 ) );
 								</td>
 							</tr>
 						<?php endif; ?>
+						<tr>
+							<th scope="row" class="row-title">
+								<?php _e( 'Subscription Key:', 'rcp' ); ?>
+							</th>
+							<td>
+								<?php echo esc_html( $membership->get_subscription_key() ); ?>
+							</td>
+						</tr>
 						<?php if ( $membership->was_upgrade() ) : ?>
 							<tr>
 								<th scope="row" class="row-title">
-									<label><?php _e( 'Upgraded From:', 'rcp' ); ?></label>
+									<label><?php _e( 'Changed From:', 'rcp' ); ?></label>
 								</th>
 								<td>
 									<?php

@@ -36,6 +36,14 @@ class RCP_Registration {
 	protected $membership = false;
 
 	/**
+	 * Payment object from the database if we're recovering a pending/abandoned/failed payment.
+	 *
+	 * @since 3.2.2
+	 * @var object|bool
+	 */
+	protected $recovered_payment = false;
+
+	/**
 	 * Store the discounts for the registration
 	 *
 	 * @since 2.5
@@ -66,6 +74,7 @@ class RCP_Registration {
 		}
 
 		$this->set_registration_type();
+		$this->maybe_recover_payment();
 		$this->maybe_add_signup_fee();
 
 		if ( $level_id && $discount ) {
@@ -79,6 +88,7 @@ class RCP_Registration {
 	 * Set the subscription for this registration
 	 *
 	 * @since 2.5
+	 *
 	 * @param $subscription_id
 	 *
 	 * @return bool
@@ -135,9 +145,9 @@ class RCP_Registration {
 	 * Get registration subscription
 	 *
 	 * @deprecated 3.0 Use `RCP_Registration::get_membership_level_id()` instead.
-	 * @see RCP_Registration::get_membership_level_id()
+	 * @see        RCP_Registration::get_membership_level_id()
 	 *
-	 * @since 2.5
+	 * @since      2.5
 	 * @return int
 	 */
 	public function get_subscription() {
@@ -148,7 +158,7 @@ class RCP_Registration {
 	 * Get the ID number of the membership level this registration is for.
 	 *
 	 * @access public
-	 * @since 3.0
+	 * @since  3.0
 	 * @return int ID of the membership level.
 	 */
 	public function get_membership_level_id() {
@@ -178,7 +188,7 @@ class RCP_Registration {
 			 */
 			$membership = rcp_get_membership( absint( $_REQUEST['membership_id'] ) );
 
-			if ( ! empty( $membership ) && $membership->get_customer()->get_user_id() == get_current_user_id() ) {
+			if ( ! empty( $membership ) && $membership->get_user_id() == get_current_user_id() ) {
 				$this->membership        = $membership;
 				$this->registration_type = sanitize_text_field( $_REQUEST['registration_type'] );
 			}
@@ -214,6 +224,15 @@ class RCP_Registration {
 			// Figure out if this is a downgrade instead.
 			$membership_level          = rcp_get_subscription_details( $this->get_membership_level_id() );
 			$previous_membership_level = rcp_get_subscription_details( $this->membership->get_object_id() );
+
+			// If the previous membership level is invalid (maybe it's been deleted), then treat this as a new registration.
+			if ( empty( $previous_membership_level ) ) {
+				rcp_log( sprintf( 'Previous membership level (#%d) is invalid. Treating this as a new registration.', $this->membership->get_object_id() ) );
+
+				$this->registration_type = 'new';
+
+				return;
+			}
 
 			$days_in_old_cycle = rcp_get_days_in_cycle( $previous_membership_level->duration_unit, $previous_membership_level->duration );
 			$days_in_new_cycle = rcp_get_days_in_cycle( $membership_level->duration_unit, $membership_level->duration );
@@ -255,7 +274,7 @@ class RCP_Registration {
 	 * for. This will return false if there is a trial but the user is not eligible for it.
 	 *
 	 * @access public
-	 * @since 3.0.6
+	 * @since  3.0.6
 	 * @return bool
 	 */
 	public function is_trial() {
@@ -286,9 +305,94 @@ class RCP_Registration {
 	}
 
 	/**
+	 * Attempt to recover an existing pending / abandoned / failed payment.
+	 *
+	 * First we look in the request for `rcp_registration_payment_id`. If that doesn't exist then we try to recover
+	 * automatically. This will only work if the current membership (located via `set_registration_type()`)
+	 * has a pending payment ID. This will be the case if someone was attempting to sign up or manually renew,
+	 * didn't complete payment, then immediately reattempted.
+	 *
+	 * If a payment is located, then this payment is used for the registration instead of creating a new one.
+	 * This will also used the existing membership record associated with this payment.
+	 *
+	 * Requirements:
+	 *      - The payment status is `pending`, `abandoned`, or `failed`.
+	 *      - Transaction ID is empty.
+	 *      - There is an associated membership record (it's okay if it's disabled, it just needs to exist).
+	 *
+	 * @link  https://github.com/restrictcontentpro/restrict-content-pro/issues/2230
+	 *
+	 * @since 3.2.2
+	 * @return void
+	 */
+	protected function maybe_recover_payment() {
+
+		// First get payment ID from request. This will be set when explicitly clicking a "Complete Payment" link.
+		$pending_payment_id = ! empty( $_REQUEST['rcp_registration_payment_id'] ) ? absint( $_REQUEST['rcp_registration_payment_id'] ) : 0;
+
+		/*
+		 * Or, try to get a pending payment ID from the current membership's meta.
+		 * This will be set if trying to renew the current membership a second time when the first time failed.
+		 */
+		if ( empty( $pending_payment_id ) && ! empty( $this->membership ) ) {
+			$pending_payment_id = rcp_get_membership_meta( $this->membership->get_id(), 'pending_payment_id', true );
+		}
+
+		if ( empty( $pending_payment_id ) ) {
+			return;
+		}
+
+		/**
+		 * @var RCP_Payments $rcp_payments_db
+		 */
+		global $rcp_payments_db;
+
+		$payment = $rcp_payments_db->get_payment( $pending_payment_id );
+
+		// We can't use this if there's already a transaction ID.
+		if ( ! empty( $payment->transaction_id ) ) {
+			return;
+		}
+
+		// We can't use this if there's a user ID mismatch.
+		if ( $payment->user_id != get_current_user_id() ) {
+			return;
+		}
+
+		// We can't use this if there's no associated membership.
+		if ( empty( $payment->membership_id ) || ! $membership = rcp_get_membership( $payment->membership_id ) ) {
+			return;
+		}
+
+		// We can't use this if the membership level ID being signed up for is now different from the recovered payment level ID.
+		if ( $this->get_membership_level_id() && $payment->object_id != $this->get_membership_level_id() ) {
+			return;
+		}
+
+		$this->recovered_payment = $payment;
+
+		// Use the same `transaction_type` as the recovered payment.
+		$this->registration_type = $this->recovered_payment->transaction_type;
+
+		rcp_log( sprintf( 'Using recovered payment #%d for registration. Transaction type: %s.', $this->recovered_payment->id, $this->recovered_payment->transaction_type ) );
+
+	}
+
+	/**
+	 * Get the recovered payment object.
+	 *
+	 * @since 3.2.3
+	 * @return object|false Payment object if set, false if not.
+	 */
+	public function get_recovered_payment() {
+		return $this->recovered_payment;
+	}
+
+	/**
 	 * Add discount to the registration
 	 *
 	 * @since      2.5
+	 *
 	 * @param      $code
 	 * @param bool $recurring
 	 *
@@ -321,20 +425,21 @@ class RCP_Registration {
 	 * Add fee to the registration. Use negative fee for credit.
 	 *
 	 * @since      2.5
+	 *
 	 * @param float $amount
-	 * @param null $description
-	 * @param bool $recurring
-	 * @param bool $proration
+	 * @param null  $description
+	 * @param bool  $recurring
+	 * @param bool  $proration
 	 *
 	 * @return bool
 	 */
 	public function add_fee( $amount, $description = null, $recurring = false, $proration = false ) {
 
 		$fee = array(
-			'amount'     => floatval( $amount ),
-			'description'=> sanitize_text_field( $description ),
-			'recurring'  => (bool) $recurring,
-			'proration'  => (bool) $proration,
+			'amount'      => floatval( $amount ),
+			'description' => sanitize_text_field( $description ),
+			'recurring'   => (bool) $recurring,
+			'proration'   => (bool) $proration,
 		);
 
 		$id = md5( serialize( $fee ) );
@@ -366,6 +471,7 @@ class RCP_Registration {
 	 * Get the total number of fees
 	 *
 	 * @since 2.5
+	 *
 	 * @param null $total
 	 * @param bool $only_recurring | set to only get fees that are recurring
 	 *
@@ -379,7 +485,7 @@ class RCP_Registration {
 
 		$fees = 0;
 
-		foreach( $this->get_fees() as $fee ) {
+		foreach ( $this->get_fees() as $fee ) {
 			if ( $only_recurring && ! $fee['recurring'] ) {
 				continue;
 			}
@@ -412,7 +518,7 @@ class RCP_Registration {
 
 		$fees = 0;
 
-		foreach( $this->get_fees() as $fee ) {
+		foreach ( $this->get_fees() as $fee ) {
 
 			if ( $fee['proration'] ) {
 				continue;
@@ -444,7 +550,7 @@ class RCP_Registration {
 
 		$proration = 0;
 
-		foreach( $this->get_fees() as $fee ) {
+		foreach ( $this->get_fees() as $fee ) {
 
 			if ( ! $fee['proration'] ) {
 				continue;
@@ -462,6 +568,7 @@ class RCP_Registration {
 	 * Get the total discounts
 	 *
 	 * @since 2.5
+	 *
 	 * @param null $total
 	 * @param bool $only_recurring | set to only get discounts that are recurring
 	 *
@@ -479,22 +586,21 @@ class RCP_Registration {
 
 		$original_total = $total;
 
-		foreach( $registration_discounts as $registration_discount => $recurring ) {
+		foreach ( $registration_discounts as $registration_discount => $recurring ) {
 
 			if ( $only_recurring && ! $recurring ) {
 				continue;
 			}
 
-			$discounts    = new RCP_Discounts();
-			$discount_obj = $discounts->get_by( 'code', $registration_discount );
+			$discount_obj = rcp_get_discount_by( 'code', $registration_discount );
 
-			if( $only_recurring && is_object( $discount_obj ) && ! empty( $discount_obj->one_time ) ) {
+			if ( $only_recurring && is_object( $discount_obj ) && ! empty( $discount_obj->is_one_time() ) ) {
 				continue;
 			}
 
 			if ( is_object( $discount_obj ) ) {
 				// calculate the after-discount price
-				$total = $discounts->calc_discounted_price( $total, $discount_obj->amount, $discount_obj->unit );
+				$total = rcp_get_discounted_price( $total, $discount_obj->get_amount(), $discount_obj->get_unit(), false );
 			}
 		}
 
@@ -545,7 +651,15 @@ class RCP_Registration {
 
 		$total = round( $total, rcp_currency_decimal_filter() );
 
-		return apply_filters( 'rcp_registration_get_total', floatval( $total ), $this );
+		/**
+		 * Filter the "initial amount" total.
+		 *
+		 * @param float $total     Total amount due today.
+		 * @param RCP_Registration Registration object.
+		 * @param bool  $discounts Whether or not discounts are included in the value.
+		 * @param bool  $fees      Whether or not fees are included in the value.
+		 */
+		return apply_filters( 'rcp_registration_get_total', floatval( $total ), $this, $discounts, $fees );
 
 	}
 
@@ -558,7 +672,7 @@ class RCP_Registration {
 	 * @since 2.5
 	 * @return float
 	 */
-	public function get_recurring_total( $discounts = true, $fees = true  ) {
+	public function get_recurring_total( $discounts = true, $fees = true ) {
 
 		$membership_level = rcp_get_subscription_details( $this->subscription );
 
@@ -582,7 +696,15 @@ class RCP_Registration {
 
 		$total = round( $total, rcp_currency_decimal_filter() );
 
-		return apply_filters( 'rcp_registration_get_recurring_total', floatval( $total ), $this );
+		/**
+		 * Filters the "recurring amount" total.
+		 *
+		 * @param float $total     Recurring amount.
+		 * @param RCP_Registration Registration object.
+		 * @param bool  $discounts Whether or not discounts are included in the value.
+		 * @param bool  $fees      Whether or not fees are included in the value.
+		 */
+		return apply_filters( 'rcp_registration_get_recurring_total', floatval( $total ), $this, $discounts, $fees );
 
 	}
 

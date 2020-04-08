@@ -29,7 +29,7 @@ function rcp_discounts_page() {
 				<input type="hidden" name="page" value="rcp-discounts"/>
 				<?php
 				$table_class->views();
-				//$table_class->search_box( __( 'Search discount codes', 'rcp' ), 'rcp-membership-levels' );
+				$table_class->search_box( __( 'Search discount codes', 'rcp' ), 'rcp-membership-levels' );
 				$table_class->display();
 				?>
 			</form>
@@ -94,7 +94,7 @@ function rcp_discounts_page() {
 								</th>
 								<td>
 									<input type="checkbox" value="1" name="one_time" id="rcp-discount-one-time"/>
-									<span class="description"><?php _e( 'Check this to make this discount only apply to the first payment in a membership. When this option is not enabled, the discount code will apply to all payments in a membership instead of just the initial payment.', 'rcp' ); ?></span>
+									<span class="description"><?php _e( 'Check this to make this discount only apply to the first payment in a membership. Note one-time discounts cannot be used in conjunction with free trials. When this option is not enabled, the discount code will apply to all payments in a membership instead of just the initial payment.', 'rcp' ); ?></span>
 								</td>
 							</tr>
 							<tr class="form-field">

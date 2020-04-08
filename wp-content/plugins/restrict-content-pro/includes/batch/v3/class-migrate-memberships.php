@@ -224,14 +224,6 @@ final class RCP_Batch_Callback_Migrate_Memberships_v3 extends Abstract_Job_Callb
 				continue;
 			}
 
-			// If a customer already exists with this ID, skip.
-			$existing_customer = rcp_get_customer_by_user_id( $user->ID );
-			if ( ! empty( $existing_customer ) ) {
-				$processed[] = $existing_customer->get_id();
-
-				continue;
-			}
-
 			$membership_level = rcp_get_subscription_details( $membership_level_id );
 
 			if ( empty( $membership_level ) ) {
@@ -241,7 +233,7 @@ final class RCP_Batch_Callback_Migrate_Memberships_v3 extends Abstract_Job_Callb
 			}
 
 			/**
-			 * First create a new customer record.
+			 * First retrieve or create a new customer record.
 			 */
 
 			// Check email verification status.
@@ -256,29 +248,50 @@ final class RCP_Batch_Callback_Migrate_Memberships_v3 extends Abstract_Job_Callb
 				$email_verification = 'none';
 			}
 
-			$customer_data = array(
-				'user_id'            => $user->ID,
-				'date_registered'    => $user->user_registered,
-				'email_verification' => $email_verification,
-				'last_login'         => '',
-				'ips'                => '',
-				'notes'              => ''
-			);
+			$existing_customer = rcp_get_customer_by_user_id( $user->ID );
 
-			$customer_id = rcp_add_customer( $customer_data );
+			if ( ! $existing_customer instanceof RCP_Customer ) {
+				// Create a new customer.
+				$customer_data = array(
+					'user_id'            => $user->ID,
+					'date_registered'    => $user->user_registered,
+					'email_verification' => $email_verification,
+					'last_login'         => '',
+					'ips'                => '',
+					'notes'              => ''
+				);
 
-			if ( empty( $customer_id ) ) {
+				$customer_id = rcp_add_customer( $customer_data );
+				$customer    = rcp_get_customer( $customer_id );
+			} else {
+				// Update customer if their email verification status has changed.
+				if ( $email_verification != $existing_customer->get_email_verification_status() ) {
+					$existing_customer->update( array(
+						'email_verification' => $email_verification
+					) );
+				}
+
+				$customer = $existing_customer;
+			}
+
+			if ( ! isset( $customer ) || ! $customer instanceof RCP_Customer ) {
 				$this->get_job()->add_error( sprintf( __( 'Error inserting customer record for user #%d.', 'rcp' ), $user->ID ) );
 
 				continue;
 			}
 
 			/**
+			 * Disable all the customer's memberships. This ensures we don't wind up with any duplicates if
+			 * this migration is run more than once.
+			 */
+			$customer->disable_memberships();
+
+			/**
 			 * Update all this user's payments to add the new customer ID.
 			 */
 			$wpdb->update(
 				rcp_get_payments_db_name(),
-				array( 'customer_id' => absint( $customer_id ) ),
+				array( 'customer_id' => absint( $customer->get_id() ) ),
 				array( 'user_id' => $user->ID ),
 				array( '%d' ),
 				array( '%d' )
@@ -378,9 +391,10 @@ final class RCP_Batch_Callback_Migrate_Memberships_v3 extends Abstract_Job_Callb
 			}
 
 			$data = array(
+				'customer_id'             => $customer->get_id(),
+				'user_id'                 => $user->ID,
 				'object_id'               => $membership_level_id,
 				'object_type'             => 'membership',
-				'customer_id'             => $customer_id,
 				'initial_amount'          => $initial_amount,
 				'recurring_amount'        => $recurring_amount,
 				'created_date'            => $join_date,

@@ -67,6 +67,7 @@ function rcp_tools_system_info_report() {
 
 	$return .= "\n" . '-- RCP Configuration' . "\n\n";
 	$return .= 'Version:                          ' . RCP_PLUGIN_VERSION . "\n";
+	$return .= 'Upgraded on:                      ' . sprintf( '%s from %s', get_option( 'rcp_version_upgraded_on', '(unknown date)' ), get_option( 'rcp_version_upgraded_from', 0 ) ) . "\n";
 	$return .= 'License Key:                      ' . ( ! empty( $rcp_options['license_key'] ) ? $rcp_options['license_key'] . "\n" : "Not set\n" );
 	$return .= 'Multiple Memberships:             ' . ( rcp_multiple_memberships_enabled() ? "Enabled\n" : "Disabled\n" );
 	$return .= 'Auto Renew:                       ' . ( ! empty( $rcp_options['auto_renew'] ) && array_key_exists( $rcp_options['auto_renew'], $auto_renew_options ) ? $auto_renew_options[$rcp_options['auto_renew']] . "\n" : "Invalid Configuration\n" );

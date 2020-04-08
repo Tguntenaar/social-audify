@@ -32,6 +32,19 @@
 			</tr>
 			<tr valign="top">
 				<th scope="row" valign="top">
+					<label for="rcp-membership-level"><?php _e( 'Membership Level', 'rcp' ); ?></label>
+				</th>
+				<td>
+					<select id="rcp-membership-level" name="membership_level_id">
+						<?php foreach ( rcp_get_subscription_levels() as $membership_level ) : ?>
+							<option value="<?php echo esc_attr( $membership_level->id ); ?>"><?php echo esc_html( $membership_level->name ); ?></option>
+						<?php endforeach; ?>
+					</select>
+					<p class="description"><?php _e( 'The membership level this payment is for.', 'rcp' ); ?></p>
+				</td>
+			</tr>
+			<tr valign="top">
+				<th scope="row" valign="top">
 					<label for="rcp-amount"><?php _e( 'Amount', 'rcp' ); ?></label>
 				</th>
 				<td>

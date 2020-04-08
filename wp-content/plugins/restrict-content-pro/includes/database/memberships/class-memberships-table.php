@@ -31,7 +31,7 @@ final class Memberships extends Table {
 	/**
 	 * @var string Database version
 	 */
-	protected $version = 201811191;
+	protected $version = 202001131;
 
 	/**
 	 * @var array Array of upgrade versions and methods
@@ -39,7 +39,9 @@ final class Memberships extends Table {
 	protected $upgrades = array(
 		'201811131' => 201811131,
 		'201811132' => 201811132,
-		'201811191' => 201811191
+		'201811191' => 201811191,
+		'201910101' => 201910101,
+		'202001131' => 202001131
 	);
 
 	/**
@@ -65,12 +67,14 @@ final class Memberships extends Table {
 	protected function set_schema() {
 		$this->schema = "id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			customer_id bigint(20) unsigned NOT NULL default '0',
+			user_id bigint(20) unsigned DEFAULT NULL,
 			object_id bigint(9) NOT NULL default '0',
 			object_type varchar(20) DEFAULT NULL,
 			currency varchar(20) NOT NULL DEFAULT 'USD',
 			initial_amount mediumtext NOT NULL,
 			recurring_amount mediumtext NOT NULL,
 			created_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			activated_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 			trial_end_date datetime DEFAULT NULL,
 			renewed_date datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 			cancellation_date datetime DEFAULT NULL,
@@ -160,5 +164,46 @@ final class Memberships extends Table {
 
 	}
 
+	/**
+	 * Upgrade to version 201910101
+	 * - Add `activated_date` column.
+	 */
+	protected function __201910101() {
+
+		// Look for column
+		$result = $this->column_exists( 'activated_date' );
+
+		// Maybe add column
+		if ( false === $result ) {
+			$result = $this->get_db()->query( "
+				ALTER TABLE {$this->table_name} ADD COLUMN `activated_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00' AFTER `created_date`;
+			" );
+		}
+
+		// Return success/fail
+		return $this->is_success( $result );
+
+	}
+
+	/**
+	 * Upgrade to version 202001131
+	 * - Add `user_id` column.
+	 */
+	protected function __202001131() {
+
+		// Look for column
+		$result = $this->column_exists( 'user_id' );
+
+		// Maybe add column
+		if ( false === $result ) {
+			$result = $this->get_db()->query( "
+				ALTER TABLE {$this->table_name} ADD COLUMN `user_id` bigint(20) unsigned DEFAULT NULL AFTER `customer_id`;
+			" );
+		}
+
+		// Return success/fail
+		return $this->is_success( $result );
+
+	}
 
 }

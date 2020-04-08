@@ -52,13 +52,21 @@ function rcp_process_add_customer() {
 			wp_die( sprintf( __( 'A user account already exists with the login %s.', 'rcp' ), esc_html( $user_login ) ), __( 'Error', 'rcp' ), array( 'response' => 500 ) );
 		}
 
-		$user_id = wp_insert_user( array(
+		$user_args = array(
 			'user_login' => sanitize_text_field( $user_login ),
 			'user_email' => sanitize_text_field( $customer_email ),
 			'user_pass'  => ! empty( $_POST['user_password'] ) ? $_POST['user_password'] : wp_generate_password( 24 ),
 			'first_name' => ! empty( $_POST['first_name'] ) ? sanitize_text_field( $_POST['first_name'] ) : '',
 			'last_name'  => ! empty( $_POST['last_name'] ) ? sanitize_text_field( $_POST['last_name'] ) : ''
-		) );
+		);
+
+		$user_args['display_name'] = trim( $user_args['first_name'] . ' ' . $user_args['last_name'] );
+
+		if ( empty( $user_args['display_name'] ) ) {
+			$user_args['display_name'] = $user_args['user_login'];
+		}
+
+		$user_id = wp_insert_user( $user_args );
 
 		if ( empty( $user_id ) ) {
 			wp_die( __( 'Error creating customer account.', 'rcp' ), __( 'Error', 'rcp' ), array( 'response' => 500 ) );
@@ -158,6 +166,12 @@ function rcp_process_edit_customer() {
 
 		rcp_log( sprintf( 'Changing email for user account #%d.', $user->ID ) );
 	}
+
+	$display_name = trim( $first_name . ' ' . $last_name );
+	if ( empty( $display_name ) ) {
+		$display_name = $user->user_login;
+	}
+	$user_args['display_name'] = sanitize_text_field( trim( $display_name ) );
 
 	if ( ! empty( $user_args ) ) {
 		$user_args['ID'] = $user->ID;

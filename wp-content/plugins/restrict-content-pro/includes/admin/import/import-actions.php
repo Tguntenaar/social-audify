@@ -76,9 +76,12 @@ function rcp_upload_csv_import_file_ajax() {
 		'application/vnd.msexcel',
 	);
 
-	if ( empty( $_FILES['import_file']['type'] ) || ! in_array( strtolower( $_FILES['import_file']['type'] ), $accepted_mime_types ) ) {
+	$file_type_data = wp_check_filetype_and_ext( $_FILES['import_file']['tmp_name'], $_FILES['import_file']['name'] );
+	$file_type      = ! empty( $file_type_data['type'] ) ? strtolower( $file_type_data['type'] ) : strtolower( $_FILES['import_file']['type'] );
+
+	if ( empty( $file_type ) || ! in_array( $file_type, $accepted_mime_types ) ) {
 		wp_send_json_error( array(
-			'message' => __( 'Error: The file you uploaded does not appear to be a CSV file.', 'rcp' ),
+			'message' => sprintf( __( 'Error: The file you uploaded does not appear to be a CSV file. File type: %s', 'rcp' ), esc_html( $file_type ) ),
 			'request' => $_REQUEST
 		) );
 	}

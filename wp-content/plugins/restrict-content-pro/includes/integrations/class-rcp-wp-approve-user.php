@@ -173,7 +173,7 @@ class RCP_WP_Approve_User {
 
 			$url = wp_nonce_url( add_query_arg( array(
 				'action' => 'rcp_wpau_unapprove',
-				'user'   => $member_id
+				'user'   => urlencode( $member_id )
 			), $url ), 'wpau-unapprove-user' );
 
 			printf( ' | <a class="submitunapprove" href="%1$s">%2$s</a>', esc_url( $url ), __( 'Unapprove', 'rcp' ) );
@@ -182,7 +182,7 @@ class RCP_WP_Approve_User {
 
 			$url = wp_nonce_url( add_query_arg( array(
 				'action' => 'rcp_wpau_approve',
-				'user'   => $member_id
+				'user'   => urlencode( $member_id )
 			), $url ), 'wpau-approve-user' );
 
 			printf( ' | <a class="submitapprove" href="%1$s">%2$s</a>', esc_url( $url ), __( 'Approve', 'rcp' ) );

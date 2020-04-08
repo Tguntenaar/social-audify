@@ -65,28 +65,24 @@ jQuery( document ).ready( function ( $ ) {
 		rcp_validate_registration_state( reg, event.type );
 	} );
 
-	/*
-	 * If reCAPTCHA is enabled, disable the submit button until it is successfully completed, at which point
-	 * it triggers rcp_validate_recaptcha().
-	 */
-	if ( '1' === rcp_script_options.recaptcha_enabled ) {
+	if ( '1' === rcp_script_options.recaptcha_enabled && '3' !== rcp_script_options.recaptcha_version ) {
+		// Disable submit button. It's then re-enabled via rcp_validate_recaptcha()
 		jQuery( '#rcp_registration_form #rcp_submit' ).prop( 'disabled', true );
 	}
 
-	// Process registration submit.
+	/**
+	 * Kick off registration when submit button is clicked.
+	 */
 	$( document ).on( 'click', '#rcp_registration_form #rcp_submit', function ( e ) {
 
 		e.preventDefault();
 
 		var submission_form = document.getElementById( 'rcp_registration_form' );
 		var form = $( '#rcp_registration_form' );
-		var form_id = form.attr( 'id' );
 
 		if ( typeof submission_form.checkValidity === "function" && false === submission_form.checkValidity() ) {
 			return;
 		}
-
-		var submit_register_text = $( this ).val();
 
 		form.block( {
 			message: rcp_script_options.pleasewait,
@@ -110,10 +106,178 @@ jQuery( document ).ready( function ( $ ) {
 
 		rcp_processing = true;
 
-		$.post( rcp_script_options.ajaxurl, form.serialize() + '&action=rcp_process_register_form&rcp_ajax=true', function ( response ) {
+		/**
+		 * Registration chain:
+		 * 		- 1. Get a reCAPTCHA v3 token, if required.
+		 *      - 2. Validate form via ajax.
+		 *      - 3. Proceed to form processing via ajax.
+		 *      - 4. Generate a new nonce.
+		 *      - 5. Unless `gateway-submits-form`, submit the HTML form.
+		 *
+		 *      If a gateway declares support for `gateway-submits-form`, then the gateway is responsible for
+		 *      triggering `rcp_submit_registration_form()` when ready.
+		 *
+		 *      @see rcp_get_recaptchav3_token()         - Step 1 - get a reCAPTCHA token if required
+		 *      @see rcp_validate_registration_form()    - Step 1 - ajax validation
+		 *      @see rcp_process_registration_form()     - Step 3 - ajax processing
+		 *      @see rcp_regenerate_registration_nonce() - Step 4 - ajax nonce replacement (after authentication)
+		 *      @see rcp_submit_registration_form()      - Step 5 - submit the HTML form
+		 *
+		 *      @see rcp_handle_registration_errors() - Error handling.
+		 */
+		rcp_get_recaptchav3_token( form ).then( function( response ) {
+			return rcp_validate_registration_form( form );
+		} ).then( function( response ) {
+			return rcp_process_registration_form( form );
+		} ).then( function( response ) {
+			return rcp_regenerate_registration_nonce( form, response );
+		} ).then( function( response ) {
+			// Set payment ID.
+			let paymentIDField = form.find( 'input[name="rcp_registration_payment_id"]' );
 
+			if ( paymentIDField.length ) {
+				paymentIDField.val( response.payment_id );
+			} else {
+				form.append( '<input type="hidden" name="rcp_registration_payment_id" value="' + response.payment_id + '"/>' );
+			}
+
+			$( 'body' ).trigger( 'rcp_register_form_submission', [ response, form.attr( 'id' ) ] );
+
+			let gateway_submits_form = false;
+			if ( response.gateway.supports && response.gateway.supports.indexOf( 'gateway-submits-form' ) !== -1 ) {
+				gateway_submits_form = true;
+			}
+
+			/**
+			 * Submit the HTML form if:
+			 *      - The total due today is $0 and the recurring total is $0; or:
+			 *      - The gateway has declared that it would like to be responsible for form submission (e.g. Stripe).
+			 *
+			 *      Submitting the form sends the registration information to the gateway for further processing and
+			 *      activates the membership if possible.
+			 *
+			 *      If the gateway has declared support for submitting the form, then it will then be the gateway's
+			 *      responsibility to hook into the `rcp_registration_form_processed` event and manually trigger
+			 *      rcp_submit_registration_form().
+			 */
+			if ( ( response.total === 0 && response.recurring_total === 0 ) || ! gateway_submits_form ) {
+				rcp_submit_registration_form( form, response );
+			} else {
+				$( 'body' ).trigger( 'rcp_registration_form_processed', [ form, response ] );
+			}
+		} ).catch ( function ( error ) {
+			console.log( 'Registration Error', error );
+			// This catches errors from any part of the process (validation, processing, etc.).
+			rcp_regenerate_registration_nonce( form, error ).then( function( response ) {
+				rcp_handle_registration_errors( response, form );
+			} ).catch( function( nonceError ) {
+				rcp_handle_registration_errors( error, form );
+			} );
+		} );
+
+	} );
+
+} );
+
+/**
+ * Step 1: Get a reCAPTCHA v3 token.
+ *
+ * @param {*|jQuery|HTMLElement} form
+ */
+function rcp_get_recaptchav3_token( form ) {
+
+	return new Promise( function( resolve, reject ) {
+
+		if ( '1' !== rcp_script_options.recaptcha_enabled || '3' !== rcp_script_options.recaptcha_version ) {
+			resolve();
+
+			return;
+		}
+
+		grecaptcha.ready(function () {
+			grecaptcha.execute( jQuery('#rcp_recaptcha').data('sitekey'), {
+				action: 'register'
+			} ).then(function ( token ) {
+				// Add token to form.
+				jQuery( form ).find('input[name="g-recaptcha-response"]').val( token );
+
+				resolve();
+			});
+		});
+
+	} );
+}
+
+/**
+ * Step 2: Validate the registration form via ajax.
+ *
+ * This ensures required fields are filled out.
+ *
+ * @param {*|jQuery|HTMLElement} form
+ *
+ * @since 3.2
+ * @returns {Promise}
+ */
+function rcp_validate_registration_form( form ) {
+	let $ = jQuery;
+
+	return new Promise( function ( resolve, reject ) {
+
+		$.post( rcp_script_options.ajaxurl, form.serialize() + '&action=rcp_process_register_form&rcp_ajax=true&validate_only=true', function ( response ) {
+
+			// Remove errors first.
 			$( '.rcp-submit-ajax', form ).remove();
 			$( '.rcp_message.error', form ).remove();
+
+			// Handle possible validation error.
+			if ( ! response.success ) {
+				reject( response.data );
+			} else {
+				$( 'body' ).trigger( 'rcp_registration_form_validated', [form, response.data] );
+				resolve( response.data );
+			}
+
+		} ).success( function ( response ) {
+		} ).done( function ( response ) {
+		} ).fail( function ( response ) {
+			console.log( response );
+			reject( Error( response ) );
+		} ).always( function ( response ) {
+		} );
+
+	} );
+}
+
+/**
+ * Step 3: Process the registration form via ajax.
+ *
+ *      - Creates user account.
+ *      - Creates customer record.
+ *      - Creates pending membership record.
+ *      - Creates pending payment record.
+ *      - Sends registration to gateway for ajax processing (Stripe payment intent is created here).
+ *
+ * @param {*|jQuery|HTMLElement} form
+ *
+ * @since 3.2
+ * @returns {Promise}
+ */
+function rcp_process_registration_form( form ) {
+
+	let $ = jQuery;
+
+	rcp_processing = true;
+
+	return new Promise( function ( resolve, reject ) {
+
+		$.post( rcp_script_options.ajaxurl, form.serialize() + '&action=rcp_process_register_form&rcp_ajax=true', function ( response ) {
+
+			// Handle processing errors.
+			if ( ! response.success ) {
+				reject( response.data );
+			} else {
+				resolve( response.data );
+			}
 
 		} ).success( function ( response ) {
 		} ).done( function ( response ) {
@@ -124,42 +288,101 @@ jQuery( document ).ready( function ( $ ) {
 
 	} );
 
-	$( document ).ajaxComplete( function ( event, xhr, settings ) {
+}
 
-		// Check for the desired ajax event
-		if ( !settings.hasOwnProperty( 'data' ) || settings.data.indexOf( 'rcp_process_register_form' ) === -1 ) {
-			return;
-		}
+/**
+ * Step 4: Generate a new registration nonce.
+ *
+ * This is annoying, but logging in a new user (via step #2) will have invalidated our existing nonce
+ * and we have to start a whole new request to get a valid one.
+ *
+ * We will replace the old value in `response` with the new one and return the new response object.
+ *
+ * @param {*|jQuery|HTMLElement} form
+ * @param {object} response Ajax response from initial processing.
+ *
+ * @since 3.2
+ * @returns {Promise}
+ */
+function rcp_regenerate_registration_nonce( form, response ) {
 
-		// Check for the required properties
-		if ( !xhr.hasOwnProperty( 'responseJSON' ) || !xhr.responseJSON.hasOwnProperty( 'data' ) ) {
-			return;
-		}
+	let $ = jQuery;
 
-		if ( xhr.responseJSON.data.success !== true ) {
-			$( '#rcp_registration_form #rcp_submit' ).val( rcp_script_options.register );
-			$( '#rcp_registration_form #rcp_submit' ).before( xhr.responseJSON.data.errors );
-			$( '#rcp_registration_form #rcp_register_nonce' ).val( xhr.responseJSON.data.nonce );
-			$( '#rcp_registration_form' ).unblock();
-			rcp_processing = false;
-			return;
-		}
+	rcp_processing = true;
 
-		// Check if gateway supports form submission
-		let gateway_submits_form = false;
-		if ( xhr.responseJSON.data.gateway.supports && xhr.responseJSON.data.gateway.supports.indexOf( 'gateway-submits-form' ) !== -1 ) {
-			gateway_submits_form = true;
-		}
+	return new Promise( function ( resolve, reject ) {
+		$.ajax( {
+			type: 'post',
+			dataType: 'json',
+			url: rcp_script_options.ajaxurl,
+			data: {
+				action: 'rcp_generate_registration_nonce'
+			},
+			success: function ( nonceResponse ) {
+				if ( ! nonceResponse.success ) {
+					reject( response );
+				} else {
+					response.nonce = nonceResponse.data;
 
-		$( 'body' ).trigger( 'rcp_register_form_submission', [xhr.responseJSON.data, event.target.forms.rcp_registration_form.id] );
+					// Replace the nonce field with the new value.
+					form.find( 'input[name="rcp_register_nonce"]' ).val( response.nonce );
 
-		if ( (xhr.responseJSON.data.total === 0 && xhr.responseJSON.data.recurring_total === 0) || !gateway_submits_form ) {
-			document.getElementById( 'rcp_registration_form' ).submit();
-		}
-
+					resolve( response );
+				}
+			}
+		} );
 	} );
 
-} );
+}
+
+/**
+ * Step 5: Submit the registration form.
+ *
+ * @param {*|jQuery|HTMLElement} form
+ * @param {object} response
+ *
+ * @since 3.2
+ */
+function rcp_submit_registration_form( form, response ) {
+
+	rcp_processing = true;
+
+	// Submit form.
+	form.submit();
+
+}
+
+/**
+ * Handle registration errors
+ *
+ *      - Resets the submit button value
+ *      - Adds error messages before the submit button
+ *      - Resets the nonce
+ *      - Unblocks the form
+ *      - Sets the `rcp_processing` var to `false` to indicate processing is over
+ *
+ * @param {object} response
+ * @param {*|jQuery|HTMLElement} form
+ *
+ * @since 3.2
+ */
+function rcp_handle_registration_errors( response, form ) {
+
+	let $ = jQuery;
+	if ( 'undefined' === typeof form ) {
+		form = $( '#rcp_registration_form' );
+	}
+
+	if ( 'undefined' === typeof response.errors ) {
+		response.errors = '<div class="rcp_message error" role="list"><p class="rcp_error" role="listitem">' + rcp_script_options.error_occurred + '</p></div>';
+	}
+
+	form.find( '#rcp_submit' ).val( rcp_script_options.register ).before( response.errors );
+	form.find( 'input[name="rcp_register_nonce"]' ).val( response.nonce );
+	form.unblock();
+	rcp_processing = false;
+
+}
 
 /**
  * Returns the selected gateway slug.
@@ -234,8 +457,9 @@ function rcp_validate_registration_state( reg_state, event_type ) {
 	}
 
 	let $ = jQuery;
+	let form = $( '#rcp_registration_form' );
 
-	$( '#rcp_registration_form' ).block( {
+	form.block( {
 		message: rcp_script_options.pleasewait,
 		css: {
 			border: 'none',
@@ -248,23 +472,26 @@ function rcp_validate_registration_state( reg_state, event_type ) {
 		}
 	} );
 
+	let data = form.serialize() +
+		'&action=rcp_validate_registration_state' +
+		'&rcp_ajax=true' +
+		'&rcp_level=' + reg_state.membership_level +
+		'&lifetime=' + reg_state.lifetime +
+		'&level_has_trial=' + reg_state.level_has_trial +
+		'&is_free=' + reg_state.is_free +
+		'&discount_code=' + reg_state.discount_code +
+		'&rcp_gateway=' + reg_state.gateway +
+		'&rcp_auto_renew=' + ( true === reg_state.auto_renew ? true : '' ) +
+		'&event_type=' + event_type +
+		'&registration_type=' + $( '#rcp-registration-type' ).val() +
+		'&membership_id=' + $( '#rcp-membership-id' ).val() +
+		'&rcp_registration_payment_id=' + $( '#rcp-payment-id' ).val();
+
 	$.ajax( {
 		type: 'post',
 		dataType: 'json',
 		url: rcp_script_options.ajaxurl,
-		data: {
-			action: 'rcp_validate_registration_state',
-			rcp_level: reg_state.membership_level,
-			lifetime: reg_state.lifetime,
-			level_has_trial: reg_state.level_has_trial,
-			is_free: reg_state.is_free,
-			discount_code: reg_state.discount_code,
-			rcp_gateway: reg_state.gateway,
-			rcp_auto_renew: true === reg_state.auto_renew ? true : '',
-			event_type: event_type,
-			registration_type: $( '#rcp-registration-type' ).val(),
-			membership_id: $( '#rcp-membership-id' ).val()
-		},
+		data: data,
 		success: function ( response ) {
 
 			if ( response.success ) {

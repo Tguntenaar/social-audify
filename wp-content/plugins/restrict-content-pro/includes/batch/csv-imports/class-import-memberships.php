@@ -40,11 +40,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 			return;
 		}
 
-		$adjusted_row_number = 1; // Note: row #1 is the header row. So the first set of data will be row #2.
-
 		foreach ( $this->rows as $row_number => $row ) {
-
-			$adjusted_row_number++;
 
 			/**
 			 * Parse user account.
@@ -52,7 +48,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 			$user = $this->get_user( $row );
 
 			if ( is_wp_error( $user ) ) {
-				$this->get_job()->add_error( sprintf( __( 'Skipping row #%d. Error code: %s; Error message: %s', 'rcp' ), $adjusted_row_number, $user->get_error_code(), $user->get_error_message() ) );
+				$this->get_job()->add_error( sprintf( __( 'Skipping row #%d. Error code: %s; Error message: %s', 'rcp' ), $row_number, $user->get_error_code(), $user->get_error_message() ) );
 
 				continue;
 			}
@@ -72,7 +68,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 			}
 
 			if ( empty( $customer ) ) {
-				$this->get_job()->add_error( sprintf( __( 'Skipping row #%d. Error creating or retrieving customer record for user #%d.', 'rcp' ), $adjusted_row_number, $user->ID ) );
+				$this->get_job()->add_error( sprintf( __( 'Skipping row #%d. Error creating or retrieving customer record for user #%d.', 'rcp' ), $row_number, $user->ID ) );
 
 				continue;
 			}
@@ -83,7 +79,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 			$membership_data = $this->get_membership_data( $row );
 
 			if ( is_wp_error( $membership_data ) ) {
-				$this->get_job()->add_error( sprintf( __( 'Skipping row #%d (user ID #%d). Error code: %s; Error message: %s', 'rcp' ), $adjusted_row_number, $user->ID, $membership_data->get_error_code(), $membership_data->get_error_message() ) );
+				$this->get_job()->add_error( sprintf( __( 'Skipping row #%d (user ID #%d). Error code: %s; Error message: %s', 'rcp' ), $row_number, $user->ID, $membership_data->get_error_code(), $membership_data->get_error_message() ) );
 
 				continue;
 			}
@@ -118,7 +114,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 				$membership_id = $customer->add_membership( $membership_data );
 
 				if ( empty( $membership_id ) ) {
-					$this->get_job()->add_error( sprintf( __( 'Error creating membership record for row #%d (user ID #%d).', 'rcp' ), $adjusted_row_number, $user->ID ) );
+					$this->get_job()->add_error( sprintf( __( 'Error creating membership record for row #%d (user ID #%d).', 'rcp' ), $row_number, $user->ID ) );
 
 					continue;
 				}
@@ -132,7 +128,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 				$updated       = $existing_membership->update( $membership_data );
 
 				if ( empty( $updated ) ) {
-					$this->get_job()->add_error( sprintf( __( 'Error updating membership record #%d for row #%d.', 'rcp' ), $existing_membership->get_id(), $adjusted_row_number ) );
+					$this->get_job()->add_error( sprintf( __( 'Error updating membership record #%d for row #%d.', 'rcp' ), $existing_membership->get_id(), $row_number ) );
 
 					continue;
 				}
@@ -268,7 +264,7 @@ class RCP_Batch_Callback_Import_Memberships extends RCP_Batch_Callback_CSV_Impor
 			 * Create new account.
 			 */
 			$user_data = array(
-				'user_login' => sanitize_text_field( $user_login ),
+				'user_login' => ! empty( $user_login ) ? sanitize_text_field( $user_login ) : sanitize_text_field( $email ),
 				'user_email' => sanitize_text_field( $email ),
 				'first_name' => sanitize_text_field( $first_name ),
 				'last_name'  => sanitize_text_field( $last_name ),
