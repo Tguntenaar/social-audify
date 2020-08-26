@@ -124,7 +124,7 @@
   </div>
 
   <section class="content">
-    <div class="sidebar col-xs-12 col-sm-12 col-md-12 col-lg-3">
+    <div class="sidebar col-xs-12 col-sm-12 col-md-12 col-lg-3" style="display: none;">
       <div class="person-info">
         <a href="/profile-page/#profile-avatar" class="person-image center"><?php
           if ( ($wp_current_user instanceof WP_User) ) {
@@ -155,11 +155,7 @@
       <nav>
         <ul>
           <a href="../dashboard/" class="responsive-item" ><li>Dashboard</li></a>
-          <a href="../audit-dashboard/"><li><i class="fas fa-file-alt"></i></i>Audits</li></a>
-          <a href="../report-dashboard/"><li><i class="fas fa-chart-line"></i>Reports<span class="beta">Beta</span></li></a>
-          <a href="../client-dashboard/"><li><i class="far fa-building"></i>Contacts</li></a>
           <a href="../profile-page/"><li><i class="fas fa-cog"></i>Config</i></li></a>
-          <a href="../search-page/" class="responsive-item search-icon" ><li>Search page</li></a>
           <a href="<?php echo wp_logout_url( home_url() ); ?>" title="Logout" ><li><i class="fas fa-power-off"></i>Logout</i></a>
         </ul>
       </nav>

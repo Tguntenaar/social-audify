@@ -13,6 +13,7 @@
   <?php
     // Header
     include(dirname(__FILE__)."/../header/dashboard_header.php");
+    
    /* $user_id $current_user set in the dashboard_header */
 
     // Weergave intro - Eerste login
@@ -93,7 +94,17 @@
 
     // Graph variable
     $graph_values = [$audit_daily_values, $report_daily_values];
+
+    // Get clients
+    $clients = $client_control->get_all();
+    
+    $jsclients = array();
+    foreach ($clients as $c) {
+      $c = array($c->name, $c->facebook, $c->instagram, $c->website, $c->mail);
+      array_push($jsclients, $c);
+    }
   ?>
+  <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/client_dashboard.css<?php echo $cache_version; ?>" type="text/css" />
 
   <!-- $intro_bit -->
   <?php if ($intro_bit): ?>
@@ -139,8 +150,59 @@
       <button onclick="$('#update-overlay').slideUp()" class="advice-button">Understood</button>
     </div>
   </div>
+  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-bottom: 50px;">
+    <div class="sub-nav-client">
+      <div class="center-buttons">
+        <a href='/client-setup/' class="create-button-client" style="margin-right: 15px;">Create client</a>
+        <a href='/client-import/' class="create-button-client" style="margin-right: 15px;">Mass import client</a>
+        <a style="color: #fff" class="create-button-client" onclick="exportClients()">Export clients</a>
+      </div>
+    </div>
+    <input type="text" name="search" class="search-client" id="search-input" placeholder="Search..."/>
+    <div class="client-overview" id="client-results"><?php
+      foreach($clients as $client) { 
+        $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
+          "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
 
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="margin-top: 0;">
+        <div class="client-overview-row" data-name="<?php echo $client->name; ?>">
+          <div class="client-overview-row-inner" data-id="<?php echo $client->id; ?>" data-client="<?php echo htmlentities(json_encode($data)); ?>"><?php
+            echo $client->audit_count > 0 ? 
+              "<div class='client-status converted'>{$client->audit_count} Audit".($client->audit_count > 1 ? 's' : '')."</div>" :
+              "<div class='client-status no_reply'>New</div>"; ?>
+
+            <div class="details">
+              <span class="client-name-n"><?php echo $client->name; ?></span><?php
+
+              if($client->facebook != NULL) { ?>
+                <a class="social-icon" target="_blank" rel="norefferer" href="https://www.facebook.com/<?php echo $client->facebook; ?>">
+                  <i class="fab fa-facebook-f"></i>
+                </a><?php
+              }
+              if($client->instagram != NULL) { ?>
+                <a class="social-icon instagram-social mail-social" target="_blank" rel="norefferer" href="https://www.instagram.com/<?php echo $client->instagram; ?>">
+                  <i class="fab fa-instagram"></i>
+                </a><?php
+              } 
+              if($client->website != NULL) { ?>
+                <a class="social-icon web-social" target="_blank" rel="norefferer" href="<?php
+                  echo (substr($client->website, 0, 4) === "http" ? "" : "http://").$client->website; ?>">
+                  <i class="fas fa-globe"></i>
+                </a><?php
+              } 
+              if($client->mail != NULL) { ?>
+                <a class="social-icon instagram-social mail-social" href="mailto: <?php echo $client->mail; ?>">
+                  <i class="far fa-envelope"></i>
+                </a><?php
+              } ?>
+            </div>
+            <i class="fas fa-ellipsis-v edit-client" style="cursor:pointer;" onclick="editClient(this)"></i>
+            <button class="create-audit-dashboard"> Create audit</button>
+          </div>
+        </div><?php
+      } ?>
+    </div>
+    
+  <!-- <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 0;">
     <div class="col-lg-12">
       <div class="download-viewed">
         <span class="clickable" onclick="export_viewed('audit')" style="margin-right:15px;">Export viewed audits</span>
@@ -167,19 +229,19 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <div class="report-dash-stat col-xs-12 col-ms-12 col-ld-12 col-lg-6">
+    <!-- <div class="report-dash-stat col-xs-12 col-ms-12 col-ld-12 col-lg-6"> -->
       <!-- <select> TODO:
         <option><?php //echo date('Y'); ?></option>
         <option><?php //echo date('F Y'); ?></option>
       </select> -->
-      <h4>Statistics for <?php echo date('Y'); ?></h4>
+      <!-- <h4>Statistics for <?php echo date('Y'); ?></h4>
       <hr class="under-line" />
-      <div style="clear:both"></div>
+      <div style="clear:both"></div> -->
 
       <!-- AUDIT STATS -->
-      <div class="stat-box audit">
+      <!-- <div class="stat-box audit">
         <span class="stat-box-title">Audits sent</span>
         <span class="stat-box-data"> <?php echo count($year_audits); ?> </span>
         <span class="stat-box-procent "> <?php echo percent_print($month_increase_audit); ?> </span>
@@ -197,10 +259,10 @@
         <span class="stat-box-procent ">
           <?php echo percent_diff($prev_open_rate_audit, $open_rate_audit, true); ?>
         </span>
-      </div>
+      </div> -->
 
       <!-- REPORT STATS -->
-      <div class="stat-box report">
+      <!-- <div class="stat-box report">
         <span class="stat-box-title">Reports sent</span>
         <span class="stat-box-data"> <?php echo count($year_reports); ?> </span>
         <span class="stat-box-procent "><?php echo percent_print($month_increase_report); ?> </span>
@@ -219,10 +281,10 @@
           <?php echo percent_diff($prev_open_rate_report, $open_rate_report, true); ?>
         </span>
       </div>
-    </div>
+    </div> -->
 
     <!-- COMPARISON WITH LAST MONTH -->
-    <div class="report-compared-last-month col-xs-12 col-sm-12 col-md-12 col-lg-6">
+    <!-- <div class="report-compared-last-month col-xs-12 col-sm-12 col-md-12 col-lg-6">
       <h4>Compared to previous Months</h4>
       <hr class="under-line" />
       <div class="graph-box">
@@ -243,7 +305,7 @@
         </span>
         <canvas id="chart-report"></canvas>
       </div>
-    </div>
+    </div> -->
       <!-- <button onclick="$('#update-overlay').slideDown()">View Recent Updates!</button> -->
   </div>
   </section>

@@ -5,17 +5,18 @@
 }
 
 .create-button-client {
-	width: 180px;
+	width: 140px;
 	color: #fff;
-	background: #487dd7;
-	height: 41px;
-	line-height: 40px;
+	background: hsl(218, 64%, 56%);
+	height: 30px;
+	line-height: 30px;
 	border-radius: 2px;
 	text-align: center;
 	display: inline-block;
 	font-weight: 300;
 	border: 1px solid #487dd7;
-	float: right;
+	float: left;
+	font-size: 12px;
 }
 .create-button-client:hover {
 	background: #fff;
@@ -23,6 +24,21 @@
 	text-decoration: none;
 }
 
+.create-audit-dashboard {
+	float: right;
+	width: 100px;
+	position: absolute;
+	right: 10px;
+	top: 24px;
+	background: hsl(218, 64%, 56%);
+	color: #fff;
+	font-size: 14px;
+	height: 35px;
+	line-height: 35px;
+	border-radius: 5px;
+	font-weight: 100;
+	border: 0;
+}
 .create-report-h1-client {
 	font-size: 24px;
 	font-family: 'Raleway', sans-serif;
@@ -138,7 +154,7 @@
 
 .edit-client {
 	position: absolute;
-	right: 20px;
+	right: 125px;
 	top: 33px;
 	color: #a0aec0;
 }
