@@ -150,15 +150,13 @@
       <button onclick="$('#update-overlay').slideUp()" class="advice-button">Understood</button>
     </div>
   </div>
-  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-bottom: 50px;">
-    <div class="sub-nav-client">
-      <div class="center-buttons">
-        <a href='/client-setup/' class="create-button-client" style="margin-right: 15px;">Create client</a>
-        <a href='/client-import/' class="create-button-client" style="margin-right: 15px;">Mass import client</a>
-        <a style="color: #fff" class="create-button-client" onclick="exportClients()">Export clients</a>
-      </div>
-    </div>
-    <input type="text" name="search" class="search-client" id="search-input" placeholder="Search..."/>
+  <div class="action-panel">
+    <a class="dashboard-action-button" style="background: hsl(218, 64%, 56%);">Create client</a>
+    <a class="dashboard-action-button" style="background: hsl(218, 64%, 56%);">Mass import client</a>
+    <div class="vertical-line-dashboard"></div>
+    <input type="text" class="search-dashboard" placeholder="Search..." />
+  </div>
+  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-top: 10px; padding-bottom: 50px;">
     <div class="client-overview" id="client-results"><?php
       foreach($clients as $client) { 
         $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
@@ -201,7 +199,29 @@
         </div><?php
       } ?>
     </div>
+  </div>
+  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-top: 10px; padding-bottom: 50px;">
+    <div class="client-overview" id="client-results"><?php
+      $recent_items = $connection->get_all_recent($user_id, 100);
+
+      foreach($recent_items as $item) { 
+        // $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
+        //   "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
+
+        <a href="https://www.socialaudify.com/audit-<?php echo $item->name;?>-<?php echo $item->id;?>" class="client-overview-row" data-name="<?php echo $item->name; ?>">
+          <div class="client-overview-row-inner" data-id="<?php echo $item->id; ?>">
+            <span class="audit-name-dashboard"><?php echo $item->name; ?></span>
+            <span class="client-name-dashboard"><?php echo $item->client_name; ?></span>
+            <div class="audit-viewed-dashboard">
+              <?php echo $item->view_time === NULL ? "<span class='open-title'>Unopened</span>" : "<span class='open-title'>Opened</span>"; ?>
+            </div>
+          </div>
+      </a><?php
+      } ?>
+    </div>
+  </div>
     
+  
   <!-- <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 0;">
     <div class="col-lg-12">
       <div class="download-viewed">

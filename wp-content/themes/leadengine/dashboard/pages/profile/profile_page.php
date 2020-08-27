@@ -20,13 +20,11 @@
   <div id="confirmModal" class="modal"></div>
 
   <div class="profile-page">
-      <div class="content-right y-scroll col-lg-9" style="padding-left: 25px;">
-        <div class="activities col-lg-12">
+      <div class="content-right y-scroll col-lg-12" style="padding-left: 25px;">
           <ul class="sub-menu-profile">
-            <li id="member-click">Profile settings</li>
+            <li class="sub-menu-profile-active" id="member-click">Profile settings</li>
             <li id="avatar-click">Avatar settings</li>
             <li id="audit-click">Audit settings</li>
-            <li id="report-click">Reports settings</li>
             <li id="mail-click">Mail configuration</li>
             <li id="account-click">Subscription Info</li><?php
             if ( 'active' == affwp_get_affiliate_status( affwp_get_affiliate_id() ) ) { ?>
@@ -55,15 +53,6 @@
             <div style="clear:both;"></div>
             <div class="profile-exp">
               <i id="audit-exp" class="info-i fas fa-info"></i>
-            </div>
-          </div>
-
-          <div id="report-settings">
-            <h3 class="h3-fix">Report Settings</h3>
-            <a href="/report-config" class="easy-config-button"><i class="fas fa-cogs"></i>Easy configuration</a>
-            <div style="clear:both;"></div>
-            <div class="profile-exp">
-              <i id="report-exp" class="info-i fas fa-info"></i>
             </div>
           </div>
 
@@ -193,7 +182,6 @@
             echo do_shortcode("[subscription_details]"); ?>
           </div>
         </div>
-      </div>
     </div>
   <?php wp_footer(); ?>
 </body>

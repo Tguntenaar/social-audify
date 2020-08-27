@@ -118,9 +118,6 @@
     <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
       <i style="margin-right: 5px;" class="fab fa-youtube"></i>Tutorial
     </a>
-    <a href="../search-page/" class="search-icon">
-      <i style="margin-right: 5px;" class="fas fa-search"></i>Search
-    </a>
   </div>
 
   <section class="content">

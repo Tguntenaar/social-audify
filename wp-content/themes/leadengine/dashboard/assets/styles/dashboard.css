@@ -4008,14 +4008,17 @@ tr input {
 /* ******************* Profile page ******************* */
 
 #profile-member {
-	width: 100%;
-	height: auto;
+	width: 79%;
+	float: right;
+	height: 83vh;
+	overflow-y:scroll;
 	background: #fff;
 	padding: 25px;
 	border-left: 1px solid #2980b9;
 	position: relative;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
+	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .profile-exp {
@@ -4030,6 +4033,7 @@ tr input {
 	position: relative;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
+	display: none;
 }
 
 #profile-member .rcp_form label {
@@ -4080,6 +4084,7 @@ tr input {
 
 #profile-avatar {
 	width: 100%;
+	display: none;
 	height: auto;
 	padding: 25px;
 	background: #fff;
@@ -4106,18 +4111,46 @@ tr input {
 	margin-left: 15px;
 	font-size: 12px;
 }
+
+.sub-menu-profile {
+	width: 200px !important;
+	float: left;
+}
+
+.sub-menu-profile li {
+	/* height: 27px;
+	line-height: 27px;
+	width: 100%;
+	font-size: 14px; */
+	width: 150px;
+	text-align: center;
+	height: 50px;
+	line-height: 50px;
+	color: #c4c4c4;
+	font-weight: 300;
+	font-size: 14px !important;
+	border-radius: 5px;
+}
+
+.sub-menu-profile-active {
+	color: #6e9d9c !important;
+	background: #fff;
+	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+}
+
 .sub-menu-profile, #affwp-affiliate-dashboard-tabs {
-	margin-left: -15px;
-	margin-top: 15px;
+	margin-left: 0px;
 	width: auto;
 	height: auto;
-	padding: 10px 30px;
+
+
+	/* padding: 10px 30px;
 	border-left: 3px solid #6e9d9c;
 	background: #fff;
 	color: #222931;
 	font-weight: 100;
 	border-top-right-radius: 3px;
-	border-bottom-right-radius: 3px;
+	border-bottom-right-radius: 3px; */
 }
 
 .sub-menu-profile li, #affwp-affiliate-dashboard-tabs li {
@@ -4158,6 +4191,7 @@ tr input {
 #audit-settings, #mail-settings, #account-settings, .profile-page-blocks {
 	width: 100%;
 	height: auto;
+	display: none;
 	padding: 25px;
 	background: #fff;
 	margin-top: 100px;
@@ -4173,6 +4207,7 @@ tr input {
 	width: 50%;
 	border-radius: 2px;
 	padding: 10px;
+	display: none;
 }
 
 .subject-line {
@@ -4197,6 +4232,7 @@ tr input {
 
 #report-settings, #audit-setting {
 	position: relative;
+	display: none;
 }
 
 #audit-settings textarea, #report-settings textarea {
