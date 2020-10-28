@@ -42,26 +42,6 @@
         <span class="title title-audit-page">Create an Audit</span>
         <div class="audit_count"><?php echo $audits_made.' created Audits today'; ?></div>
 
-        <!-- One "tab" for each step in the form: -->
-        <form class="setup-form submit-audit">
-          <!-- Facebook tab -->
-          <div class="tab tab-setup">
-            <span class="login-title">Login to retrieve the data of Facebook that is needed to create an Audit.</span>
-            <span style="color: #c0392b; font-size: 12px; display: block;text-align: center; width: 100%;">Trouble logging in to Facebook? Try another browser.</span>
-            <div style="margin-top: 30px" class="fb-login-button login-center"
-                data-scope="manage_pages,instagram_basic,instagram_manage_insights,ads_read"
-                auth_type="rerequest"
-                data-width="100"
-                data-max-rows="1"
-                data-size="large"
-                data-button-type="continue_with"
-                data-show-faces="false"
-                data-auto-logout-link="true"
-                data-use-continue-as="false"
-                onlogin="checkLoginState();">
-            </div>
-          </div>
-
           <!-- Choose a client -->
           <div class="tab tab-setup">
             <div style="border: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
@@ -89,7 +69,9 @@
           <div class="tab tab-setup" >
             <span style="display: none;" class="temp-show-comp"></span>
             <div style="border: 0;" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 row-title no-padding">
-              <div style="font-weight:100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">Want to compare <span style="font-weight: 100; color: #000;" class="show-client"></span> to a Competitor?<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span></div>
+              <div style="font-weight:100;" class="col-xs-10 col-sm-10 col-md-10 col-lg-10 row-title-style title-green no-padding">
+                Want to compare <span style="font-weight: 100; color: #000;" class="show-client"></span> to a Competitor?<span style="color:#000; font-size: 12px; margin-left: 5px;">(Optional)</span>
+              </div>
             </div>
             <input type="text" name="search" class="setup-input" id="search-input-compare" placeholder="Search..." valid/>
             <div class="inner-scroll" style="height: 335px;" id="compare-list">

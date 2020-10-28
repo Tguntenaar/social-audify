@@ -1,17 +1,12 @@
-var currentTab = 0; // Current tab is set to be the first tab (0)
+// Set Initial tab index.
+var currentTab = validateClient() ? 1 : 0; 
 var type = window.location.pathname.includes('audit-setup') ? 'an audit' : 'a report';
 
 showTab(currentTab);
 
-function showIntro(display) {
-  checkLoginState(false);
-  types = display ? ['block', 'none'] : ['none', 'block'];
-  $('.create-block-box').css({'display': types[0]});
-  $('.back').css({'display': types[1]});
-  $('.overview-audit-report .left').css({'display': types[1]});
-}
-
 /**
+ *  TODO: moet naar functions.js -> includen in dashboard_header.
+ * 
  *  Getloginstatus maakt gebruik van de cache de tweede parameter true forceert
  *  een roundtrip naar de facebook servers.
  *  Gets called when the user is finished with the facebook login button.
@@ -31,10 +26,8 @@ function checkLoginState(showError = true) {
       }));
     }
   });
-
   return false;
 }
-
 
 function showTab(index) {
   // This function will display the specified tab of the form ...
@@ -54,8 +47,7 @@ function showTab(index) {
     // change on click functionality.
     $('#nextBtn').off('click');
     $('#nextBtn').on('click', function() {
-      if ((Instance.page.type == 'report' && validateSelectedAds()) ||
-          (Instance.page.type == 'audit' && validateName())) {
+      if (Instance.page.type == 'audit' && validateName()) {
         submitForm();
       }
     });
@@ -72,16 +64,13 @@ function showTab(index) {
   steps.eq(index).addClass('active');
 }
 
-function nextPrev(n, loggedIn = false) {
+function nextPrev(n) {
   // This function will figure out which tab to display
   var tab = $('.tab');
 
   // validate this step
-  if (n == 1 && !validateStep(loggedIn))
+  if (n == 1 && !validateStep())
     return;
-
-  // request campaigns or ads from facebook servers.
-  if (Instance.page.type == 'report' && n === 1 && currentTab === 4) showActiveCampaigns(); // FIXME: dit moet niet hier gebeuren.
 
   // Hide the current tab:
   tab.eq(currentTab).css({'display':'none'});
@@ -94,34 +83,21 @@ function nextPrev(n, loggedIn = false) {
     showTab(currentTab);
 }
 
-function validateStep(loggedIn) {
+function validateStep() {
   switch (currentTab) {
     case 0:
-      return loggedIn || checkLoginState();
-    case 1:
       return validateClient();
-    case 2:
+    case 1:
       return validateCompetitorTab();
-    case 3:
-      return validateName();
-    case 4:
-      $('.step').eq(currentTab).addClass('finish');
-      return true; // showActiveCampaigns
   }
   return false;
-}
-
-// TODO:
-function validateSelectedAds() {
-  return true
 }
 
 function validateClient() {
   if (!(selected = findSelected($('#client-list'))))
     return false;
 
-  // Instance.client = JSON.parse(selected.attr("data-client"));
-  // TODO:
+  //  TODO: Instance.client = JSON.parse(selected.attr("data-client"));
   Instance.client = selected.data('client');
 
   $('.show-client').html(`${Instance.client.name}`);
