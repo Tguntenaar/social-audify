@@ -115,6 +115,14 @@
         $(this).toggleClass('open');
         $('nav').toggleClass('block');
       });
+
+      $("#change-facebook").click(function() {
+        $(".login-facebook").css("display", "block");
+      }); 
+
+      $(".close-login").click(function() {
+        $(".login-facebook").css("display", "none");
+      }); 
     });
   </script>
 
@@ -149,9 +157,9 @@
     <!-- <a href="https://www.facebook.com/socialaudify/" target="_blank" rel="norefferer" style="font-size:14px; float:right;margin-right:30px;">
       <i style="margin-right: 5px;" class="far fa-comment"></i>Questions
     </a> -->
-    <a href="/tutorial/" target="_blank" rel="norefferer" style="font-size:14px; float:right;margin-right:20px;">
+    <span id="change-facebook" style="cursor: pointer; font-size:14px; float:right;margin-right:20px;">
       <i style="margin-right: 5px;" class="fas fa-exchange-alt"></i>Change Facebook
-    </a>
+    </span>
   </div>
 
   <section class="content">

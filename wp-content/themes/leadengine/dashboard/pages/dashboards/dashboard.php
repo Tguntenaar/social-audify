@@ -111,6 +111,7 @@
   
   <!-- $intro_bit -->
   <div class="login-facebook">
+      <span class="close-login"><i class="fas fa-times"></i></span>
       <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto; text-align: center;">
           <h2 style="padding: 5px 15px; background: #4167b2; width: 500px; margin-bottom: 15px; margin: 0 auto;">Login on Facebook to continue</h2>
           <p style="width: 70%; margin: 10px auto; font-size: 14px;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
