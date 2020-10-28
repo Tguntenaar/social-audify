@@ -237,8 +237,9 @@
           window.mail_send = 1;
         },
         error: function (xhr, textStatus, errorThrown) {
+          console.log(errorThrown);
           var send_error = error_func(xhr, textStatus, errorThrown, data);
-          logError(send_error, 'page-templates/audit_page_v2.php', 'send_mail');
+          // logError(send_error, 'page-templates/audit_page_v2.php', 'send_mail');
           window.mail_send = 0;
         }
       });

@@ -598,8 +598,8 @@ function send_mail() {
   $mail_controller = new mail_controller();
 
   $result = $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail,
-    $mail->subject, $mail->body, $signature, $audit->name, $link);
-
+  $mail->subject, $mail->body, $signature, $audit->name, $link);
+  wp_send_json(array('result' => "test"));
   // Toggle send mail
   if ($result === 1) {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
