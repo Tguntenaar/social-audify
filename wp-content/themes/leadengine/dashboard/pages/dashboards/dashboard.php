@@ -9,10 +9,12 @@
 <head>
   <title>SA Dashboard</title>
   <script src="//code.tidio.co/shn7vki15l32gvyiv33o2bmemv7ckkc2.js" async></script>
+
 </head>
   <?php
     // Header
     include(dirname(__FILE__)."/../header/dashboard_header.php");
+    
     
    /* $user_id $current_user set in the dashboard_header */
 
@@ -105,8 +107,27 @@
     }
   ?>
   <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/dashboard/assets/styles/client_dashboard.css<?php echo $cache_version; ?>" type="text/css" />
-
+  <script src="<?php echo get_template_directory_uri(); ?>/dashboard/assets/scripts/fbcalls.js<?php echo $cache_version; ?>" charset="utf-8" defer></script>
+  
   <!-- $intro_bit -->
+  <div class="login-facebook">
+      <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto; text-align: center;">
+          <h2 style="padding: 5px 15px; background: #4167b2; width: 500px; margin-bottom: 15px; margin: 0 auto;">Login on Facebook to continue</h2>
+          <p style="width: 70%; margin: 10px auto; font-size: 14px;">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <div style="margin-top: 0px;" class="fb-login-button login-center"
+                  data-scope="manage_pages,instagram_basic,instagram_manage_insights,ads_read"
+                  auth_type="rerequest"
+                  data-width="100"
+                  data-max-rows="1"
+                  data-size="large"
+                  data-button-type="continue_with"
+                  data-show-faces="false"
+                  data-auto-logout-link="true"
+                  data-use-continue-as="false"
+                  onlogin="checkLoginState();">
+              </div>
+      </div>
+  </div>
   <?php if ($intro_bit): ?>
     <div class="intro-overlay">
       <div class="vertical-align" style="width: 100%; margin: 0 auto; height: auto;">
@@ -151,12 +172,35 @@
     </div>
   </div>
   <div class="action-panel">
-    <a class="dashboard-action-button" style="background: hsl(218, 64%, 56%);">Create client</a>
-    <a class="dashboard-action-button" style="background: hsl(218, 64%, 56%);">Mass import client</a>
-    <div class="vertical-line-dashboard"></div>
+    <a href="/client-setup" class="dashboard-action-button" style="background: #487dd7;">Create client</a>
+    <a href="/client-import" class="dashboard-action-button" style="color: #487dd7 !important;">Mass import client</a>
+    <!-- s<div class="vertical-line-dashboard"></div> -->
     <input type="text" class="search-dashboard" placeholder="Search..." />
   </div>
   <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-top: 10px; padding-bottom: 50px;">
+    <h3>Audits</h3>
+    <span class="open-rate">Open rate: <?php if($open_rate_audit > 0) { echo '<span style="color: #27ae60">' . $open_rate_audit . '%</span>'; } else { echo $open_rate_audit;}?></span>
+    <div class="client-overview" id="client-results"><?php
+      $recent_items = $connection->get_all_recent($user_id, 100);
+
+      foreach($recent_items as $item) { 
+        // $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
+        //   "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
+
+        <a href="/audit-<?php echo $item->name;?>-<?php echo $item->id;?>" class="client-overview-row" data-name="<?php echo $item->name; ?>">
+          <div class="client-overview-row-inner" data-id="<?php echo $item->id; ?>">
+            <span class="audit-name-dashboard"><?php echo $item->name; ?></span>
+            <span class="client-name-dashboard"><?php echo $item->client_name; ?></span>
+            <div class="audit-viewed-dashboard">
+              <?php echo $item->view_time === NULL ? "<span class='open-title'>Unopened</span>" : "<span style='background: #c6f6d5;' class='open-title'>Opened</span>"; ?>
+            </div>
+          </div>
+      </a><?php
+      } ?>
+    </div>
+  </div>
+  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-top: 10px; padding-bottom: 50px;">
+    <h3>Clients</h3>
     <div class="client-overview" id="client-results"><?php
       foreach($clients as $client) { 
         $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
@@ -194,29 +238,9 @@
               } ?>
             </div>
             <i class="fas fa-ellipsis-v edit-client" style="cursor:pointer;" onclick="editClient(this)"></i>
-            <button class="create-audit-dashboard"> Create audit</button>
+            <a href="/audit-setup?cid=<?php echo $client->id; ?>" class="create-audit-dashboard"> Create audit</a>
           </div>
         </div><?php
-      } ?>
-    </div>
-  </div>
-  <div class="client-dashboard content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-6" style="padding-top: 10px; padding-bottom: 50px;">
-    <div class="client-overview" id="client-results"><?php
-      $recent_items = $connection->get_all_recent($user_id, 100);
-
-      foreach($recent_items as $item) { 
-        // $data = ["id"=> $client->id, "name"=>$client->name, "fb"=> $client->facebook, "ig"=> $client->instagram,
-        //   "wb"=> $client->website, "ml" => $client->mail, "ad_id" => $client->ad_id]; ?>
-
-        <a href="https://www.socialaudify.com/audit-<?php echo $item->name;?>-<?php echo $item->id;?>" class="client-overview-row" data-name="<?php echo $item->name; ?>">
-          <div class="client-overview-row-inner" data-id="<?php echo $item->id; ?>">
-            <span class="audit-name-dashboard"><?php echo $item->name; ?></span>
-            <span class="client-name-dashboard"><?php echo $item->client_name; ?></span>
-            <div class="audit-viewed-dashboard">
-              <?php echo $item->view_time === NULL ? "<span class='open-title'>Unopened</span>" : "<span class='open-title'>Opened</span>"; ?>
-            </div>
-          </div>
-      </a><?php
       } ?>
     </div>
   </div>

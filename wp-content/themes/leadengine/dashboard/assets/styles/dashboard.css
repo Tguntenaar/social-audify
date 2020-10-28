@@ -538,12 +538,15 @@ pre {
 }
 
 .person-image {
-	height: 100px;
-	width: 100px;
+	height: 40px;
+	width: 40px;
 	background-color: #000;
 	border-radius: 50%;
 	overflow: hidden;
 	display: block;
+	float: right;
+	margin-top: 10px;
+	margin-right: 10px;
 }
 
 .person-image img {
@@ -551,6 +554,7 @@ pre {
 	min-height: 100%;
 	min-width: 100%;
 	margin: 0 auto;
+	vertical-align: inherit;
 }
 
 .person-info {
@@ -558,10 +562,11 @@ pre {
 }
 
 .person-name {
-	font-size: 18px;
+	font-size: 12px;
 	color: #fff;
-	margin-top: 5px;
+	margin-top: 0px;
 	display: block;
+	float: right;
 }
 
 .person-title {
@@ -1293,13 +1298,27 @@ nav ul a li {
 	padding: 5px 14px !important;
 	position: absolute;
 	margin-top: -56px;
-	margin-left: -60px;
+	margin-left: -55px;
 	background: #c0392b !important;
 	color: #fff;
 	cursor: pointer;
 	/* background: #6e9d9c !important; */
 }
 
+.login-facebook {
+	width: 100%;
+	height: 100vh;
+	position: absolute;
+	top: 0; left: 0;
+	z-index: 9999999999999;
+	background: rgba(0, 0, 0, 0.8);
+	color: #fff;
+	display: none;
+}
+.open-rate {
+	float: right;
+	font-size: 12px;
+}
 .inner-scroll {
 	width: 100%;
 	height: 250px;
@@ -1545,8 +1564,11 @@ nav ul a li {
 }
 
 .client_left {
-	height: 585px;
+	height: 450px;
+	padding-top: 30px;
+	background: #fff;
 	float: left;
+	border: 1px solid #e5e7f2;
 }
 
 .client_left ul {
@@ -1572,8 +1594,16 @@ nav ul a li {
 }
 
 .client_right {
-	height: 585px;
+	height: 600px;
 	float: left;
+	background: #fff;
+	padding: 30px;
+	border: 1px solid #e5e7f2;
+}
+
+.client_right button {
+	float: left;
+	margin-right: 20px;
 }
 
 .audit-setup {
@@ -4021,6 +4051,8 @@ tr input {
 	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
+.wpua-edit-container { display: block !important;}
+
 .profile-exp {
 	position: absolute;
 	right: 40px;
@@ -4034,6 +4066,7 @@ tr input {
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
 	display: none;
+	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 #profile-member .rcp_form label {
@@ -4083,9 +4116,10 @@ tr input {
 }
 
 #profile-avatar {
-	width: 100%;
+	width: 78%;
+	float: right;
 	display: none;
-	height: auto;
+	height: 50vh;
 	padding: 25px;
 	background: #fff;
 	margin-top: 30px;
@@ -4189,8 +4223,9 @@ tr input {
 }
 
 #audit-settings, #mail-settings, #account-settings, .profile-page-blocks {
-	width: 100%;
+	width: 78%;
 	height: auto;
+	float: right;
 	display: none;
 	padding: 25px;
 	background: #fff;
@@ -4200,6 +4235,7 @@ tr input {
 	position: relative;
 	border-top-right-radius: 3px;
 	border-bottom-right-radius: 3px;
+	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 #mail-settings textarea {

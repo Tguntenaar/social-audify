@@ -30,7 +30,9 @@
 	position: absolute;
 	right: 10px;
 	top: 24px;
-	background: #27ae60;
+	background: #487dd7;
+	/* background: #27ae60; */
+	/* background: #6c5ce7; */
 	color: #fff;
 	font-size: 14px;
 	height: 35px;
@@ -38,6 +40,7 @@
 	border-radius: 5px;
 	font-weight: 100;
 	border: 0;
+	text-align: center;
 }
 .create-report-h1-client {
 	font-size: 24px;
@@ -96,11 +99,13 @@
 }
 
 .open-title {
-	font-size: 16px;
+	font-size: 14px;
 	position: absolute;
 	right: 10px;
-	top: 30px;
+	top: 25px;
 	color: #000;
+	background: #dbe7fd;
+	padding: 5px 15px;
 }
 
 .audit-name-dashboard {
@@ -116,11 +121,11 @@
 	width: 150px;
 	border-radius: 5px;
 	font-weight: 100;
-	margin-left: 15px;
+	margin-right: 15px;
+	float: right;
 	height: 40px;
 	line-height: 40px;
 	text-align: center;
-	float: left;
 	margin-top: 15px;
 	color: #fff !important;
 	font-size: 14px;
@@ -135,7 +140,8 @@
 	border: 1px solid #eff0f2;
 	border-radius: 5px;
 	margin-top: 15px;
-	width: 400px;
+	width: 47.7%;
+	margin-left: 15px;
 }
 
 
@@ -245,6 +251,11 @@
 	float: left;
 }
 
+.client-dashboard h3 {
+	font-size: 18px;
+	margin-bottom: 0px;
+	float: left;
+}
 
 @media only screen and (max-width: 1060px) {
 	.client-dashboard .create-report-h1-client {

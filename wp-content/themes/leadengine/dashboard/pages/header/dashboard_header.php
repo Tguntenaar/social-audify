@@ -79,6 +79,26 @@
           }
         });
       }
+
+      var loggedInPromise = new Promise((resolve, reject) => {
+          FB.getLoginStatus(function(response) {
+            if (response.status === 'connected') {
+              resolve(response);
+            } else {
+              reject(response);
+            }
+        });
+      });
+
+      console.log(loggedInPromise);
+      loggedInPromise.then((value) => {
+        return false;
+      }).catch((reason) => {
+         // Not logged in:
+         $(".login-facebook").css("display", "block");
+
+      });
+
     };
 
     (function(d, s, id) {
@@ -105,25 +125,39 @@
 
   <div id="instagramErrorModal" class="modal"></div>
   <div id="adAccountModal" class="modal"></div>
+  
 
 
   <div class="sub-header col-lg-12">
-    <a href="../dashboard/" class="home-link">
+    <a href="/profile-page/#profile-avatar" >
+      <span class="person-name" style="position: relative;">
+            <i style="position: absolute; left: -20px; bottom: 10px; font-size: 16px;"class="fas fa-cog"></i>
+            <?php $company_name = get_user_meta(get_current_user_id(), 'rcp_company', true ); 
+            echo $company_name != "" ? $company_name : $wp_current_user->display_name; ?>
+        </span>
+        <span href="/profile-page/#profile-avatar" class="person-image center"><?php
+            if ( ($wp_current_user instanceof WP_User) ) {
+              echo get_avatar( $user_id, $size = 32, $alt = 'Profile Picture' );
+            } ?>
+        </span>
+    </a>
+
+    <a href="../dashboard/" style="margin-left: -15px;" class="home-link">
       <i class="fas fa-th-large"></i> Dashboard
     </a>
 
-    <a href="https://www.facebook.com/socialaudify/" target="_blank" rel="norefferer" style="float:right;margin-right:50px;">
+    <!-- <a href="https://www.facebook.com/socialaudify/" target="_blank" rel="norefferer" style="font-size:14px; float:right;margin-right:30px;">
       <i style="margin-right: 5px;" class="far fa-comment"></i>Questions
-    </a>
-    <a href="/tutorial/" target="_blank" rel="norefferer" style="float:right;margin-right:30px;">
-      <i style="margin-right: 5px;" class="fab fa-youtube"></i>Tutorial
+    </a> -->
+    <a href="/tutorial/" target="_blank" rel="norefferer" style="font-size:14px; float:right;margin-right:20px;">
+      <i style="margin-right: 5px;" class="fas fa-exchange-alt"></i>Change Facebook
     </a>
   </div>
 
   <section class="content">
     <div class="sidebar col-xs-12 col-sm-12 col-md-12 col-lg-3" style="display: none;">
       <div class="person-info">
-        <a href="/profile-page/#profile-avatar" class="person-image center"><?php
+        <a href="/profile-page/#profile-avatar" style="position: relative;" class="person-image center"><?php
           if ( ($wp_current_user instanceof WP_User) ) {
             echo get_avatar( $user_id, $size = 32, $alt = 'Profile Picture' );
           } ?>

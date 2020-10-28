@@ -26,10 +26,9 @@
     include(dirname(__FILE__)."/../header/dashboard_header.php");
   ?>
 
-  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-9" style="padding-bottom: 50px;">
-  <div class="content-title col-lg-12"> </div>
+  <div class="content-right y-scroll col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding-bottom: 50px;">
   <div class="col-lg-12 client_register_box">
-    <div class="col-lg-6 client_left client_none">
+    <div class="col-lg-5 client_left client_none">
       <div class="col-lg-12">
         <div class="content-title col-lg-12">
           <span class="title">How to create a contact?</span>
@@ -46,7 +45,7 @@
       </div>
     </div>
 
-    <div class="col-lg-6 client_right">
+    <div class="col-lg-6 client_right" style="margin-left: 30px;">
       <div class="col-lg-12">
         <div class="content-title col-lg-9">
           <span class="title">Fill in the form.</span>
@@ -70,7 +69,8 @@
           E-mail:<br>
           <input type="email" id="client_mail" name="client_mail" title="" placeholder="mail@example.com" required>
 
-          <button type="submit">Submit</button>
+          <button type="submit">Create Audit</button>
+          <button style="background: #487dd7;" type="submit">Create Contact</button>
         </form>
       </div>
     </div>

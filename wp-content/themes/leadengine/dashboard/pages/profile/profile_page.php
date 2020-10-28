@@ -332,6 +332,46 @@
         }));
       });
     });
+    $("#member-click").click(function() {
+      $(".sub-menu-profile li").removeClass("sub-menu-profile-active");
+      $("#member-click").addClass("sub-menu-profile-active");
+
+      $(".profile-page .content-right div").css("display", "none");
+      $("#profile-member").css("display", "block");
+    });
+
+    $("#avatar-click").click(function() {
+      $(".sub-menu-profile li").removeClass("sub-menu-profile-active");
+      $("#avatar-click").addClass("sub-menu-profile-active");
+
+      $(".profile-page .content-right div").css("display", "none");
+      $("#profile-avatar").css("display", "block");
+    });
+
+    $("#audit-click").click(function() {
+      $(".sub-menu-profile li").removeClass("sub-menu-profile-active");
+      $("#audit-click").addClass("sub-menu-profile-active");
+
+      $(".profile-page .content-right div").css("display", "none");
+      $("#audit-settings").css("display", "block");
+    });
+
+    $("#mail-click").click(function() {
+      $(".sub-menu-profile li").removeClass("sub-menu-profile-active");
+      $("#mail-click").addClass("sub-menu-profile-active");
+
+      $(".profile-page .content-right div").css("display", "none");
+      $("#mail-settings").css("display", "block");
+    });
+
+    $("#account-click").click(function() {
+      $(".sub-menu-profile li").removeClass("sub-menu-profile-active");
+      $("#account-click").addClass("sub-menu-profile-active");
+
+      $(".profile-page .content-right div").css("display", "none");
+      $("#account-settings").css("display", "block");
+    });
+
   });
 </script>
 </html>
