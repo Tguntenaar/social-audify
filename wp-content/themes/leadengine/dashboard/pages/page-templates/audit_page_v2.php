@@ -227,7 +227,8 @@
           client: <?php echo json_encode(array("name" => $client->name, "mail" => $client->mail)); ?>,
           audit: <?php echo json_encode(array("id" => $audit->id, "name" => $audit->name)); ?>,
           signature: '<?php echo $user->signature ?>'
-        };
+      };
+      alert("2");
       $.ajax({
         type: "POST",
         url: ajaxurl,
@@ -268,6 +269,7 @@
       showModal(mailModal)
       
       $('#mail_send_confirmed').click(function() {
+        alert("1");
         send_mail()
       });
     }
