@@ -54,15 +54,15 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
       // Signature & Send
-      $this->add_signature($signature);
+      // $this->add_signature($signature);
       $this->add_link();
 
       // DKIM DomainKeys Identified Mail
-      $this->mailer->DKIM_domain = 'dev.socialaudify.com';
-      $this->mailer->DKIM_private = '/etc/pmta/key1.socialaudify.com.pem';
-      $this->mailer->DKIM_selector = 'key1';
-      $this->mailer->DKIM_passphrase = '';
-      $this->mailer->DKIM_identity = $this->mailer->From;
+      // $this->mailer->DKIM_domain = 'socialaudify.com';
+      // $this->mailer->DKIM_private = '/etc/pmta/key1.socialaudify.com.pem';
+      // $this->mailer->DKIM_selector = 'key1';
+      // $this->mailer->DKIM_passphrase = '';
+      // $this->mailer->DKIM_identity = $this->mailer->From;
 
       $this->mailer->send();
       
