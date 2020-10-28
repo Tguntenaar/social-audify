@@ -58,7 +58,7 @@ use PHPMailer\PHPMailer\Exception;
       $this->add_link();
 
       // DKIM DomainKeys Identified Mail
-      $this->mailer->DKIM_domain = 'socialaudify.com';
+      $this->mailer->DKIM_domain = 'dev.socialaudify.com';
       $this->mailer->DKIM_private = '/etc/pmta/key1.socialaudify.com.pem';
       $this->mailer->DKIM_selector = 'key1';
       $this->mailer->DKIM_passphrase = '';

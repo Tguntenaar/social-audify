@@ -602,8 +602,6 @@ function send_mail() {
 
   // Toggle send mail
   if ($result === 1) {
-  wp_send_json(array('result' => "test"));
-
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
 
