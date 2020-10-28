@@ -44,13 +44,13 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->Port       = 465;
       $this->mailer->CharSet    = 'UTF-8';                                // TCP port to connect to
       $this->mailer->setFrom('contact@socialaudify.com', $sender_name);  // Name is optional
-      $this->mailer->addAddress($recipient_email, $recipient_name);       // Add a recipient
+      $this->mailer->addAddress("bramhoogenkamp@live.nl", $recipient_name);       // Add a recipient
       $this->mailer->addReplyTo($sender_email, $sender_name);
 
       // Content
       $this->mailer->isHTML(true);                                  // Set email format to HTML
       $this->mailer->Subject = $subject;
-      $this->mailer->Body    = $body_html;
+      $this->mailer->Body    = "test";
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
       // Signature & Send
