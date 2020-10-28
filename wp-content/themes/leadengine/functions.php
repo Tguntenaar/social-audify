@@ -591,15 +591,15 @@ function send_mail() {
   $client = (object) $_POST['client'];
   $audit = (object) $_POST['audit'];
   $mail = (object) $_POST['mail'];
-  $signature = wp_get_attachment_url($_POST['signature']);
+  // $signature = wp_get_attachment_url($_POST['signature']);
 
   $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
+  wp_send_json(array('result' => "test"));
 
   $mail_controller = new mail_controller();
 
   $result = $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail,
-  $mail->subject, $mail->body, $signature, $audit->name, $link);
-  wp_send_json(array('result' => "test"));
+  $mail->subject, $mail->body, $audit->name, $link);
 
   // Toggle send mail
   if ($result === 1) {
