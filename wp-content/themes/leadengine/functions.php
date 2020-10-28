@@ -582,8 +582,6 @@ add_action( 'wp_ajax_send_mail', 'send_mail');
 add_action( 'wp_ajax_nopriv_send_mail', 'not_logged_in');
 
 function send_mail() {
- wp_send_json(array('result' => "test"));
-
   require_once(dirname(__FILE__)."/dashboard/phpmailer/mail_controller.php");
   
   $wp_user = wp_get_current_user();
@@ -601,6 +599,8 @@ function send_mail() {
 
   $result = $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail,
   $mail->subject, $mail->body, $signature, $audit->name, $link);
+  wp_send_json(array('result' => "test"));
+
   // Toggle send mail
   if ($result === 1) {
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
