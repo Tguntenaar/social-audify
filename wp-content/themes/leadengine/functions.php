@@ -596,13 +596,14 @@ function send_mail() {
   $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
 
   $mail_controller = new mail_controller();
-  wp_send_json(array('result' => "test"));
 
   $result = $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail,
   $mail->subject, $mail->body, $audit->name, $link);
 
   // Toggle send mail
   if ($result === 1) {
+  wp_send_json(array('result' => "test"));
+
     require_once(dirname(__FILE__)."/dashboard/services/connection.php");
     require_once(dirname(__FILE__)."/dashboard/controllers/audit_controller.php");
 
