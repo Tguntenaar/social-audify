@@ -594,9 +594,9 @@ function send_mail() {
   // $signature = wp_get_attachment_url($_POST['signature']);
 
   $link = "https://www.socialaudify.com/public/audit-" . str_replace(' ', '-', $audit->name) . "-" . $audit->id;
-  wp_send_json(array('result' => "test"));
 
   $mail_controller = new mail_controller();
+  wp_send_json(array('result' => "test"));
 
   $result = $mail_controller->send($name, $wp_user->user_email, $client->name, $client->mail,
   $mail->subject, $mail->body, $audit->name, $link);
