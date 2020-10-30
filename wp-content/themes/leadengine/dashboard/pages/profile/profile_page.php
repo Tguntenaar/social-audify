@@ -59,13 +59,13 @@
           <div id="mail-settings">
             <h3 class="h3-fix">Mail configuration</h3>
             <ul>
-              <li id="when-mail-item" class="active-menu-item">When</li>
+              <li id="when-mail-item" class="mail-settings-active active-menu-item">When</li>
               <li id="content-mail-item">Content</li>
             </ul>
             <div class="error-display-mail"></div>
             <form action="/ppc?settings=mail" id="mail_config" method="post" enctype="multipart/form-data">
               <!-- mail when -->
-              <div class="when-mail-block tab">
+              <div class="when-mail-block tab" style="display: block;">
                 <h6>Send first reply after <span id="first-day-value"><?php echo $user->day_1; ?></span> days:</h6>
                 <input type="text" id="day_1" name="day_1" placeholder="x" value="<?php echo $user->day_1; ?>" />
 
@@ -273,6 +273,7 @@
           $(`.${el}-${type}-block`).css("display", "none");
         }
       });
+
     }
 
     ["member", "avatar"].forEach(function(el) {

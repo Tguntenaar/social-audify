@@ -42,22 +42,27 @@ use PHPMailer\PHPMailer\Exception;
       $this->mailer->Password   = 'XQhkUjNxqxBsaZrq';                     // SMTP password
       $this->mailer->SMTPSecure = 'ssl';                                  // Enable TLS encryption, `ssl` also accepted
       $this->mailer->Port       = 465;
-      $this->mailer->CharSet    = 'UTF-8';                                // TCP port to connect to
+      $this->mailer->CharSet    = 'UTF-8'; 
+      
+      // Dit houden?
+      $this->mailer->Priority = 1;
+                                   // TCP port to connect to
       $this->mailer->setFrom('contact@socialaudify.com', $sender_name);  // Name is optional
-      $this->mailer->addAddress("bramhoogenkamp@live.nl", $recipient_name);       // Add a recipient
+      $this->mailer->addAddress($recipient_email, $recipient_name);       // Add a recipient
       $this->mailer->addReplyTo($sender_email, $sender_name);
 
       // Content
       $this->mailer->isHTML(true);                                  // Set email format to HTML
       $this->mailer->Subject = $subject;
-      $this->mailer->Body    = "test";
+      $this->mailer->Body    = $body_html;
       $this->mailer->AltBody = $body + "\n\n" + $audit_link;
 
       // Signature & Send
       // $this->add_signature($signature);
       $this->add_link();
 
-      // DKIM DomainKeys Identified Mail
+      
+      //DKIM DomainKeys Identified Mail
       // $this->mailer->DKIM_domain = 'socialaudify.com';
       // $this->mailer->DKIM_private = '/etc/pmta/key1.socialaudify.com.pem';
       // $this->mailer->DKIM_selector = 'key1';

@@ -4338,7 +4338,7 @@ h4 {
 	margin-bottom: 20px;
 }
 
-#audit-settings ul li, #report-settings ul li, #mail-settings ul li {
+#audit-settings ul li, #report-settings ul li {
 	display: inline-block;
 	margin-right: 10px;
 	font-size: 16px !important;
@@ -4346,6 +4346,28 @@ h4 {
 	cursor: pointer;
 	font-style: italic;
 }
+
+.mail-settings-active {
+	display: inline-block;
+	width: 100px;
+	height: 50px;
+	line-height: 50px;
+	color: #6e9d9c !important;
+    background: #fff !important;
+	box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2) !important;
+	border-radius: 5px;
+}
+#mail-settings ul li {
+	display: inline-block;
+	width: 100px;
+	height: 40px;
+	line-height: 40px;
+	color: #c4c4c4;
+	text-align: center;
+	cursor: pointer;
+	font-weight: 300;
+}
+
 
 #audit-settings ul li:hover, #report-settings ul li:hover {
 	opacity: 0.7;
